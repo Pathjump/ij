@@ -1,0 +1,149 @@
+{% extends '::base.html.twig' %}
+
+{% block notifications %}
+{%endblock%}
+
+{%block body%}
+
+<section id="page01" class="intro">
+    <div class="wrapper">
+
+        <!--
+        <aside class="video">
+            <h1>Why choose InternJump.com?</h1>
+            <h2>Click on the Play button to find out ..</h2>
+            <div class="videoDiv" style="display: none;">
+            <img src="http://img.youtube.com/vi/{{home_page_video_id}}/0.jpg"/>
+            </div>
+            <div class="player">
+                <span><img src="{{asset('img/playerIcon.png')}}"/></span>
+                <img src="http://img.youtube.com/vi/{{home_page_video_id}}/0.jpg"/>
+            </div>
+            
+        </aside>
+        -->
+
+        <aside class="jump">
+            <h1>Jump Start Your Career</h1>
+            <p>We know you're ambitious and want that great internship that will help launch your career. Look no further, InternJump works with companies in the leading industries and makes applying and managing internships an easy process.</p>
+            <a href="javascript:void(0)" class="student">Student</a>
+            <a href="javascript:void(0)" class="employer">Employer</a>
+        </aside>
+        <div class="clear"></div>
+    </div>
+
+        <!--
+    <div class="botSec">
+        <div class="botSecTopShadow">
+        </div>
+
+            {% if homeCompanies|length > 0 %}
+        <div class="wrapper">
+            <h1>Great employers to work for..</h1>
+            <ul>
+                {% for company in homeCompanies %}
+                    <li>
+                        <a href="{{path('internship',{'loginName' : company.loginName})}}">
+                        <img src="{{company.getTimThumbUrl(60,80)}}" width="60" height="80"/>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+            {% endif %}
+    </div>
+        -->
+</section>
+
+<section id="page02" class="students" style="display: none;">
+    <h1>Students</h1>
+    <div class="wrapper">
+        <a href="{{path('user_signup')}}">Get Started</a>
+    </div>
+</section>
+
+
+<section id="page03" class="employers" style="display: none;">
+    <h1>Employers</h1>
+    <div class="wrapper">
+        <a href="{{path('company_signup')}}">Get Started</a>
+    </div>
+</section>
+
+
+{%if reFlag=="auth"%}
+<script>window.parent.location="https://www.facebook.com/login.php?api_key=282137608565990&skip_api_login=1&display=page&cancel_url=http%3A%2F%2Fapps.facebook.com%2F282137608565990%2F%3Ferror_reason%3Duser_denied%26error%3Daccess_denied%26error_description%3DThe%2Buser%2Bdenied%2Byour%2Brequest.%26state%3D737a56fda2813fa481ecefeceb218a58&next=https%3A%2F%2Fwww.facebook.com%2Fdialog%2Fpermissions.request%3F_path%3Dpermissions.request%26app_id%3D282137608565990%26redirect_uri%3Dhttp%253A%252F%252Fapps.facebook.com%252F282137608565990%252F%26display%3Dpage%26response_type%3Dcode%26state%3D737a56fda2813fa481ecefeceb218a58%26canvas%3D1%26from_login%3D1%26client_id%3D282137608565990&rcount=1"</script>
+{%else%}
+{%if flag=="facebook"%}
+
+    <script> 
+       
+  FB.getLoginStatus(function(response) {
+      
+  if (response.status === 'connected') {
+    // the user is logged in and has authenticated your
+    // app, and response.authResponse supplies
+    // the user's ID, a valid access token, a signed
+    // request, and the time the access token 
+    // and signed request each expire
+    var uid = response.authResponse.userID;
+    var accessToken = response.authResponse.accessToken;
+    //alert('already auth');
+  } else if (response.status === 'not_authorized') {
+    // the user is logged in to Facebook, 
+    // but has not authenticated your app
+    //alert('yes ,but not auth');
+  } else {
+    // the user isn't logged in to Facebook.
+    //alert('not');
+  }
+ });
+        
+        </script>
+
+    {%endif%}
+
+
+{%endif%}
+
+{%endblock%}
+
+
+
+{%block javascripts%}
+ {{parent()}}
+<script>        
+$(document).ready(function() {
+    //add crnt class to home link
+    $('#homePageLink').addClass('crnt');
+    //go to student area
+    $('.student,.employer').click(function(){
+        var linkClass = $(this).attr('class');
+        if(linkClass == 'employer'){
+            $('.students').hide();
+            $('.employers').show();
+            $('html,body').animate({ scrollTop: $('.employers').offset().top }, 1500);
+        }else{
+            $('.employers').hide();
+            $('.students').show();
+            $('html,body').animate({ scrollTop: $('.students').offset().top }, 1500);
+        }
+    });
+    
+    
+    $('.player').click(function(){
+        autoPlayVideo('{{home_page_video_id}}','400','260');
+    });
+
+
+});
+
+function autoPlayVideo(vcode, width, height){
+  $(".videoDiv").append('<iframe class="videoIfram" width="'+width+'" height="'+height+'" src="https://www.youtube.com/embed/'+vcode+'?autoplay=1&loop=1&rel=0&wmode=transparent" frameborder="0" allowfullscreen wmode="Opaque"></iframe>');
+  $('.player').hide();
+  $('.videoDiv').show();
+}
+
+
+</script>        
+{%endblock%}

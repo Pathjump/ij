@@ -1,0 +1,114 @@
+<link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('css/jquery-ui-1.8.24.custom.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
+
+<div class="ask4Interview">
+    <div class="wrapper">
+        <h1>Ask for Interview</h1>
+        {% if form_errors(form) %}
+            <span class="alert error">
+            {{ form_errors(form) }}
+            </span>
+        {% endif %}
+        <aside>
+            <form action="{{ path('interview_request',{'userId' : userId,'cvId' : cvId}) }}" method="post" {{ form_enctype(form) }}>
+                <label>Date</label>
+                {{ form_widget(form.interviewDate) }}
+                <span class="miniError">{{ form_errors(form.interviewDate) }}</span>
+                <br>
+
+
+
+                <label>Job Name</label>
+                {{ form_widget(form.internship) }}
+                <span class="miniError">{{ form_errors(form.internship) }}</span>
+                <br>
+
+
+                <label>Country:</label>
+                {{ form_widget(form.country,{'attr' : {'class' :  'chzn-select','style' : 'width:250px;'}}) }}
+                <span class="miniError">{{ form_errors(form.country) }}</span>
+                <br>
+
+
+                <label>State</label>
+                {{ form_widget(form.state,{'attr' : {'class' :  'chzn-select','style' : 'width:250px;'}}) }}
+                <span class="miniError">{{ form_errors(form.state) }}</span>
+                <br>
+
+
+                <label>City</label>
+                {{ form_widget(form.city) }}
+                <span class="miniError">{{ form_errors(form.city) }}</span>
+                <br>
+
+
+                <label>Address</label>
+                {{ form_widget(form.address) }}
+                <span class="miniError">{{ form_errors(form.address) }}</span>
+                <br>
+
+                <label>Details</label>
+                {{ form_widget(form.details) }}
+                <span class="miniError">{{ form_errors(form.details) }}</span>
+                <br>
+
+                <label>ZIP Code</label>
+                {{ form_widget(form.zipcode,{'attr' : {'class' :  'zip'}}) }}
+                <span class="miniError">{{ form_errors(form.zipcode) }}</span>
+                <a href="javascript:void(0)" id="getMyPosition" class="zip">get my position</a>
+                <img src="{{asset('img/loadingfacebox.gif')}}" id="getMyPositionImg" style="display: none;"/>
+                <br>
+
+                {{ form_widget(form.Latitude) }}
+    {{ form_widget(form.Longitude) }}
+
+
+    {{ form_rest(form) }}
+
+                <button type="submit" class="submit">Send</button>
+            </form>
+        </aside>
+
+        <aside>
+            <div class="onMap">
+                <span class="ico"></span>
+                <h2>Your interview on map :</h2>
+                <div class="map" id="map_canvas">
+                </div>
+            </div>
+        </aside>
+
+    </div>
+</div>
+
+<div id="container" style=" background: rgba(0,0,0,0.5); position: absolute; top: 0;
+     left:0;">
+
+
+
+<script src="{{asset('js/jquery-1.8.1.js')}}"></script>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script>
+var no_zipcode_message_new_job_page = '{{no_zipcode_message_new_job_page}}';
+var map_change_location_message = '{{map_change_location_message}}';
+var jobCity = '{{company.city}}';
+var jobState = '{{company.state}}';
+var latitude = '{{company.Latitude}}';
+var longitude = '{{company.Longitude}}';
+var countryCitiesStatesUrl = '{{url('get_countey_cities_states',{'countryId' : ''})}}';
+var getPositionUrl = '{{url('get_position',{'zipcode' : ''})}}';
+var cityAutoCompleteUrl = "{{ path('city_auto_complete') }}";
+$(document).ready(function(){
+    $("select").chosen();
+$('.interviewDate').datepicker({changeYear: true, dateFormat: 'yy-mm-dd', minDate: new Date()});
+initialize();
+});
+</script>
+
+<script src="{{ asset('js/libs/chosen.jquery.min.js') }}"></script>
+<script src="{{ asset('js/libs/jquery-ui-1.8.24.custom.min.js') }}" type="text/javascript"></script>
+<script src="{{asset('bundles/objectsinternjump/js/internShip.js')}}"></script>
+<script src="{{asset('bundles/objectsinternjump/js/newInternShipMap.js')}}"></script>
+<script src="{{asset('bundles/objectsinternjump/js/cityAutoComplete.js')}}"></script>
+

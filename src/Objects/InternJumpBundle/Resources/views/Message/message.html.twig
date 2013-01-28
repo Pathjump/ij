@@ -1,0 +1,24 @@
+<div class="simpleTabsContent">
+    <form onsubmit="confirmDelete(this, '{{ path('company_messages', {'box': box}) }}', '#{{ box }}Tab');return false;" style="display: inline-block;" action="{{ path('company_message_delete', { 'id': entity.id }) }}" method="post">
+        {{ form_widget(delete_form) }}
+        <button type="submit">Delete</button>
+    </form>
+    {% if not entity.sentFromCompany %}
+    <a class="button" onclick="requestData('{{ path('company_new_message_form', {'userName': entity.user.loginName}) }}', '#{{ box }}Tab');return false;" href="{{ path('company_new_message', {'userName': entity.user.loginName}) }}">Reply</a>
+    {% endif %}
+    <a class="button" onclick="requestData('{{ path('company_messages', {'box': box}) }}', '#{{ box }}Tab');return false;" href="{{ path('company_box', {'box': box}) }}">Back To {{ box | capitalize }}</a>
+    <div class="msgBody">
+        <span class="title">{% if entity.sentFromCompany %}To{% else %}From{% endif %}</span>
+        <span class="info">{{ entity.user }}</span>
+        <br/>
+        <span class="title">Date</span>
+        <span class="info">{{ entity.createdAt|date('M d,Y') }}</span>
+        <br/>
+        <span class="title">Title</span>
+        <span class="info">{{ entity.title }}</span>
+        <br/>
+        <p>
+            {{ entity.message }}
+        </p>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}
+{{parent()}} - {{post.postTitle}}
+{%endblock%}
+
+{%block stylesheets%}
+{{parent()}}
+{%endblock%}
+
+{%block body%}
+
+{%if post%}
+<div id="main" role="main">
+
+<section id="comJobList">
+<div class="wrapper">
+
+<aside class="resourcesWrapper">
+<h1>{{post.postTitle}}</h1>
+
+<ul class="rescList">
+<li>
+<header class="clearfix">
+<img src="{{post.getTimThumbUrl(127,139)}}" width="127" height="139">
+<h1 style="margin: 10px 0 0; ">{{post.postTitle}}
+    <span style="margin: 10px 0 0; "><b>Posted in:</b>{%for cat in post.getCategories()%}{{cat.catName}}{%endfor%} </span> <span style="margin: 10px 0 0; "> <b> Date:</b> {{post.createdAt|date('d-m-Y')}}</span>
+</h1>
+</header>
+<p>{{post.postBody|raw}}</p>
+<div class="clear"></div>
+</li>
+
+</ul>
+
+</aside>
+
+
+</div>
+</section>
+
+
+</div>
+
+<!-- xxx END Body Section xxx -->
+{%endif%}
+
+
+{%endblock%}
+
+{%block javascripts%}
+{{parent()}}
+
+{%endblock%}
+

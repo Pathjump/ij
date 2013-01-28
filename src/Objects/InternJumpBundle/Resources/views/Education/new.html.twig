@@ -1,0 +1,159 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}New Education{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/jquery-ui-1.8.24.custom.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+<section id="student-01">
+    <div class="wrapper">
+
+        <!--Edit-skils-->
+        <div class="Edit-Objectives">
+            <!--form Name-->
+            <h1>{%if formName%}{{formName}}{%endif%}:</h1>
+            <hr/>
+            {% if app.session.hasFlash('notice') %}
+            <span class="alert fail">
+            {{ app.session.flash('notice') | raw }}
+            </span>
+            {% endif %}
+            {% if app.session.hasFlash('success') %}
+            <span class="alert success">
+            {{ app.session.flash('success') | raw }}
+            </span>
+            {% endif %}
+            {% if app.session.hasFlash('error') %}
+            <span class="alert error">
+            {{ app.session.flash('error') | raw }}
+            </span>
+            {% endif %}
+            {% if form_errors(form) %}
+            <span class="alert error">
+            {{ form_errors(form) }}
+            </span>
+            {% endif %}
+            <div id="newEducation" class="edit-objectives-box">
+                <form action="{{ path('education_create') }}" method="POST">
+                    <!--form Desc-->
+                    <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
+
+                    <label>College/University :</label>
+                    {{ form_widget(form.schoolName) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.schoolName) }}</span>
+                    <br/>
+                    {{ form_label(form.underGraduate) }}
+                    {{ form_widget(form.underGraduate) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.underGraduate) }}</span>
+                    <br/>
+                    <div class="graduateDegreeRow"{% if not form.vars.value.underGraduate %} style="display: none;"{% endif %}>
+                        <label>Graduate Degree :</label>
+                        {{ form_widget(form.graduateDegree) }}
+                        <br/>
+                        <span class="miniError">{{ form_errors(form.graduateDegree) }}</span>
+                        <br/>
+                    </div>
+                    <div class="underGraduateDegreeRow"{% if form.vars.value.underGraduate is null or form.vars.value.underGraduate %} style="display: none;"{% endif %}>
+                        <label>Undergraduate Degree :</label>
+                        {{ form_widget(form.underGraduateDegree) }}
+                        <br/>
+                        <span class="miniError">{{ form_errors(form.underGraduateDegree) }}</span>
+                        <br/>
+                    </div>
+                    <label>Start Date :</label>
+                    {{ form_widget(form.startDate) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.startDate) }}</span>
+                    <br/>
+                    <label>End Date :</label>
+                    {{ form_widget(form.endDate) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.endDate) }}</span>
+                    <br/>
+                    <label>Major :</label>
+                    {{ form_widget(form.major) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.major) }}</span>
+                    <br/>
+                    <label>Minor :</label>
+                    {{ form_widget(form.minor) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.minor) }}</span>
+                    <br/>
+                    <label>CumulativeGPA :</label>
+                    {{ form_widget(form.cumulativeGPA) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.cumulativeGPA) }}</span>
+                    <br/>
+                    <label>MajorGPA :</label>
+                    {{ form_widget(form.majorGPA) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.majorGPA) }}</span>
+                    <br/>
+                    <label>Relevant Coursework Taken :</label>
+                    {{ form_widget(form.relevantCourseworkTaken) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.relevantCourseworkTaken) }}</span>
+                    <br/>
+                    <label>Extra Curricular Activities :</label>
+                    {{ form_widget(form.extracurricularActivity) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.extracurricularActivity) }}</span>
+                    <br/>
+                    {{ form_rest(form) }}
+                    <div class="low-btns">
+                        <input type="submit" class="submit" value="Save">
+                    </div>
+                </form>
+                    <div class="clear"></div>
+            </div>
+            <!-- End Skils Box-->
+        </div>
+    </div><!--end of wrapper -->
+</section>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('js/libs/jquery-ui-1.8.24.custom.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/libs/chosen.jquery.min.js') }}" type="text/javascript"></script>
+<script>
+    $(document).ready(function() {
+        $('#logedInStudent,#newEducation').addClass('crnt');
+        $('#studentNav').show();
+        $('.graduateDegree').autocomplete({
+            autoFocus: true,
+            minLength: 2,
+            source: "{{ path('education_undergraduate_degrees', {'for': 'graduate'})}}"
+        });
+        $('.underGraduateDegree').autocomplete({
+            autoFocus: true,
+            minLength: 2,
+            source: "{{ path('education_undergraduate_degrees', {'for': 'undergraduate'})}}"
+        });
+        $('.underGraduate input').change(function(){
+            var currentCheck = $(this);
+            if(currentCheck.val())
+            $('.graduateDegreeRow').each(function() {
+                if(currentCheck.val() == 1) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+            $('.underGraduateDegreeRow').each(function() {
+                if(currentCheck.val() == 0) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+        $('.chzn-select').chosen();
+    });
+</script>
+{% endblock %}

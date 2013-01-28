@@ -1,0 +1,16 @@
+{% extends '::base.html.twig' %}
+{% block title %}{% trans %}Login{% endtrans %}{% endblock %}
+
+{% block body %}
+{% include 'ObjectsUserBundle:User:login_popup.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script>
+$(document).ready(function(){
+    $('#loginLink').addClass('crnt');
+});
+</script>
+{% endblock %}
+    

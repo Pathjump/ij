@@ -1,0 +1,200 @@
+{% extends '::base.html.twig' %}
+{% block title %}Create new job{% endblock %}
+
+{% block stylesheets %}
+{{parent()}}
+<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('css/jquery-ui-1.8.24.custom.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+
+<section id="addJob">
+    <div class="wrapper">
+        <div id="loading"><img src="{{asset('img/followLoader.gif')}}" width="35" height="35"></div>
+
+        <!--form Name-->
+        <h1>{%if formName%}{{formName}}{%endif%}:</h1>
+        <hr>
+        <div class="addJobWrapper">
+            <form action="{{ path('internship_new') }}" method="post" {{ form_enctype(form) }}>
+                <!--form Desc-->
+                <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
+                {% if form_errors(form) %}
+                <span class="alert">
+                {{ form_errors(form) }}
+                    </span>
+                {% endif %}
+
+                    <aside>
+                        <label>Job title</label>
+                    {{ form_widget(form.title) }}
+                        <span class="miniError">{{ form_errors(form.title) }}</span>
+                        <br>
+
+
+
+                        <label>Category</label>
+                    {{ form_widget(form.categories,{'attr' : {'class' :  'chzn-select','style' : 'width:310px;'}}) }}
+                        <span class="miniError">{{ form_errors(form.categories) }}</span>
+                        <br>
+
+
+                        <label>Active From</label>
+                    {{ form_widget(form.activeFrom) }}
+                        <span class="miniError">{{ form_errors(form.activeFrom) }}</span>
+                        <br>
+
+
+                        <label>Active To</label>
+                    {{ form_widget(form.activeTo) }}
+                        <span class="miniError">{{ form_errors(form.activeTo) }}</span>
+                        <br>
+
+
+                        <label>Active ?</label>
+                        <div class="onoffswitch">
+                        {{ form_widget(form.active,{'attr' : {'class' :  'onoffswitch-checkbox'}}) }}
+                                <label class="onoffswitch-label" for="form_active">
+                                    <div class="onoffswitch-inner">
+                                        <div class="onoffswitch-active">ON</div>
+                                        <div class="onoffswitch-inactive">OFF</div>
+                                    </div>
+                                    <div class="onoffswitch-switch"></div>
+                                </label>
+                            </div>
+                        </aside>
+
+                        <aside>
+                            <label>Address</label>
+                    {{ form_widget(form.address) }}
+                            <span class="miniError">{{ form_errors(form.address) }}</span>
+                            <br>
+
+                            <label>City</label>
+                    {{ form_widget(form.city) }}
+                            <span class="miniError">{{ form_errors(form.country) }}</span>
+                            <br>
+
+                    {#<div class="justSpacing"  style="height:406px;"></div>    #}
+
+                            <label>State</label>
+                    {{ form_widget(form.state,{'attr' : {'class' :  'chzn-select','style' : 'width:310px;'}}) }}
+                            <span class="miniError">{{ form_errors(form.country) }}</span>
+                            <br>
+
+                            <label>ZIP Code</label>
+                    {{ form_widget(form.zipcode, { 'attr': {'value': company.zipcode} }) }}
+                    {#<a href="javascript:void(0)" id="getMyPosition">get my position</a>#}
+                            <span class="miniError">{{ form_errors(form.zipcode) }}</span>
+
+                            <br>
+
+                            <label>Country</label>
+                    {{ form_widget(form.country,{'attr' : {'class' :  'chzn-select','style' : 'width:310px;'}}) }}
+                            <span class="miniError">{{ form_errors(form.country) }}</span>
+                            <br>
+
+                            <label>Requirements</label>
+                    {{ form_widget(form.requirements) }}
+                            <span class="miniError">{{ form_errors(form.requirements) }}</span>
+
+                        </aside>
+                
+                        <aside> 
+                            <label>Description</label>
+                    {{ form_widget(form.description, {'attr': {'style': 'height:328px;width:906px; position: relative; z-index: 2' } }) }}
+                            <span class="miniError">{{ form_errors(form.description) }}</span>
+                            <br>
+                        </aside>
+               {# <a href="javascript:void(0)" id="getMyPosition" class="submit" style="float: none; width: 200px; height: 50px; background: #D6E3F4; border: 1px solid windowframe;"><b style=" te">Get my position</b></a>#}
+                        <div id="getMyPosition" class="position" href="javascript:void(0)"><span></span><a href="javascript:void(0)">Update map position</a></div>
+                        <img class="positionLoader" src="{{asset('img/loadingfacebox.gif')}}" id="getMyPositionImg" style="display: none;"/>
+                        <div class="onMap">
+                            <span class="ico"></span>
+                            <h2>Your Internship on map :</h2>
+                            <div class="map">
+                                <div id="map_canvas" style="height:328px;width:906px;"></div>
+                            </div>
+                        </div>
+
+                {{ form_widget(form.Latitude, { 'attr': {'value': company.Latitude} }) }}
+                {{ form_widget(form.Longitude, { 'attr': {'value': company.Longitude} }) }}
+
+                {{ form_rest(form) }}
+                        <div class="btns">
+                            <span class="termsAddJob"><input type="checkbox" class="agree">By submitting this post, you agree with our <a href="{{path('termsOfUse')}}"> terms of service.</a></span> 
+                            <button id="submit" type="submit" name="create" class="submit" style="float: none; width: 200px; height: 50px; "><b>Submit</b></button>
+                            <!--
+                            <button type="submit" name="create-add-another" class="submit create">Create and Add New</button>
+                            -->
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </section>
+{% endblock %}
+
+
+{% block javascripts %}
+{{parent()}}
+        <script>
+        var no_zipcode_message_new_job_page = '{{no_zipcode_message_new_job_page}}';
+        var map_change_location_message = '{{map_change_location_message}}';
+        var jobCity = '{{company.city}}';
+        var jobState = '{{company.state}}';
+        var companyAddress = '{{company.address|nl2br}}';
+        var latitude = '{{company.Latitude}}';
+        var longitude = '{{company.Longitude}}';
+        var countryCitiesStatesUrl = '{{url('get_countey_cities_states',{'countryId' : ''})}}';
+        var getPositionUrl = '{{url('get_position',{'zipcode' : ''})}}';
+        var cityAutoCompleteUrl = "{{ path('city_auto_complete') }}";
+        var defaultStateName = '{{defaultStateName}}';
+
+        $(document).ready(function(){
+            $('#logedInComapny,#newJob').addClass('crnt');
+            $('#companyNav').show();
+
+            setInterval(function(){
+                //Loader Script
+                $('#loading').width($('#loading').parent().width());
+                $('#loading').height($('#loading').parent().height());
+            }, 500);
+
+            $('.activeFrom').datepicker({changeYear: true, dateFormat: 'yy-mm-dd', minDate: new Date()});
+            $('.activeTo').datepicker({changeYear: true, dateFormat: 'yy-mm-dd', minDate: new Date()});
+
+            //Function for Choosen >> page of inbox
+            $(".chzn-select,#form_activeFrom_year,#form_activeFrom_day,#form_activeFrom_month,#form_activeTo_month,#form_activeTo_day,#form_activeTo_year").chosen();
+            $(".chzn-select-deselect").chosen({
+                allow_single_deselect:true
+            });
+    
+            initialize();
+
+            //add ckeditor
+            var editor = CKEDITOR.editor.replace('form_description');
+            $('#submit').click(function(){
+                     var content = editor.getData();
+                     //set update job description textarea with the ckeditor value
+                     $('textarea#form_description').val(content);
+                     
+                     if($('.agree').is(':checked')){return true;}
+                     else{alert("You must agree with our terms of service first.");return false;}
+             
+                 });
+        });
+            </script>
+            <script src="{{ asset('js/libs/chosen.jquery.min.js') }}"></script>
+            <script src="{{ asset('js/libs/jquery-ui-1.8.24.custom.min.js') }}" type="text/javascript"></script>
+            <script src="{{asset('bundles/objectsinternjump/js/internShip.js')}}"></script>
+            <script src="{{asset('bundles/objectsinternjump/js/newInternShipMap.js')}}"></script>
+            <script src="{{asset('bundles/objectsinternjump/js/cityAutoComplete.js')}}"></script>
+            <script type="text/javascript" src="{{asset('js/ckeditor/ckeditor.js')}}"></script>
+
+            <script>
+         
+                </script>
+{% endblock %}

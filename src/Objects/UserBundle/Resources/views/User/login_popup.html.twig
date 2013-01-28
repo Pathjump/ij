@@ -1,0 +1,84 @@
+<section id="student-01">
+<div class="wrapper">
+
+<div class="login">
+<div class="grayCont">
+
+<fieldset>
+    <!--form Name-->
+    <legend>{%if formName%}{{formName}}{%endif%}</legend>
+    <!--form Desc-->
+    <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
+    
+
+{% if app.session.hasFlash('notice') %}
+<span class="alert">
+    {{ app.session.flash('notice') | raw }}
+</span>
+{% endif %}
+{% if app.session.hasFlash('success') %}
+<span class="alert">
+    {{ app.session.flash('success') | raw }}
+</span>
+{% endif %}
+{% if app.session.hasFlash('error') %}
+<span class="alert">
+    {{ app.session.flash('error') | raw }}
+</span>
+{% endif %}
+    {% if app.session.hasFlash('note') %}
+<span class="alert">
+    {{ app.session.flash('note') | raw }}
+</span>
+{% endif %}
+{% if message %}
+<span class="alert">
+    {{ message | raw }}
+</span>
+{% endif %}
+
+{% if error %}
+    <span class="alert">
+    {{ error.message | trans }}
+</span>
+{% endif %}
+    
+    
+<form action="{{ path('login_check') }}" method="post">
+<label>User Name</label>
+<input type="text" id="username" name="_username" value="{{ last_username }}" />
+<br>
+<label>Password</label>
+<input type="password" id="password" name="_password"/>
+<br>
+<input type="checkbox" id="remember_me" name="_remember_me" class="remember" checked />
+<span class="remTxt">Remember me</span>
+
+<div class="submitlogin">
+    <button type="submit">Submit</button>
+<a href="{{ path('forgot_password') }}">Lost your password ?</a> 
+<a href="{{ path('user_signup') }}">Creat new Student</a>
+<a href="{{ path('company_signup') }}">Creat new Employer</a>
+</div>
+
+<br/>
+
+<div class="logWith">
+<label>For Students Login With : </label>
+{% render "ObjectsAPIBundle:Facebook:facebookButton" with {'facebookUserHandleRoute' : 'facebook_logging','permissions': 'email,publish_stream,user_birthday,user_about_me','cssClass' : 'face' , 'linkText' : ''} %}
+<a onclick="newWindow = window.open('{{ path('twitter_authentication', {'redirectRoute': 'twitter_enter', 'popup': 'yes'}) }}', '{% trans %}Twitter Login{% endtrans %}', 'height=200, width=200');if(window.focus)newWindow.focus();return false;" target="_blank" title="{% trans %}Twitter Login{% endtrans %}" class="twitter" href="{{ path('twitter_authentication', {'redirectRoute': 'twitter_enter'}) }}"></a>
+<a onclick="newWindow = window.open('{{ path('linkedInButton', {'callbackUrl': 'linkedIn_user_data','popup' : 'yes'}) }}', '{% trans %}LinkedIn Login{% endtrans %}', 'height=400, width=600');if(window.focus)newWindow.focus();return false;" target="_blank" title="{% trans %}LinkedIn Login{% endtrans %}" href="{{ path('linkedInButton', {'callbackUrl': 'linkedIn_user_data'}) }}" class="linkedin"></a>
+</div>
+
+
+
+
+</form>
+
+
+</fieldset>
+</div>
+</div>
+
+</div>
+</section>

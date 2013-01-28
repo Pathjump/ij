@@ -1,0 +1,12 @@
+#scrollbar1 {
+    position: relative;
+}
+
+#scrollbar1 .scrollbar {
+    position: absolute;
+    right: 0px;
+}
+
+#scrollbar1 .viewport {
+ 
+}

@@ -1,0 +1,90 @@
+{% extends '::base.html.twig' %}
+
+{%block body%}
+<h1>Task list</h1>
+
+<table class="records_list" border="1">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Startedat</th>
+            <th>Endedat</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('company_task_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.title }}</td>
+            <td>{{ entity.description }}</td>
+            <td>{{ entity.status }}</td>
+           {# <td>{% if entity.createdAt %}{{ entity.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>#}
+            <td>{% if entity.startedAt %}{{ entity.startedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+            <td>{% if entity.endedAt %}{{ entity.endedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('company_task_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('company_task_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('task_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>
+
+    <ul>
+                                {% if lastPageNumber > 1 %}
+                    {% if page > 1 %}
+                                                <li><a href="{{ url('company_task') }}">&raquo;&raquo;</a></li>
+                                                <li><a href="{{ url('company_task',{'page': page - 1}) }}">&raquo;</a></li>
+                    {% endif %}
+
+                                
+
+        {% for numberOfPage in 1..lastPageNumber %}
+        {% if numberOfPage > page - 3 and numberOfPage < page + 3 %}
+                                {% if page == numberOfPage %}<li class="crnt"><a href="javascript:void(0)">{{ numberOfPage }}</a></li>{% else %}<li><a href="{{ url('company_task',{ 'page': numberOfPage}) }}" >{{ numberOfPage }}</a></li>{%endif%}
+        {% endif %}
+        {% endfor %}
+
+                               
+
+                    {% if page < lastPageNumber %}
+                                                <li><a href="{{ url('company_task',{'page': page + 1}) }}" >&laquo;</a></li>
+                                                <li><a href="{{ url('company_task',{'page': lastPageNumber}) }}" >&laquo;&laquo;</a></li>                    
+{% endif %}
+                {% endif %}
+                                            </ul>
+
+
+
+
+
+<hr>
+{%if companyUsers%}
+<br />
+<div>
+<h2>CompanyIterns</h2>
+{%for cu in companyUsers%}
+{{cu.internship.title}} -- {{cu.user.id}} --<a href="{{path('company_user_task', { 'userName': cu.user.loginname })}}">{{cu.user.loginname}}</a><br />
+{%endfor%}
+{%endif%}
+</div>
+
+{%endblock%}

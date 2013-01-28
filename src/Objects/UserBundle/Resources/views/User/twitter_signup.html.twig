@@ -1,0 +1,42 @@
+{% extends '::base.html.twig' %}
+{% block title %}{% trans %}Twitter Sign up{% endtrans %}{% endblock %}
+
+{% block body %}
+<section id="student-01">
+<div class="wrapper">
+
+<div class="login">
+<div class="grayCont">
+
+<fieldset>
+    <legend>Twitter Sign up</legend>
+{% if form_errors(form) %}
+    <span class="alert">
+{{ form_errors(form) }}
+</span>
+{% endif %}
+<form action="{{ path('twitter_enter') }}" method="post" {{ form_enctype(form) }}>
+    
+    <label>{% trans %}Email{% endtrans %}:</label>
+    {{ form_widget(form.email.Email) }}
+    {% if form_errors(form.email) %}
+                <span class="triangle-border left">{{ form_errors(form.email) }}</span>
+                {% endif %}
+    <br/>
+
+    <label>{% trans %}ReEmail{% endtrans %}:</label>
+    {{ form_widget(form.email.ReEmail) }}<br>
+
+    {{ form_rest(form) }}
+<div class="submit">
+        <button type="submit" class="submit" title="{% trans %}Submit{% endtrans %}">Submit</button>
+</div>
+</form>
+     </fieldset>
+</div>
+</div>
+
+</div>
+</section>
+    
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends '::base.html.twig' %}
+{% block title %}{{company}} interview{% endblock %}
+
+{% block body %}
+
+<div id="main" role="main">
+
+    <section id="comJobList">
+        <div class="wrapper">
+            <section class="comntSection fullWidth" id="interviewDetails">
+
+                <aside class="addEdiTask">
+                    <h1>Interview Details</h1>
+
+                    <div class="onMap">
+                        <span class="ico"></span>
+                        <h2>Interview location :</h2>
+                        <div class="map" id="map_canvas">
+                        </div>
+                    </div>
+
+                    <div class="intDetails">
+                        <span><strong>Date : </strong> {{interview.interviewDate|date('j F Y')}}</span>
+                        <span><strong>Country : </strong> {{interview.getCountryName}}</span>
+                        <span><strong>City : </strong> {{interview.city}}</span>
+                        {% if interview.state %}
+                        <span><strong>State : </strong> {{interview.state}}</span>
+                        {% endif %}
+                        <span><strong>Address : </strong> {{interview.address}} </span>
+                        {% if interview.details %}
+                        <span><strong>Interview Details : </strong> {{interview.details}} </span>
+                        {% endif %}
+                        {% if interview.accepted != 'pending' %}
+                        <span><strong>Interview status : </strong> {{interview.accepted}} </span>
+                        {% endif %}
+                        
+                        <span>
+                            <a href="{{path('internship_show',{'id' : interview.internship.id})}}" target="_blank">click here to see job details</a>
+                        </span>
+                    </div>
+                    <div class="clear"></div>
+
+                </aside>
+
+
+
+            </section>
+            <div class="clear"></div>
+        </div>
+    </section>
+
+
+</div>
+
+{#
+{{interview.user}} - {{interview.interviewDate|date('Y-m-d')}} -
+
+{{interview.accepted}}
+#}
+
+
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script>
+  var latitude = '{{interview.Latitude}}';
+   var longitude = '{{interview.Longitude}}';
+   
+$(document).ready(function(){
+    initialize();
+    });
+    </script>
+    <script src="{{asset('bundles/objectsinternjump/js/internShipMap.js')}}"></script>
+{% endblock %}

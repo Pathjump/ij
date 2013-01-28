@@ -1,0 +1,231 @@
+{% extends '::base.html.twig' %}
+{% block title %}company edit acount{% endblock %}
+
+{% block stylesheets %}
+{{parent()}}
+<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('css/jquery-ui-1.8.24.custom.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+
+<section id="empSignup">
+    <div class="wrapper">
+
+
+        <h1>FOR EMPLOYERS<div></div></h1>
+
+        <div class="comSignupWrapper">
+            <form action="{{ path('company_edit') }}" method="post" {{ form_enctype(form) }}>
+
+
+
+
+                {% if message %}
+                            <span class="alert sucs">
+                {{ message | trans }}
+                                </span>
+                {% endif %}
+
+                {% if form_errors(form) %}
+                                <span class="alert">
+                {{ form_errors(form) }}
+                                    </span>
+                {% endif %}
+
+
+                {% if oldPassword %}
+                    <label>Old Password:</label>
+                    {{ form_widget(form.oldPassword) }}
+                    {% if form_errors(form.oldPassword) %}
+                                    <span class="triangle-border left">{{ form_errors(form.oldPassword) }}</span>
+                    {% endif %}
+                                    <br>
+                {% endif %}
+
+                <label>Company Name:</label>
+                {{ form_widget(form.name) }}
+                {% if form_errors(form.name) %}
+                                    <span class="triangle-border left">{{ form_errors(form.name) }}</span>
+                {% endif %}
+                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;">*</span>
+                <br>
+
+                {% if changeUserName %}
+                 <label>Login Name:</label>
+                    {{ form_widget(form.loginName) }}
+                    {% if form_errors(form.loginName) %}
+                                    <span class="triangle-border left">{{ form_errors(form.loginName) }}</span>
+                    {% endif %}
+                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;">*</span>
+                <br>
+                {% endif %}
+
+
+                <label>Password:</label>
+                {{ form_widget(form.userPassword.Password) }}
+                {% if form_errors(form.userPassword) %}
+                 <span class="triangle-border left">{{ form_errors(form.userPassword) }}</span>
+                {% endif %}
+                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;">*</span>                 
+                 <br>
+
+                <label>Confirm Password:</label>
+                {{ form_widget(form.userPassword.RePassword) }}
+                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;">*</span>                
+                <br>
+
+                 <label>Company Email:</label>
+                {{ form_widget(form.email) }}
+                {% if form_errors(form.email) %}
+                 <span class="triangle-border left">{{ form_errors(form.email) }}</span>
+                {% endif %}
+                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;">*</span>                 
+                <span>{% trans %}You will need to activate your acount if you update your email{% endtrans %}</span>
+                                    <br>
+
+                                    <span class="sepa"></span>
+                                    <br>
+
+                                    <div class="prof">
+                                        <label>Industry</label>
+                {{ form_widget(form.professions,{'attr' : {'class' :  'chzn-select'}}) }}
+                {% if form_errors(form.professions) %}
+                                        <span class="triangle-border left">{{ form_errors(form.professions) }}</span>
+                {% endif %}
+                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;">*</span>                
+                                    </div>
+                                    <br>
+
+                                  {#  <label>Establishment Date:</label>
+                {{ form_widget(form.establishmentDate) }}
+                {% if form_errors(form.establishmentDate) %}
+                                    <span class="triangle-border left">{{ form_errors(form.establishmentDate) }}</span>
+                {% endif %}
+                                    <br>#}
+                                    <label>Company Logo:</label>
+                                    <span class="file-wrapper">
+                    {{ form_widget(form.file) }}
+                                            <span class="button">Browse</span>
+                     {% if company.image %}
+                                            <img id="yourImage" src="{{company.getTimThumbUrl(65,60)}}" style="border: none;" width="65" height="60"/>
+                    {% else %}
+                                            <img id="yourImage" src="#" style="border: none;" width="65" height="60"/>
+                    {% endif %}
+                                        </span>
+                                        <br>
+
+                                        <span class="sepa"></span>
+                                        <br>
+
+                                        
+
+                                        <label>Telephone:</label>
+                {{ form_widget(form.telephone) }}
+                {% if form_errors(form.telephone) %}
+                                        <span class="triangle-border left">{{ form_errors(form.telephone) }}</span>
+                {% endif %}
+                                        <br>
+
+                                        <label>Fax:</label>
+                {{ form_widget(form.fax) }}
+                {% if form_errors(form.fax) %}
+                                        <span class="triangle-border left">{{ form_errors(form.fax) }}</span>
+                {% endif %}
+                                        <br>
+
+                                        <label>Company Website:</label>
+                {{ form_widget(form.url) }}
+                {% if form_errors(form.url) %}
+                                        <span class="triangle-border left">{{ form_errors(form.url) }}</span>
+                {% endif %}
+                                        <br>
+
+                <label>Company Address:</label>
+                {{ form_widget(form.address) }}
+                {% if form_errors(form.address) %}
+                  <span class="triangle-border left">{{ form_errors(form.address) }}</span>
+                {% endif %}
+                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;">*</span>                  
+                <br>
+
+
+                                        <label>City:</label>
+                {{ form_widget(form.city) }}
+                {% if form_errors(form.city) %}
+                                        <span class="triangle-border left">{{ form_errors(form.city) }}</span>
+                {% endif %}
+                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;">*</span>                                        <br>
+
+                                        <label>State:</label>
+                {{ form_widget(form.state) }}
+                {% if form_errors(form.state) %}
+                                        <span class="triangle-border left">{{ form_errors(form.state) }}</span>
+                {% endif %}
+                                        <br>
+
+                                        <label>ZIP Code:</label>
+                {{ form_widget(form.zipcode) }}
+                {% if form_errors(form.zipcode) %}
+                                        <span class="triangle-border left">{{ form_errors(form.zipcode) }}</span>
+                {% endif %}
+                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;">*</span>                                        
+                <a href="javascript:void(0)" id="getMyPosition">Update Position On Map</a>
+                <img src="{{asset('img/loadingfacebox.gif')}}" id="getMyPositionImg" style="display: none;"/>
+                
+                                        <br>
+
+                                        
+                <label>Country:</label>
+                {{ form_widget(form.country) }}
+                {% if form_errors(form.country) %}
+                   <span class="triangle-border left">{{ form_errors(form.country) }}</span>
+                {% endif %}
+                <br>
+                                        
+                {{ form_widget(form.Latitude) }}
+                {{ form_widget(form.Longitude) }}
+
+                                        <div class="onMap">
+                                            <span class="ico"></span>
+                                            <h2>Your company on map :</h2>
+                                            <div class="map" id="map_canvas" style="width: 906px;height: 328px;">
+                                            </div>
+                                        </div>
+                                        <br>
+                {{ form_rest(form) }}
+                                        <button type="submit">Submit</button>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </section>
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+{{parent()}}
+                        <script>
+
+                        var countrySelectsUrl = '{{ path('get_countey_cities_states', {'countryId': ''}) }}/';
+                        var no_zipcode_message_new_job_page = '{{no_zipcode_message_new_job_page}}';
+                        var map_change_location_message = '{{map_change_location_message}}';
+                        var getPositionUrl = '{{url('get_position',{'zipcode' : ''})}}';
+                        var latitude = '{{company.Latitude}}';
+                        var longitude = '{{company.Longitude}}';
+var cityAutoCompleteUrl = "{{ path('city_auto_complete') }}";
+var companyState = "{{company.state}}";
+                            </script>
+                            <script src="{{ asset('js/libs/chosen.jquery.min.js') }}"></script>
+                            <script src="{{ asset('js/libs/jquery-ui-1.8.24.custom.min.js') }}" type="text/javascript"></script>
+                            <script src="{{asset('bundles/objectsinternjump/js/companySignup.js')}}"></script>
+                            <script src="{{asset('bundles/objectsinternjump/js/cityAutoComplete.js')}}"></script>
+                            
+                            <script>
+    $(document).ready(function(){
+        $('#form_url').click(function(){ $(this).attr('value','http://')} );
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,34 @@
+<link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
+
+<div class="ask4Interview selectCV">
+    <div class="wrapper">
+        <h1>Ask for hire</h1>
+        {% if form_errors(form) %}
+        <span class="alert error">
+            {{ form_errors(form) }}
+            </span>
+        {% endif %}
+            <form action="{{ path('company_hire_user',{'userId' : userId,'cvId' : cvId}) }}" method="post" {{ form_enctype(form) }}>
+                <label>Select your job</label><br>
+            {{ form_errors(form.internship) }}<br>
+            {{ form_widget(form.internship,{'attr' : {'style' : 'width:300px;'}}) }}
+
+            {{ form_rest(form) }}
+                <button id="userCvSubmit" type="submit" class="submit">Create</button>
+
+                <div class="clearfix"></div>
+            </form>
+
+        </div>
+    </div>
+
+
+<script src="{{asset('js/jquery-1.8.1.js')}}"></script>
+<script>
+$(document).ready(function(){
+    $("select").chosen();    
+});
+</script>
+
+<script src="{{ asset('js/libs/chosen.jquery.min.js') }}"></script>

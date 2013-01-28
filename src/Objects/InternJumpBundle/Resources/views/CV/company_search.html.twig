@@ -1,0 +1,128 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Search for a Resume{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('css/scrollinList.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block body %}
+<section id="comJobList">
+    <div class="wrapper">
+        <div id="loading">
+            <img src="{{ asset('img/followLoader.gif') }}" alt="loader">
+        </div>
+
+        <form id="cv-search-form" onsubmit="refreshPage(1);return false;" action="{{ path('company_search_for_cv') }}" method="GET">
+            <input name="cv-search-form-submited" type="hidden" value="1"/>
+            <!--search-container-->
+            <div class="Search-Internships">
+                <input name="search-string" type="text"{% if searchString %} value="{{ searchString }}"{% endif %} placeholder="Search with professions and skills">
+                <input type="submit" value="Search" class="submit" style="float: none;"><span></span>
+            </div>
+            <br><br>
+            <aside class="others filters">
+                <h1>Search Filters:</h1>
+                <div class="filterWrapper">
+
+                    <h2>Categories</h2>
+                    <div id="scrollbar1">
+                        <div class="scrollbar">
+                            <div class="track">
+                                <div class="thumb">
+                                    <div class="end">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="viewport">
+                            <div class="overview">
+                                {% for category in parentCategories %}
+                                    <label><input onchange="refreshPage(1);return false;" name="selected-categories[]" type="checkbox" value="{{ category.id }}"{% if category.id in selectedCategories %} checked="checked"{% endif %}>{{ category }}</label><hr>
+                                    {% for childCategory in category.subCategories %}
+                                        {% if loop.first %}
+                                        <div class="fulterSub">
+                                        {% endif %}
+                                        <label><input onchange="refreshPage(1);return false;" name="selected-categories[]" type="checkbox" value="{{ childCategory.id }}"{% if childCategory.id in selectedCategories %} checked="checked"{% endif %}>{{ childCategory }}</label><hr>
+                                        {% if loop.last %}
+                                        </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2>Skills</h2>
+                    <select onchange="refreshPage(1);return false;" name="skills-ids[]" multiple="" data-placeholder="Choose Skills" class="chzn-select" style="width: 225px">
+                        <option value=""></option>
+                        {% for skill in skills %}
+                            <option value="{{ skill.id }}"{% if skill.id in selectedSkillsIds %} selected="selected"{% endif %}>{{ skill }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <h2>Experience</h2>
+                    <div class="viewport">
+                    <label><input onchange="refreshPage(1);return false;" name="experience-years[]" type="checkbox" value="0"{% if 0 in experienceYears %} checked="checked"{% endif %}>Fresh Graduated</label><hr>
+                    <label><input onchange="refreshPage(1);return false;" name="experience-years[]" type="checkbox" value="1"{% if 1 in experienceYears %} checked="checked"{% endif %}>1 Year</label><hr>
+                    <label><input onchange="refreshPage(1);return false;" name="experience-years[]" type="checkbox" value="2"{% if 2 in experienceYears %} checked="checked"{% endif %}>2 Years</label><hr>
+                    <label><input onchange="refreshPage(1);return false;" name="experience-years[]" type="checkbox" value="3"{% if 3 in experienceYears %} checked="checked"{% endif %}>3 Years</label><hr>
+                    <label><input onchange="refreshPage(1);return false;" name="experience-years[]" type="checkbox" value="4"{% if 4 in experienceYears %} checked="checked"{% endif %}>4 Years</label><hr>
+                    <label><input onchange="refreshPage(1);return false;" name="experience-years[]" type="checkbox" value="5"{% if 5 in experienceYears %} checked="checked"{% endif %}>5 Years</label><hr>
+                    </div>
+
+                    <h2>Country</h2>
+                    <select onchange="refreshPage(1);return false;" name="country-id" id="form_country" data-placeholder="Choose a country..." class="chzn-select" style="width: 225px">
+                        <option value=""></option>
+                        {% for country in countries %}
+                            <option value="{{ country.id }}"{% if country.id == countryId %} selected="selected"{% endif %}>{{ country }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+
+                    <h2>City</h2>
+                    <select onchange="refreshPage(1);return false;" name="city" id="form_city" data-placeholder="Choose a city..." class="chzn-select" style="width: 225px">
+                        <option value=""></option>
+                        {% if cityId %}
+                        <option selected="selected" value="{{ cityId }}"></option>
+                        {% endif %}
+                    </select>
+                    <br>
+
+                    <h2>State</h2>
+                    <select onchange="refreshPage(1);return false;" name="state" id="form_state" data-placeholder="Choose a state..." class="chzn-select" style="width: 225px">
+                        <option value=""></option>
+                        {% if stateId %}
+                        <option selected="selected" value="{{ stateId }}"></option>
+                        {% endif %}
+                    </select>
+                    <br>
+
+                    <button type="submit" class="submit">Search</button>
+                    <div class="clear"></div>
+                </div>
+            </aside>
+
+            <section id="company-cv-search-results" class="srchResults comntSection">
+                {% include 'ObjectsInternJumpBundle:CV:company_search_ajax.html.twig' %}
+            </section>
+        </form>
+        <div class="clearfix"></div>
+
+    </div>
+</section>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('js/libs/chosen.jquery.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/libs/jquery.tinyscrollbar.min.js') }}" type="text/javascript"></script>
+<script>
+    $(document).ready(function(){
+        $('#logedInComapny,#searchStudents').addClass('crnt');
+        $('#companyNav').show();
+    });
+    var countrySelectsUrl = '{{ path('get_countey_cities_states', {'countryId': ''}) }}/';
+</script>
+<script src="{{ asset('bundles/objectsinternjump/js/companySearchForCV.js') }}" type="text/javascript"></script>
+{% endblock %}

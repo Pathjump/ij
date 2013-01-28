@@ -1,0 +1,731 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}
+{{app.user}} profile
+{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('css/stuEdu.css') }}" rel="stylesheet" type="text/css"/>
+{#<link href="{{asset('css/jquery-ui.css')}}" rel="stylesheet" type="text/css"/>#}
+<link href="{{asset('css/scrollinList.css')}}" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+
+        <section id="comJobList">
+            {% if is_granted('ROLE_USER') %}
+
+                        <!-- Meter Part -->
+{% render "ObjectsInternJumpBundle:Task:userMeter" %}
+            <div class="wrapper">
+
+                <aside class="comJobListAccTabs">
+
+{% if latestJobs %}<!--check if found Jobs found or Not for the cv categories-->
+            <div class="lastUpdates">
+
+                <h1>Internship Suggestions</h1>
+                 {%if cvCategoris%} <!--check if found categories of cvs or not i.e: student has Cv(s) and active or not-->
+                <ul>
+                    {% for job in latestJobs %}
+                        <li>
+                            <span>{{ job['title'] }}</span>
+                            <a title="Read Job Details" href="{{ path('internship_show', {'id': job['id']}) }}">Read</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <i>
+                    To See Latest Jobs<br />
+                    activate at least One of your CVs<br />
+                    Or Create new one
+                </i>
+                {% endif %}
+            </div>
+{% endif %}
+
+
+                                             <!--Scrolling List-->
+                                <div class="scrolList">
+                                    <h1>Upcoming Interviews</h1>
+
+                                {%if interviews%}
+                                    <div id="scrollbar1">
+                                        <div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
+                                        <div class="viewport">
+                                            <div class="overview">
+                                                <ul>
+                                {%for interview in interviews%}
+
+                                                        <li {% if loop.last %}style="margin-bottom: 1px;"{% endif %}><img src="{{interview.company.getTimThumbUrl(24,24)}}" width="24" height="24">
+                                                            <a href="{{path('user_interview',{'interviewId' : interview.id})}}">
+                                                                    {{interview.company}}
+                                                                </a>
+                                                                <br>
+                                                                <div class="status"><span class="{{interview.accepted}}"></span>{{interview.accepted}}</div>
+                                                                <div class="date">{{interview.interviewDate|date('j F. Y')}}</div>
+                                                            </li>
+
+                                {% endfor %}
+
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                        {% else %}
+                        <h2 class="current">You don't have any interviews</h2>
+
+                           {% endif %}</div>
+
+            {%if flag=="facebook"%}
+            {%else%}
+                <div class="fb-like-box" data-href="http://www.facebook.com/internjump?fref=ts" data-width="292" data-show-faces="false" data-stream="false" data-header="true"></div>
+            {%endif%}
+
+        </aside>
+
+        <section class="comntSection" id="portalHome">
+            <aside class="copmanyInfo">
+                <img src="{{ user.getTimThumbUrl(111, 119) }}" width="111" height="119"/>
+                <div>
+                    <h1>{{ user }}<a href="{{path('user_edit')}}" style="float:right;padding-right: 10px; text-decoration: underline; font-weight: normal;">Edit</a></h1>
+                    <div class="infoBlock">
+                        <table width="200" cellpadding="3" border="0" class="Objectives-box">
+
+                            <tr>
+                                {#{%if user.getGenderString()%}
+                                <th class="title-des" scope="row">Gender:</th>
+                                <td>{{ user.getGenderString() }}</td>
+                                {%endif%}#}
+                                {%if user.email%}
+                                <td class="title-des">Email:</td>
+                                <td>{{ user.email }}</td>
+                                {%endif%}
+                            </tr>
+                            <tr>
+                                {%if cvCount > 0%}
+                                <td class="title-des">Status:</td>
+                                <td>-{{cvCount}}Resumes Published {%if userjob%} <br />-Hired In <b>{{userjob.internship.company}}</b>{%endif%}{%if interviews%} <br />-Have {{interviewsCount}} upcoming Interview(s){%endif%}</td>
+                                {%else%}
+                                <td class="title-des">Status:</td>
+                                <td>-No Resumes Published {%if userjob%} <br />-Hired In {{userjob.internship.company}}{%endif%}{%if interviews%} <br />-Have {{interviewsCount}} upcoming Interview(s){%endif%}</td>
+                                {%endif%}
+                            </tr>
+                            {#<tr>
+                                {%if user.getCountryName()%}
+                                    <th class="title-des" scope="row">Country:</th>
+                                    <td>{{ user.getCountryName() }}</td>
+                                {%endif%}
+                                {%if user.getCity()%}
+                                    <td class="title-des">City:</td>
+                                    <td>{{ user.getCity() }}</td>
+                                {%endif%}
+                            </tr>
+                            <tr>
+                                {%if user.getState()%}
+                                <th class="title-des" scope="row">State:</th>
+                                <td>{{ user.getState() }}</td>
+                                {%endif%}
+                                {%if user.getAge()%}
+                                <td class="title-des">Age:</td>
+                                <td>{{ user.getAge() }}</td>
+                                {%endif%}
+                            </tr>#}
+                            <tr>
+                                {%if user.about%}
+                                <th class="title-des" scope="row">About:</th>
+                                <td colspan="3">{{ user.about }}</td>
+                                {%endif%}
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                {%if quizResult%}
+                <br />
+                <br />
+                <aside class="profile_quiz" >
+                    <h2>Personality Test Character:</h2><br>
+                    <p>
+                    <img src="{{quizResult.getTimThumbUrl(48,48)}}" style="width: 48px; height: 48px;">
+                    {{quizResult.message}}
+                    <span style="font-weight: bold; font-size: 25px; margin: 10px; color: rgb(3, 124, 191);" class="quizMore"><a href="javascript:void(0)">?</a></span>
+                    <p style="display: none; border-top: 1px solid rgb(221, 221, 221); padding: 10px; margin: 10px; font: 12px/1.5 arial;" class="quizMoreData">{{quizResult.description}}</p>
+
+                    </p>
+                </aside>
+                {%endif%}
+
+                <aside id="tabs">
+                    <div class="tabsList">
+                        <ul>
+                            <li><a href="#tabs-1" faceFlag='faceFlag'>Skills</a></li>
+                            <li><a href="#tabs-2" faceFlag='faceFlag'>Education</a></li>
+                            <li><a href="#tabs-3" faceFlag='faceFlag'>Experience</a></li>
+                        </ul>
+                    </div>
+                    <div id="tabs-1">
+                        {%if user.skills|length > 0%}
+                            <a href="{{path('addEditUserSkills')}}"><u>Edit</u></a>
+                            <ul>
+                            {% for skill in user.skills %}
+                                <li>{{ skill }}</li>
+                            {% endfor %}
+                            </ul>
+                        {%else%}
+                            <p>
+                                <a href="{{path('addEditUserSkills')}}"><u>Add Skill</u></a>
+                            </p>
+                        {%endif%}
+                    </div>
+                    <div id="tabs-2">
+                   {%if user.educations|length > 0%}
+                        {% for education in user.educations %}
+                        {#<table border="0" class="Objectives-box" cellpadding="3">
+                            <tr>
+                                <th scope="row"  class="title-des">School Name:</th>
+                                <td>{{ education.schoolName }}</td>
+                                <td class="title-des">Field Of Study:</td>
+                                <td>{{ education.fieldOfStudy }}</td>
+                                <td class="title-des">Grade:</td>
+                                <td>{{ education.grade }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row"  class="title-des">Degree:</th>
+                                <td>{{ education.degree }}</td>
+                                <td class="title-des">Start Year:</td>
+                                <td>{% if education.startDate %}{{ education.startDate | date('Y-m-d') }}{% endif %}</td>
+                                <td class="title-des">End Year:</td>
+                                <td>{% if education.endDate %}{{ education.endDate | date('Y-m-d') }}{% endif %}</td>
+                            </tr>
+                            <tr class="notes">
+                                <td class="title-des">Additional Notes</td>
+                                <td colspan="5">{{ education.additionalDetails }}</td>
+                            </tr>
+                        </table> #}
+                              <div class="block2">
+                            <a  href="{{path('education_edit',{'id' : education.id })}}" ><u>Edit</u></a>
+                            <ul class="Objectives-box">
+
+
+                                    {% if education.schoolName %}
+                                    <li>
+                                    <b class="title-des">My collage:</b>
+                                    {{education.schoolName}}
+                                    </li>
+                                    {% endif %}
+
+                                    <li>
+                                    <b class="title-des">Major:</b>
+                                    {{education.major}}
+                                    </li>
+
+
+                                    {% if education.minor %}
+                                    <li>
+                                    <b class="title-des">Minor:</b>
+                                    {{education.minor}}
+                                    </li>
+                                    {% endif %}
+
+                                    {% if education.startDate %}
+                                    <li>
+                                    <b class="title-des">{%if education.underGraduate%}Undergraduate{%else%}Graduate{%endif%} start date:</b>
+                                   {{education.startDate}}
+                                    </li>
+                                    {% endif %}
+
+
+                                    {% if education.endDate %}
+                                    <li>
+                                    <b class="title-des">{%if education.underGraduate%}Undergraduate{%else%}Graduate{%endif%} end date:</b>
+                                    {{education.endDate}}
+                                    </li>
+                                    {% endif %}
+
+
+                                    {% if education.extracurricularActivity %}
+                                    <li>
+                                    <b class="title-des">Extra Curricular Activities:</b>
+                                    {{education.extracurricularActivity}}
+                                    </li>
+                                    {% endif %}
+
+                                    {% if education.relevantCourseworkTaken %}
+                                    <li>
+                                    <b class="title-des">Relevant course work taken:</b>
+                                    {{education.relevantCourseworkTaken}}
+                                    </li>
+                                    {% endif %}
+
+                                    {% if education.cumulativeGPA %}
+                                    <li>
+                                    <b class="title-des">Cumulative GPA:</b>
+                                    {{education.cumulativeGPA}}
+                                    </li>
+                                    {% endif %}
+
+                                    {% if education.majorGPA %}
+                                    <li>
+                                    <b class="title-des">Major GPA:</b>
+                                    {{education.majorGPA}}
+                                    </li>
+                                    {% endif %}
+
+                                    {% if education.graduateDegree %}
+                                    <li>
+                                    <b class="title-des">Graduate degree:</b>
+                                    {{education.graduateDegree}}
+                                    </li>
+                                    {% endif %}
+
+                                    {% if education.undergraduateDegree %}
+                                    <li>
+                                    <b class="title-des">Undergraduate degree:</b>
+                                    {{education.undergraduateDegree}}
+                                    </li>
+                                    {% endif %}
+                            </ul>
+                        </div>  <!--block2-->
+                        {% endfor %}
+                     {%else%}
+                        <div class="block2">
+                            <a  href="{{path('education_new')}}"> <u>Add Education</u></a>
+                        </div>
+                     {%endif%}
+                    </div>
+                    <div id="tabs-3">
+                    {%if user.employmentHistories|length > 0%}
+                        {% for employmentHistory in user.employmentHistories %}
+                        <a href="{{path('employmenthistory_edit',{'id': employmentHistory.id})}}"><u>Edit</u></a>
+                        <ul class="Objectives-box">
+                            {%if employmentHistory.title%}
+                            <li>
+                                <b class="title-des">Title:</b>
+                                {{ employmentHistory.title }}
+                            </li>
+                            {%endif%}
+
+                            {%if employmentHistory.industry%}
+                            <li>
+                                <b class="title-des">Industry:</b>
+                                {{ employmentHistory.industry }}
+                            </li>
+                            {%endif%}
+
+                            {%if  employmentHistory.companyName%}
+                            <li>
+                                <b class="title-des">Company Name:</b>
+                                {% if employmentHistory.companyUrl %}<a target="_blank" rel="nofollow" href="{{ employmentHistory.companyUrl }}">{% endif %}{{ employmentHistory.companyName }}{% if employmentHistory.companyUrl %}</a>{% endif %}
+                            </li>
+                            {%endif%}
+
+                            {% if employmentHistory.startedFrom %}
+                            <li>
+                                <b class="title-des">Started Position:</b>
+                                {{ employmentHistory.startedFrom | date('Y-m-d') }}
+                            </li>
+                            {% endif %}
+
+                            {% if employmentHistory.endedIn %}
+                            <li>
+                                <b class="title-des">Position Ended:</b>
+                                {{ employmentHistory.endedIn | date('Y-m-d') }}
+                            </li>
+                            {% endif %}
+
+                            {%if employmentHistory.description%}
+                            <li class="notes">
+                                <b class="title-des">Description</b>
+                                {{ employmentHistory.description }}
+                            </li>
+                            {%endif%}
+
+                        </ul>
+                        {% endfor %}
+
+                    {%else%}
+                            <a href="{{path('employmenthistory_new')}}"><u>Add Employment History</u></a>
+                    {%endif%}
+                    </div>
+                    <div class="clear"></div>
+                </aside>
+            </aside>
+
+            {%if userjob%}
+            <section class="comntSection" id="crntHired">
+                <aside class="copmanyInfo" id="msgsBox">
+
+
+                    <h1>Currently Hired In <i>{%if userjob%}{{userjob.internship.company}}{%endif%}</i></h1>
+                    <h2>You are now working at <a href="#">{%if userjob%}{{userjob.internship.company}}{%endif%}</a> as a <a href="#">{%if userjob%}{{userjob.internship.title}}{%endif%}</a></h2>
+
+                    <div class="wrapper">
+
+                        <div class="inboxBlock">
+
+                            <div class="simpleTabsContent" style="display: block;">
+                                <button type="submit"><img src="{{asset('img/eyeIcon.png')}}" width="19" height="12"></button>
+                                <button type="submit"><img src="{{asset('img/taskList.png')}}" width="28" height="16"></button>
+
+                              <div class="perPage">
+                                    <span>Filter :</span>
+                                    <select class="chzn-select" id="statusFilter">
+                                        <option value=""></option>
+                                        <option {%if status=="new"%}selected="selected"{%endif%}>new</option>
+                                        <option {%if status=="inprogress"%}selected="selected"{%endif%}>inprogress</option>
+                                        <option {%if status=="done"%}selected="selected"{%endif%}>done</option>
+                                        <option {%if status=="all"%}selected="selected"{%endif%}>all</option>
+                                    </select>
+                                </div>
+
+
+                                <div class="perPage" id="perpageFilter">
+                                    <span>Per page :</span>
+                                    <select  class="chzn-select" id="perpageFilter" tabindex="2" name="tasks_per_show_page_{{ user.id }}" onchange="setCookie('tasks_per_show_page_{{ user.id }}', this.value, 86391359);window.location.reload();">
+                                        {% for perPageNumber in 10 .. 100 %}
+                                            {% if perPageNumber is divisibleby(10) %}
+                                                <option{% if tasksPerPage == perPageNumber %} selected="selected"{% endif %} value="{{ perPageNumber }}">{{ perPageNumber }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="perPage">
+                                    <span>Page :</span>
+                                    <select class="chzn-select" id="pageFilter" tabindex="2">
+                                        <option value=""></option>
+                                        {% for pageNumber in 1 .. lastPageNumber %}
+                                            <option{% if page == pageNumber %} selected="selected"{% endif %} value="{{ pageNumber }}">{{ pageNumber }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <table class="msgsTable">
+                                    <thead>
+                                        <td>&nbsp;</td>
+                                        <td>Task Name</td>
+                                        <td>Date</td>
+                                        <td>Task Case</td>
+                                        <td>Show Task</td>
+                                    </thead>
+                                    {% if entities %}
+                                    {% for entity in entities %}
+                                    <tr{% if entity.status == 'new' %} class="read"{% endif %}>
+                                        <td>&nbsp;</td>
+                                        <td><a href="{{ path('student_task_show', { 'id': entity.id }) }}">{{ entity.title }}</a></td>
+                                        <td><a href="{{ path('student_task_show', { 'id': entity.id }) }}">{% if entity.createdAt %}{{ entity.createdAt|date('Y-m-d H:i:s') }}{% endif %}</a></td>
+                                        <td class="case"><a href="{{ path('student_task_show', { 'id': entity.id }) }}"><span class="{% if entity.status == 'new' %}new{% elseif entity.status == 'inprogress' %}inprog{% else %}done{% endif %}"></span>{% if entity.status == 'new' %}New{% elseif entity.status == 'inprogress' %}Inprogress{% else %}Done{% endif %}</a></td>
+                                        <td class="showTask"><a onclick="$('#Task_{{ entity.id }}_description').toggle();" href="javascript:void(0)">showTask</a></td>
+                                    </tr>
+                                    <tr style="display: none;" id="Task_{{ entity.id }}_description">
+                                        <td colspan="5" class="taskDetails">
+                                            {{ entity.description }}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                     {% endif %}
+                                </table>
+
+                                {% if lastPageNumber > 1 %}
+                                <ul class="pging">
+                                    {% if page > 1 %}
+                                    <li><a href="{{ url('student_task',{'loginName': user.loginName,'status': status}) }}">&laquo;&laquo;</a></li>
+                                    <li><a href="{{ url('student_task',{'loginName':user.loginName,'status': status,'page': page - 1}) }}">&laquo;</a></li>
+                                    {% endif %}
+
+                                    {% for numberOfPage in 1..lastPageNumber %}
+                                    {% if numberOfPage > page - 3 and numberOfPage < page + 3 %}
+                                        {% if page == numberOfPage %}<li class="crnt"><a href="{{ url('student_task',{'loginName':user.loginName,'status': status ,'page': numberOfPage}) }}">{{ numberOfPage }}</a></li>{% else %}<li><a href="{{ url('student_task',{'loginName':user.loginName ,'status': status,'page': numberOfPage}) }}" >{{ numberOfPage }}</a></li>{%endif%}
+                                    {% endif %}
+                                    {% endfor %}
+
+                                    {% if page < lastPageNumber %}
+                                            <li><a href="{{ url('student_task',{'loginName':user.loginName,'status': status, 'page': page + 1}) }}" >&raquo;</a></li>
+                                            <li><a href="{{ url('student_task',{'loginName':user.loginName,'status': status, 'page': lastPageNumber}) }}" >&raquo;&raquo;</a></li>
+                                    {% endif %}
+                                </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                </aside>
+            </section>
+                {%endif%}
+
+
+            {% if user.cvs %}
+            <section class="comntSection" id="crntHired">
+                <aside class="copmanyInfo" id="myCvs">
+                    <h1>My Resumes</h1>
+                    <div class="CVs-box">
+                        <ul>
+                            {% for cv in user.cvs %}
+                            <li>
+                                <input type="checkbox" name="checkbox" class="cvcheckbox" value="{{ cv.id }}"/>
+                                <a title="{{ cv }}" href="{{ path('user_portal_home',{'loginName' : user.loginName,'cvId' : cv.id}) }}">{{ cv.name }}</a>
+                                <div class="onoffswitch">
+                                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox isActiveCv" id="{{ cv.id }}" {% if cv.isActive %}checked="checked"{% endif %}>
+                                    <label class="onoffswitch-label" for="{{cv.id}}">
+                                        <div class="onoffswitch-inner">
+                                            <div class="onoffswitch-active">ON</div>
+                                            <div class="onoffswitch-inactive">OFF</div>
+                                        </div>
+                                        <div class="onoffswitch-switch"></div>
+                                    </label>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <br>
+                    <a class="button addcvbutton" href="{{path('cv_new')}}" value="AddCV">Add Resume</a>
+                    <button class="button del_btn" value="Delete">Delete</button>
+                    <button class="button pub_btn" value="Publish">Publish</button>
+                    <button class="button unpub_btn" value="UnPublish">Unpublish</button>
+                    <div class="clear"></div>
+
+                </aside>
+            </section>
+            {% endif %}
+
+                {%if appliedJobs%}
+            <section class="comntSection" id="crntHired">
+                <aside class="copmanyInfo" id="myCvs">
+                    <h1>Job Applications</h1>
+                    <div class="CVs-box">
+                        <ul>
+                        {%for userjob in appliedJobs%}
+                            <li>
+                                <a title="" href="{{path('internship_show',{'id': userjob.internship.id})}}"> {{userjob.internship.title}}</a>
+
+                            </li>
+                            {%endfor%}
+                        </ul>
+                    </div>
+                    <div class="clear"></div>
+                </aside>
+            </section>
+                {%endif%}
+
+        </section>
+    </div>
+            {%else%}
+                         <section id="portalHome" class="comntSection">
+                            <div class="alertConfirmation">Please Activate Your Account ! </div>
+                         </section>
+            {%endif%}
+</section>
+
+
+
+
+
+{%endblock%}
+
+{% block javascripts %}
+<script src="{{ asset('js/libs/vtabs.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/libs/chosen.jquery.min.js') }}" type="text/javascript"></script>
+   <script type="text/javascript" src="{{asset('js/libs/jquery.tinyscrollbar.min.js')}}"></script>
+   <script type="text/javascript" src="{{asset('js/jquery.mousewheel-3.0.6.pack.js')}}"></script>
+                                                <script type="text/javascript" src="{{asset('js/website.js')}}"></script>
+<script>
+    $(document).ready(function(){
+        $(".chzn-select").chosen();
+        $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+        $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+    });
+    var changeCvStatusUrl = '{{ path('change_user_cv_status') }}';
+    var cvActionsUrl= '{{ path('user_cvs_actions') }}';
+    var user= '{{user.loginName}}';
+    var status= '{{status}}';
+    var portalPageActionsUrl= '{{ path('student_task', {'loginName': user.loginName,'status':'', 'page':''}) }}';
+</script>
+<script src="{{asset('bundles/objectsinternjump/js/StudentTasksMainPage.js')}}"></script>
+<script src="{{ asset('js/cookies.js') }}" type="text/javascript"></script>
+    <script>
+    $(document).ready(function(){
+        $('#logedInStudent,#userHome').addClass('crnt');
+        $('#studentNav').show();
+
+        $('.progressBar').hover(function() {
+        if($('.moredetails').is(':hidden')){
+        $('.moredetails').slideToggle(1000);
+        $('.detailsLink').text('hide details');
+        }
+    });
+
+        $('.detailsLink').click(function(){
+            $('.moredetails').slideToggle(1000,function(){
+                if($('.moredetails').is(':hidden')){
+                $('.detailsLink').text('show details');
+            }else{
+                $('.detailsLink').text('hide details');
+            }
+            });
+    });
+    });
+
+        // add_CV button
+      /*  $('.addcvbutton').click(function(){
+            window.location= '{{path('cv_new')}}';
+        });
+      */
+
+        // Publish Button
+        $('.pub_btn').click(function(){
+            var count = 0;
+            var status= 1;
+            var method= "pubUnpub";
+            $(".cvcheckbox:checked").each(function(){//input[type=checkbox][checked]
+                count+= 1;
+            });
+            if(count==0)//in case no checked checkbox
+            {
+                jAlert('Please Choose CV(s) to be published','Confirm Publish');
+            }
+            else
+            {
+             jConfirm('ok','cancel','You are about to Publish '+count+' Of your CV(s) <br />Are you sure you want to ', 'Confirm Publish', function (r) {
+            if (r == true) {
+                var cvsId=[];
+                $('.loading').show();
+                $(".cvcheckbox:checked").each(function(){
+                    cvsId.push($(this).val());
+                });
+                //end .each
+
+
+                    $.ajax({
+                        url: cvActionsUrl+'/'+cvsId+'/'+status+'/'+method,
+                        success: function(msg) {
+                         },
+                        complete: function(msg) {
+                            //hide loading div
+                            $('.loading').hide();
+                            //now reload the page
+                            window.location.reload();
+                        }
+                    });
+
+
+
+            }});
+
+        }//end else
+
+        });
+
+
+        //Unpublish Button
+        $('.unpub_btn').click(function(){
+            var count = 0;
+            var status= 0;
+            var method= "pubUnpub";
+            $(".cvcheckbox:checked").each(function(){//input[type=checkbox][checked]
+                count+= 1;
+            });
+            if(count==0)//in case no checked checkbox
+            {
+                jAlert('Please Choose CV(s) to be Unpublished','Confirm Publish');
+            }
+            else
+            {
+             jConfirm('ok','cancel','You are about to UnPublish '+count+' Of your CV(s) <br />Are you sure you want to ', 'Confirm UnPublish', function (r) {
+            if (r == true) {
+
+                var cvsId=[];
+                $('.loading').show();
+                $(".cvcheckbox:checked").each(function(){
+                    cvsId.push($(this).val());
+                });
+                //end .each
+
+                    $.ajax({
+                        url: cvActionsUrl+'/'+cvsId+'/'+status+'/'+method,
+                        success: function(msg) {
+                         },
+                        complete: function(msg) {
+                            //hide loading div
+                            $('.loading').hide();
+                            //now reload the page
+                            window.location.reload();
+                        }
+                    });
+
+
+
+
+            }});
+
+        }//end else
+
+        });
+
+
+        //Delete Button
+        $('.del_btn').click(function(){
+            var count = 0;
+            var status= 2;
+            var method= "delete";
+            $(".cvcheckbox:checked").each(function(){//input[type=checkbox][checked]
+                count+= 1;
+            });
+            if(count==0)//in case no checked checkbox
+            {
+                jAlert('Please Choose CV(s) to be Deleted','Confirm Delete');
+            }
+            else
+            {
+             jConfirm('ok','cancel','You are about to Delete '+count+' Of your CV(s) <br />Are you sure you want to ', 'Confirm Delete', function (r) {
+            if (r == true) {
+
+                var cvsId=[];
+                $('.loading').show();
+                $(".cvcheckbox:checked").each(function(){
+                    cvsId.push($(this).val());
+                });
+                //end .each
+
+                    $.ajax({
+                        url: cvActionsUrl+'/'+cvsId+'/'+status+'/'+method,
+                        success: function(msg) {
+                         },
+                        complete: function(msg) {
+                            //hide loading div
+                            $('.loading').hide();
+                            //now reload the page
+                            window.location.reload();
+                        }
+                    });
+
+
+
+
+            }});
+
+        }//end else
+
+        });
+
+        $('#statusFilter').change(function(){
+                 var status = $('#statusFilter option:selected').val();
+                 window.location= portalPageActionsUrl+status;
+        });
+
+        $('#pageFilter').change(function(){
+                var page=$('#pageFilter option:selected').val();
+                var status ='{{status}}';
+                 window.location= portalPageActionsUrl+status+"/"+page;
+        });
+
+        $('.quizMore').hover(function(){
+            $('.quizMoreData').toggle(300);
+        },function(){
+            $('.quizMoreData').toggle(300);
+        });
+    </script>
+
+
+{% endblock %}

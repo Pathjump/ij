@@ -1,0 +1,122 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}New Employment History{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('css/jquery-ui-1.8.24.custom.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+<section id="student-01">
+    <div class="wrapper">
+
+        <!--Edit-skils-->
+        <div class="Edit-Objectives">
+            <!--form Name-->
+            <h1>{%if formName%}{{formName}}{%endif%}:</h1>
+            <hr/>
+            {% if app.session.hasFlash('notice') %}
+            <span class="alert fail">
+            {{ app.session.flash('notice') | raw }}
+            </span>
+            {% endif %}
+            {% if app.session.hasFlash('success') %}
+            <span class="alert success">
+            {{ app.session.flash('success') | raw }}
+            </span>
+            {% endif %}
+            {% if app.session.hasFlash('error') %}
+            <span class="alert error">
+            {{ app.session.flash('error') | raw }}
+            </span>
+            {% endif %}
+            {% if form_errors(form) %}
+            <span class="alert error">
+            {{ form_errors(form) }}
+            </span>
+            {% endif %}
+            <div class="edit-objectives-box">
+                <form action="{{ path('employmenthistory_create') }}" method="POST">
+                    <!--form Desc-->
+                    <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
+
+                    <label>Title :</label>
+                    {{ form_widget(form.title) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.title) }}</span>
+                    <br/>
+                    <label>Industry :</label>
+                    {{ form_widget(form.industry) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.industry) }}</span>
+                    <br/>
+                    <label>Description :</label>
+                    {{ form_widget(form.description) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.description) }}</span>
+                    <br/>
+                    <label>Started Position :</label>
+                    {{ form_widget(form.startedFrom) }}
+                    <br/>
+                    <label for="objects_internjumpbundle_employmenthistorytype_isCurrent">Current Position :</label>
+                    {{ form_widget(form.isCurrent) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.isCurrent) }}</span>
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.startedFrom) }}</span>
+                    <br/>
+                    <label>Position Ended :</label>
+                    {{ form_widget(form.endedIn) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.endedIn) }}</span>
+                    <br/>
+                    <label>Company Name :</label>
+                    {{ form_widget(form.companyName) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.companyName) }}</span>
+                    <br/>
+                    <label>Company URL :</label>
+                    {{ form_widget(form.companyUrl) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.companyUrl) }}</span>
+                    <br/>
+                    {{ form_rest(form) }}
+                    <div class="low-btns">
+                        <input type="submit" class="submit" value="Save">
+                    </div>
+                </form>
+                <div class="clear"></div>
+            </div>
+            <!-- End Skils Box-->
+        </div>
+    </div><!--end of wrapper -->
+</section>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('js/libs/jquery-ui-1.8.24.custom.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/libs/chosen.jquery.min.js') }}" type="text/javascript"></script>
+<script>
+    function changeInputs() {
+        var currentCheck = $(this);
+        currentCheck.parent().parent().find('.employmentEndedIn').each(function() {
+            if(currentCheck.is(':checked')) {
+                $(this).attr('disabled', 'disabled');
+                $(this).val('');
+            } else {
+                $(this).removeAttr('disabled');
+            }
+        });
+    }
+    $(document).ready(function() {
+        $('#logedInStudent,#newEmploymentHistory').addClass('crnt');
+        $('#studentNav').show();
+        $('.employmentStartedFrom').datepicker({changeYear: true, dateFormat: 'yy-mm-dd', maxDate: new Date()});
+        $('.employmentEndedIn').datepicker({changeYear: true, dateFormat: 'yy-mm-dd', maxDate: new Date()});
+        $('.employmentIsCurrentJob').each(changeInputs);
+        $('.employmentIsCurrentJob').change(changeInputs);
+        $('.chzn-select').chosen();
+    });
+</script>
+{% endblock %}

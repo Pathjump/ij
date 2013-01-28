@@ -1,0 +1,65 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Resume Employment Histories{% endblock %}
+
+{% block body %}
+<section id="student-01">
+    <div class="wrapper">
+
+        <div class="editSkills">
+            <h1>{{ entity }}</h1>
+            <hr/>
+            <div class="blueCont">
+                <!--form Name-->
+                <h2>{%if formName%}{{formName}}{%endif%}:</h2>
+                <!--form Desc-->
+                <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
+                {% if userEmploymentHistories | length > 0 %}
+                <form method="POST" action="{{ path('cv_employment_history', {'id': entity.id}) }}">
+                    <div class="infoBlock">
+                        <table>
+                            <tr>
+                                <td><input{% if userEmploymentHistories | length == cvEmploymentHistories | length %} checked="checked"{% endif %} onchange="checkUnCheck(this);" id="all_cv_experience" type="checkbox"></td>
+                                <td colspan="2"><label for="all_cv_experience" style="display: block;">Check/UnCheck All</label></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"></td>
+                            </tr>
+                            {% for employmentHistory in userEmploymentHistories %}
+                            <tr>
+                                <td><input{% if employmentHistory in cvEmploymentHistories %} checked="checked"{% endif %} id="employmentHistory_{{ employmentHistory.id }}" class="cvemploymentHistoryInput" name="cv_employment_histories[]" type="checkbox" value="{{ employmentHistory.id }}"></td>
+                                <td onclick="$('#employmentHistory_{{ employmentHistory.id }}').click();">{{ employmentHistory }}</td>
+                                <td title="Edit your employment history"><a href="{{ path('employmenthistory_edit', {'id': employmentHistory.id}) }}">Edit</a></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"></td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <button class="submit" type="submit">{{ buttonText }}</button>
+                </form>
+                {% else %}
+                <p>You Do not have any employment history yet, Follow the next link to create a new one.</p>
+                {% endif %}
+                <a class="submit" title="Add new employment history" href="{{ path('employmenthistory_new') }}">Add new employment history</a>
+                <div class="clear"></div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<script>
+    function checkUnCheck(element) {
+        if(element.checked){
+            $('.cvemploymentHistoryInput').each(function(){
+                $(this).attr('checked', 'checked')
+            });
+        } else {
+            $('.cvemploymentHistoryInput').each(function(){
+                $(this).removeAttr('checked')
+            });
+        }
+    }
+</script>
+{% endblock %}

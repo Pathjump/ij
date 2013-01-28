@@ -1,0 +1,111 @@
+{% extends '::base.html.twig' %}
+{% block title %}personal Questions{% endblock %}
+
+{% block body %}
+
+<section id="resumePages">
+    <div class="wrapper" id="resume-employers">
+
+        <aside class="resume-box">
+
+            {% if questions|length > 0%}
+            <div class="Company-Questions">
+
+                <h3>Personal Questions</h3>
+
+                <div class="resume-contents resume-comment">
+                    {% for question in questions %}
+
+
+
+                        <div class="block3 answered">{{question.question}}</div>
+                        <div class="block4">
+                            <a href="javascript:void(0)" class="edit-btn addEditAnswerLink" id="{{question.id}}">Edit Answer</a>
+                            <span id="questionAnswerSpan-{{question.id}}">
+                        {{question.userAnswer}}
+                                </span>
+                            </div>
+
+                            <form action="" method="get" class="student-comment" id="addEditQuestionAnswerDiv-{{question.id}}" style="display: none;">
+
+                                <textarea name="" cols="" rows="" placeholder="Answer a question" class="addEditQuestionAnswer" id="addEditQuestionAnswer-{{question.id}}">{{question.userAnswer}}</textarea>
+                                <div class="low-btns">
+                                    <button class="button addEditQuestionAnswerButton" name="" type="button" value="" id="{{question.id}}">
+                                        Answer</button>
+                                        <div class="clear"></div>
+                                </div>
+                            </form>
+
+
+                        
+
+                    {% endfor %}
+
+
+
+
+
+                        </div>
+                        <!--resume-contents-->
+
+                    </div>
+            {% else %}
+            <div class="Company-Questions">
+
+                <h3>Questions is not created yet</h3>
+            </div>    
+            {% endif %}
+                    <!--Company-Questions-->
+                </aside>
+                <aside class="others">
+                    <div class="fb-like-box" data-href="http://www.facebook.com/internjump?fref=ts" data-width="292" data-show-faces="false" data-stream="false" data-header="true"></div>
+
+                    <!--CVs-box-->
+                </aside>
+
+            </div><!--end of wrapper -->
+        </section>
+
+{% endblock %}
+
+
+{% block javascripts %}
+{{parent()}}
+        <script>
+        $(document).ready(function(){
+            $('#logedInStudent,#personalQuestion').addClass('crnt');
+                    
+            //show edit/add question answer form
+$('a.addEditAnswerLink').click(function(){
+var thisLink = $(this);
+var questionId = thisLink.attr('id');
+//show the input field
+$('#addEditQuestionAnswerDiv-'+questionId).slideToggle(500);
+});
+
+//add/edit form action
+    $('button.addEditQuestionAnswerButton').click(function(){
+        var thisInput = $(this);
+        var questionId = thisInput.attr('id');
+        //get the answer text
+        var answerText = $.trim($('#addEditQuestionAnswer-'+questionId).val());
+        if(answerText){
+            //hide the button
+            thisInput.hide();
+            //show loading div
+            $('.loading').show();
+            $.ajax({
+                url: '{{path('addEdit_personal_question_answer')}}'+'/'+questionId+'/'+encodeURIComponent(answerText),
+                success: function(msg) {
+                },
+                complete: function(msg) {
+                    window.location.reload();
+                }
+            });
+        
+        }
+    });
+    
+        });
+            </script>
+{% endblock %}

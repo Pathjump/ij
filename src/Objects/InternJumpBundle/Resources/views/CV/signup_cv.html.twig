@@ -1,0 +1,85 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Resume First Step{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('css/simpletabs.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+<section id="student-01">
+    <div class="wrapper">
+        <h1>FOR STUDENTS<div></div></h1>
+
+        <div class="simpleTabs">
+            <ul class="simpleTabsNavigation">
+                <li><a class="current">Step 1</a></li>
+                <li><a>Step 2</a></li>
+                <li><a>Step 3</a></li>
+                <li><a>Step 4</a></li>
+            </ul>
+
+            <div class="simpleTabsContent" style="display: block;">
+                {% if app.session.hasFlash('notice') %}
+                <span class="alert fail">
+                {{ app.session.flash('notice') | raw }}
+                </span>
+                {% endif %}
+                {% if app.session.hasFlash('success') %}
+                <span class="alert success">
+                {{ app.session.flash('success') | raw }}
+                </span>
+                {% endif %}
+                {% if app.session.hasFlash('error') %}
+                <span class="alert error">
+                {{ app.session.flash('error') | raw }}
+                </span>
+                {% endif %}
+                {% if form_errors(form) %}
+                <span class="alert error">
+                {{ form_errors(form) }}
+                </span>
+                {% endif %}
+                <!--form Name-->
+                <h1>{%if formName%}{{formName}}{%endif%} <strong>{%if formName%}{{formName1}}{%endif%}</strong>:</h1>
+                <!--form Desc-->
+                <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
+
+                <form action="{{ path('signup_cv') }}" method="post" {{ form_enctype(form) }}>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="160" class="top"><label>Resume Title:</label></td>
+                            <td>{{ form_widget(form.name) }}{% if form_errors(form.name) %}<span class="triangle-border left">{{ form_errors(form.name) }}</span>{% endif %}<br/></td>
+                        </tr>
+                        <tr>
+                            <td width="160" class="top"><label>Objectives:</label></td>
+                            <td>{{ form_widget(form.objective) }}{% if form_errors(form.objective) %}<span class="triangle-border left">{{ form_errors(form.objective) }}</span>{% endif %}<br/></td>
+                        </tr>
+                        <tr>
+                            <td width="160" class="top"><label>Interested in interning:</label></td>
+                            <td>{{ form_widget(form.categories) }}{% if form_errors(form.categories) %}<span class="triangle-border left">{{ form_errors(form.categories) }}</span>{% endif %}<br/></td>
+                        </tr>
+                    </table>
+
+                    {{ form_rest(form) }}
+
+                    <button style="float: right; margin-top: 20px;" class="submit" type="submit" title="{% trans %}Next{% endtrans %}">{% trans %}Next{% endtrans %}</button>
+                    <div class="clear"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('js/libs/chosen.jquery.min.js') }}" type="text/javascript"></script>
+<script>
+    $(document).ready(function() {
+        $('.chzn-select').chosen();
+        var stuTitleBar = $('#main .wrapper').width();
+        $('#student-01 > .wrapper h1 div').width(stuTitleBar-202);
+    });
+</script>
+{% endblock %}

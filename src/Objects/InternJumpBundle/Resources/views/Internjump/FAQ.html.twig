@@ -1,0 +1,67 @@
+{% extends '::base.html.twig' %}
+
+
+
+{% block title %}
+{{parent()}} - FAQ
+{%endblock%}
+
+{%block stylesheets%}
+{{parent()}}
+<link href="{{asset('css/tabs-accordion.css')}}" type="text/css" rel="stylesheet" />
+{%endblock%}
+
+{%block body%}
+
+<div id="main" role="main">
+
+<section id="comJobList">
+<div class="wrapper">
+
+<aside class="faqsPage">
+{%if AskedQuestions%}
+<h1>Frequently Asked Questions</h1>
+
+<div id="accordion">
+
+    {%for question in AskedQuestions%}
+        <h2>{{question.question}}</h2>
+        <div class="pane">
+        {{question.answer}}
+        </div>
+    {%endfor%}
+
+
+</div>
+{%else%}
+No recent frequently asked questions
+{%endif%}
+</aside>
+
+
+</div>
+</section>
+
+
+</div>
+
+<!-- xxx END Body Section xxx -->
+
+{%endblock%}
+{%block javascripts%}
+{{parent()}}
+<!--Accordion Tabs-->
+<script type="text/javascript" src="{{asset('js/libs/accTabs.js')}}"></script>
+<script>
+	$(document).ready(function() {
+            
+         $('#faqLink').addClass('crnt');
+            
+    	$("#accordion").tabs(
+    	"#accordion div.pane",
+    	{tabs: 'h2', effect: 'slide', initialIndex: null}
+		);
+    });
+</script>
+{%endblock%}
+

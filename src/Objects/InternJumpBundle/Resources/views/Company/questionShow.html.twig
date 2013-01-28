@@ -1,0 +1,152 @@
+{% extends '::base.html.twig' %}
+{% block title %}{{question}}{% endblock %}
+
+{% block body %}
+
+<div id="main" role="main">
+
+    <section id="comJobList">
+        <div class="wrapper">
+
+            {% if is_granted('ROLE_USER') %}
+            <aside class="copmanyInfo">
+                <h1>Interested company</h1>
+                <div class="infoBlock">
+                    <div class="logo">
+                        <img src="{{questionCompany.getTimThumbUrl(105,120)}}" width="105" height="120">
+                    </div>
+                    <div class="info">
+                        <label>Company:</label>
+                        <span>{{questionCompany}}</span>
+                        <br>
+                            {% if questionCompany.url %}
+                        <label>Website:</label>
+                        <span>
+                            <a href="{{questionCompany.url}}">{{questionCompany.url}}</a>
+                        </span>
+                        <br>
+                            {% endif %}
+                        <label>Country:</label>
+                        <span>{{questionCompany.getCountryName()}}</span>
+                        <br>
+                        <label>City:</label>
+                        <span>{{questionCompany.city}}</span>
+                        <br>
+                            {% if questionCompany.state %}
+                        <label>State:</label>
+                        <span>{{questionCompany.state}}</span>
+                        <br>
+                            {% endif %}
+                        <label>Address:</label>
+                        <span>{{questionCompany.address}}</span>
+                        <br>
+                    </div>
+
+                    <!--
+                <p>
+                    Provide students with access to companies which they would not find in their typical job search. Internjump works with small to midsized companies which do not have the resources to reach out to college campuses. By promoting internjump you will be giving your students access to opportunities they might never have learned about in their internship search process.
+                </p>
+                    -->
+
+                    <div class="clear"></div>
+                </div>
+            </aside>
+            {% endif %}
+
+            <section class="comntSection fullWidth">
+
+                <aside class="addEdiTask">
+                    <h1>{{question.question}}</h1>
+                    <div class="intDetails">
+                            {% if question.answer %}
+                            <span>
+                        {{question.answer}}
+                                </span>
+                            {% elseif is_granted('ROLE_USER') %}
+                                <span>
+                                    <textarea class="questionAnswer"></textarea>
+                                    <button class="submit questionAnswerButton" id="accepted">submit</button>
+                                </span>
+                            {% endif %}
+
+                            </div>
+
+                            <div class="clear"></div>
+
+                        </aside>
+
+
+
+
+                    </section>
+
+                    <div class="clear"></div>
+                </div>
+            </section>
+
+
+        </div>
+
+{#
+{{question.company}} - {{question.createdAt|date('Y-m-d')}} <br/> {{question.question}} 
+
+{% if is_granted('ROLE_USER') %}
+
+{% if not question.answer %}
+<textarea class="questionAnswer"></textarea>
+<input type="button" value="submit" class="questionAnswerButton"/>
+<img src="{{asset('img/loadingfacebox.gif')}}" id="questionAnswerImg" style="display: none;"/>
+<span id="questionAnswer"></span>
+{% else %}
+<span id="questionAnswer">
+{{question.answer}}
+</span>
+{% endif %}
+
+{% elseif is_granted('ROLE_COMPANY') %}
+<span id="questionAnswer">
+{{question.answer}}
+</span>
+{% endif %}
+#}
+
+{% endblock %}
+
+
+{% block javascripts %}
+{{parent()}}
+        <script>
+  
+        $(document).ready(function(){
+            //interest accept/reject
+            $('.questionAnswerButton').click(function(){
+                var thisInput = $(this);
+                //get the answer text
+                var answerText = $.trim($('.questionAnswer').val());
+                if(answerText){
+                    //hide the button
+                    thisInput.hide();
+                    //show loading div
+                    $('.loading').show();
+                    $.ajax({
+                        url: '{{path('user_answer_company_question',{'questionId' : question.id,'answerText' : ''})}}'+'/'+encodeURIComponent(answerText),
+                        success: function(msg) {
+                            if(msg == 'done'){
+                                //hide the textarea
+                                $('.questionAnswer').hide();
+                                //change the question answer
+                                $('#questionAnswer').text(answerText);
+                            }
+                        },
+                        complete: function(msg) {
+                            location.reload();
+                        }
+                    });
+        
+                }
+            });
+
+        });
+
+            </script>
+{% endblock %}

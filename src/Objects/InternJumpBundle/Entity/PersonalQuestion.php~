@@ -1,0 +1,67 @@
+<?php
+
+namespace Objects\InternJumpBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * Objects\InternJumpBundle\Entity\PersonalQuestion
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Objects\InternJumpBundle\Entity\PersonalQuestionRepository")
+ */
+class PersonalQuestion
+{
+    /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string $question
+     * @Assert\NotNull
+     * @ORM\Column(name="question", type="string", length=255)
+     */
+    private $question;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection $personalQuestionAnswers
+     * @ORM\OneToMany(targetEntity="PersonalQuestionAnswer", mappedBy="question", cascade={"remove"}, orphanRemoval=true)
+     */
+    private $personalQuestionAnswers;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set question
+     *
+     * @param string $question
+     */
+    public function setQuestion($question)
+    {
+        $this->question = $question;
+    }
+
+    /**
+     * Get question
+     *
+     * @return string 
+     */
+    public function getQuestion()
+    {
+        return $this->question;
+    }
+}

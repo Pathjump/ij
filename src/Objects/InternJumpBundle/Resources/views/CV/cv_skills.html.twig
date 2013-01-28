@@ -1,0 +1,62 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Resume Skills{% endblock %}
+
+{% block body %}
+<section id="student-01">
+    <div class="wrapper">
+
+        <div class="editSkills">
+            <h1>{{ entity }}</h1>
+            <hr/>
+            <div class="blueCont">
+                <!--form Name-->
+                <h2>{%if formName%}{{formName}}{%endif%}:</h2>
+                <!--form Desc-->
+                <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
+                {% if userSkills | length > 0 %}
+                <form method="POST" action="{{ path('cv_skills', {'id': entity.id}) }}">
+                    <div class="infoBlock">
+                        <table>
+                            <tr>
+                                <td><input{% if userSkills | length == cvSkills | length %} checked="checked"{% endif %} onchange="checkUnCheck(this);" id="all_cv_skills" type="checkbox"></td>
+                                <td><label for="all_cv_skills" style="display: block;"><b>Check / UnCheck All</b></label></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                            </tr>
+                            {% for skill in userSkills %}
+                            <tr>
+                                <td><input{% if skill in cvSkills %} checked="checked"{% endif %} id="skill_{{ skill.id }}" class="cvSkillInput" name="cv_skills[]" type="checkbox" value="{{ skill.id }}"></td>
+                                <td onclick="$('#skill_{{ skill.id }}').click();">{{ skill }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                        <button type="submit" class="submit">{{ buttonText }}</button>
+                </form>
+                {% endif %}
+                <a title="Add/Edit your skills" href="{{ path('addEditUserSkills') }}" class="submit">Add/Edit your skills</a>
+                <div class="clear"></div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<script>
+    function checkUnCheck(element) {
+        if(element.checked){
+            $('.cvSkillInput').each(function(){
+                $(this).attr('checked', 'checked')
+            });
+        } else {
+            $('.cvSkillInput').each(function(){
+                $(this).removeAttr('checked')
+            });
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends '::base.html.twig' %}
+
+
+
+{% block title %}
+{{parent()}} - Schools
+{%endblock%}
+
+
+
+{%block body%}
+<div id="main" role="main">
+
+<section id="employersData" class="shool">
+<div class="wrapper">
+	
+<div class="employers-data-text">
+    {{schoolsDataUpper | raw}}
+</div>
+<!--employers-data-text-->
+<div class="clearfix"></div>
+</div>
+<!--end of wrapper -->
+<div class="Ques-container">
+<div class="Ques-box"> 
+    {{schoolsDataLower | raw}}
+</div>
+</div>
+<!--Ques-box-->
+<!--employers-data-Que-->
+</section>
+
+
+</div>
+
+<!-- xxx END Body Section xxx -->
+{%endblock%}
+
+{%block javascripts%}
+{{parent()}}
+<script>
+$(document).ready(function(){
+$('#schoolsLink').addClass('crnt');
+});
+</script>
+{%endblock%}
+

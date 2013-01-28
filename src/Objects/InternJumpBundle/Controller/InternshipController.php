@@ -1,0 +1,635 @@
+<?php
+
+namespace Objects\InternJumpBundle\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Objects\InternJumpBundle\Entity\Internship;
+use Objects\InternJumpBundle\Form\InternshipType;
+use Symfony\Component\HttpFoundation\Response;
+use Objects\InternJumpBundle\Entity\City;
+
+/**
+ * Internship controller.
+ *
+ */
+class InternshipController extends Controller {
+
+    /**
+     * this function will get position from google map by zipcode
+     * @author Ahmed
+     * @param int $zipcode
+     */
+    public function getPositionAction($zipcode) {
+        $url = "http://maps.googleapis.com/maps/api/geocode/json?address=$zipcode&sensor=false";
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($ch);
+        $output = json_decode($output, true);
+        if (isset($output['status']) && strtolower($output['status']) == 'ok') {
+            return new Response($output['results']['0']['geometry']['location']['lat'] . '|' . $output['results']['0']['geometry']['location']['lng'] . '|' . $output['results']['0']['formatted_address']);
+        } else {
+            return new Response('faild');
+        }
+    }
+
+    /**
+     * this function will list all company jobs
+     * @author Ahmed
+     * @param string $loginName
+     * @param int $page
+     */
+    public function indexAction($loginName, $page) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
+        $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
+        $interestRepo = $em->getRepository('ObjectsInternJumpBundle:Interest');
+        $InterviewRepo = $em->getRepository('ObjectsInternJumpBundle:Interview');
+
+        //get company object
+        $company = $companyRepo->findOneBy(array('loginName' => $loginName));
+
+
+        if (!$company) {
+            throw $this->createNotFoundException('this company does not exist.');
+        }
+
+        //the results per page number
+        $itemsPerPage = $this->container->getParameter('jobs_per_page_index_jobs_page');
+
+        //get company jobs
+        //check if the owner company
+        if (True === $this->get('security.context')->isGranted('ROLE_COMPANY') && $this->get('security.context')->getToken()->getUser()->getLoginName() == $loginName) {
+            $companyJobs = $internshipRepo->getCompanyJobs($company->getId(), $page, $itemsPerPage, TRUE);
+        } else {
+            $companyJobs = $internshipRepo->getCompanyJobs($company->getId(), $page, $itemsPerPage, FALSE);
+        }
+
+        //all questionsCount 
+        //check if the owner company
+        $companyHiredUsers = array();
+        $hiredUsersJobsArray = array();
+        $companyInterests = array();
+        $companyInterviews = array();
+        $ownerCompanyFlag = 0;
+
+        if (True === $this->get('security.context')->isGranted('ROLE_COMPANY') && $this->get('security.context')->getToken()->getUser()->getLoginName() == $loginName) {
+            $ownerCompanyFlag = 1;
+            $allcompanyJobsCount = $internshipRepo->countCompanyJobs($company->getId(), TRUE);
+            //get compaqny hired users
+            $companyJobsIds = $internshipRepo->getCompanyJobsIds($company->getId());
+            $companyJobsIdsArray = array();
+            foreach ($companyJobsIds as $job) {
+                $companyJobsIdsArray [] = $job['id'];
+            }
+
+            if (sizeof($companyJobsIdsArray) > 0) {
+                $companyHiredUsers = $internshipRepo->getCompanyHiredUsers($companyJobsIdsArray);
+            }
+
+            if (sizeof($companyHiredUsers) > 0) {
+                $hiredUsersJobsArray = array();
+                foreach ($companyHiredUsers as $companyHiredUser) {
+                    if (!in_array($companyHiredUser->getInternship()->getTitle(), $hiredUsersJobsArray)) {
+                        array_push($hiredUsersJobsArray, $companyHiredUser->getInternship()->getTitle());
+                    }
+                }
+            }
+
+            //get company interests requests
+            $companyInterests = $interestRepo->findBy(array('company' => $company->getId()), array('createdAt' => 'desc'));
+
+            //get company interviews
+            $companyInterviews = $InterviewRepo->findBy(array('company' => $company->getId()), array('interviewDate' => 'asc'));
+        } else {
+            $allcompanyJobsCount = $internshipRepo->countCompanyJobs($company->getId(), FALSE);
+        }
+        $allcompanyJobsCount = $allcompanyJobsCount['0']['jobsCount'];
+
+        //calculate the last page number
+        $lastPageNumber = (int) ($allcompanyJobsCount / $itemsPerPage);
+        if (($allcompanyJobsCount % $itemsPerPage) > 0) {
+            $lastPageNumber++;
+        }
+
+
+
+        return $this->render('ObjectsInternJumpBundle:Internship:index.html.twig', array(
+                    'companyJobs' => $companyJobs,
+                    'page' => $page,
+                    'lastPageNumber' => $lastPageNumber,
+                    'loginName' => $loginName,
+                    'company' => $company,
+                    'hiredUsersJobsArray' => $hiredUsersJobsArray,
+                    'companyHiredUsers' => $companyHiredUsers,
+                    'companyInterests' => $companyInterests,
+                    'companyInterviews' => $companyInterviews,
+                    'ownerCompanyFlag' => $ownerCompanyFlag
+                ));
+    }
+
+    /**
+     * Finds and displays a Internship entity.
+     *
+     */
+    public function showAction($id) {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $entity = $em->getRepository('ObjectsInternJumpBundle:Internship')->find($id);
+        $userInternshipRepo = $em->getRepository('ObjectsInternJumpBundle:UserInternship');
+        $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
+        $interviewRepo = $em->getRepository('ObjectsInternJumpBundle:Interview');
+
+        if (!$entity) {
+            throw $this->createNotFoundException('this Internship does not exist.');
+        } else {
+            //check if not the owner company
+            //so will check for job active or not 
+            if (FALSE === $this->get('security.context')->isGranted('ROLE_COMPANY') || $this->get('security.context')->getToken()->getUser()->getId() != $entity->getCompany()->getId()) {
+                $todayDate = new \DateTime('today');
+                if (!$entity->getActive() || $entity->getActiveTo() < $todayDate || $entity->getActiveFrom() > $todayDate) {
+                    throw $this->createNotFoundException('this Internship does not exist.');
+                }
+            }
+        }
+
+
+        //get this job company
+        $company = $entity->getCompany();
+
+        //check if this job available
+        $nowDate = date('Y-m-d');
+        $jobAvailabilityFlag = 0;
+        if (strtotime($nowDate) <= strtotime($entity->getActiveTo()->format('Y-m-d')) && strtotime($entity->getActiveFrom()->format('Y-m-d')) <= strtotime($nowDate)) {
+            $jobAvailabilityFlag = 1;
+        }
+
+        //check if the logein user add this job before
+        $addedBeforeFlag = 1;
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_USER')) {
+            //get logedin user object
+            $user = $this->get('security.context')->getToken()->getUser();
+            $userInternshipObject = $userInternshipRepo->findOneBy(array('user' => $user->getId(), 'internship' => $id));
+            if ($userInternshipObject) {
+                $addedBeforeFlag = 0;
+            }
+        }
+
+        //get applyed users
+        $applyedUsers = array();
+        $otherJobs = array();
+        $interviewsUsers = array();
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            //get applyed users
+            $applyedUsers = $userInternshipRepo->getJobApplyedUsers($id);
+            //get others company jobs
+            $otherJobs = $internshipRepo->getOtherJobs($id, $company->getId());
+            //get interviews user
+            $interviewsUsers = $interviewRepo->findBy(array('company' => $company->getId(), 'internship' => $id), array('interviewDate' => 'desc'));
+        }
+
+        //get job categories
+        $jobCategories = array();
+        foreach ($entity->getCategories() as $category) {
+            $jobCategories [] = $category->getId();
+        }
+
+
+        return $this->render('ObjectsInternJumpBundle:Internship:show.html.twig', array(
+                    'entity' => $entity,
+                    'company' => $company,
+                    'otherJobs' => $otherJobs,
+                    'interviewsUsers' => $interviewsUsers,
+                    'jobAvailabilityFlag' => $jobAvailabilityFlag,
+                    'addedBeforeFlag' => $addedBeforeFlag,
+                    'applyedUsers' => $applyedUsers,
+                    'jobCategories' => $jobCategories,
+                    'job_added_before_message' => $this->container->getParameter('job_added_before_message_show_job_page'),
+                    'job_apply_success_message' => $this->container->getParameter('job_apply_success_message_show_job_page')
+                ));
+    }
+
+    /**
+     * this function will get all countries json 
+     * @author Ahmed
+     */
+    public function getAllCountriesAction() {
+        $em = $this->getDoctrine()->getEntityManager();
+        $countryRepo = $em->getRepository('ObjectsInternJumpBundle:Country');
+
+        $allCountries = $countryRepo->getAllCountries();
+        $allCountriesArray = array();
+        foreach ($allCountries as $value) {
+            $allCountriesArray [$value['id']] = $value['name'];
+        }
+
+        return new Response(json_encode($allCountriesArray));
+    }
+
+    /**
+     * this function will get all country cities & states by country id
+     * @author Ahmed
+     * @param int $countryId
+     */
+    public function getCounteyCitiesStatesAction($countryId) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $countryRepo = $em->getRepository('ObjectsInternJumpBundle:Country');
+        //get country cities
+        $countryCities = $countryRepo->getCountryCities($countryId);
+        $countryCitiesArray = array();
+        foreach ($countryCities as $value) {
+            $countryCitiesArray [$value['id']] = $value['name'];
+        }
+        //get country states
+        $countryStates = $countryRepo->getCountryStates($countryId);
+        $countryStatesArray = array();
+        foreach ($countryStates as $value) {
+            $countryStatesArray [$value['id']] = $value['name'];
+        }
+
+        $resultsArray = array();
+        $resultsArray ['cities'] = $countryCitiesArray;
+        $resultsArray ['states'] = $countryStatesArray;
+        return new Response(json_encode($resultsArray));
+    }
+
+    /**
+     * this function is used to insert a new city or update the city priority if the city was found
+     * @author Mahmoud
+     * @param string $cityName
+     * @param string $countryName
+     * @param boolean $updateCity
+     */
+    private function insertCityIfNotFound($cityName, $countryName, $updateCity = false) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $city = $em->getRepository('ObjectsInternJumpBundle:City')->findOneBy(array('name' => $cityName, 'country' => $countryName));
+        if (!$city) {
+            $country = $em->getRepository('ObjectsInternJumpBundle:Country')->find($countryName);
+            if ($country) {
+                $city = new City();
+                $city->setCountry($country);
+                $city->setName($cityName);
+                $city->setSlug($cityName);
+                $em->persist($city);
+            }
+        } else {
+            if ($updateCity) {
+                $em->getRepository('ObjectsInternJumpBundle:City')->increasePriority($city->getId());
+            }
+        }
+        try {
+            $em->flush();
+        } catch (\Exception $e) {
+            
+        }
+    }
+
+    /**
+     * Displays a form to create a new Internship entity.
+     *
+     */
+    public function newAction() {
+        //check for logrdin company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+        }
+
+        //get logedin company objects
+        $company = $this->get('security.context')->getToken()->getUser();
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $countryRepo = $em->getRepository('ObjectsInternJumpBundle:Country');
+        $cvRepo = $em->getRepository('ObjectsInternJumpBundle:CV');
+
+        //get the container object
+        $container = $this->container;
+        //get countries array
+        $allCountries = $countryRepo->getAllCountries();
+        $allCountriesArray = array();
+        foreach ($allCountries as $value) {
+            $allCountriesArray [$value['id']] = $value['name'];
+        }
+        $entity = new Internship();
+        $entity->setCompany($company);
+        $entity->setAddress($company->getAddress());
+
+        //Get State Repo
+        $stateRepo = $em->getRepository('ObjectsInternJumpBundle:State');
+        //Get The NewYork State which is decided to be set as a default state 
+        $defaultState = $stateRepo->findOneBy(array('slug' => 'new_york'));
+        //Get the default state id to set it in the script chesen
+        $defaultStateID = $defaultState->getId();
+        //Get default state name
+        $defaultStateName = $defaultState->getName();
+
+
+        $request = $this->getRequest();
+        //get after 1 year date
+        $afterOneYearDate = new \DateTime('+1 year');
+        $form = $this->createFormBuilder($entity)
+                ->add('activeFrom', 'date', array('attr' => array('class' => 'activeFrom'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
+                ->add('activeTo', 'date', array('attr' => array('class' => 'activeTo'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
+                ->add('title')
+                ->add('description')
+                ->add('requirements')
+                ->add('categories')
+                ->add('country', 'choice', array(
+                    'choices' => $allCountriesArray,
+                    'preferred_choices' => array($company->getCountry()),
+                ))
+                ->add('city', NULL, array('attr' => array('class' => 'autocomplete', 'style' => 'width:310px;')))
+                ->add('state', 'choice', array('empty_value' => '--- choose state ---', 'required' => false))
+                ->add('address', 'text')
+                ->add('zipcode')
+                ->add('active', null, array('required' => FALSE))
+                ->add('Latitude', 'hidden')
+                ->add('Longitude', 'hidden')
+                ->getForm();
+
+        if ($request->getMethod() == 'POST') {
+            $form->bindRequest($request);
+
+            if ($form->isValid()) {
+                //get the user object from the form
+                $entity = $form->getData();
+                //insert the city into our table if not found
+                $this->insertCityIfNotFound($entity->getCity(), $entity->getCountry(), true);
+
+                $em = $this->getDoctrine()->getEntityManager();
+                $em->persist($entity);
+                $em->flush();
+
+                //set the success flag in the session
+                $this->getRequest()->getSession()->setFlash('success', $container->getParameter('new_job_success_message'));
+
+
+                //send email for suitable users
+                $categoryIdsArray = array();
+                foreach ($entity->getCategories() as $category) {
+                    $categoryIdsArray[] = $category->getId();
+                }
+                //get suitable cvs for this job categories
+                if (sizeof($categoryIdsArray) > 0) {
+                    $suitableCvs = $cvRepo->getNewJobSuitableCvs($categoryIdsArray);
+
+                    $newJobLink = $container->get('router')->generate('internship_show', array('id' => $entity->getId()), TRUE);
+                    $messageText = $container->getParameter('new_job_to_suitable_users_message_text');
+                    $subject = $container->getParameter('new_job_to_suitable_users_subject_text');
+                    //send email for the results users
+                    foreach ($suitableCvs as $user) {
+                        $message = \Swift_Message::newInstance()
+                                ->setSubject($subject)
+                                ->setFrom($container->getParameter('contact_us_email'))
+                                ->setTo($user['email'])
+                                ->setBody($container->get('templating')->render('ObjectsInternJumpBundle:Internship:newjobMail.html.twig', array(
+                                    'messageText' => $messageText,
+                                    'newJobLink' => $newJobLink
+                                )))
+                        ;
+                        //send the mail
+                        $container->get('mailer')->send($message);
+                    }
+                }
+                //check if company want to add another job
+//                if (isset($_POST['create'])) {
+                return $this->redirect($this->generateUrl('internship_show', array('id' => $entity->getId())));
+//                } elseif (isset($_POST['create-add-another'])) {
+//                    return $this->redirect($this->generateUrl('internship_new', array()));
+//                }
+            }
+        }
+
+        return $this->render('ObjectsInternJumpBundle:Internship:new.html.twig', array(
+                    'entity' => $entity,
+                    'form' => $form->createView(),
+                    'company' => $company,
+                    'no_zipcode_message_new_job_page' => $this->container->getParameter('no_zipcode_message_new_job_page'),
+                    'map_change_location_message' => $this->container->getParameter('map_change_location_message_new_job_page'),
+                    'formName' => $this->container->getParameter('companyAddJob_FormName'),
+                    'formDesc' => $this->container->getParameter('companyAddJob_FormDesc'),
+                    'defaultStateName' => $defaultStateName,
+                ));
+    }
+
+    /**
+     * Displays a form to edit an existing Internship entity.
+     *
+     */
+    public function editAction($id) {
+        //check for logrdin company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+        }
+
+        //get logedin company objects
+        $company = $this->get('security.context')->getToken()->getUser();
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $countryRepo = $em->getRepository('ObjectsInternJumpBundle:Country');
+        //get countries array
+        $allCountries = $countryRepo->getAllCountries();
+        $allCountriesArray = array();
+        foreach ($allCountries as $value) {
+            $allCountriesArray [$value['id']] = $value['name'];
+        }
+
+        $request = $this->getRequest();
+        $entity = $em->getRepository('ObjectsInternJumpBundle:Internship')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('this Internship does not exist.');
+        }
+
+        $editForm = $this->createFormBuilder($entity)
+                ->add('activeFrom', 'date', array('attr' => array('class' => 'activeFrom'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
+                ->add('activeTo', 'date', array('attr' => array('class' => 'activeTo'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
+                ->add('title')
+                ->add('description')
+                ->add('requirements')
+                ->add('categories')
+                ->add('country', 'choice', array(
+                    'choices' => $allCountriesArray))
+                ->add('city', NULL, array('attr' => array('class' => 'autocomplete', 'style' => 'width:310px;')))
+                ->add('state', 'choice', array('empty_value' => '--- choose state ---', 'required' => false))
+                ->add('address', 'text')
+                ->add('zipcode')
+                ->add('active', null, array('required' => FALSE))
+                ->add('Latitude', 'hidden')
+                ->add('Longitude', 'hidden')
+                ->getForm();
+
+        if ($request->getMethod() == 'POST') {
+            $editForm->bindRequest($request);
+
+            if ($editForm->isValid()) {
+                //get the user object from the form
+                $entity = $editForm->getData();
+                //insert the city into our table if not found
+                $this->insertCityIfNotFound($entity->getCity(), $entity->getCountry());
+
+                $entity->setCompany($company);
+                $em->persist($entity);
+                $em->flush();
+
+                //set the success flag in the session
+                $this->getRequest()->getSession()->setFlash('success', 'Internship modified successfully');
+
+
+                return $this->redirect($this->generateUrl('internship_edit', array('id' => $id)));
+            }
+        }
+
+
+        return $this->render('ObjectsInternJumpBundle:Internship:edit.html.twig', array(
+                    'entity' => $entity,
+                    'company' => $company,
+                    'edit_form' => $editForm->createView(),
+                    'no_zipcode_message_new_job_page' => $this->container->getParameter('no_zipcode_message_new_job_page'),
+                    'map_change_location_message' => $this->container->getParameter('map_change_location_message_new_job_page'),
+                    'formName' => $this->container->getParameter('companyEditJob_FormName'),
+                    'formDesc' => $this->container->getParameter('companyEditJob_FormDesc'),
+                ));
+    }
+
+    /**
+     * Deletes a Internship entity.
+     *
+     */
+    public function deleteAction($id) {
+        //check for logrdin company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        $job = $em->getRepository('ObjectsInternJumpBundle:Internship')->find($id);
+
+        if (!$job) {
+            throw $this->createNotFoundException('this Internship does not exist.');
+        }
+        //get job company
+        $jobCompany = $job->getCompany();
+        //get logedin company objects
+        $company = $this->get('security.context')->getToken()->getUser();
+
+        //check if the logedin company is the owner
+        if ($company->getId() == $jobCompany->getId()) {
+            $em->remove($job);
+            $em->flush();
+        }
+
+        return $this->redirect($this->generateUrl('internship', array('loginName' => $company->getLoginName())));
+    }
+
+    /**
+     * this action will add job to the logein user
+     * @author Ahmed
+     * @param int $jobId
+     */
+    public function addUserJobAction($jobId, $cvId) {
+        //check if not loged in user
+        if (false === $this->get('security.context')->isGranted('ROLE_USER')) {
+            return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+        }
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $job = $em->getRepository('ObjectsInternJumpBundle:Internship')->find($jobId);
+        $userInternshipRepo = $em->getRepository('ObjectsInternJumpBundle:UserInternship');
+        $cvRepo = $em->getRepository('ObjectsInternJumpBundle:CV');
+        $interestRepo = $em->getRepository('ObjectsInternJumpBundle:Interest');
+
+        if (!$job) {
+            throw $this->createNotFoundException('this Internship does not exist.');
+        }
+
+        //get job company
+        $company = $job->getCompany();
+        //get logedin user object
+        $user = $this->get('security.context')->getToken()->getUser();
+        //get user cv
+        $userCv = $cvRepo->find($cvId);
+        //check if the logein user add this job before
+        $userInternshipObject = $userInternshipRepo->findOneBy(array('user' => $user->getId(), 'internship' => $jobId));
+        if ($userInternshipObject) {
+            return new Response('added before');
+        } else {
+            //create new userInternShip object
+            $newUserInternShip = new \Objects\InternJumpBundle\Entity\UserInternship();
+            $newUserInternShip->setInternship($job);
+            $newUserInternShip->setUser($user);
+            $newUserInternShip->setStatus('apply');
+            $newUserInternShip->setCv($userCv);
+            $em->persist($newUserInternShip);
+
+            $em->flush();
+
+            //add user interset for this company
+            //check if the user interset this campany before
+            $intersetObject = $interestRepo->findOneBy(array('user' => $user->getId(), 'company' => $company->getId()));
+            $intersetId = NULL;
+            if (!$intersetObject) {
+                $newIntersetObject = new \Objects\InternJumpBundle\Entity\Interest();
+                $newIntersetObject->setAccepted('accepted');
+                $newIntersetObject->setCompany($company);
+                $newIntersetObject->setUser($user);
+                $newIntersetObject->setRespondedAt(new \DateTime());
+                $newIntersetObject->setValidTo(new \DateTime());
+                $newIntersetObject->setCvId($cvId);
+                $em->persist($newIntersetObject);
+                $em->flush();
+
+                $intersetId = $newIntersetObject->getId();
+            } elseif ($intersetObject->getAccepted() == 'pending') {
+                //check the valid to date
+                if ($intersetObject->getValidTo() > new \DateTime('today')) {
+                    $intersetObject->setAccepted('accepted');
+                    $intersetObject->setCreatedAt(new \DateTime());
+                    $intersetObject->setRespondedAt(new \DateTime());
+                } else {
+                    $intersetObject->setAccepted('accepted');
+                    $intersetObject->setCreatedAt(new \DateTime());
+                    $intersetObject->setRespondedAt(new \DateTime());
+                    $intersetObject->setValidTo(new \DateTime());
+                }
+
+                $intersetId = $intersetObject->getId();
+            }
+
+            //add company job apply notification
+            $comapnyNotification = new \Objects\InternJumpBundle\Entity\CompanyNotification();
+            $comapnyNotification->setCompany($company);
+            $comapnyNotification->setUser($user);
+            $comapnyNotification->setType('user_job_apply');
+            $comapnyNotification->setTypeId($jobId);
+            $em->persist($comapnyNotification);
+            InternjumpController::companyNotificationMail($this->container, $user, $company, 'user_job_apply', $jobId);
+
+
+
+            $em->flush();
+
+            return new Response('done');
+        }
+    }
+
+    /**
+     * this action will show all active user cvs to use it in apply on job
+     * @author Ahmed
+     */
+    public function userCvsAction() {
+        //check if not loged in user
+        if (false === $this->get('security.context')->isGranted('ROLE_USER')) {
+            return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        $cvRepo = $em->getRepository('ObjectsInternJumpBundle:CV');
+        //get logedin user object
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        //get all user cvs
+        $allUserCvs = $cvRepo->findBy(array('user' => $user->getId(), 'isActive' => TRUE), array('createdAt' => 'desc'));
+        return $this->render('ObjectsInternJumpBundle:Internship:userCvs.html.twig', array(
+                    'allUserCvs' => $allUserCvs,
+                    'user_does_not_have_cv_message' => $this->container->getParameter('user_does_not_have_cv_message')
+                ));
+    }
+
+}

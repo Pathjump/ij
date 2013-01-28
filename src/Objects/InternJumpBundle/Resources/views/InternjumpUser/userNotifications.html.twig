@@ -1,0 +1,36 @@
+<ul class="msgsNotifs">
+    {% for notification in userNotificationsCountByType %}
+        <li><a href="javascript:void(0)" onclick="window.location = '{{path('User_notification',{'type' : notification.type})}}';">
+        {% if notification.type == 'company_question' %}
+                    Comp. question
+        {% elseif notification.type == 'company_interest' %}      
+                    Comp. interest
+        {% elseif notification.type == 'company_job_hire' %}      
+                    Comp. hire 
+        {% elseif notification.type == 'company_interview' %}      
+                    Comp. interview       
+        {% elseif notification.type == 'company_edit_task' %}      
+                    Comp. edit task 
+        {% elseif notification.type == 'company_add_note' %}      
+                    Comp. add task note 
+        {% elseif notification.type == 'company_assign_task' %}      
+                    Comp. add task        
+        {% elseif notification.type == 'company_edit_note' %}      
+                    Comp. edit task note             
+        {% endif %}            
+        </a>
+    <span class="tip">{{notification.notficiationsCount}}</span>
+    </li>
+    {% endfor %}
+    
+    <li><a href="javascript:void(0)" onclick="window.location = '{{path('User_notification')}}';">Notifications</a>
+        {% if allUserNotificationsCount > 0 %}
+        <span class="tip">{{allUserNotificationsCount}}</span>
+        {% endif %}
+    </li>
+    <li><a title="Your Inbox" href="{{ path('user_box', {'box': 'inbox'}) }}">Messsages</a>
+    {% if newMessagesCount > 0 %}
+        <span class="tip">{{newMessagesCount}}</span>
+        {% endif %}
+    </li>
+</ul>

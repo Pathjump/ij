@@ -1,0 +1,51 @@
+{% extends '::base.html.twig' %}
+
+
+
+{% block title %}
+{{parent()}} - {{title}}
+{%endblock%}
+
+{%block body%}
+
+<section id="comJobList">
+
+    <div class="wrapper">
+      
+
+            <aside class="quizeWrapper aboutus" style="width: 100%;" {%if not flag%} style="width: auto;"{% endif %}>
+            {{content|raw}}
+               
+            </aside>
+<div class="clearfix"></div>
+
+{%if flag%}  
+        <aside class="comJobListAccTabs" style="float: left;  width: 100%;">
+{%if founders%}
+<div class="sendPeople" style="margin-left: 20px; width: 100%; float: left;">
+
+<ul class="peopleList">
+
+{%for founder in founders%}
+<li style="float: left; margin-right: 5px;">
+<img src="{{founder.getTimThumbUrl(102,120)}}" width="102" height="120">
+<a href="javascript:void(0)">{#mailto:{{founder.founderEmail}}#}
+<h1>{{founder.founderName}}</h1>
+<h2>{{founder.founderPosition}}</h2></a>
+</li>
+{%endfor%}
+</ul>
+
+</div>
+{%endif%}
+
+ </aside>
+{%endif%}
+
+ <div class="clearfix"></div>
+        </div>
+    </section>
+
+
+{%endblock%}
+

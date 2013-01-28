@@ -1,0 +1,56 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Resume Success{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/simpletabs.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+<section id="student-01">
+    <div class="wrapper">
+        <h1>FOR STUDENTS<div></div></h1>
+
+        <div class="simpleTabs">
+            <ul class="simpleTabsNavigation">
+                <li><a>Step 1</a></li>
+                <li><a>Step 2</a></li>
+                <li><a>Step 3</a></li>
+                <li><a class="current">Step 4</a></li>
+            </ul>
+
+            <div class="simpleTabsContent" style="display: block;">
+                {% if app.session.hasFlash('notice') %}
+                <span class="alert fail">
+                {{ app.session.flash('notice') | raw }}
+                </span>
+                {% endif %}
+                {% if app.session.hasFlash('success') %}
+                <span class="alert success">
+                {{ app.session.flash('success') | raw }}
+                </span>
+                {% endif %}
+                {% if app.session.hasFlash('error') %}
+                <span class="alert error">
+                {{ app.session.flash('error') | raw }}
+                </span>
+                {% endif %}
+                <div id="step04">
+                    <h1>Congratulations on your first resume with InternJump</h1>
+                    <a href="{{ path('user_portal_home', {'loginName': loginName, 'cvId': cvId}) }}">View Your Resume</a>
+                    <h2>You are just a step away from securing a killer internship</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    $(document).ready(function() {
+        var stuTitleBar = $('#main .wrapper').width();
+        $('#student-01 > .wrapper h1 div').width(stuTitleBar-202);
+    });
+</script>
+{% endblock %}

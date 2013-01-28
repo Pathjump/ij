@@ -1,0 +1,275 @@
+{% extends '::base.html.twig' %}
+{% block title %}{{company}} jobs{% endblock %}
+
+{% block stylesheets %}
+<link href="{{asset('css/tabs-accordion.css')}}" type="text/css" rel="stylesheet" />
+<link href="{{asset('css/scrollinList.css')}}" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+
+<section id="comJobList">
+    <div class="wrapper">
+
+        {% if ownerCompanyFlag == 1 %}
+        <aside class="comJobListAccTabs">
+
+            <div class="accTabs">
+                <h1>Manage Interns</h1>
+
+                <!--Accordion Tabs-->
+                <div id="accordion">
+                    {% if hiredUsersJobsArray|length > 0 %}
+                    {% for jobName in hiredUsersJobsArray %}
+
+                        <h2 {% if loop.first %}class="current"{% endif %}>{{jobName}}</h2>
+                        <div class="pane" {% if loop.first %}style="display:block"{% endif %}>
+                            <ul>
+                            {% for job in companyHiredUsers %}
+                                {% if job.internship.title == jobName %}
+                                    <li><img src="{{job.user.getTimThumbUrl(111,119)}}" width="111" height="119">
+                                        <a href="{{path('company_user_task',{'userName' : job.user.loginName})}}">
+{{job.user}}
+                                            </a>
+                                        </li>
+                                {% endif %}
+                            {% endfor %}
+                                    </ul>
+                                </div>
+
+                    {% endfor %}
+                    {% else %}
+                        <h2 class="current">You don't have any jobs</h2>
+                    {% endif %}    
+
+                            </div>
+                        </div>
+
+
+                        <!--Scrolling List-->
+                        <div class="scrolList">
+                            <h1>Interesting Candidates</h1>
+
+
+                            <div id="scrollbar1">
+                                {% if companyInterests|length > 0 %}
+                                <div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
+                                <div class="viewport">
+                                    <div class="overview">
+                                        <ul>
+                                {% for interest in companyInterests %}
+
+                                                <li {% if loop.last %}style="margin-bottom: 1px;"{% endif %}><img src="{{interest.user.getTimThumbUrl(111,119)}}" width="111" height="119">
+                                                    <a href="{{path('company_see_user_data',{'userLoginName' : interest.user.loginName,'cvId' : interest.cvId})}}">
+                                                                    {{interest.user}}
+                                                        </a>
+                                                        <br>
+                                                                <div class="status"><span class="{{interest.accepted}}"></span>{{interest.accepted}}</div>
+                                                                
+                                                        
+                                                    </li>
+
+                                {% endfor %}
+
+                                                </ul>                   
+                                            </div>
+                                        </div>
+                                {% else %}
+                        <h2 class="current">You don't have any interests</h2>
+                    {% endif %} 
+                                    </div>
+
+
+                                </div>
+
+
+                                <!--Scrolling List-->
+                                <div class="scrolList">
+                                    <h1>Interviews</h1>
+
+
+                                    <div id="scrollbar1">
+                                        {% if companyInterviews|length > 0 %}
+                                        <div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
+                                        <div class="viewport">
+                                            <div class="overview">
+                                                <ul>
+                                {% for interview in companyInterviews %}
+
+                                                        <li {% if loop.last %}style="margin-bottom: 1px;"{% endif %}><img src="{{interview.user.getTimThumbUrl(111,119)}}" width="111" height="119">
+                                                            <a href="{{path('interview_show',{'interviewId' : interview.id})}}">
+                                                                    {{interview.user}}
+                                                                </a>
+                                                                <br>
+                                                                <div class="status"><span class="{{interview.accepted}}"></span>{{interview.accepted}}</div>
+                                                                <div class="date">{{interview.interviewDate|date('j F. Y')}}</div>
+                                                            </li>
+
+                                {% endfor %}
+
+                                                        </ul>                   
+                                                    </div>
+                                                </div>
+                                        {% else %}
+                        <h2 class="current">You don't have any interviews</h2>
+                    {% endif %}
+                                            </div>
+
+
+                                        </div>
+                                    </aside>
+{% endif %}
+
+        <section class="comntSection" {% if ownerCompanyFlag == 0 %}style="width: 100%;"{% endif %}>
+                                        <aside class="copmanyInfo">
+                                            <h1>{{company.name}}
+                                                {% if ownerCompanyFlag == 1 %}
+                                                <a href="{{path('company_edit')}}" style="float: right;margin-right: 10px;">Edit</a>
+                                                {% endif %}
+                                            </h1>
+                                            
+                                            <div class="infoBlock">
+                                                <div class="logo">
+                                                    <img src="{{asset('images/companies-logos/')}}{{company.image}}">
+                                                </div>
+                                                <div class="info">
+                                                    <label>Name:</label><span>
+                                                        <a target="_blank" href="{% if company.url %}{{company.url}}{% else %}javascript:void(0){% endif %}">
+{{company.name}}
+                                                                </a>
+                                                        </span>
+                                                    <br>
+                                                    <label>Industry:</label><span>
+                        {% for profession in company.professions %}
+                                {% if loop.last %}
+                                {{profession}}
+                                {% else %}
+                                {{profession}} ,
+                                {% endif %}
+                        {% endfor %}        
+                                                        </span>
+                                                        <br>
+                                                        {#<label>Establised:</label><span>{{company.establishmentDate|date('j F, Y')}}</span>
+                                                        <br>#}
+                                                        <label>Country:</label><span>{{company.getCountryName}}</span>
+                                                        <br>
+                                                        <label>City:</label><span>{{company.city}}</span>
+                                                        <br>
+                        {% if company.state %}
+                                                        <label>State:</label><span>{{company.state}}</span>
+                                                        <br>
+                        {% endif %}
+                                                        <label>Address:</label><span>{{company.address}}</span>
+                                                        <br>
+                                                    </div>
+
+                                                    <div class="map">
+                                                        <div id="map_canvas" style="width: 215px;height: 168px;"></div>
+                                                    </div>
+
+                                                    <div class="clear"></div>
+                                                </div>
+                                            </aside>
+
+                                            <aside class="jobWrapper">
+                                                <h1>{{company}} internships list:</h1>
+                {% if is_granted('ROLE_COMPANY') %}
+                                                <a href="{{ path('internship_new') }}"><span>+</span>Add a new job</a>
+{% endif %}
+                                                <div class="clear"></div>
+                                                <ul>
+                    {% for entity in companyJobs %}      
+                                                        <li>
+                                                            <div class="title">
+                                                                <h2><a href="{{path('internship_show',{'id' : entity.id})}}">{{ entity.title }}</a>
+                                                                </h2>
+                                                                <h4>{{ entity.getCountryName }}</h4>
+                                                                <span class="share">
+                            {% if not is_granted('ROLE_COMPANY')%}
+                                                                        <div class="fb-like" data-href="{{ url('internship_show', {'id' : entity.id} ) }}" data-send="false" data-layout="button_count" data-width="110" data-show-faces="true" ></div>    
+                                                                        <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-url="{{ url('internship_show', {'id' : entity.id} ) }}">Tweet</a>
+                            {% endif %}
+                                                                    </span>
+{% if entity.active and is_granted('ROLE_COMPANY') and company.id == app.user.id %}
+                                                                    <span class="actv">Active</span>
+{% elseif is_granted('ROLE_COMPANY') and company.id == app.user.id %}
+                                                                    <span class="exp">Not Active</span>
+{% endif %}
+
+                                                                    <span class="edit">
+{% if is_granted('ROLE_COMPANY') and company.id == app.user.id %}
+                                                                            <a href="{{ path('internship_edit', { 'id': entity.id }) }}">Edit</a>
+{% endif %}
+                                                                        </span>
+                                                                    </div>
+
+                                                                    <div class="details">
+                                                                        <h2>{{ entity.title }}</h2>
+                                                                        <span class="date"><strong>Post Date:</strong> {{ entity.createdAt|date('d/m/Y') }}</span>
+                                                                        <span class="valid"><strong>To :</strong> {{ entity.activeTo|date('d M. Y') }} </span>
+                                                                        <span class="valid"><strong>Active From :</strong>{{ entity.activeFrom|date('d M. Y') }}</span>
+
+                                                                        <p>{{ entity.description|raw }}</p>
+                                                                    </div>
+                                                                </li>
+{% else %}
+                                                                <span class="alert sucs">
+                                                                    You don’t have any jobs posted           
+                                                                </span>
+{% endfor %}
+                                                            </ul>
+                                                        </aside>
+
+                                                        <ul class="pging">
+                {% if lastPageNumber > 1 %}
+                    {% if page > 1 %}
+                                                                <li><a href="{{ url('internship',{'loginName' : loginName }) }}" class="right">&laquo;&laquo;</a></li>
+                                                                <li><a href="{{ url('internship', { 'loginName' : loginName,'page': page - 1}) }}" class="right">&laquo;</a></li>
+                    {% endif %}
+
+        {% for numberOfPage in 1..lastPageNumber %}
+        {% if numberOfPage > page - 3 and numberOfPage < page + 3 %}
+                                {% if page == numberOfPage %}<li class="crnt">{{ numberOfPage }}</li>{% else %}<li><a href="{{ url('internship', {'loginName' : loginName,'page': numberOfPage}) }}">{{ numberOfPage }}</a></li>{%endif%}
+        {% endif %}
+        {% endfor %}
+
+
+                    {% if page < lastPageNumber %}
+                                                                <li><a href="{{ url('internship', { 'loginName' : loginName,'page': page + 1}) }}" class="left">&raquo;</a></li>
+                                                                <li><a href="{{ url('internship', {'loginName' : loginName,'page': lastPageNumber}) }}" class="left">&raquo;&raquo;</a></li>                    
+{% endif %}
+                {% endif %}
+                                                            </ul>
+                                                        </section>
+        <div class="clear"></div>
+                                                    </div>
+                                                </section>
+
+
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+                                                <script type="text/javascript" src="{{asset('js/libs/accTabs.js')}}"></script>
+                                                <script type="text/javascript" src="{{asset('js/libs/jquery.tinyscrollbar.min.js')}}"></script>
+                                                <script type="text/javascript" src="{{asset('js/jquery.mousewheel-3.0.6.pack.js')}}"></script>
+                                                <script type="text/javascript" src="{{asset('js/website.js')}}"></script>
+                                                <script>
+                                                        $(function() {
+                                                        $("#accordion").tabs(
+                                                        "#accordion div.pane",
+                                                        {tabs: 'h2', effect: 'slide', initialIndex: null}
+                                                                );
+                                                    });
+    
+                                                    var latitude = '{{company.Latitude}}';
+                                                    var longitude = '{{company.Longitude}}';
+                                                    $(document).ready(function(){
+                                                    $('#logedInComapny,#jobsList').addClass('crnt');
+                                                    $('#companyNav').show();    
+                                                    initialize();
+                                                    })
+    
+                                                    </script>
+                                                    <script src="{{asset('bundles/objectsinternjump/js/internShipMap.js')}}"></script>
+{% endblock %}

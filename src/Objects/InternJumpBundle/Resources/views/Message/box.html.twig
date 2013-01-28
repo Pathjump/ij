@@ -1,0 +1,70 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}company {{ box }}{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('css/tabber.css') }}" rel="stylesheet" type="text/css"/>
+<script type="text/javascript">document.write('<style type="text/css">.tabber{display:none;}<\/style>');</script>
+{% endblock %}
+
+{% block body %}
+<section id="msgsBox">
+    <div class="wrapper">
+        <div id="loading">
+            <img src="{{ asset('img/followLoader.gif') }}" alt="loader">
+        </div>
+        <div class="inboxBlock">
+            <h1>Messages</h1>
+            <div class="tabber simpleTabs">
+                <div class="tabbertab{% if box == 'inbox' %} tabbertabdefault{% endif %}">
+                    <h2><a href="{{ path('company_box', {'box': 'inbox'}) }}" title="Company Inbox">Inbox</a></h2>
+                    <div id="inboxTab" class="simpleTabsContent">
+                        {% if type == 'box' and box == 'inbox' %}
+                            {% render 'ObjectsInternJumpBundle:CompanyMessage:getMessages' with {'box': box, 'page': page, 'itemsPerPage': itemsPerPage} %}
+                        {% elseif type == 'show' and box == 'inbox' %}
+                            {% render 'ObjectsInternJumpBundle:CompanyMessage:getMessage' with {'id': messageId} %}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="tabbertab{% if box == 'outbox' %} tabbertabdefault{% endif %}">
+                    <h2><a href="{{ path('company_box', {'box': 'outbox'}) }}" title="Company Outbox">Outbox</a></h2>
+                    <div id="outboxTab" class="simpleTabsContent">
+                        {% if type == 'box' and box == 'outbox' %}
+                            {% render 'ObjectsInternJumpBundle:CompanyMessage:getMessages' with {'box': box, 'page': page, 'itemsPerPage': itemsPerPage} %}
+                        {% elseif type == 'show' and box == 'outbox' %}
+                            {% render 'ObjectsInternJumpBundle:CompanyMessage:getMessage' with {'id': messageId} %}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="tabbertab{% if type == 'compose' %} tabbertabdefault{% endif %}">
+                    <h2><a href="{{ path('company_new_message') }}" title="Company Compose Message">Compose</a></h2>
+                    <div id="composeTab" class="simpleTabsContent">
+                        {% if type == 'compose' %}
+                            {% render 'ObjectsInternJumpBundle:CompanyMessage:newMessageForm' with {'userName': userName} %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('js/libs/jquery.livequery.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/libs/chosen.jquery.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('bundles/objectsinternjump/js/companyMessages.js') }}" type="text/javascript"></script>
+<script type="text/javascript">
+    var companyInboxurl = '{{ path('company_messages', {'box': 'inbox'}) }}';
+    var inboxUrl = '{{ path('company_box', {'box': 'inbox'}) }}';
+    var companyOutboxurl = '{{ path('company_messages', {'box': 'outbox'}) }}';
+    var outboxUrl = '{{ path('company_box', {'box': 'outbox'}) }}';
+    var companyMessageurl = '{{ path('company_new_message_form') }}';
+    var tabberOptions = {'onClick':getTabContents};
+</script>
+<script src="{{ asset('js/libs/tabber-minimized.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/cookies.js') }}" type="text/javascript"></script>
+{% endblock %}

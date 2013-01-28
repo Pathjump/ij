@@ -1,0 +1,10 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+<div class="Wrapper404">
+<h1>404</h1>
+<h2>The requested page was not found.</h2>
+
+<h2>Help us resolve this issue, <a href="{{path('mail_404')}}?url={{app.request.uri}}">click here</a> to report this to us.<br /> Thank you.</h2>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Employers data{% endblock %}
+
+{%block body%}
+<div id="main" role="main">
+
+    <section id="employersData">
+        {{employersData|raw}}
+        <!--employers-data-Que-->
+    </section>
+
+
+</div>
+
+{%endblock%}
+
+{% block javascripts %}
+{{parent()}}
+<script>
+$(document).ready(function(){
+    $('#employerLink').addClass('crnt');
+    
+    $('#companySignUpLink').click(function(){
+        window.location = '{{path('company_signup')}}';
+    });
+    $('#companyLogin').click(function(){
+        window.location = '{{path('login')}}';
+    });
+});
+</script>
+{% endblock %}
+

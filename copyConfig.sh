@@ -1,0 +1,1 @@
+cp server_config/parameters.ini app/config/parameters.ini

@@ -1,0 +1,23 @@
+<form action="{{ path('company_create_message') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_errors(form) }}
+    <table class="composeMsg">
+        <tr>
+            <td><strong>To:</strong></td>
+            <td>{{ form_widget(form.user) }}</td>
+            <td>{{ form_errors(form.user) }}</td>
+        </tr>
+        <tr>
+            <td><strong>Subject:</strong></td>
+            <td>{{ form_widget(form.title) }}</td>
+            <td>{{ form_errors(form.title) }}</td>
+        </tr>
+        <tr>
+            <td><strong>Message:</strong></td>
+            <td>{{ form_widget(form.message) }}</td>
+            <td>{{ form_errors(form.message) }}</td>
+        </tr>
+    </table>
+    {{ form_rest(form) }}
+    <button type="submit">Send Message</button>
+    <div class="clear"></div>
+</form>

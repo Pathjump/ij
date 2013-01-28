@@ -1,0 +1,42 @@
+<ul class="msgsNotifs">
+    {% for notification in companyNotificationsCountByType %}
+        <li><a href="javascript:void(0)" onclick="window.location = '{{path('company_notification',{'type' : notification.type})}}';">
+        {% if notification.type == 'user_answer_question' %}
+                    User. answer question
+        {% elseif notification.type == 'user_job_apply' %}      
+                    User. job apply
+        {% elseif notification.type == 'user_accept_job' %}      
+                    User. accept job 
+        {% elseif notification.type == 'user_reject_job' %}      
+                    User. reject job       
+        {% elseif notification.type == 'user_accept_interest' %}      
+                    User. accept interest 
+        {% elseif notification.type == 'user_reject_interest' %}      
+                    User. reject interest
+        {% elseif notification.type == 'user_accept_interview' %}      
+                    User. accept interview        
+        {% elseif notification.type == 'user_reject_interview' %}      
+                    User. reject interview   
+        {% elseif notification.type == 'user_edit_task' %}      
+                    User. update task    
+        {% elseif notification.type == 'user_add_note' %}      
+                    User. add task note
+        {% elseif notification.type == 'user_edit_note' %}      
+                    User. edit task note            
+        {% endif %}            
+        </a>
+    <span class="tip">{{notification.notficiationsCount}}</span>
+    </li>
+    {% endfor %}
+    
+    <li><a href="javascript:void(0)" onclick="window.location = '{{path('company_notification')}}';">Notifications</a>
+        {% if allCompanyNotificationsCount > 0 %}
+        <span class="tip">{{allCompanyNotificationsCount}}</span>
+        {% endif %}
+    </li>
+    <li><a href="{{path('company_box',{'box' : 'inbox'})}}">Messsages</a>
+        {% if newMessagesCount > 0 %}
+        <span class="tip">{{newMessagesCount}}</span>
+        {% endif %}
+    </li>
+</ul>

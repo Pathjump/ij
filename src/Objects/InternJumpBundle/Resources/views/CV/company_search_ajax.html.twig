@@ -1,0 +1,42 @@
+<h1>Resultes for your Search {{ count }}:</h1>
+<ul class="comntList" style="clear:both">
+    {% for cv in cvs %}
+    <li>
+        <div class="title">
+            <span class="name">
+                <a href="{{ path('company_see_user_data',{'userLoginName' : cv.user.loginName,'cvId' : cv.id}) }}">{{ cv.user }}</a>
+            </span>
+            |
+            <span class="jobTitle">{{ cv }}</span>
+            <span class="date">
+                <strong>Post Date:</strong> {{ cv.createdAt | date('Y-m-d') }}</span>
+        </div>
+        <div class="comnTxt">
+            {{ cv.objective }}
+        </div>
+        <footer>
+            <span><strong>Country:</strong>{{ cv.user.getCountryName() }}</span>
+        </footer>
+    </li>
+    {% endfor %}
+</ul>
+
+{% if lastPageNumber > 1 %}
+<ul class="pging">
+    {% if page > 1 %}
+    <li class="pgingBigger"><button type="submit" name="page" value="1" onclick="refreshPage(1);return false;">First</button></li>
+    <li><button type="submit" name="page" value="{{ page - 1 }}" onclick="refreshPage({{ page - 1 }});return false;">&lt;</button></li>
+    {% endif %}
+
+    {% for numberOfPage in 1..lastPageNumber %}
+    {% if numberOfPage > page - 4 and numberOfPage < page + 4 %}
+    <li{% if numberOfPage == page %} class="crnt"{% endif %}><button type="submit" name="page" value="{{ numberOfPage }}" onclick="refreshPage({{ numberOfPage }});return false;">{{ numberOfPage }}</button></li>
+    {% endif %}
+    {% endfor %}
+
+    {% if page < lastPageNumber %}
+    <li><button type="submit" name="page" value="{{ page + 1 }}" onclick="refreshPage({{ page + 1 }});return false;">&gt;</button></li>
+    <li class="pgingBigger"><button type="submit" name="page" value="{{ lastPageNumber }}" onclick="refreshPage({{ lastPageNumber }});return false;">Last</button></li>
+    {% endif %}
+</ul>
+{% endif %}

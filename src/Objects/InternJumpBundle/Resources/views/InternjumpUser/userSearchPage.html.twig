@@ -1,0 +1,312 @@
+{% extends '::base.html.twig' %}
+{% block title %}
+Internship Search
+{% endblock %}
+
+{% block stylesheets %}
+{{parent()}}
+<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('css/jquery-ui-1.8.24.custom.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+
+<section id="srchPage">
+    <div class="wrapper">
+
+
+
+        <div class="srchFilter">
+            <aside>
+                <label>Location</label>
+{#<select class="chzn-select" style="width: 160px">
+<option>Choose a location</option>
+<option>Country / State</option>
+<option>Country / State</option>
+<option>Country / State</option>
+</select>#}
+{{form_widget(form.country, { 'attr': {'class': 'chzn-select','style':'width:160px;', 'id' : 'country_search'} })}}
+{#{{form_widget(form.city, { 'attr': {'class': 'chzn-select','style':'width:160px;', 'id' : 'city_search'} })}}#}
+{{form_widget(form.state, { 'attr': {'class': 'chzn-select','style':'width:160px;', 'id' : 'state_search'} })}}
+{{form_widget(form.city, { 'attr': {'style':'width:160px;', 'id' : 'city_search', 'placeholder': 'Type city'} })}}
+            </aside>
+            <br />
+            <span class="or">Or</span><br />
+            <aside>
+                <label>Industry</label>
+{{form_widget(form.category, { 'attr': {'class': 'chzn-select','style':'width:160px;', 'id' : 'category_search'} })}}
+            </aside>
+            <span class="or">Or</span>
+            <aside>
+                <label>Companies</label>
+{{form_widget(form.company, { 'attr': {'class': 'chzn-select','style':'width:160px;', 'id' : 'company_search'} })}}
+            </aside>
+        </div>
+        <!--Search-Internships-->
+                <!--search-container-->	
+        <div class="Search-Internships">
+            <form id="search_form" action="" method="POST">
+                <input id="search_text" name="" type="text" placeholder="Keywords">
+                <input id="search_button" name="" type="button" value="Search"><span></span>
+            </form>
+
+        </div>
+        
+    </div>
+    <!--end of wrapper -->
+</section>
+
+
+
+<section id="comJobList">
+    <div class="wrapper">
+
+        <aside class="jobWrapper">
+            <h1 class="search_title" style="display: none;">Search Results:</h1>
+            <div class="clear"></div>
+
+            <ul class="searchResult">
+
+
+
+            </ul>
+
+
+
+        </aside>
+        
+
+    </div>
+</section>
+
+
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script src="{{asset('js/libs/chosen.jquery.min.js')}}"></script>
+<script src="{{asset('bundles/objectsinternjump/js/internShip_Search.js')}}"></script>
+<script src="{{asset('js/libs/jquery-ui-1.8.24.custom.min.js')}}"></script>
+
+<script>
+    $(document).ready(function(){
+        $('#logedInStudent,#jobSearch').addClass('crnt');
+        $('#studentNav').show();
+    });
+    
+    
+    var countryCitiesStatesUrl = '{{url('get_countey_cities_states',{'countryId' : ''})}}';
+    var searchJobsUrl= '{{url('user_search_ajax', {'title' : '','country' : '','city' : '','state' : '','category' : '','company' :  '','page' :  1})}}';
+    var autoCompleteUrl='{{url('auto_complete_url')}}';
+    var cityAutoCompleteUrl= '{{url('city_auto_complete_url')}}';
+    var text="empty"
+    var country='empty';
+    var city='empty';
+    var state="empty";
+    var category="empty"; 
+    var company="empty";
+    
+    </script>
+
+    <script>
+    $('#search_form').submit(function(){
+    return false;
+    });
+
+    $('#search_button').click(function(){
+    var searchJobsUrl= '{{url('user_search_ajax', {'title' : '','country' : '','city' : '','state' : '','category' : '','company' :  '','page' :  1})}}';
+    $('.loading').show();
+
+    if($('#search_text').val()!= ""){ var text=$('#search_text').val();}
+    else{ var text='empty'; }
+
+    if($('#form_country').val()!= ""){ var country=$('#form_country').val();}
+    else{ var country='empty'; }
+
+    if($('#form_city').val()!= ""){ var city=$('#form_city').val();}
+    else{ var city='empty'; }
+
+    if($('#form_state').val()!= ""){ var state=$('#form_state').val();}
+    else{var state="empty"; }
+
+    if($('#form_category').val()!= ""){ var category=$('#form_category').val();}
+    else{ var category="empty"; }
+
+    if($('#form_company').val()!= ""){ var company=$('#form_company').val();}
+    else{ var company="empty";}
+
+
+    if(text || country || city || state || category || company){
+    $('#search_error').hide();
+                        {% if app.request.get('access_method') == 'facebook' %}
+                        searchJobsUrl=searchJobsUrl+"/"+text+"/"+country+"/"+city+"/"+state+"/"+category+"/"+company+"?access_method=facebook";
+                        {% else %}
+                            searchJobsUrl=searchJobsUrl+"/"+text+"/"+country+"/"+city+"/"+state+"/"+category+"/"+company;
+                    {%endif%}
+                        
+    $.ajax({
+                url: searchJobsUrl,
+                success: function(msg) {
+                    $('.searchResult').empty();
+                    $('.searchResult').append(msg);
+                },
+                complete: function(msg) {
+                    $('.loading').hide();
+                    $('.search_title').show();
+                    {% if app.request.get('access_method') == 'facebook' %}
+                        $('a').each(function(){
+                                 if(!$(this).attr('faceFlag')){
+                                    if($(this).attr('href') == "javascript:void(0)")
+                                    {}
+                                    else{
+                                        this.href += (/\?/.test(this.href) ? '&' : '?') + 'access_method=facebook';
+                                    }
+                                 }
+                        });
+                    {%endif%}
+                
+
+                }
+            });
+    }//end if
+    else{
+    $('#search_error').show();
+    $('.loading').hide();
+    }
+    });
+
+        </script>
+        <script>
+           $("#search_text").autocomplete({
+                minLength: 3,
+                source: function(request, response) {
+                    $.ajax({
+                        url: autoCompleteUrl,
+                        data: {
+                            term: request.term
+                        },
+                        dataType: "json",
+                        success: function(data) {
+                            // alert(data);
+                            response($.map(data, function(item) {
+                      
+                                return {
+                                    label:  item.name,
+                                    value:  item.id 
+                           
+                                }
+                            }))
+                        }
+                    })
+                },
+                select: function( event, ui ) {
+                    result = ui.item.value;
+                    {% if app.request.get('access_method') == 'facebook' %}
+                        searchJobsUrl=searchJobsUrl+"/empty/empty/empty/empty/"+result+"/empty"+"?access_method=facebook";
+                    {% else %}
+                        searchJobsUrl=searchJobsUrl+"/empty/empty/empty/empty/"+result+"/empty";
+                    {%endif%}
+                    $.ajax({
+                    url: searchJobsUrl,
+                    success: function(msg) {
+                        $('.searchResult').empty();
+                        $('.searchResult').append(msg);
+                    },
+                    complete: function(msg) {
+                        $('.loading').hide();
+                        $('.search_title').show();
+                        {% if app.request.get('access_method') == 'facebook' %}
+                        $('a').each(function(){
+                                 if(!$(this).attr('faceFlag')){
+                                    if($(this).attr('href') == "javascript:void(0)")
+                                    {}
+                                    else{
+                                        this.href += (/\?/.test(this.href) ? '&' : '?') + 'access_method=facebook';
+                                    }
+                                 }
+                        });
+                        {%endif%}
+
+                    }
+                });
+            
+                },
+                close: function (event, ui){
+                    $("#search_text").val("");
+                }
+            });
+ 
+ 
+ //auto complete for city feild
+            $("#form_city").autocomplete({
+                minLength: 3,
+                source: function(request, response) {
+                    $.ajax({
+                        url: cityAutoCompleteUrl,
+                        data: {
+                            city: request.term,
+                            country : $('#form_country').val()
+                        },
+                        dataType: "json",
+                        success: function(data) {
+                            // alert(data);
+                            response($.map(data, function(item) {
+                      
+                                return {
+                                    label:  item.name,
+                                    value:  item.name
+                           
+                                }
+                            }))
+                        }
+                    })
+                },
+                select: function( event, ui ) {
+                    
+                },
+                close: function (event, ui){
+                    
+                }
+            });
+ 
+ 
+            //pagenation links ajax
+            $(".pagenum").live('click', function(){
+                $('.loading').show();
+                var pageurl =$(this).attr('href');
+                {% if app.request.get('access_method') == 'facebook' %}
+                        pageurl=pageurl+"?access_method=facebook"
+                {%endif%}
+                
+                $.ajax({
+                    url: pageurl,
+                    success: function(msg) {
+                        $('.searchResult').empty();
+                        $('.searchResult').append(msg);
+                    },
+                    complete: function(msg) {
+                        $('.loading').hide();
+                        $('.search_title').show();
+                        {% if app.request.get('access_method') == 'facebook' %}
+                        $('a').each(function(){
+                                 if(!$(this).attr('faceFlag')){
+                                    if($(this).attr('href') == "javascript:void(0)")
+                                    {}
+                                    else{
+                                        this.href += (/\?/.test(this.href) ? '&' : '?') + 'access_method=facebook';
+                                    }
+                                 }
+                        });
+                        {%endif%}
+
+                    }
+                 });
+                 return false;
+                    
+            });
+            
+            </script>
+{% endblock %}

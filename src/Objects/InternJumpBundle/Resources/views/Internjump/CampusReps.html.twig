@@ -1,0 +1,70 @@
+{% extends '::base.html.twig' %}
+
+
+
+{% block title %}
+{{parent()}} - {{title}}
+{%endblock%}
+
+{%block body%}
+
+
+
+
+<section id="comJobList">
+
+    <div class="wrapper">
+        
+
+        <aside class="quizeWrapper aboutus" >
+            {{content|raw}}
+                <div class="clearfix"></div>
+            </aside>
+
+
+        </div>
+    </section>
+
+<section id="comJobList">
+<div class="wrapper">
+
+
+
+<section class="comntSection" id="contactForm">
+<aside class="addEdiTask">
+    
+<div class="contactWrapper">
+{%if flag==1%}
+        Your message has been sent Succefully
+{%else%}
+<fieldset>
+<legend>Tell us about yourself</legend>
+<form action="{{path('campus_resps')}}" method="POST" {{ form_enctype(form) }}>
+
+        <label>Name :</label>
+            {{form_widget(form.Name)}}
+        <br>
+        <label>Email :</label>
+            {{form_widget(form.Email)}}
+        <br>
+        <label>Phone :</label>
+            {{form_widget(form.Phone)}}
+        <br>
+        <label>Your Message :</label>
+            {{form_widget(form.Message, {'attr': {'class': 'task'}})}}
+        
+        {{form_rest(form)}}
+        <input type="submit" value="Send" class="submit">
+</form>
+</fieldset>
+{%endif%}
+</div>
+
+</aside>
+</section>
+<div class="clear"></div>
+</div>
+</section>
+
+{%endblock%}
+

@@ -1,0 +1,101 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}{% trans %}Sign up{% endtrans %}{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/stuEdu.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+<section id="student-01">
+    <div class="wrapper">
+        <h1>FOR STUDENTS<div></div></h1>
+
+        <div class="studentEduBgBlock">
+            <div id="stuEdu02" class="yellowCont">
+                {% if app.session.hasFlash('notice') %}
+                <span class="alert fail">
+                {{ app.session.flash('notice') | raw }}
+                </span>
+                {% endif %}
+                {% if app.session.hasFlash('success') %}
+                <span class="alert success">
+                {{ app.session.flash('success') | raw }}
+                </span>
+                {% endif %}
+                {% if app.session.hasFlash('error') %}
+                <span class="alert error">
+                {{ app.session.flash('error') | raw }}
+                </span>
+                {% endif %}
+                {% if message %}
+                <span class="alert fail">
+                    {{ message | raw }}
+                </span>
+                {% endif %}
+                {% if form_errors(form) %}
+                <span class="alert error">
+                {{ form_errors(form) }}
+                </span>
+                {% endif %}
+                <!--form Name-->
+                <h1>{%if formName%}{{formName}}{%endif%}:</h1>
+                <!--form Desc-->
+                <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
+                <form id="stuEdu" action="{{ path('user_signup') }}" method="post" {{ form_enctype(form) }}>
+                    {% if loginNameRequired %}
+                    <label>{% trans %}Login Name{% endtrans %}:</label>
+                    {{ form_widget(form.loginName) }}
+                    <span class="miniError" id="loginName-error"></span>
+                    <span class="miniError">{{ form_errors(form.loginName) }}</span>
+                    <br>
+                    {% endif %}
+
+                    <label>{% trans %}Email{% endtrans %}:</label>
+                    {{ form_widget(form.email.Email) }}<br>
+                    <span class="miniError" id="mailcheck-message"></span>
+                    <label>{% trans %}Confirm Email{% endtrans %}:</label>
+                    {{ form_widget(form.email.ReEmail) }}
+                    <span class="miniError">{{ form_errors(form.email) }}</span><br>
+
+                    <label>{% trans %}Password{% endtrans %}:</label>
+                    {{ form_widget(form.userPassword.Password) }}<br>
+                    <label>{% trans %}Confirm Password{% endtrans %}:</label>
+                    {{ form_widget(form.userPassword.RePassword) }}
+                    <span class="miniError">{{ form_errors(form.userPassword) }}</span><br>
+
+                    {{ form_rest(form) }}
+                    <button class="nxt" type="submit" title="{% trans %}Sign up{% endtrans %}" id="user-signup">Next</button>
+                    <div class="clear"></div>
+                </form>
+
+                <div class="sociaLogin">
+                    <h2>Creat your account by :</h2>
+                    {% render "ObjectsAPIBundle:Facebook:facebookButton" with {'facebookUserHandleRoute' : 'facebook_logging','permissions': 'email,publish_stream,user_birthday,user_about_me,user_education_history,user_work_history,user_location,user_hometown','cssClass' : 'face' , 'linkText' : 'facebook'} %}<br>
+                    <a class="twitter" onclick="newWindow = window.open('{{ path('twitter_authentication', {'redirectRoute': 'twitter_enter', 'popup': 'yes'}) }}', '{% trans %}Twitter Sign up{% endtrans %}', 'height=200, width=200');if(window.focus)newWindow.focus();return false;" target="_blank" title="{% trans %}Twitter Sign up{% endtrans %}" href="{{ path('twitter_authentication', {'redirectRoute': 'twitter_enter'}) }}">{% trans %}Twitter Sign up{% endtrans %}</a><br>
+                    <a class="linkedin" onclick="newWindow = window.open('{{ path('linkedInButton', {'callbackUrl': 'linkedIn_user_data','popup' : 'yes'}) }}', '{% trans %}LinkedIn Sign up{% endtrans %}', 'height=400, width=600');if(window.focus)newWindow.focus();return false;" target="_blank" title="{% trans %}LinkedIn Sign up{% endtrans %}" href="{{ path('linkedInButton', {'callbackUrl': 'linkedIn_user_data'}) }}">{% trans %}LinkedIn Sign up{% endtrans %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script>
+    var loginNameError = "{% trans %}Only characters, numbers and _ is valid{% endtrans %}";
+    var loginNameNotExist = "{% trans %}valid{% endtrans %}";
+    var loginNameExist = "{% trans %}This value is already used{% endtrans %}";
+    var mailcheckMessage = "{% trans %}Did you mean{% endtrans %}";
+    var loginNameCheckUrl = "{{url('login_name_check',{'loginName' : ''})}}";
+    var countryCitiesStatesUrl = '{{url('get_countey_cities_states',{'countryId' : ''})}}';
+    $(document).ready(function(){
+        var stuTitleBar = $('#main .wrapper').width();
+        $('#student-01 > .wrapper h1 div').width(stuTitleBar-202);
+    });
+</script>
+<script src="{{asset('bundles/objectsuser/js/xregexp-all.js')}}"></script>
+<script src="{{asset('bundles/objectsuser/js/mailcheck.js')}}"></script>
+<script src="{{asset('bundles/objectsuser/js/signUp.js')}}"></script>
+{% endblock %}

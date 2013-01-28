@@ -1,0 +1,377 @@
+{% extends '::base.html.twig' %}
+{% block title %}{{userObject}}{% endblock %}
+
+{% block stylesheets %}
+{{parent()}}
+<link href="{{ asset('css/jquery-ui-1.8.24.custom.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+
+<section id="resumePages">
+    <div class="wrapper" id="resume-employers">
+
+        <aside class="resume-box">
+
+            {% if companyUserInterestFlag == 1 and is_granted('ROLE_COMPANY')%}
+            <div class="Manage-Interns">
+                <a href="javascript:void(0)" id="interviewAsk" class="button-1">Ask for interview</a>
+
+                <a href="{{path('company_new_message',{'userName' : userObject.loginName})}}" class="button-2">Send message</a>
+
+                <a href="javascript:void(0)" id="companyHireUser" class="button-3">Hire him</a>
+            </div>
+            {% endif %}
+
+            <!--Manage-Interns-->
+            <h2><b>{{userCv.name}}</b></h2>
+            <div class="clearfix"></div>
+            <hr/>
+            <div class="resume-contents">
+
+                {% if companyUserInterestFlag == 1 and is_granted('ROLE_COMPANY')%}
+                <a class="cv-btn">Description</a>
+                <div class="block2">
+                    <table width="100%" border="0"  class="Objectives-box" cellpadding="5">
+                        <tr>
+                            <th rowspan="5" scope="row">
+                                <img src="{{userObject.getTimThumbUrl(111,119)}}"/>
+                            </th>
+                            <td class="title-des2">Full Name:</td>
+                            <td>{{userObject}}</td>
+                            {% if userObject.state %}
+                            <td class="title-des2">State:</td>
+                            <td>{{userObject.state}}</td>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            {% if userObject.address %}
+                                <td class="title-des2">Address:</td>
+                                <td>{{userObject.address}}</td>
+                            {% endif %}
+                            {% if userObject.zipcode %}
+                                <td class="title-des2">Zip code:</td>
+                                <td>{{userObject.zipcode}}</td>
+                            {% endif %}
+                            </tr>
+                            <tr>
+                                <td class="title-des2">Gender:</td>
+                                <td>{{userObject.getGenderString}}</td>
+                            </tr>
+                            {% if userObject.dateOfBirth %}
+                            <tr>
+                                <td class="title-des2">Age:</td>
+                                <td>{{age}}</td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                            {% if userObject.country %}
+                                    <td class="title-des2">Country:</td>
+                                    <td>{{userObject.getCountryName}}</td>
+                            {% endif %}
+                                    <td class="title-des2">&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!--block2-->
+                {% elseif companyUserInterestFlag == 2 and is_granted('ROLE_COMPANY')%}
+                        <div class="block1">
+                            <img src="{{asset('img/cv-img.png')}}" width="65" height="71">
+                            <span class="cant-view-t">{{company_user_interset_reject_message}}</span>
+                        </div><!--block1-->
+                {% elseif companyUserInterestFlag == 3 and is_granted('ROLE_COMPANY') %}
+                        <div class="block1">
+                            <img src="{{asset('img/cv-img.png')}}" width="65" height="71">
+                            <span class="cant-view-t">{{user_interset_waiting_message}}</span>
+                        </div><!--block1-->
+               {% elseif is_granted('ROLE_COMPANY') %}
+                        <div class="block1">
+                            <img src="{{asset('img/cv-img.png')}}" width="65" height="71">
+                            <span class="cant-view-t">
+                                {% if errorMessage %}
+                                       {{errorMessage}}
+                                {% else %}
+                                       Contact details will be avilable once approved by the candidates.
+                                {% endif %}
+                            </span>
+                            <a href="javascript:void(0)" class="btn2" id="addInerest">Express interest</a>
+                            <img src="{{asset('img/loadingfacebox.gif')}}" id="addInerestImg" style="display: none;"/>
+                        </div><!--block1-->
+                {% endif %}
+
+
+
+
+
+                        <a class="cv-btn">Objectives</a>
+
+                        <div class="block2">
+                            <table width="200" border="0" class="Objectives-box" cellpadding="5">
+                                <tr>
+                                    <td>
+                                        {{userCv.objective}}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div><!--block2-->
+
+                        <a class="cv-btn">Educations</a>
+{% for education in userObject.educations %}
+                        <div class="block2">
+                            <ul class="Objectives-box">
+
+
+                                    {% if education.schoolName %}
+                                <li>
+                                    <b class="title-des">My collage:</b>
+                                    {{education.schoolName}}
+                                    </li>
+                                    {% endif %}
+
+                                    <li>
+                                    <b class="title-des">Major:</b>
+                                    {{education.major}}
+                                </li>
+
+
+                                    {% if education.minor %}
+                                <li>
+                                    <b class="title-des">Minor:</b>
+                                    {{education.minor}}
+                                    </li>
+                                    {% endif %}
+
+                                    {% if education.startDate %}
+                                    <li>
+                                    <b class="title-des">Start date:</b>
+                                   {{education.startDate}}
+                                    </li>
+                                    {% endif %}
+
+
+                                    {% if education.endDate %}
+                                    <li>
+                                    <b class="title-des">End date:</b>
+                                    {{education.endDate}}
+                                    </li>
+                                    {% endif %}
+
+                                    {% if education.extracurricularActivity %}
+                                    <li>
+                                    <b class="title-des">Extra Curricular Activities:</b>
+                                    {{education.extracurricularActivity}}
+                                    </li>
+                                    {% endif %}
+
+                                    {% if education.relevantCourseworkTaken %}
+                                    <li>
+                                    <b class="title-des">Relevant course work taken:</b>
+                                    {{education.relevantCourseworkTaken}}
+                                    </li>
+                                    {% endif %}
+
+                                    {% if education.cumulativeGPA %}
+                                    <li>
+                                    <b class="title-des">Cumulative GPA:</b>
+                                    {{education.cumulativeGPA}}
+                                    </li>
+                                    {% endif %}
+
+                                    {% if education.majorGPA %}
+                                    <li>
+                                    <b class="title-des">Major GPA:</b>
+                                    {{education.majorGPA}}
+                                    </li>
+                                    {% endif %}
+
+                                    {% if education.graduateDegree %}
+                                    <li>
+                                    <b class="title-des">Graduate degree:</b>
+                                    {{education.graduateDegree}}
+                                    </li>
+                                    {% endif %}
+
+                                    {% if education.undergraduateDegree %}
+                                    <li>
+                                    <b class="title-des">Undergraduate degree:</b>
+                                    {{education.undergraduateDegree}}
+                                    </li>
+                                    {% endif %}
+
+
+                            </ul>
+                        </div>  <!--block2-->
+
+                        {% else %}
+                        <div class="block2"></div>
+                         {% endfor %}
+
+
+
+                        <a class="cv-btn">Skills</a>
+
+                        <div class="block2">
+                            <table width="200" border="0" class="Objectives-box" cellpadding="5">
+                                {% for skill in userCv.skills %}
+                                <tr>
+                                    <th scope="row" class="title-des">{{loop.index}}<sup>
+                                        {% if loop.index == 1 %}
+                                        st
+                                        {% elseif loop.index == 1 %}
+                                        nd
+                                        {% elseif loop.index == 1 %}
+                                        rd
+                                        {% else %}
+                                        th
+                                        {% endif %}
+                                        </sup>  skill:</th>
+                                    <td>{{skill.title}}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div><!--block2-->
+
+
+
+                        <a class="cv-btn">Employment history</a>
+                        {% for empHistory in userObject.employmentHistories %}
+                        <div class="block2">
+                            <table width="200" border="0" class="Objectives-box" cellpadding="5">
+
+                                <tr>
+                                    <th scope="row" class="title-des">Title</th>
+                                    <td>
+                                        {{empHistory.title}}
+                                    </td>
+                                </tr>
+
+                                {% if empHistory.description %}
+                                <tr>
+                                    <th scope="row" class="title-des">Description</th>
+                                    <td>
+                                        {{empHistory.description}}
+                                    </td>
+                                    </tr>
+                                    {% endif %}
+
+                                    <tr>
+                                    <th scope="row" class="title-des">Started Position</th>
+                                    <td>
+                                        {{empHistory.startedFrom|date('d/m/Y')}}
+                                    </td>
+                                    </tr>
+
+                                    {% if empHistory.endedIn %}
+                                    <tr>
+                                    <th scope="row" class="title-des">Position Ended</th>
+                                    <td>
+                                        {{empHistory.endedIn|date('d/m/Y')}}
+                                    </td>
+                                    </tr>
+                                    {% endif %}
+
+
+
+                                    <tr>
+                                    <th scope="row" class="title-des">Company name</th>
+                                    <td>
+                                        {% if empHistory.companyUrl %}
+                                        <a href="{{empHistory.companyUrl}}">
+                                        {{empHistory.companyName}}
+                                                </a>
+                                        {% else %}
+                                            {{empHistory.companyName}}
+                                            {% endif %}
+                                    </td>
+                                    </tr>
+
+                                    {% if empHistory.companyUrl %}
+                                    <tr>
+                                    <th scope="row" class="title-des">Industry</th>
+                                    <td>
+                                        {{empHistory.industry}}
+                                    </td>
+                                    </tr>
+                                    {% endif %}
+
+                                    {% if empHistory.isCurrent %}
+                                    <tr>
+                                    <th scope="row" class="title-des">
+                                        <span class="actv" style="color: #1EAF01;font: bold 15px/40px Arial,Helvetica,sans-serif;">Current Position</span>
+                                    </th>
+                                </tr>
+                                {% endif %}
+
+                            </table>
+                        </div><!--block2-->
+                        {% else %}
+                        <div class="block2"></div>
+                        {% endfor %}
+
+                    </div><!--resume-contents-->
+
+                    <div class="clearfix"></div>
+                    <div class="Company-Questions">
+
+                        <h3>Company Questions</h3>
+
+                        <div class="resume-contents">
+                            {% for question in companiesQuestions %}
+                                {% if question.answer %}
+                                    <div class="block3 answered">{{question.question}}</div>
+                                    <div class="block4">{{question.answer}}</div>
+                                {% else %}
+                                    <div class="block3">{{question.question}}</div>
+                                {%endif %}
+                            {% endfor %}
+                        </div>
+                        <!--resume-contents-->
+
+                        {% if companyUserInterestFlag == 1 and is_granted('ROLE_COMPANY')%}
+                        <div class="resume-comment">
+                            <p class="title-des2">If you are a comapny you can ask a question:</p>
+                            <form action="" method="get">
+                                <textarea name="" cols="" rows="" id="companyAddQuestionText" placeholder="Ask a question"></textarea>
+                                <div class="low-btns">
+                                    <button name="" id="companyAddQuestionButton" type="button" class="button">
+                                        Ask a questions
+                                    </button>
+                                    <img src="{{asset('img/loadingfacebox.gif')}}" id="companyAddQuestionImg" style="display: none;margin: 0 50px 10px 0;float: right;"/>
+                                </div>
+                            </form>
+                        </div>
+                        <!--resume-comment-->
+                        {% endif %}
+                    </div>
+                    <!--Company-Questions-->
+                </aside>
+
+
+                <aside class="others">
+                    <div class="faceWrapper">
+                        <div class="fb-like-box" data-href="http://www.facebook.com/internjump?fref=ts" data-width="292" data-show-faces="false" data-stream="false" data-header="true"></div>
+                    </div>
+                </aside>
+
+            </div>
+            <!--end of wrapper -->
+        </section>
+
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+{{parent()}}
+        <script>
+
+        var askForInterviewUrl = '{{path('interview_request',{'userId' : userObject.id,'cvId' : cvId})}}';
+        var companyHireUserUrl = '{{path('company_hire_user',{'userId' : userObject.id,'cvId' : cvId})}}';
+        var addInterestUrl = '{{path('add_interest',{'loginName' : userObject.loginName,'cvId' : cvId})}}';
+        var addUserQuestionUrl = '{{path('add_user_question',{'userLoginName' : userObject.loginName,'question': ''})}}';
+            </script>
+            <script src="{{ asset('js/libs/jquery-ui-1.8.24.custom.min.js') }}" type="text/javascript"></script>
+            <script src="{{asset('bundles/objectsinternjump/js/companyUserData.js')}}"></script>
+{% endblock %}

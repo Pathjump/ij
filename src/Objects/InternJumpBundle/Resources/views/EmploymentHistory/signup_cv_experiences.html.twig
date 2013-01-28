@@ -1,0 +1,202 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Resume Third Step{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('css/simpletabs.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('css/jquery-ui-1.8.24.custom.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+<section id="student-01">
+    <div class="wrapper">
+        <h1>FOR STUDENTS<div></div></h1>
+
+        <div class="simpleTabs">
+            <ul class="simpleTabsNavigation">
+                <li><a>Step 1</a></li>
+                <li><a>Step 2</a></li>
+                <li><a class="current">Step 3</a></li>
+                <li><a>Step 4</a></li>
+            </ul>
+
+            <div class="simpleTabsContent" style="display: block;">
+                <div class="btns" style="float: right;">
+                    Click "+" to add a new form&nbsp;&nbsp;&nbsp;
+                    <input type="button" id="btnAdd" value="+" />
+                    <input disabled="disabled" type="button" id="btnDel" value="-" />
+                </div>
+                {% if app.session.hasFlash('notice') %}
+                <span class="alert fail">
+                {{ app.session.flash('notice') | raw }}
+                </span>
+                {% endif %}
+                {% if app.session.hasFlash('success') %}
+                <span class="alert success">
+                {{ app.session.flash('success') | raw }}
+                </span>
+                {% endif %}
+                {% if app.session.hasFlash('error') %}
+                <span class="alert error">
+                {{ app.session.flash('error') | raw }}
+                </span>
+                {% endif %}
+                {% if form_errors(form) %}
+                <span class="alert error">
+                {{ form_errors(form) }}
+                </span>
+                {% endif %}
+                <form class="formTable" id="step03" action="{{ path('signup_cv_experience') }}" method="post" {{ form_enctype(form) }}>
+                    <!--form Name-->
+                <h2>{%if formName%}{{formName}}{%endif%}:</h2>
+                <!--form Desc-->
+                <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
+
+                    <div id="formsContainer">
+                        {% for employmentHistory in form.employmentHistories %}
+                        <div style="margin-bottom:4px;" class="clonedInput">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td width="160"><label>Title</label></td>
+                                    <td>{{ form_widget(employmentHistory.title) }}<span class="miniError">{{ form_errors(employmentHistory.title) }}</span></td>
+                                    <td width="75">&nbsp;</td>
+                                    <td width="160"><label>Industry</label></td>
+                                    <td class="started">{{ form_widget(employmentHistory.industry) }}<span class="miniError">{{ form_errors(employmentHistory.industry) }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="top"></td>
+                                    <td class="top"></td>
+                                    <td>&nbsp;</td>
+                                    <td><label>Started Position</label></td>
+                                    <td>{{ form_widget(employmentHistory.startedFrom) }}<span class="miniError">{{ form_errors(employmentHistory.startedFrom) }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>{{ form_label(employmentHistory.isCurrent) }}</td>
+                                    <td class="started">{{ form_widget(employmentHistory.isCurrent) }}<span class="miniError">{{ form_errors(employmentHistory.isCurrent) }}</span></td>
+                                    <td>&nbsp;</td>
+                                    <td><label>Position Ended</label></td>
+                                    <td class="started">{{ form_widget(employmentHistory.endedIn) }}<span class="miniError">{{ form_errors(employmentHistory.endedIn) }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="top"><label>Company Name</label></td>
+                                    <td class="top">{{ form_widget(employmentHistory.companyName) }}<span class="miniError">{{ form_errors(employmentHistory.companyName) }}</span></td>
+                                    <td>&nbsp;</td>
+                                    <td class="top"><label>Company URL</label></td>
+                                    <td>{{ form_widget(employmentHistory.companyUrl) }}<span class="miniError">{{ form_errors(employmentHistory.companyUrl) }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>&nbsp;</td>
+                                    <td class="top"><label>More Details</label></td>
+                                    <td>{{ form_widget(employmentHistory.description) }}<span class="miniError">{{ form_errors(employmentHistory.description) }}</span></td>
+                                </tr>
+                            </table>
+                            <span class="yellowSepa"></span>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    {{ form_rest(form) }}
+                    <button style="float: right;" class="submit" type="submit" title="{% trans %}Next{% endtrans %}">{% trans %}Next{% endtrans %}</button>
+                    <a class="bak" href="{{ path('signup_cv_skills') }}">Back</a>
+                    <a class="bak" href="{{ path('signup_cv_success') }}">Skip</a>
+                    <div class="clear"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block javascripts %}
+{% set formElementHTML %}
+{% spaceless %}
+<div style="margin-bottom:4px;" class="clonedInput">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td width="160"><label>Title</label></td>
+            <td>{{ form_widget(form.employmentHistories.vars.prototype.title) }}</td>
+            <td width="75">&nbsp;</td>
+            <td width="160"><label>Industry</label></td>
+            <td class="started">{{ form_widget(form.employmentHistories.vars.prototype.industry) }}</td>
+        </tr>
+        <tr>
+            <td class="top"></td>
+            <td class="top"></td>
+            <td>&nbsp;</td>
+            <td><label>Started Position</label></td>
+            <td>{{ form_widget(form.employmentHistories.vars.prototype.startedFrom) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.employmentHistories.vars.prototype.isCurrent) }}</td>
+            <td class="started">{{ form_widget(form.employmentHistories.vars.prototype.isCurrent) }}</td>
+            <td>&nbsp;</td>
+            <td><label>Position Ended</label></td>
+            <td class="started">{{ form_widget(form.employmentHistories.vars.prototype.endedIn) }}</td>
+        </tr>
+        <tr>
+            <td class="top"><label>Company Name</label></td>
+            <td class="top">{{ form_widget(form.employmentHistories.vars.prototype.companyName) }}</td>
+            <td>&nbsp;</td>
+            <td class="top"><label>Company URL</label></td>
+            <td>{{ form_widget(form.employmentHistories.vars.prototype.companyUrl) }}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td>&nbsp;</td>
+            <td class="top"><label>More Details</label></td>
+            <td>{{ form_widget(form.employmentHistories.vars.prototype.description) }}</td>
+        </tr>
+    </table>
+    <span class="yellowSepa"></span>
+</div>
+{% endspaceless %}
+{% endset %}
+<script src="{{ asset('js/libs/chosen.jquery.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/libs/jquery.livequery.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/libs/jquery-ui-1.8.24.custom.min.js') }}" type="text/javascript"></script>
+<script>
+    var formElementHTML = '{{ formElementHTML }}';
+    function changeInputs() {
+        var currentCheck = $(this);
+        currentCheck.parent().parent().find('.employmentEndedIn').each(function() {
+            if(currentCheck.is(':checked')) {
+                $(this).attr('disabled', 'disabled');
+                $(this).val('');
+            } else {
+                $(this).removeAttr('disabled');
+            }
+        });
+    }
+    $(document).ready(function() {
+        $('.employmentIsCurrentJob').livequery(function() {
+            $(this).change(changeInputs);
+        });
+        $('.employmentStartedFrom').livequery(function() {
+            $(this).datepicker({changeYear: true, dateFormat: 'yy-mm-dd', maxDate: new Date()});
+        });
+        $('.employmentEndedIn').livequery(function() {
+            $(this).datepicker({changeYear: true, dateFormat: 'yy-mm-dd', maxDate: new Date()});
+        });
+        $('#btnAdd').click(function() {
+            var tempHtml = formElementHTML;
+            $('#formsContainer').append(tempHtml.replace(/\$\$name\$\$/g, $('#formsContainer').children().length));
+            $('#btnDel').removeAttr('disabled');
+        });
+        $('#btnDel').click(function() {
+            if($('#formsContainer').children().length == 2) {
+                $('#btnDel').attr('disabled','disabled');
+            }
+            $('#formsContainer').children().last().remove();
+        });
+        var stuTitleBar = $('#main .wrapper').width();
+        $('#student-01 > .wrapper h1 div').width(stuTitleBar-202);
+        $('.chzn-select').livequery(function() {
+            $(this).chosen();
+        });
+    });
+</script>
+{% endblock %}

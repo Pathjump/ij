@@ -1,0 +1,262 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+<link href="{{asset('css/tabs-accordion.css')}}" type="text/css" rel="stylesheet" />
+<link href="{{asset('css/scrollinList.css')}}" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{%block body%}
+
+
+<section id="comJobList">
+<div class="wrapper">
+
+<aside class="comJobListAccTabs">
+
+<div class="accTabs">
+<h1>Company Interns</h1>
+
+<!--Accordion Tabs-->
+<div id="accordion">
+{%if companyUsers%}
+{%set job =""%}
+{%for cu in companyUsers%}
+        {%if cu.internship.id != job%}
+        <h2 {% if loop.first %}class="current"{% endif %}>{{cu.internship.title}}</h2>
+        {%set job =cu.internship.id %}
+        <div class="pane" {% if loop.first %}style="display:block"{% endif %}>
+            <ul>
+        {%for u in companyUsers%}
+            {%if cu.internship.title == u.internship.title%}
+                <li><img src="{{u.user.getTimThumbUrl(111,119)}}" width="111" height="119">
+                    <a href="{{path('company_user_task',{'userName' : u.user.loginName})}}">
+                        {{u.user}}
+                    </a>
+            </li>
+            {%endif%}
+        {%endfor%}
+             </ul>
+        </div>
+        {%endif%}
+        
+{%endfor%}
+{%endif%}
+</div>
+<!--Accordion Tabs-->
+
+</div>
+</aside>
+    
+<section class="comntSection" id="portalHome">
+
+<aside class="addEdiTask">
+<h1>Manage interns</h1>
+<div class="userData">
+<img src="{{ user.getTimThumbUrl(111, 119) }}" width="111" height="119">
+
+<div class="info">
+<h2>{{ user }}</h2>
+<span><strong>Date of work:</strong>{{hireDate|date('Y-m-d')}}</span>
+<span><strong>Tasks number:</strong> {{numOfTasks}}</span>
+</div>
+
+<div class="btns">
+<a href="{{ path('task_new') }}" class="addTask">Add Task</a>
+<a href="{{path('company_new_message', {'usename': user.loginName})}}" class="sndMsg">Send Message</a>
+<a href="{{ path('company_task_edit', { 'id': entity.id }) }}">Edit</a>
+<form action="{{ path('task_delete', { 'id': entity.id }) }}" method="post" class="deleteform">{{ form_widget(delete_form) }}<input class="deletebutton" type="button" value="Delete"/></form>
+
+</div>
+</div>
+
+
+<section class="comntSection managInterns" id="crntHired">
+<aside class="copmanyInfo" id="msgsBox">
+
+<div class="wrapper">
+<div class="inboxBlock">
+
+<div class="simpleTabsContent" style="display: block;">
+<a href="{{path('company_user_task', {'userName': user.loginName})}}"><button type="submit" class="button">Back</button></a>
+
+<section class="singleTask">
+<h1>{{ entity.title }}</h1>
+<div>
+<span class="case">Task Case<span id="taskstatus" class="{% if entity.status == 'new' %}new{% elseif entity.status == 'inprogress' %}inprog{% else %}done{% endif %}"></span>
+<select class="status">
+  <option>new</option>
+  <option>inprogress</option>
+  <option>done</option>
+</select>
+</span>
+<span class="clear"></span>
+
+<label>From : <span>{{entity.company.name}}</span></label>
+<label>To : <span>{{entity.user.loginName}}</span></label>
+<label>Start : <span>{{ entity.startedAt|date('Y-m-d H:i:s') }}</span></label>
+<label>End :  <span>{{ entity.endedAt|date('Y-m-d H:i:s') }}</span></label>
+
+<div class="txt">
+{{ entity.description }}
+</div>
+
+<!--Notes part -->
+<div class="noteDivParent">
+<div class="noteDiv">
+{%if notes%}
+    {%for note in notes%}
+<div class="reply">
+    {% if note.type == 0%}<span class="name">{{entity.user.loginname}}</span>{% elseif note.type == 1 %}<span class="name">{{entity.company.name}}</span>{%endif%}: 
+    <span class="date">{{note.createdAt|date('Y-m-d H:i a')}}</span>
+    <div class="clear"></div>
+    <div class="{{note.id}}note"><article>{{note.note}}</article></div> 
+    {%if (note.type ==0 and is_granted('ROLE_USER') ) or (note.type ==1 and is_granted('ROLE_COMPANY') ) %}
+    <a href=" javascript:void(0)" noteid="{{note.id}}" class="editNoteAjax ediTask">Edit Note</a>{%endif%}
+    <div class="edittaskNote" style=" display: none;">
+        <textarea style="width: 652px;" class="noteText" value="{{note.note}}" noteId="{{note.id}}">{{note.note}}</textarea>
+            <input type="button" value="Edit" class="editNoteButton" >
+    </div>
+</div>
+
+{#<a class="ediTask" href="#">Edit Note</a>#}
+{%endfor%}
+{%endif%}
+</div>
+<div class="addNote">
+{#<textarea name="" cols="" rows=""></textarea>#}
+<button class="button addNoteAjax">Add Note</button>
+<div class="taskNote">
+    <textarea type="text" class="noteText1"></textarea>
+    <input type="button" value="Add" class="addNoteButton">
+</div>
+</div>
+
+
+        
+</div>
+
+</div>
+</section>
+
+</aside>
+
+</section>
+<div class="clear"></div>
+
+</div>
+</section>
+
+
+{#
+<h1>Task</h1>
+
+<select class="status">
+  <option>new</option>
+  <option>inprogress</option>
+  <option>done</option>
+</select>
+
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Title</th>
+            <td>{{ entity.title }}</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>{{ entity.description }}</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>{{ entity.status }}</td>
+        </tr>
+        <tr>
+            <th>Createdat</th>
+            <td>{{ entity.createdAt|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Startedat</th>
+            <td>{{ entity.startedAt|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Endedat</th>
+            <td>{{ entity.endedAt|date('Y-m-d H:i:s') }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('company_task') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('company_task_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('task_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+</ul>
+
+{%if notes%}
+<hr>
+<div class="noteDivParent">
+<div class="noteDiv">
+<h3>Notes</h3>
+----------<br />
+    {%for note in notes%}
+    <b>{% if note.type == 0%}{{entity.user.loginname}}{% elseif note.type == 1 %}{{entity.company.name}}{%endif%}: </b><div class="{{note.id}}note">{{note.note}}</div> {%if (note.type ==0 and is_granted('ROLE_USER') ) or (note.type ==1 and is_granted('ROLE_COMPANY') ) %}<b> -- </b> <a href=" javascript:void(0)" noteid="{{note.id}}" class="editNoteAjax">Edit Note</a>{%endif%}
+        <div class="edittaskNote">
+            <input type="text" class="noteText" value="{{note.note}}" noteId="{{note.id}}">
+            <input type="button" value="Edit" class="editNoteButton">
+        </div>
+        <br />
+        <br />
+{%endfor%}
+{%endif%}
+</div>
+    <a href="javascript:void(0)" class="addNoteAjax">Add Note</a>
+<div class="taskNote">
+    <input type="text" class="noteText1">
+    <input type="button" value="Add" class="addNoteButton">
+</div>
+</div>#}
+{%endblock%}
+
+    
+{%block javascripts%}
+{{parent()}}
+<script type="text/javascript" src="{{asset('js/libs/accTabs.js')}}"></script>
+<script type="text/javascript" src="{{asset('js/libs/jquery.tinyscrollbar.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('js/jquery.mousewheel-3.0.6.pack.js')}}"></script>
+<script type="text/javascript" src="{{asset('js/website.js')}}"></script>
+<script>
+                                                        $(function() {
+                                                        $("#accordion").tabs(
+                                                        "#accordion div.pane",
+                                                        {tabs: 'h2', effect: 'slide', initialIndex: null}
+                                                                );
+                                                    });
+                                                    
+</script>
+<script>
+var taskId= '{{entity.id}}';
+var userId = '{{entity.user.id}}'; 
+var name = '{{entity.company.name}}'
+var addNoteUrl = '{{url('add_note',{'text' : '','taskId' : ''})}}';
+var editNoteUrl = '{{url('edit_note',{'text' : '' ,'taskId' : '','noteId' : ''})}}';
+var changeStatusUrl= '{{url('change_status',{'taskId' : '','status' : ''})}}';
+var taskStatus= '{{entity.status}}';
+</script>
+<script src="{{asset('bundles/objectsinternjump/js/note.js')}}"></script>
+{%endblock%}

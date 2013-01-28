@@ -1,0 +1,73 @@
+{% if entities | length > 0 %}
+<div class="perPage js">
+    <span>Page :</span>
+    <select class="chzn-select" style="width:350px;" tabindex="2" name="page" onchange="window.location = '{{ path('user_box', {'box': box}) }}/' + this.value;">
+        {% for pageNumber in 1 .. lastPageNumber %}
+            <option{% if page == pageNumber %} selected="selected"{% endif %} value="{{ pageNumber }}">{{ pageNumber }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+<div class="perPage js">
+    <span>Per page :</span>
+    <select class="chzn-select" style="width:350px;" tabindex="2" name="user_messages_per_page_{{ userId }}" onchange="setCookie('user_messages_per_page_{{ userId }}', this.value, 86391359);document.location.reload(true);">
+        {% for perPageNumber in 10 .. 100 %}
+            {% if perPageNumber is divisibleby(10) %}
+        <option{% if itemsPerPage == perPageNumber %} selected="selected"{% endif %} value="{{ perPageNumber }}">{{ perPageNumber }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+</div>
+
+<form onsubmit="return false;" id="companyMessagesForm" action="{{ path('user_messages_batch_action') }}" method="POST">
+    <input id="currentBox" type="hidden" name="box" value="{{ box }}"/>
+    {% if box =='inbox' %}
+    <button type="submit" id="readAllMessages" name="readAllMessages" value="1"><img src="{{ asset('img/eyeIcon.png') }}" alt="read" width="19" height="12"/></button>
+    {% endif %}
+    <button type="submit" id="deleteAllMessages" name="deleteAllMessages" value="1">Delete</button>
+    <table class="msgsTable">
+        <thead>
+            <tr>
+                <th><input class="js" title="select/deseclect all messages" onchange="changeMessagesSelection(this);" type="checkbox"/></th>
+                <th>&nbsp;</th>
+                <th>{% if box == 'outbox' %}To{% else %}From{% endif %}</th>
+                <th>Subject</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr{% if (entity.sentFromCompany) and (not entity.isRead) %} class="read"{% endif %}>
+                <td><input class="companyMessage" name="userMessages[]" value="{{ entity.id }}" type="checkbox"/></td>
+                <td>{% if (entity.sentFromCompany) and (not entity.isRead) %}<a onclick="requestData('{{ path('user_message', {'id': entity.id}) }}', '#{{ box }}Tab');return false;" href="{{ path('show_user_message', {'id': entity.id}) }}" title="{{ entity }}"><img src="{{ asset('img/msgEye.png') }}" alt="read" width="13" height="7"/></a>{% endif %}</td>
+                <td><a onclick="requestData('{{ path('user_message', {'id': entity.id}) }}', '#{{ box }}Tab', updateUserNotifications);return false;" href="{{ path('show_user_message', {'id': entity.id}) }}" title="{{ entity }}">{{ entity.company }}</a></td>
+                <td><a onclick="requestData('{{ path('user_message', {'id': entity.id}) }}', '#{{ box }}Tab', updateUserNotifications);return false;" href="{{ path('show_user_message', {'id': entity.id}) }}" title="{{ entity }}">{{ entity.title }}</a></td>
+                <td><a onclick="requestData('{{ path('user_message', {'id': entity.id}) }}', '#{{ box }}Tab', updateUserNotifications);return false;" href="{{ path('show_user_message', {'id': entity.id}) }}" title="{{ entity }}">{{ entity.createdAt|date('M d,Y') }}</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</form>
+
+{% if lastPageNumber > 1 %}
+<ul class="pging">
+    {% if page > 1 %}
+    <li class="pgingBigger"><a onclick="requestData('{{ path('user_messages', {'box': box}) }}', '#{{ box }}Tab');return false;" href="{{ path('user_box', {'box': box}) }}">First</a></li>
+    <li><a onclick="requestData('{{ path('user_messages', {'box': box, 'page': page - 1}) }}', '#{{ box }}Tab');return false;" href="{{ path('user_box', {'box': box, 'page': page - 1}) }}">&lt;</a></li>
+    {% endif %}
+
+    {% for numberOfPage in 1..lastPageNumber %}
+    {% if numberOfPage > page - 4 and numberOfPage < page + 4 %}
+    <li{% if numberOfPage == page %} class="crnt"{% endif %}><a onclick="requestData('{{ path('user_messages', {'box': box, 'page': numberOfPage}) }}', '#{{ box }}Tab');return false;" href="{{ path('user_box', {'box': box, 'page': numberOfPage}) }}">{{ numberOfPage }}</a></li>
+    {% endif %}
+    {% endfor %}
+
+    {% if page < lastPageNumber %}
+    <li><a onclick="requestData('{{ path('user_messages', {'box': box, 'page': page + 1}) }}', '#{{ box }}Tab');return false;" href="{{ path('user_box', {'box': box, 'page': page + 1}) }}">&gt;</a></li>
+    <li class="pgingBigger"><a onclick="requestData('{{ path('user_messages', {'box': box, 'page': lastPageNumber}) }}', '#{{ box }}Tab');return false;" href="{{ path('user_box', {'box': box, 'page': lastPageNumber}) }}">Last</a></li>
+    {% endif %}
+</ul>
+{% endif %}
+{% else %}
+You have no messages
+{% endif %}

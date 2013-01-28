@@ -1,0 +1,235 @@
+<?php
+
+namespace Objects\InternJumpBundle\Entity;
+
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Objects\InternJumpBundle\Entity\Education
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Objects\InternJumpBundle\Entity\EducationRepository")
+ */
+class Education {
+
+    /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * the user
+     * @var \Objects\UserBundle\Entity\User $user
+     * @ORM\ManyToOne(targetEntity="\Objects\UserBundle\Entity\User", inversedBy="educations")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)
+     */
+    private $user;
+
+    /**
+     * @var string $schoolName
+     * @Assert\NotNull
+     * @ORM\Column(name="schoolName", type="string", length=255)
+     */
+    private $schoolName;
+    
+    /**
+     * @var string $fieldOfStudy
+     * @ORM\Column(name="fieldOfStudy", type="string", length=255, nullable=true)
+     */
+    private $fieldOfStudy;
+    
+    /**
+     * @var integer $startDate
+     * @Assert\Min(limit = 1900)
+     * @ORM\Column(name="startDate", type="integer", nullable=true)
+     */
+    private $startDate;
+    
+    /**
+     * @var integer $endDate
+     * @Assert\Min(limit = 1900)
+     * @ORM\Column(name="endDate", type="integer", nullable=true)
+     */
+    private $endDate;
+
+    /**
+     * @var string $additionalDetails
+     * @ORM\Column(name="additionalDetails", type="string", length=255, nullable=true)
+     */
+    private $additionalDetails;
+
+    /**
+     * @var string $title
+     * @ORM\Column(name="title", type="string", length=255, nullable=true)
+     */
+    private $title;
+
+    /**
+     * @var string $major
+     * @ORM\Column(name="major", type="string", length=255, nullable=true)
+     */
+    private $major;
+
+    /**
+     * @var string $grade
+     * @ORM\Column(name="grade", type="string", length=255, nullable=true)
+     */
+    private $grade;
+
+    /**
+     * @var string $degree
+     * @ORM\Column(name="degree", type="string", length=255, nullable=true)
+     */
+    private $degree;
+
+    /**
+     * this function will check if the user entered a valid endDate
+     * @Assert\True(message = "End date must not be greater than current year")
+     */
+    public function isEndDateCorrect() {
+        if ($this->endDate <= date('Y')) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+    
+    /**
+     * this function will check if the user entered a valid startDate
+     * @Assert\True(message = "Start date must be greater than end date")
+     */
+    public function isStartDateCorrect() {
+        if ($this->startDate < $this->endDate) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+
+    public function __toString() {
+        return "Education $this->id";
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     */
+    public function setTitle($title) {
+        $this->title = $title;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle() {
+        return $this->title;
+    }
+
+    /**
+     * Set major
+     *
+     * @param string $major
+     */
+    public function setMajor($major) {
+        $this->major = $major;
+    }
+
+    /**
+     * Get major
+     *
+     * @return string 
+     */
+    public function getMajor() {
+        return $this->major;
+    }
+
+    /**
+     * Set grade
+     *
+     * @param string $grade
+     */
+    public function setGrade($grade) {
+        $this->grade = $grade;
+    }
+
+    /**
+     * Get grade
+     *
+     * @return string 
+     */
+    public function getGrade() {
+        return $this->grade;
+    }
+
+    /**
+     * Set degree
+     *
+     * @param string $degree
+     */
+    public function setDegree($degree) {
+        $this->degree = $degree;
+    }
+
+    /**
+     * Get degree
+     *
+     * @return string 
+     */
+    public function getDegree() {
+        return $this->degree;
+    }
+
+    /**
+     * Set user
+     *
+     * @param Objects\UserBundle\Entity\User $user
+     */
+    public function setUser(\Objects\UserBundle\Entity\User $user) {
+        $this->user = $user;
+    }
+
+    /**
+     * Get user
+     *
+     * @return Objects\UserBundle\Entity\User 
+     */
+    public function getUser() {
+        return $this->user;
+    }
+
+    /**
+     * Set additionalDetails
+     *
+     * @param string $additionalDetails
+     */
+    public function setAdditionalDetails($additionalDetails) {
+        $this->additionalDetails = $additionalDetails;
+    }
+
+    /**
+     * Get additionalDetails
+     *
+     * @return string 
+     */
+    public function getAdditionalDetails() {
+        return $this->additionalDetails;
+    }
+
+}

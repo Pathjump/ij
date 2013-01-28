@@ -1,0 +1,95 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Resume Create{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+<section id="student-01">
+    <div class="wrapper">
+
+        <!--Edit-skils-->
+        <div class="Edit-Objectives">
+            <!--form Name-->
+            <h1>{%if formName%}{{formName}}{%endif%}:</h1>
+            <hr/>
+            <div class="edit-objectives-box">
+                {% if app.session.hasFlash('notice') %}
+                <span class="alert fail">
+                {{ app.session.flash('notice') | raw }}
+                </span>
+                {% endif %}
+                {% if app.session.hasFlash('success') %}
+                <span class="alert success">
+                {{ app.session.flash('success') | raw }}
+                </span>
+                {% endif %}
+                {% if app.session.hasFlash('error') %}
+                <span class="alert error">
+                {{ app.session.flash('error') | raw }}
+                </span>
+                {% endif %}
+                {% if form_errors(form) %}
+                <span class="alert error">
+                {{ form_errors(form) }}
+                </span>
+                {% endif %}
+                <form action="{{ path('cv_create') }}" method="post" {{ form_enctype(form) }}>
+                    <!--form Desc-->
+                    <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
+
+                    <label>Resume Title:</label>
+                    {{ form_widget(form.name) }}<br/>
+                    {% if form_errors(form.name) %}
+                        <span class="miniError">{{ form_errors(form.name) }}</span>
+                        <br/>
+                    {% endif %}
+                    <label>Objectives:</label>
+                    {{ form_widget(form.objective) }}<br/>
+                    {% if form_errors(form.objective) %}
+                        <span class="miniError">{{ form_errors(form.objective) }}</span>
+                        <br/>
+                    {% endif %}
+                    <label>Your Categories:</label>
+                    {{ form_widget(form.categories) }}<br/>
+                    {% if form_errors(form.categories) %}
+                        <span class="miniError">{{ form_errors(form.categories) }}</span><br/>
+                    {% endif %}
+                    <label>Is Active:</label>
+                    <div class="onoffswitch">
+                        {{ form_widget(form.isActive) }}
+                        <label class="onoffswitch-label" for="objects_internjumpbundle_cvtype_isActive">
+                            <div class="onoffswitch-inner">
+                                <div class="onoffswitch-active">ON</div>
+                                <div class="onoffswitch-inactive">OFF</div>
+                            </div>
+                            <div class="onoffswitch-switch"></div>
+                        </label>
+                    </div>
+                    <br/>
+                    {% if form_errors(form.isActive) %}
+                        <span class="miniError">{{ form_errors(form.isActive) }}</span><br/>
+                    {% endif %}
+
+                    {{ form_rest(form) }}
+                    <div class="low-btns">
+                        <input type="submit" class="submit" value="Next"/>
+                    </div>
+                </form>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('js/libs/chosen.jquery.min.js') }}" type="text/javascript"></script>
+<script>
+    $(document).ready(function() {
+        $('.chzn-select').chosen();
+    });
+</script>
+{% endblock %}

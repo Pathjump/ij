@@ -1,0 +1,155 @@
+{% extends '::base.html.twig' %}
+{% block title %}internjumb quiz{% endblock %}
+
+{% block body %}
+
+
+<section id="comJobList">
+    <div class="wrapper">
+
+        <aside class="quizeWrapper">
+            <h1>Know you(quiz)</h1>
+            <p>This quizes is to determine what kind of intern are you, by answering this question you wil know maney things about your Capabilties.</p>
+            {% if quiz|length > 0 %}  
+            <ul id="questionsList">
+                {% if not user.score %}
+                {% for question in quiz %}
+                <li {% if not loop.first %}style="display: none;"{% endif %} questionNumber={{loop.index}}>
+                    <h1>{{loop.index}}<sup>
+                        {% if loop.index == 1 %}
+                                        st 
+                                        {% elseif loop.index == 2 %}
+                                        nd
+                                        {% elseif loop.index == 3 %}
+                                        rd
+                                        {% else %}
+                                        th
+                                        {% endif %}
+                        </sup> Question</h1>
+                    <hr>
+                    <div class="blueCont">
+                        <h2>{{question.question}} </h2>
+                        {% for answer in question.answers %}
+                        <p><input class="quizAnswer" name="{{question.id}}" score="{{answer.score}}" type="radio">{{answer.answer}}</p><br>
+                        {% endfor %}
+                    </div>
+                </li>
+                {% endfor %}
+                {% else %}
+                <li>
+                    <div class="blueCont">
+                        <h2>You finish this quiz before</h2>
+                    </div>
+                </li>
+                {% endif %}
+            </ul>
+            {% else %}
+            <ul id="questionsList">
+                <li>
+                    <div class="blueCont">
+                        <h2>The exam is not created yet</h2>
+                    </div>
+            </li>
+            </ul>
+            {% endif %}
+            
+            {% if not user.score and quiz|length > 0 %}
+            <div id="quizButtons">
+            <button class="submit" id="quizNextButton" style="display: none;">Next</button>
+            <button class="quizBackButton" id="quizBackButton" style="display: none;">Back</button>
+            <button class="submit" id="submitQuiz" style="display: none;">Submit</button>
+            </div>
+            <img src="{{asset('img/loadingfacebox.gif')}}" id="quizLoadingImg" style="float: right;display: none;"/>
+            {% endif %}
+            <div class="clearfix"></div>
+        </aside>
+
+
+    </div>
+</section>
+
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script>
+    var updateUserScoreUrl = '{{path('update_user_quiz_score',{'score' : ''})}}';
+$(document).ready(function(){
+    var questionsNumber = '{{quiz|length}}';
+    if(questionsNumber > 1){
+        $('#quizNextButton').show();
+    }else if(questionsNumber == 1){
+        $('#submitQuiz').show();
+    }
+    
+    //get prev question
+    $('#quizBackButton').click(function(){
+        //get the visible question number
+        var visibleQuestionNoB = $('#questionsList li:visible').attr('questionNumber');
+        //hide visible question and show the prev one
+        $('#questionsList li:visible').hide();
+        $('#questionsList li').eq(parseInt(visibleQuestionNoB) - 2).show();
+        //show next button
+        if(parseInt(visibleQuestionNoB) - 1 < questionsNumber){
+            $('#quizNextButton').show();
+            //hide the submit button
+            $('#submitQuiz').hide();
+        }
+        //hide back button if first question
+        if(parseInt(visibleQuestionNoB) - 1 == 1){
+            $('#quizBackButton').hide();
+        }
+        
+    });
+    
+    //get next question
+    $('#quizNextButton').click(function(){
+        //get the visible question number
+        var visibleQuestionNo = $('#questionsList li:visible').attr('questionNumber');
+        //hide visible question and show the next one
+        $('#questionsList li:visible').hide();
+        $('#questionsList li').eq(parseInt(visibleQuestionNo)).show();
+        //show back button
+        if(parseInt(visibleQuestionNo) + 1 > 1){
+            $('#quizBackButton').show();
+        }
+        
+        //show submit button at the last question
+        if(parseInt(visibleQuestionNo) + 1 == questionsNumber){
+            //hide the next button
+            $('#quizNextButton').hide();
+            //show the submit button
+            $('#submitQuiz').show();
+        }
+        
+    });
+    
+    
+    $('#submitQuiz').click(function(){
+        var score = 0;
+        $('.quizAnswer:checked').each(function(){
+            score = score + parseInt($(this).attr('score'));
+        });
+        
+        //hide the button
+        $('#quizButtons').hide()
+        //show loading img
+        $('#quizLoadingImg').show();
+        $.ajax({
+        url: updateUserScoreUrl+'/'+score,
+        success: function(msg) {
+            $('#quizButtons').remove();
+            $('#questionsList').empty();
+            $('#questionsList').append(msg);
+        },
+        complete: function(msg) {
+            //hide loading img
+            $('#quizLoadingImg').hide();
+        }
+    });
+            
+    });
+});
+    </script>
+{% endblock %}
+

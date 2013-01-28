@@ -1,0 +1,7 @@
+{{ form_errors(form) }}
+<form action="{{ url('upload_cv') }}" method="post" {{ form_enctype(form) }} id="imageUploadForm">
+    {{ form_widget(form.file) }}
+        <p>{{ form_errors(form.file) }}</p>
+    {{ form_rest(form) }}
+        <input type="submit" value="Upload" id="uploadCVFile"/>
+</form>
