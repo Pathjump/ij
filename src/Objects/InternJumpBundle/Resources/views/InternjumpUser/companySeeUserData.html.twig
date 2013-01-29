@@ -30,7 +30,7 @@
             <div class="resume-contents">
 
                 {% if companyUserInterestFlag == 1 and is_granted('ROLE_COMPANY')%}
-                <a class="cv-btn">Description</a>
+                <a class="cv-btn">Profile Information</a>
                 <div class="block2">
                     <table width="100%" border="0"  class="Objectives-box" cellpadding="5">
                         <tr>
@@ -124,7 +124,7 @@
 
                                     {% if education.schoolName %}
                                 <li>
-                                    <b class="title-des">My collage:</b>
+                                    <b class="title-des">School:</b>
                                     {{education.schoolName}}
                                     </li>
                                     {% endif %}
