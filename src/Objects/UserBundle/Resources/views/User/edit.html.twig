@@ -40,7 +40,7 @@
                         {% endif %}
                         {% if changeUserName %}
                             <tr>
-                                <td width="160"><label>{% trans %}Username{% endtrans %}:</label></td>
+                                <td width="160"><label>{% trans %}Username*{% endtrans %}:</label></td>
                                 <td>{{ form_widget(form.loginName) }}<span class="miniError">{{ form_errors(form.loginName) }}</span></td>
                                 <td width="75">&nbsp;</td>
 
@@ -49,25 +49,24 @@
                         {% endif %}
 
                         <tr>
-                            <td width="160"><label>{% trans %}First Name{% endtrans %}:</label></td>
+                            <td width="160"><label>{% trans %}First Name*{% endtrans %}:</label></td>
                             <td>{{ form_widget(form.firstName) }}<span class="miniError">{{ form_errors(form.firstName) }}</span></td>
                             <td width="75">&nbsp;</td>
 
-                            <td><label>{% trans %}Last Name{% endtrans %}:</label></td>
+                            <td><label>{% trans %}Last Name*{% endtrans %}:</label></td>
                             <td>{{ form_widget(form.lastName) }}<span class="miniError">{{ form_errors(form.lastName) }}</span></td>
-                        </tr>
 
                         <tr>
-                            <td width="160"><label>{% trans %}Password{% endtrans %}:</label></td>
+                            <td width="160"><label>{% trans %}New Password{% endtrans %}:</label></td>
                             <td>{{ form_widget(form.userPassword.Password) }}<span class="miniError">{{ form_errors(form.userPassword) }}</span></td>
                             <td width="75">&nbsp;</td>
 
-                            <td><label>{% trans %}RePassword{% endtrans %}:</label></td>
+                            <td><label>{% trans %}Enter New Password Again{% endtrans %}:</label></td>
                             <td>{{ form_widget(form.userPassword.RePassword) }}</td>
                         </tr>
 
                         <tr>
-                            <td width="160"><label>{% trans %}Gender{% endtrans %}:</label></td>
+                            <td width="160"><label>{% trans %}Gender*{% endtrans %}:</label></td>
                             <td>{{ form_widget(form.gender) }}<span class="miniError">{{ form_errors(form.gender) }}</span></td>
                             <td width="75">&nbsp;</td>
 
@@ -76,8 +75,10 @@
                         </tr>
 
                         <tr>
-                            <td width="160"><label>{% trans %}Country{% endtrans %}:</label></td>
-                            <td>{{ form_widget(form.country) }}<span class="miniError">{{ form_errors(form.country) }}</span></td>
+
+                            <td width="160"><label>{% trans %}Address{% endtrans %}:</label></td>
+                            <td>{{ form_widget(form.address) }}<span class="miniError">{{ form_errors(form.address) }}</span></td>
+
                             <td width="75">&nbsp;</td>
 
                             <td width="160"><label>{% trans %}City{% endtrans %}:</label></td>
@@ -89,8 +90,9 @@
                             <td>{{ form_widget(form.state) }}<span class="miniError">{{ form_errors(form.state) }}</span></td>
                             <td width="75">&nbsp;</td>
 
-                            <td width="160"><label>{% trans %}Address{% endtrans %}:</label></td>
-                            <td>{{ form_widget(form.address) }}<span class="miniError">{{ form_errors(form.address) }}</span></td>
+
+                            <td width="160"><label>{% trans %}Country{% endtrans %}:</label></td>
+                            <td>{{ form_widget(form.country) }}<span class="miniError">{{ form_errors(form.country) }}</span></td>
                         </tr>
 
                         <tr>
@@ -136,26 +138,29 @@
 
                     {{ form_rest(form) }}
 
-                    <button class="nxt" type="submit" title="{% trans %}Update{% endtrans %}">{% trans %}Edit{% endtrans %}</button>
+                    <button class="nxt" type="submit" title="{% trans %}Update{% endtrans %}">{% trans %}Update{% endtrans %}</button>
                     <div class="clear"></div>
                 </form>
 
+<h2>Connect with your social network account for faster and easy login to InternJump</h2>
+<span>Employers will not have access nor view any of your social network information.</span>
+
                     {% if socialAccounts and socialAccounts.isFacebookLinked() %}
-<a href="{{ path('social_unlink', {'social': 'facebook'}) }}" title="{% trans %}unlink facebook{% endtrans %}">{% trans %}unlink facebook{% endtrans %}</a><br><br>
+<a href="{{ path('social_unlink', {'social': 'facebook'}) }}" title="{% trans %}unlink facebook{% endtrans %}">{% trans %}Disconnect from your Facebook account{% endtrans %}</a><br><br>
 {% else %}
-{% render "ObjectsAPIBundle:Facebook:facebookButton" with {'facebookUserHandleRoute' : 'facebook_link','permissions': 'email,publish_stream','cssClass' : '' , 'linkText' : 'link facebook' | trans} %}<br><br>
+{% render "ObjectsAPIBundle:Facebook:facebookButton" with {'facebookUserHandleRoute' : 'facebook_link','permissions': 'email,publish_stream','cssClass' : '' , 'linkText' : 'Connect with your Facebook account' | trans} %}<br><br>
 {% endif %}
 
 {% if socialAccounts and socialAccounts.isLinkedInLinked() %}
-<a href="{{ path('social_unlink', {'social': 'linkedin'}) }}" title="{% trans %}unlink linkedin{% endtrans %}">{% trans %}unlink linkedin{% endtrans %}</a><br/><br/>
+<a href="{{ path('social_unlink', {'social': 'linkedin'}) }}" title="{% trans %}unlink linkedin{% endtrans %}">{% trans %}Disconnect from your Linkedin account{% endtrans %}</a><br/><br/>
 {% else %}
-<a onclick="newWindow = window.open('{{ path('linkedInButton', {'callbackUrl': 'linkedin_link','popup' : 'yes'}) }}', '{% trans %}LinkedIn Link{% endtrans %}', 'height=400, width=600');if(window.focus)newWindow.focus();return false;" target="_blank" title="{% trans %}LinkedIn Link{% endtrans %}" href="{{ path('linkedInButton', {'callbackUrl': 'linkedin_link'}) }}">{% trans %}LinkedIn Link{% endtrans %}</a><br/><br/>
+<a onclick="newWindow = window.open('{{ path('linkedInButton', {'callbackUrl': 'linkedin_link','popup' : 'yes'}) }}', '{% trans %}LinkedIn Link{% endtrans %}', 'height=400, width=600');if(window.focus)newWindow.focus();return false;" target="_blank" title="{% trans %}LinkedIn Link{% endtrans %}" href="{{ path('linkedInButton', {'callbackUrl': 'linkedin_link'}) }}">{% trans %}Connect with your LinkedIN Account{% endtrans %}</a><br/><br/>
 {% endif %}
 
 {% if socialAccounts and socialAccounts.isTwitterLinked() %}
-<a href="{{ path('social_unlink', {'social': 'twitter'}) }}" title="{% trans %}unlink twitter{% endtrans %}">{% trans %}unlink twitter{% endtrans %}</a>
+<a href="{{ path('social_unlink', {'social': 'twitter'}) }}" title="{% trans %}unlink twitter{% endtrans %}">{% trans %}Disconnect from your Twitter account{% endtrans %}</a>
 {% else %}
-<a onclick="javascript:startTwitterLink();return false;" target="_blank" title="{% trans %}Twitter Link{% endtrans %}" href="{{ path('twitter_authentication', {'redirectRoute': 'twitter_link'}) }}">{% trans %}Twitter Link{% endtrans %}</a>
+<a onclick="javascript:startTwitterLink();return false;" target="_blank" title="{% trans %}Twitter Link{% endtrans %}" href="{{ path('twitter_authentication', {'redirectRoute': 'twitter_link'}) }}">{% trans %}Connect with your Twitter Account{% endtrans %}</a>
 {% endif %}
 
             </div>
