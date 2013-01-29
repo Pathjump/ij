@@ -46,47 +46,47 @@
                 <form class="formTable" action="{{ path('user_signup_second_step') }}" method="post" {{ form_enctype(form) }}>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td width="160"><label>{% trans %}First Name{% endtrans %}:</label></td>
+                            <td width="160"><label>{% trans %}First Name*{% endtrans %}:</label></td>
                             <td>{{ form_widget(form.firstName) }}<span class="miniError">{{ form_errors(form.firstName) }}</span></td>
                             <td width="75">&nbsp;</td>
 
-                            <td><label>{% trans %}Last Name{% endtrans %}:</label></td>
+                            <td><label>{% trans %}Last Name*{% endtrans %}:</label></td>
                             <td>{{ form_widget(form.lastName) }}<span class="miniError">{{ form_errors(form.lastName) }}</span></td>
                         </tr>
 
                         <tr>
-                            <td width="160"><label>{% trans %}Gender{% endtrans %}:</label></td>
+                            <td width="160"><label>{% trans %}Gender*{% endtrans %}:</label></td>
                             <td>{{ form_widget(form.gender) }}<span class="miniError">{{ form_errors(form.gender) }}</span></td>
                             <td width="75">&nbsp;</td>
 
-                            <td width="160"><label>{% trans %}Date Of Birth{% endtrans %}:</label></td>
+                            <td width="160"><label>{% trans %}Date Of Birth*{% endtrans %}:</label></td>
                             <td>{{ form_widget(form.dateOfBirth) }}<span class="miniError">{{ form_errors(form.dateOfBirth) }}</span></td>
                         </tr>
 
                         <tr>
-                            <td width="160"><label>{% trans %}Country{% endtrans %}:</label></td>
-                            <td>{{ form_widget(form.country) }}<span class="miniError">{{ form_errors(form.country) }}</span></td>
+                            <td width="160"><label>{% trans %}Address*{% endtrans %}:</label></td>
+                            <td>{{ form_widget(form.address) }}<span class="miniError">{{ form_errors(form.address) }}</span></td>
                             <td width="75">&nbsp;</td>
 
-                            <td width="160"><label>{% trans %}City{% endtrans %}:</label></td>
+                            <td width="160"><label>{% trans %}City*{% endtrans %}:</label></td>
                             <td>{{ form_widget(form.city) }}<span class="miniError">{{ form_errors(form.city) }}</span></td>
                         </tr>
 
                         <tr>
-                            <td width="160"><label>{% trans %}State{% endtrans %}:</label></td>
+                            <td width="160"><label>{% trans %}State*{% endtrans %}:</label></td>
                             <td>{{ form_widget(form.state) }}<span class="miniError">{{ form_errors(form.state) }}</span></td>
                             <td width="75">&nbsp;</td>
 
-                            <td width="160"><label>{% trans %}Address{% endtrans %}:</label></td>
-                            <td>{{ form_widget(form.address) }}<span class="miniError">{{ form_errors(form.address) }}</span></td>
+                            <td width="160"><label>{% trans %}Country*{% endtrans %}:</label></td>
+                            <td>{{ form_widget(form.country) }}<span class="miniError">{{ form_errors(form.country) }}</span></td>
                         </tr>
 
                         <tr>
-                            <td width="160"><label>{% trans %}ZipCode{% endtrans %}:</label></td>
+                            <td width="160"><label>{% trans %}ZipCode*{% endtrans %}:</label></td>
                             <td>{{ form_widget(form.zipcode) }}<span class="miniError">{{ form_errors(form.zipcode) }}</span></td>
                             <td width="75">&nbsp;</td>
 
-                            <td width="160"><label>{% trans %}URL{% endtrans %}:</label></td>
+                            <td width="160"><label>{% trans %}Your website{% endtrans %}:</label></td>
                             <td>{{ form_widget(form.url) }}<span class="miniError">{{ form_errors(form.url) }}</span></td>
                         </tr>
 
@@ -96,7 +96,7 @@
                             <td width="75">&nbsp;</td>
 
                             {{ form_errors(form.file) }}
-                            <td><label>{% trans %}Your Image{% endtrans %}:</label></td>
+                            <td><label>{% trans %}InternJump Profile Picture{% endtrans %}:</label></td>
                             <td class="userImg">
                                 <span class="file-wrapper">
                                     {{ form_widget(form.file) }}
