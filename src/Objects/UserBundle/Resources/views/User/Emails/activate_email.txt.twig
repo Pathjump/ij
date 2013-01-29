@@ -1,2 +1,8 @@
-{% trans %}this email was sent to you because you changed your email and your account is now not active{% endtrans %}
-{% trans %}press on the next link to activate your account{% endtrans %} {{ url('user_active', {'confirmationCode': user.confirmationCode, 'email': user.email}) }}
+{% trans %}Dear user,
+This email was sent to you because you changed your email and your account is now now set to inactive{% endtrans %}
+{% trans %}In order to activate your account, please visit the following url:
+{% endtrans %} {{ url('user_active', {'confirmationCode': user.confirmationCode, 'email': user.email}) }}
+
+Regards,
+InternJump Support Team
+http://internjump.com
