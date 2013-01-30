@@ -8,8 +8,8 @@
     <div class="wrapper">
 
         <aside class="quizeWrapper">
-            <h1>Know you(quiz)</h1>
-            <p>This quizes is to determine what kind of intern are you, by answering this question you wil know maney things about your Capabilties.</p>
+            <h1>InternJump Personality Quiz.</h1>
+            <p>The InternJump Personality Quiz is based on the Myers Briggs personality test and can be used to learn more about what industries you might enjoy interning in as well as excel in! </p>
             {% if quiz|length > 0 %}  
             <ul id="questionsList">
                 {% if not user.score %}
@@ -38,7 +38,7 @@
                 {% else %}
                 <li>
                     <div class="blueCont">
-                        <h2>You finish this quiz before</h2>
+                        <h2>You have already completed this quiz before</h2>
                     </div>
                 </li>
                 {% endif %}
@@ -47,7 +47,7 @@
             <ul id="questionsList">
                 <li>
                     <div class="blueCont">
-                        <h2>The exam is not created yet</h2>
+                        <h2>The quiz is not created yet</h2>
                     </div>
             </li>
             </ul>
