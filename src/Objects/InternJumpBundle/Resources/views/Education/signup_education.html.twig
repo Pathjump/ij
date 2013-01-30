@@ -21,7 +21,7 @@
                 <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
 
                 <div class="btns">
-                    Click "+" to add another school&nbsp;&nbsp;&nbsp;
+                    Click "<strong>+</strong>" to add another school / "<strong>-</strong>" to remove last added school&nbsp;&nbsp;&nbsp;
                     <input type="button" id="btnAdd" value="+" />
                     <input disabled="disabled" type="button" id="btnDel" value="-" />
                 </div>
@@ -95,10 +95,10 @@
 
                                 <tr>
                                     <td><label>Relevant Coursework Taken :</label></td>
-                                    <td>{{ form_widget(education.relevantCourseworkTaken) }}<span class="miniError">{{ form_errors(education.relevantCourseworkTaken) }}</span></td>
+                                    <td>{{ form_widget(education.relevantCourseworkTaken) }}<span class="miniError">{{ form_errors(education.relevantCourseworkTaken) }}</span><small>Separate Multiple Course Names With Commas</small></td>
                                     <td></td>
                                     <td><label>Extracurricular Activity :</label></td>
-                                    <td>{{ form_widget(education.extracurricularActivity) }}<span class="miniError">{{ form_errors(education.extracurricularActivity) }}</span></td>
+                                    <td>{{ form_widget(education.extracurricularActivity) }}<span class="miniError">{{ form_errors(education.extracurricularActivity) }}</span><small>Separate Multiple Extracurricular Activities With Commas</small></td>
                                     <td></td>
                                 </tr>
                             </table>
