@@ -48,6 +48,7 @@
                 <form id="step02" action="{{ path('signup_cv_skills') }}" method="post" {{ form_enctype(form) }}>
                     <div id="formsContainer">
                         {% for skill in form.skills %}
+                        <div>Skills are very important to employers make sure to include interpersonal/communication skills in addition to technical skills (Software, languages). Employers frequently use skills to search for candidates so make sure the list is comprehensive. <strong>Add one skill per box, click on the + sign to add additional skills.</strong></div>
                         <div id="input1" style="margin-bottom:4px;" class="clonedInput">
                             <label>Skill :</label>{{ form_widget(skill.title) }}<span class="miniError">{{ form_errors(skill.title) }}</span>
                         </div>
