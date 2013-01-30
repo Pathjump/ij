@@ -1,0 +1,6 @@
+/app/cache/
+/app/logs/
+/vendor/
+/web/images/
+/web/cache/
+/web/cvFiles/
