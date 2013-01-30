@@ -112,8 +112,8 @@
     $(document).ready(function() {
         $('#logedInStudent,#newEmploymentHistory').addClass('crnt');
         $('#studentNav').show();
-        $('.employmentStartedFrom').datepicker({changeYear: true, dateFormat: 'yy-mm-dd', maxDate: new Date()});
-        $('.employmentEndedIn').datepicker({changeYear: true, dateFormat: 'yy-mm-dd', maxDate: new Date()});
+        $('.employmentStartedFrom').datepicker({changeYear: true, yearRange : 'c-30:c+0', dateFormat: 'yy-mm-dd', maxDate: new Date()});
+        $('.employmentEndedIn').datepicker({changeYear: true, yearRange : 'c-30:c+0', dateFormat: 'yy-mm-dd', maxDate: new Date()});
         $('.employmentIsCurrentJob').each(changeInputs);
         $('.employmentIsCurrentJob').change(changeInputs);
         $('.chzn-select').chosen();

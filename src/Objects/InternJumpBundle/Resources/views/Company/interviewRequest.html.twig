@@ -101,7 +101,7 @@ var getPositionUrl = '{{url('get_position',{'zipcode' : ''})}}';
 var cityAutoCompleteUrl = "{{ path('city_auto_complete') }}";
 $(document).ready(function(){
     $("select").chosen();
-$('.interviewDate').datepicker({changeYear: true, dateFormat: 'yy-mm-dd', minDate: new Date()});
+$('.interviewDate').datepicker({changeYear: true, yearRange : 'c-0:c+30', dateFormat: 'yy-mm-dd', minDate: new Date()});
 initialize();
 });
 </script>

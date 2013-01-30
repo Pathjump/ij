@@ -176,10 +176,10 @@
             $(this).change(changeInputs);
         });
         $('.employmentStartedFrom').livequery(function() {
-            $(this).datepicker({changeYear: true, dateFormat: 'yy-mm-dd', maxDate: new Date()});
+            $(this).datepicker({changeYear: true, yearRange : 'c-30:c+0', dateFormat: 'yy-mm-dd', maxDate: new Date()});
         });
         $('.employmentEndedIn').livequery(function() {
-            $(this).datepicker({changeYear: true, dateFormat: 'yy-mm-dd', maxDate: new Date()});
+            $(this).datepicker({changeYear: true, yearRange : 'c-30:c+0', dateFormat: 'yy-mm-dd', maxDate: new Date()});
         });
         $('#btnAdd').click(function() {
             var tempHtml = formElementHTML;

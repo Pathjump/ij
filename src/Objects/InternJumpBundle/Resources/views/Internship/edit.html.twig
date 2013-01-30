@@ -153,8 +153,8 @@
                 $('#loading').height($('#loading').parent().height());
             }, 500);
 
-            $('.activeFrom').datepicker({changeYear: true, dateFormat: 'yy-mm-dd', minDate: new Date()});
-            $('.activeTo').datepicker({changeYear: true, dateFormat: 'yy-mm-dd', minDate: new Date()});
+            $('.activeFrom').datepicker({changeYear: true, yearRange : 'c-0:c+30', dateFormat: 'yy-mm-dd', minDate: new Date()});
+            $('.activeTo').datepicker({changeYear: true, yearRange : 'c-0:c+30', dateFormat: 'yy-mm-dd', minDate: new Date()});
 
             //Function for Choosen >> page of inbox
             $(".chzn-select,#form_activeFrom_year,#form_activeFrom_day,#form_activeFrom_month,#form_activeTo_month,#form_activeTo_day,#form_activeTo_year").chosen();
