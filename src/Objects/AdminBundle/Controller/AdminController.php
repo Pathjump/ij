@@ -91,6 +91,9 @@ class AdminController extends Controller {
             $config['one_year_experience_points'] = $container->getParameter('one_year_experience_points');
             $config['skill_point'] = $container->getParameter('skill_point');
             $config['contact_detinations'] = $container->getParameter('contact_detinations');
+            $config['contact_info_name'] = $container->getParameter('contact_info_name');
+            $config['contact_info_address_part1'] = $container->getParameter('contact_info_address_part1');
+            $config['contact_info_address_part2'] = $container->getParameter('contact_info_address_part2');
             $config['resource_per_page'] = $container->getParameter('resource_per_page');
             $config['facebook_mesasage'] = $container->getParameter('facebook_mesasage');
             $config['internjumb_copyright'] = $container->getParameter('internjumb_copyright');
@@ -152,7 +155,10 @@ class AdminController extends Controller {
                     ->add('facebook_mesasage', 'textarea')
                     ->add('internjumb_copyright', 'text')
                     ->add('info_email', 'email')
-                    
+                    ->add('contact_info_name', 'text')
+                    ->add('contact_info_address_part1', 'text')
+                    ->add('contact_info_address_part2', 'text')
+                               
                     ->getForm();
 
             $request = $this->getRequest();
@@ -340,6 +346,16 @@ class AdminController extends Controller {
                     if ($formDataArray['info_email'] != $container->getParameter('info_email')) {
                         $firstFileChange = TRUE;
                     }
+                    if ($formDataArray['contact_info_name'] != $container->getParameter('contact_info_name')) {
+                        $firstFileChange = TRUE;
+                    }
+                    if ($formDataArray['contact_info_address_part1'] != $container->getParameter('contact_info_address_part1')) {
+                        $firstFileChange = TRUE;
+                    }
+                    if ($formDataArray['contact_info_address_part2'] != $container->getParameter('contact_info_address_part2')) {
+                        $firstFileChange = TRUE;
+                    }
+                       
 
                     //check if we need to open the first file to change it is config
                     if ($firstFileChange) {
@@ -421,7 +437,9 @@ class AdminController extends Controller {
                             $value['parameters']['facebook_mesasage'] = $formDataArray['facebook_mesasage'];
                             $value['parameters']['internjumb_copyright'] = $formDataArray['internjumb_copyright'];
                             $value['parameters']['info_email'] = $formDataArray['info_email'];
-
+                            $value['parameters']['contact_info_name'] = $formDataArray['contact_info_name'];
+                            $value['parameters']['contact_info_address_part1'] = $formDataArray['contact_info_address_part1'];
+                            $value['parameters']['contact_info_address_part2'] = $formDataArray['contact_info_address_part2'];
 
                             //dump to make spaces and format of the file before update it
                             $dumper = new \Symfony\Component\Yaml\Dumper();

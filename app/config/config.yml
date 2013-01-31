@@ -34,6 +34,9 @@ twig:
         analytics: %analytics%
         facebook_mesasage: %facebook_mesasage%
         internjumb_copyright: %internjumb_copyright%
+        contact_info_name: %contact_info_name%
+        contact_info_address_part1: %contact_info_address_part1%
+        contact_info_address_part2: %contact_info_address_part2%
 
 # Assetic Configuration
 assetic:

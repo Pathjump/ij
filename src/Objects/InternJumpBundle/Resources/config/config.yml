@@ -49,6 +49,9 @@ parameters:
   skill_point: 5
   one_year_experience_points: 20
   contact_detinations: 'Compliment,Criticism,Suggestion,Bug Report,Support,Investor Relations,Other'
+  contact_info_name: InternJump LLC
+  contact_info_address_part1: 30 Broad St
+  contact_info_address_part2: New York, NY 10004
   resource_per_page: 10
   facebook_mesasage: 'Your Facebook details will not be shared with the employers.'
   internjumb_copyright: 'InternJump LLC'

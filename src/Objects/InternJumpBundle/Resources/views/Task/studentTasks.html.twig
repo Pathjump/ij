@@ -106,10 +106,10 @@
                             <tr>
                                 {%if cvCount > 0%}
                                 <td class="title-des">Status:</td>
-                                <td>-{{cvCount}}Resumes Published {%if userjob%} <br />-Hired In <b>{{userjob.internship.company}}</b>{%endif%}{%if interviews%} <br />-Have {{interviewsCount}} upcoming Interview(s){%endif%}</td>
+                                <td>-{{cvCount}}Resumes Published {%if userjob%} <br />-Hired at <b>{{userjob.internship.company}}</b>{%endif%}{%if interviews%} <br />-Have {{interviewsCount}} upcoming Interview(s){%endif%}</td>
                                 {%else%}
                                 <td class="title-des">Status:</td>
-                                <td>-No Resumes Published {%if userjob%} <br />-Hired In {{userjob.internship.company}}{%endif%}{%if interviews%} <br />-Have {{interviewsCount}} upcoming Interview(s){%endif%}</td>
+                                <td>-No Resumes Published {%if userjob%} <br />-Hired at {{userjob.internship.company}}{%endif%}{%if interviews%} <br />-Have {{interviewsCount}} upcoming Interview(s){%endif%}</td>
                                 {%endif%}
                             </tr>
                             {#<tr>
