@@ -222,14 +222,6 @@ class CompanyAdmin extends Admin {
         return $formBuilder;
     }
 
-    /**
-     * this function is for editing the routes of this class
-     * @author Mahmoud
-     * @param RouteCollection $collection 
-     */
-//    protected function configureRoutes(RouteCollection $collection) {
-//        $collection->remove('delete');
-//    }
 
 }
 
