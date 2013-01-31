@@ -47,7 +47,7 @@
                 <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
                 <form id="stuEdu" action="{{ path('user_signup') }}" method="post" {{ form_enctype(form) }}>
                     {% if loginNameRequired %}
-                    <label>{% trans %}Login Name{% endtrans %}:</label>
+                    <label>{% trans %}Username{% endtrans %}:</label>
                     {{ form_widget(form.loginName) }}
                     <span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                     <span class="miniError" id="loginName-error"></span>
@@ -95,9 +95,9 @@
 {% block javascripts %}
 {{parent()}}
 <script>
-    var loginNameError = "{% trans %}Only characters, numbers and _ is valid{% endtrans %}";
-    var loginNameNotExist = "{% trans %}valid{% endtrans %}";
-    var loginNameExist = "{% trans %}This value is already used{% endtrans %}";
+    var loginNameError = "{% trans %}Username can only have letters, number and hypen.{% endtrans %}";
+    var loginNameNotExist = "{% trans %}Available{% endtrans %}";
+    var loginNameExist = "{% trans %}Already taken.{% endtrans %}";
     var mailcheckMessage = "{% trans %}Did you mean{% endtrans %}";
     var loginNameCheckUrl = "{{url('login_name_check',{'loginName' : ''})}}";
     var countryCitiesStatesUrl = '{{url('get_countey_cities_states',{'countryId' : ''})}}';
