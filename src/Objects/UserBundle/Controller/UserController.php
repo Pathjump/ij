@@ -384,7 +384,7 @@ class UserController extends ObjectsController {
                 ->add('zipcode')
                 ->add('url', 'url', array('required' => false))
                 ->add('country', 'choice', array('choices' => $allCountriesArray, 'required' => false, 'attr' => array('class' => 'chzn-select', 'style' => 'width:200px;')))
-                ->add('city', NULL, array('attr' => array('class' => 'autocomplete', 'style' => 'width:200px;')))
+                ->add('city', NULL, array('attr' => array('style' => 'width:200px;')))
                 ->add('state', 'choice', array('required' => false, 'attr' => array('class' => 'chzn-select', 'style' => 'width:200px;')))
                 ->add('email')
                 ->add('file', 'file', array('required' => false, 'label' => 'image', 'attr' => array('onchange' => 'readURL(this);')))
@@ -409,8 +409,7 @@ class UserController extends ObjectsController {
             if ($form->isValid()) {
                 //get the user object from the form
                 $user = $form->getData();
-                //insert the city into our table if not found
-                $this->insertCityIfNotFound($user->getCity(), $user->getCountry());
+
                 //check if we need to change the user to not active
                 if ($user->getEmail() != $oldEmail && !$container->getParameter('auto_active')) {
                     //remove the role user
@@ -2032,7 +2031,7 @@ class UserController extends ObjectsController {
                 ->add('dateOfBirth', 'birthday', array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'required' => FALSE, 'attr' => array('class' => 'dateOfBirth')))
                 ->add('zipcode')
                 ->add('country', 'choice', array('choices' => $allCountriesArray, 'required' => false, 'attr' => array('class' => 'chzn-select', 'style' => 'width:200px;')))
-                ->add('city', NULL, array('attr' => array('class' => 'autocomplete', 'style' => 'width:200px;')))
+                ->add('city', NULL, array('attr' => array('style' => 'width:200px;')))
                 ->add('state', 'choice', array('required' => false, 'attr' => array('class' => 'chzn-select', 'style' => 'width:200px;')))
                 ->add('address');
         //create the form
@@ -2045,8 +2044,7 @@ class UserController extends ObjectsController {
             if ($form->isValid()) {
                 //get the user object from the form
                 $user = $form->getData();
-                //insert the city into our table if not found
-                $this->insertCityIfNotFound($user->getCity(), $user->getCountry(), true);
+
                 //get the current user roles
                 $userRoles = $user->getUserRoles();
                 //define the role to remove

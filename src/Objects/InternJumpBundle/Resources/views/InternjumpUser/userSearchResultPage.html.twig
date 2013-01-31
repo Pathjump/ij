@@ -17,7 +17,7 @@
         <span class="valid"><strong>To :</strong>{{job.activeTo|date('j F, Y')}} </span>
         <span class="valid"><strong>Active From :</strong>{{job.activeFrom|date('j F, Y')}}</span>
 
-        <p>{{job.description|striptags}}</p>
+        <p>{{job.description|raw}}</p>
     </div>
 </li>
 

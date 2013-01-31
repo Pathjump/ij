@@ -398,7 +398,7 @@ class CompanyController extends Controller {
                     'required' => false))
                 ->add('country', 'choice', array('choices' => $allCountriesArray,
                     'preferred_choices' => array($company->getCountry()), 'attr' => array('class' => 'chzn-select', 'style' => 'width:312px;')))
-                ->add('city', NULL, array('attr' => array('class' => 'autocomplete', 'style' => 'width:312px;')))
+                ->add('city', NULL, array('attr' => array('style' => 'width:312px;')))
                 ->add('state', 'choice', array('required' => FALSE, 'attr' => array('class' => 'chzn-select', 'style' => 'width:312px;')))
                 ->add('address', 'text')
                 //->add('establishmentDate', 'date', array('attr' => array('class' => 'establishmentDate'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
@@ -432,8 +432,6 @@ class CompanyController extends Controller {
             if ($form->isValid()) {
                 //get the company
                 $company = $form->getData();
-                //insert the city into our table if not found
-                $this->insertCityIfNotFound($company->getCity(), $company->getCountry());
 
                 if ($company->getEmail() != $oldEmail && !$container->getParameter('auto_active')) {
                     //remove the role company
@@ -684,7 +682,7 @@ class CompanyController extends Controller {
                     'second_name' => 'RePassword',
                     'invalid_message' => "The passwords don't match"))
                 ->add('country', 'choice', array('preferred_choices' => array('US'), 'choices' => $allCountriesArray, 'attr' => array('class' => 'chzn-select', 'style' => 'width:312px;')))
-                ->add('city', NULL, array('attr' => array('class' => 'autocomplete', 'style' => 'width:312px;')))
+                ->add('city', NULL, array('attr' => array( 'style' => 'width:312px;')))
                 ->add('state', 'choice', array('required' => FALSE, 'attr' => array('class' => 'chzn-select', 'style' => 'width:312px;')))
                 ->add('address', 'text')
                 //->add('establishmentDate', 'date', array('attr' => array('class' => 'establishmentDate'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
@@ -713,8 +711,7 @@ class CompanyController extends Controller {
             if ($form->isValid()) {
                 //get the user object from the form
                 $company = $form->getData();
-                //insert the city into our table if not found
-                $this->insertCityIfNotFound($company->getCity(), $company->getCountry(), true);
+
                 //finish company signup
                 //add the new user to the entity manager
                 $em->persist($company);
@@ -1023,7 +1020,7 @@ class CompanyController extends Controller {
                 ->add('country', 'choice', array(
                     'choices' => $allCountriesArray
                 ))
-                ->add('city', NULL, array('attr' => array('class' => 'autocomplete', 'style' => 'width:250px;')))
+                ->add('city', NULL, array('attr' => array( 'style' => 'width:250px;')))
                 ->add('state', 'choice', array('empty_value' => '--- choose state ---', 'required' => false))
                 ->add('address')
                 ->add('details')
@@ -1038,8 +1035,6 @@ class CompanyController extends Controller {
             if ($form->isValid()) {
                 //get the user object from the form
                 $interview = $form->getData();
-                //insert the city into our table if not found
-                $this->insertCityIfNotFound($interview->getCity(), $interview->getCountry(), true);
 
                 //check if the there is an invalide interview request
                 $interviewObject = $InterviewRepo->findOneBy(array('company' => $company->getId(), 'user' => $userId, 'internship' => $form->getData()->getInternship()->getId()));

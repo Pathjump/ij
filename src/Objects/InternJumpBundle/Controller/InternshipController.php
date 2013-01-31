@@ -336,7 +336,7 @@ class InternshipController extends Controller {
                     'choices' => $allCountriesArray,
                     'preferred_choices' => array($company->getCountry()),
                 ))
-                ->add('city', NULL, array('attr' => array('class' => 'autocomplete', 'style' => 'width:310px;')))
+                ->add('city', NULL, array('attr' => array('style' => 'width:310px;')))
                 ->add('state', 'choice', array('empty_value' => '--- choose state ---', 'required' => false))
                 ->add('address', 'text')
                 ->add('zipcode')
@@ -351,8 +351,6 @@ class InternshipController extends Controller {
             if ($form->isValid()) {
                 //get the user object from the form
                 $entity = $form->getData();
-                //insert the city into our table if not found
-                $this->insertCityIfNotFound($entity->getCity(), $entity->getCountry(), true);
 
                 $em = $this->getDoctrine()->getEntityManager();
                 $em->persist($entity);
@@ -448,7 +446,7 @@ class InternshipController extends Controller {
                 ->add('categories')
                 ->add('country', 'choice', array(
                     'choices' => $allCountriesArray))
-                ->add('city', NULL, array('attr' => array('class' => 'autocomplete', 'style' => 'width:310px;')))
+                ->add('city', NULL, array('attr' => array('style' => 'width:310px;')))
                 ->add('state', 'choice', array('empty_value' => '--- choose state ---', 'required' => false))
                 ->add('address', 'text')
                 ->add('zipcode')
@@ -463,8 +461,6 @@ class InternshipController extends Controller {
             if ($editForm->isValid()) {
                 //get the user object from the form
                 $entity = $editForm->getData();
-                //insert the city into our table if not found
-                $this->insertCityIfNotFound($entity->getCity(), $entity->getCountry());
 
                 $entity->setCompany($company);
                 $em->persist($entity);
