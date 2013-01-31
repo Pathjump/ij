@@ -10,6 +10,9 @@
 {%block body%}
 
 <section id="comJobList">
+                <!-- Test Meter Part -->
+{% render "ObjectsInternJumpBundle:Task:userMeter" %}
+    
     <div class="wrapper">
 
         <aside class="others">
@@ -85,7 +88,7 @@
                 <ul>
                     {% for job in latestJobs %}
                         <li>
-                            <span>{{ job['title'] }} {{ job['position'] }}</span>
+                            <span>{{ job['title'] }}</span>
                             <a title="Read Job Details" href="{{ path('internship_show', {'id': job['id']}) }}">Read</a>
                         </li>
                     {% endfor %}
@@ -100,8 +103,7 @@
             </div>
 {% endif %}
 
-            <!-- Test Meter Part -->
-{% render "ObjectsInternJumpBundle:Task:userMeter" %}
+
         </aside>
 
         <section class="comntSection" id="portalHome">
@@ -184,8 +186,8 @@
                                 <td>{{ employmentHistory.title }}</td>
                                 <td class="title-des">Industry:</td>
                                 <td>{{ employmentHistory.industry }}</td>
-                                <td class="title-des">Job Position:</td>
-                                <td>{{ employmentHistory.jobPosition }}</td>
+                                {#<td class="title-des">Job Position:</td>
+                                <td>{{ employmentHistory.jobPosition }}</td>#}
                             </tr>
                             <tr>
                                 <th scope="row"  class="title-des">Company Name:</th>
@@ -367,6 +369,7 @@
 
 
 {%block javascripts%}
+{{parent()}}
 <script src="{{ asset('js/libs/vtabs.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/libs/chosen.jquery.min.js') }}" type="text/javascript"></script>
 <script>
@@ -384,4 +387,22 @@ var changeStatusUrl= '{{url('change_status',{'taskId' : '','status' : ''})}}';
 var taskStatus= '{{entity.status}}';
 </script>
 <script src="{{asset('bundles/objectsinternjump/js/note.js')}}"></script>
+
+<script>
+        $('.progressBar').hover(function() {
+        if($('.moredetails').is(':hidden')){
+        $('.moredetails').slideToggle(1000);
+        $('.detailsLink').text('hide details');
+        }
+    });
+            $('.detailsLink').click(function(){
+            $('.moredetails').slideToggle(1000,function(){
+                if($('.moredetails').is(':hidden')){
+                $('.detailsLink').text('show details');
+            }else{
+                $('.detailsLink').text('hide details');
+            }
+            });
+    });
+</script>
 {%endblock%}
