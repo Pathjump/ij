@@ -151,7 +151,7 @@
     }
     var cityAutoCompleteUrl = "{{ path('city_auto_complete') }}";
     $(document).ready(function() {
-        $('.dateOfBirth').datepicker({changeYear: true, yearRange : 'c-0:c+30', dateFormat: 'yy-mm-dd', maxDate: '-12y', minDate: '-52y'});
+        $('.dateOfBirth').datepicker({changeYear: true, dateFormat: 'yy-mm-dd', maxDate: '-12y'}); //, yearRange : 'c-0:c+30', minDate: '-52y'
         $('select.chzn-select').chosen();
         var stuTitleBar = $('#main .wrapper').width();
         $('#student-01 > .wrapper h1 div').width(stuTitleBar-202);
