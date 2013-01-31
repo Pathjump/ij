@@ -4,6 +4,9 @@
 
 {% block stylesheets %}
 <link href="{{ asset('css/stuEdu.css') }}" rel="stylesheet" type="text/css"/>
+<style>
+    #tooltip{color:#444;font-size:12px;text-shadow:1px 1px 0 #fff;border:1px solid #666;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;background-image:url(../images/th-bg.png);background-repeat:repeat-x;background-position:left top;background-color:#D7D7D7;-moz-box-shadow:0 0 4px #bbb;-webkit-box-shadow:0 0 4px #bbb;box-shadow:0 0 4px #bbb;line-height:1.2em;position:absolute;z-index:100000;display:none;padding:5px}
+</style>
 {% endblock %}
 
 {% block body %}
@@ -46,22 +49,30 @@
                     {% if loginNameRequired %}
                     <label>{% trans %}Login Name{% endtrans %}:</label>
                     {{ form_widget(form.loginName) }}
+                    <span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                     <span class="miniError" id="loginName-error"></span>
                     <span class="miniError">{{ form_errors(form.loginName) }}</span>
+                    
                     <br>
                     {% endif %}
 
                     <label>{% trans %}Email{% endtrans %}:</label>
-                    {{ form_widget(form.email.Email) }}<br>
+                    {{ form_widget(form.email.Email) }}
+                    <span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
+                    <br>
                     <span class="miniError" id="mailcheck-message"></span>
                     <label>{% trans %}Confirm Email{% endtrans %}:</label>
                     {{ form_widget(form.email.ReEmail) }}
+                    <span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                     <span class="miniError">{{ form_errors(form.email) }}</span><br>
 
                     <label>{% trans %}Password{% endtrans %}:</label>
-                    {{ form_widget(form.userPassword.Password) }}<br>
+                    {{ form_widget(form.userPassword.Password) }}
+                    <span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
+                    <br>
                     <label>{% trans %}Confirm Password{% endtrans %}:</label>
                     {{ form_widget(form.userPassword.RePassword) }}
+                    <span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                     <span class="miniError">{{ form_errors(form.userPassword) }}</span><br>
 
                     {{ form_rest(form) }}
@@ -98,4 +109,5 @@
 <script src="{{asset('bundles/objectsuser/js/xregexp-all.js')}}"></script>
 <script src="{{asset('bundles/objectsuser/js/mailcheck.js')}}"></script>
 <script src="{{asset('bundles/objectsuser/js/signUp.js')}}"></script>
+<script src="{{asset('js/tooltip/tooltip.js')}}"></script>
 {% endblock %}

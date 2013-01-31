@@ -5,6 +5,10 @@
 {{parent()}}
 <link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('css/jquery-ui-1.8.24.custom.css') }}" rel="stylesheet" type="text/css"/>
+
+<style>
+    #tooltip{color:#444;font-size:12px;text-shadow:1px 1px 0 #fff;border:1px solid #666;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;background-image:url(../images/th-bg.png);background-repeat:repeat-x;background-position:left top;background-color:#D7D7D7;-moz-box-shadow:0 0 4px #bbb;-webkit-box-shadow:0 0 4px #bbb;box-shadow:0 0 4px #bbb;line-height:1.2em;position:absolute;z-index:100000;display:none;padding:5px}
+</style>
 {% endblock %}
 
 {% block body %}
@@ -13,7 +17,7 @@
     <div class="wrapper">
 
 
-        <h1>FOR EMPLOYERS<div></div></h1>
+        <h1>FOR EMPLOYERS<div style="width: 770px;"></div></h1>
 
         <div class="comSignupWrapper">
             <form action="{{ path('company_signup') }}" method="post" {{ form_enctype(form) }}>
@@ -33,7 +37,7 @@
                 {% if form_errors(form.name) %}
                 <span class="triangle-border left">{{ form_errors(form.name) }}</span>
                 {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px;">*</span>
+                <span style="color: red; font-weight: bold; margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                 <br>
 
                 <label>Login Name:</label>
@@ -41,7 +45,7 @@
                 {% if form_errors(form.loginName) %}
                 <span class="triangle-border left">{{ form_errors(form.loginName) }}</span>
                 {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px;">*</span>
+                <span style="color: red; font-weight: bold; margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                 <br>
 
                 <label>Password:</label>
@@ -49,12 +53,12 @@
                 {% if form_errors(form.userPassword) %}
                 <span class="triangle-border left">{{ form_errors(form.userPassword) }}</span>
                 {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px;">*</span>
+                <span style="color: red; font-weight: bold; margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                 <br>
 
                 <label>Confirm Password:</label>
                 {{ form_widget(form.userPassword.RePassword) }}
-                <span style="color: red; font-weight: bold; margin-left: 10px;">*</span>
+                <span style="color: red; font-weight: bold; margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                 <br>
 
                 <label>Company Email:</label>
@@ -62,12 +66,12 @@
                 {% if form_errors(form.email) %}
                 <span class="triangle-border left">{{ form_errors(form.email) }}</span>
                 {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px;">*</span>
+                <span style="color: red; font-weight: bold; margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                 <br>
 
                 <label>Confirm Company Email:</label>
                 {{ form_widget(form.email.ReEmail) }}
-                <span style="color: red; font-weight: bold; margin-left: 10px;">*</span>
+                <span style="color: red; font-weight: bold; margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                 <br>
 
                 <span class="sepa"></span>
@@ -79,7 +83,7 @@
                 {% if form_errors(form.professions) %}
                 <span class="triangle-border left">{{ form_errors(form.professions) }}</span>
                 {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px;">*</span>
+                <span style="color: red; font-weight: bold; margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                 </div>
                 
                 <br>
@@ -129,7 +133,7 @@
                 {% if form_errors(form.address) %}
                 <span class="triangle-border left">{{ form_errors(form.address) }}</span>
                 {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px;">*</span>
+                <span style="color: red; font-weight: bold; margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                 <br>
                
 
@@ -138,7 +142,7 @@
                 {% if form_errors(form.city) %}
                 <span class="triangle-border left">{{ form_errors(form.city) }}</span>
                 {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px;">*</span>
+                <span style="color: red; font-weight: bold; margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                 <br>
 
                 <label>State:</label>
@@ -153,7 +157,7 @@
                 {% if form_errors(form.zipcode) %}
                 <span class="triangle-border left">{{ form_errors(form.zipcode) }}</span>
                 {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;">*</span>
+                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                 <a href="javascript:void(0)" id="getMyPosition">Update Position On Map</a>
                 <img src="{{asset('img/loadingfacebox.gif')}}" id="getMyPositionImg" style="display: none;"/>
 
@@ -206,7 +210,7 @@ var defaultStateName= '{{defaultStateName}}';
 <script src="{{ asset('js/libs/chosen.jquery.min.js') }}"></script>
 <script src="{{asset('bundles/objectsinternjump/js/companySignup.js')}}"></script>
 <script src="{{asset('bundles/objectsinternjump/js/cityAutoComplete.js')}}"></script>
-
+<script src="{{asset('js/tooltip/tooltip.js')}}"></script>
 <script>
     $(document).ready(function(){
         $('#form_url').click(function(){ $(this).attr('value','http://')} );
