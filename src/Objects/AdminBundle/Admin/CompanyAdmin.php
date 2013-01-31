@@ -62,6 +62,7 @@ class CompanyAdmin extends Admin {
                     'actions' => array(
                         'view' => array(),
                         'edit' => array(),
+                        'delete' => array(),
                     )
                 ))
         ;
@@ -226,9 +227,9 @@ class CompanyAdmin extends Admin {
      * @author Mahmoud
      * @param RouteCollection $collection 
      */
-    protected function configureRoutes(RouteCollection $collection) {
-        $collection->remove('delete');
-    }
+//    protected function configureRoutes(RouteCollection $collection) {
+//        $collection->remove('delete');
+//    }
 
 }
 

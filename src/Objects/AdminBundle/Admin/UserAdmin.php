@@ -58,6 +58,7 @@ class UserAdmin extends Admin {
                     'actions' => array(
                         'view' => array(),
                         'edit' => array(),
+                        'delete' => array(),
                     )
                 ))
         ;
@@ -214,9 +215,9 @@ class UserAdmin extends Admin {
      * this function is for editing the routes of this class
      * @param RouteCollection $collection 
      */
-    protected function configureRoutes(RouteCollection $collection) {
-        $collection->remove('delete');
-    }
+//    protected function configureRoutes(RouteCollection $collection) {
+//        $collection->remove('delete');
+//    }
 
     /**
      * @param \Objects\UserBundle\Entity\User $user
