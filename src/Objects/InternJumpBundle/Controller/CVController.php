@@ -49,7 +49,7 @@ class CVController extends ObjectsController {
                     $userSocialAccounts = $user->getSocialAccounts();
                     $container = $this->container;
                     if ($userSocialAccounts) {
-                        $status = 'I have created my resume on InternJump';
+                        $status = 'I just created my resume on InternJump, boy was it easy!!';
                         $link = $this->generateUrl('site_homepage', array('access_method' => 'facebook'), TRUE);
 
                         // check if have facebook
@@ -186,7 +186,7 @@ class CVController extends ObjectsController {
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('ObjectsInternJumpBundle:CV')->find($id);
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find CV');
+            throw $this->createNotFoundException('Unable to find resume');
         }
         $this->checkUserOwnObject($entity);
         //get the request object
@@ -279,7 +279,7 @@ class CVController extends ObjectsController {
             $userSocialAccounts = $user->getSocialAccounts();
             $container = $this->container;
             if ($userSocialAccounts) {
-                $status = 'I have created my resume on InternJump';
+                $status = 'I just created my resume on InternJump, boy was it easy!';
                 $link = $this->generateUrl('site_homepage', array('access_method' => 'facebook'), TRUE);
 
                 // check if have facebook
@@ -319,7 +319,7 @@ class CVController extends ObjectsController {
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('ObjectsInternJumpBundle:CV')->find($id);
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find CV');
+            throw $this->createNotFoundException('Unable to find resume');
         }
         $this->checkUserOwnObject($entity);
         $editForm = $this->createForm(new CVType(), $entity);
