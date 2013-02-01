@@ -2099,7 +2099,7 @@ class UserController extends ObjectsController {
                 $userSocialAccounts = $user->getSocialAccounts();
                 $container = $this->container;
                 if ($userSocialAccounts) {
-                    $status = 'I have just created my account on InternJump';
+                    $status = 'I just installed the InternJump App, a platform to find internships/entry-level jobs!';
                     $link = $this->generateNormalUrl('site_homepage', array(), TRUE);
 
                     // check if have facebook
