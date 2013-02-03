@@ -1817,7 +1817,6 @@ class UserController extends ObjectsController {
                             } else {
                                 //create new skill
                                 $newSkill = new \Objects\InternJumpBundle\Entity\Skill();
-                                $newSkill->setType('general');
                                 $newSkill->setTitle(strtolower($skill['skill']['name']));
                                 $user->addSkill($newSkill);
                             }
@@ -1830,7 +1829,6 @@ class UserController extends ObjectsController {
                         } else {
                             //create new skill
                             $newSkill = new \Objects\InternJumpBundle\Entity\Skill();
-                            $newSkill->setType('general');
                             $newSkill->setTitle(strtolower($userData['skills']['skill']['skill']['name']));
 
                             $user->addSkill($newSkill);
