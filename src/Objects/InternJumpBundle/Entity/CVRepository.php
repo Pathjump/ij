@@ -87,17 +87,32 @@ class CVRepository extends EntityRepository {
 
     /**
      * this function will get suitable active user cvs for new job
-     * @author Ahmed
+     * @author Ahmed edited by Ola
      * @param array $categoryIdsArray
      */
-    public function getNewJobSuitableCvs($categoryIdsArray) {
+    public function getNewJobSuitableCvs($categoryIdsArray,$country = NULL, $state = NULL) {
+        
+        $where = ""; 
+        //if country and state are set with values
+        if($country != NULL && $state != NULL){
+            $where = "WHERE c.isActive = true and cat.id in (:categoryIdsArray) AND u.country = '$country' AND u.state = '$state'"; 
+        }
+        //if country is set and state not set
+        elseif($country != NULL && $state == NULL){
+            $where = "WHERE c.isActive = true and cat.id in (:categoryIdsArray) AND u.country = '$country'"; 
+        }
+        //both are not set [both null]
+        else{
+            $where = "WHERE c.isActive = true and cat.id in (:categoryIdsArray)";  
+        }
+        echo $where."<br>";
         $query = $this->getEntityManager()
                         ->createQuery('
             SELECT c.id as cvId,u.id as userId,u.email
             FROM ObjectsInternJumpBundle:CV c
             JOIN c.user u
             JOIN c.categories cat
-            WHERE c.isActive = true and cat.id in (:categoryIdsArray)
+            '.$where.'
             group by u.email
             ')->setParameter('categoryIdsArray', $categoryIdsArray);
 

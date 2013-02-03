@@ -367,8 +367,15 @@ class InternshipController extends Controller {
                 }
                 //get suitable cvs for this job categories
                 if (sizeof($categoryIdsArray) > 0) {
-                    $suitableCvs = $cvRepo->getNewJobSuitableCvs($categoryIdsArray);
-
+                    
+                    //Now Get Country and State to compare them with useres' before sending them emails
+                    //get Job Country
+                    $country = $entity->getCountry();
+                    //get Job State
+                    $state = $entity->getState();
+                    //get suitable users' cvs
+                    $suitableCvs = $cvRepo->getNewJobSuitableCvs($categoryIdsArray,$country,$state);
+                    
                     $newJobLink = $container->get('router')->generate('internship_show', array('id' => $entity->getId()), TRUE);
                     $messageText = $container->getParameter('new_job_to_suitable_users_message_text');
                     $subject = $container->getParameter('new_job_to_suitable_users_subject_text');
