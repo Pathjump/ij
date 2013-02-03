@@ -37,9 +37,9 @@
                 </ul>
                 {% else %}
                 <i>
-                    To See Latest Jobs<br />
-                    activate at least One of your CVs<br />
-                    Or Create new one
+                    To view the latest internships/job postings,<br />
+                    please activate at least one of your Resume<br />
+                    Or Create a new one!
                 </i>
                 {% endif %}
             </div>
@@ -74,7 +74,7 @@
                                                 </div>
                                         </div>
                                         {% else %}
-                        <h2 class="current">You don't have any interviews</h2>
+                        <h2 class="current">You don't have any scheduled interviews</h2>
 
                            {% endif %}</div>
 
@@ -145,7 +145,7 @@
                 <br />
                 <br />
                 <aside class="profile_quiz" >
-                    <h2>Personality Test Character:</h2><br>
+                    <h2>Personality Character:</h2><br>
                     <p>
                     <img src="{{quizResult.getTimThumbUrl(48,48)}}" style="width: 48px; height: 48px;">
                     {{quizResult.message}}
@@ -153,6 +153,7 @@
                     <p style="display: none; border-top: 1px solid rgb(221, 221, 221); padding: 10px; margin: 10px; font: 12px/1.5 arial;" class="quizMoreData">{{quizResult.description}}</p>
 
                     </p>
+
                 </aside>
                 {%endif%}
 
@@ -322,14 +323,14 @@
 
                             {% if employmentHistory.startedFrom %}
                             <li>
-                                <b class="title-des">Started Position:</b>
+                                <b class="title-des">Position Started:</b>
                                 {{ employmentHistory.startedFrom | date('Y-m-d') }}
                             </li>
                             {% endif %}
 
                             {% if employmentHistory.endedIn %}
                             <li>
-                                <b class="title-des">Position Ended:</b>
+                                <b class="title-des">Ended Position:</b>
                                 {{ employmentHistory.endedIn | date('Y-m-d') }}
                             </li>
                             {% endif %}
@@ -357,7 +358,7 @@
                 <aside class="copmanyInfo" id="msgsBox">
 
 
-                    <h1>Currently Hired In <i>{%if userjob%}{{userjob.internship.company}}{%endif%}</i></h1>
+                    <h1>Currently hired at <i>{%if userjob%}{{userjob.internship.company}}{%endif%}</i></h1>
                     <h2>You are now working at <a href="#">{%if userjob%}{{userjob.internship.company}}{%endif%}</a> as a <a href="#">{%if userjob%}{{userjob.internship.title}}{%endif%}</a></h2>
 
                     <div class="wrapper">
@@ -406,7 +407,7 @@
                                         <td>&nbsp;</td>
                                         <td>Task Name</td>
                                         <td>Date</td>
-                                        <td>Task Case</td>
+                                        <td>Status</td>
                                         <td>Show Task</td>
                                     </thead>
                                     {% if entities %}
@@ -513,7 +514,10 @@
     </div>
             {%else%}
                          <section id="portalHome" class="comntSection">
-                            <div class="alertConfirmation">Please Activate Your Account ! </div>
+                            <div class="alertConfirmation">Please Activate Your Account!</div>
+                            <div style="padding:5px;margin:10px;width:320px;border:1px solid #CCC;margin:0 auto;">In order to protect our database we ask users to confirm their email. 
+                            Please check your inbox for a email from us, if you have not received it 
+                            check your spam folder. If you still can not find the email, please contact support@internjump.com</div>
                          </section>
             {%endif%}
 </section>

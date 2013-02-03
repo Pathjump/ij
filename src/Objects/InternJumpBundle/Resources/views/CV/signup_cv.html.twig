@@ -5,6 +5,9 @@
 {% block stylesheets %}
 <link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('css/simpletabs.css') }}" rel="stylesheet" type="text/css"/>
+<style>
+    #tooltip{color:#444;font-size:12px;text-shadow:1px 1px 0 #fff;border:1px solid #666;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;background-image:url(../images/th-bg.png);background-repeat:repeat-x;background-position:left top;background-color:#D7D7D7;-moz-box-shadow:0 0 4px #bbb;-webkit-box-shadow:0 0 4px #bbb;box-shadow:0 0 4px #bbb;line-height:1.2em;position:absolute;z-index:100000;display:none;padding:5px}
+</style>
 {% endblock %}
 
 {% block body %}
@@ -49,16 +52,21 @@
                 <form action="{{ path('signup_cv') }}" method="post" {{ form_enctype(form) }}>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td width="160" class="top"><label>Resume Title:</label></td>
-                            <td>{{ form_widget(form.name) }}{% if form_errors(form.name) %}<span class="triangle-border left">{{ form_errors(form.name) }}</span>{% endif %}<br/></td>
+                            <td width="160" class="top"><label>Resume Title: <span style="margin-left: 10px;"><img class="tooltip" title="Use a creative title for your resume" src="{{asset('js/tooltip/tooltip.png')}}"></span></label></td>
+                            <td>{{ form_widget(form.name) }}{% if form_errors(form.name) %}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="triangle-border left">{{ form_errors(form.name) }}</span>{% endif %}<br/></td>
                         </tr>
                         <tr>
-                            <td width="160" class="top"><label>Objectives:</label></td>
-                            <td>{{ form_widget(form.objective) }}{% if form_errors(form.objective) %}<span class="triangle-border left">{{ form_errors(form.objective) }}</span>{% endif %}<br/></td>
+                            <td width="160" class="top"><label>Objectives: <span style="margin-left: 10px;"><img class="tooltip" title="Consider two factors as you set the objectives for your internship: 1) What is your basic goal for taking on the internship? 2) •    Define what has to happen during the internship for you to know that you have fulfilled your basic goal?" src="{{asset('js/tooltip/tooltip.png')}}"></span></label></td>
+                            <td>{{ form_widget(form.objective) }}{% if form_errors(form.objective) %}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="triangle-border left">{{ form_errors(form.objective) }}</span>{% endif %}<br/>
+                            Examples of Objectives Include: <br>
+							<em>To Learn the primary skills of financial industry<br>
+							To clarify the primary responsibilities of a film producer<br>
+							To understand the education background of being a programmer at an internet start-up</em>
+                            </td>
                         </tr>
                         <tr>
                             <td width="160" class="top"><label>I Am Interested In Interning in…:</label></td>
-                            <td>{{ form_widget(form.categories) }}{% if form_errors(form.categories) %}<span class="triangle-border left">{{ form_errors(form.categories) }}</span>{% endif %}<br/></td>
+                            <td>{{ form_widget(form.categories) }}{% if form_errors(form.categories) %}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="triangle-border left">{{ form_errors(form.categories) }}</span>{% endif %}<br/></td>
                         </tr>
                     </table>
 
@@ -75,6 +83,7 @@
 
 {% block javascripts %}
 <script src="{{ asset('js/libs/chosen.jquery.min.js') }}" type="text/javascript"></script>
+<script src="{{asset('js/tooltip/tooltip.js')}}"></script>
 <script>
     $(document).ready(function() {
         $('.chzn-select').chosen();

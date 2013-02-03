@@ -6,6 +6,9 @@
 <link href="{{ asset('css/jquery-ui-1.8.24.custom.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('css/stuEdu.css') }}" rel="stylesheet" type="text/css"/>
+<style>
+    #tooltip{color:#444;font-size:12px;text-shadow:1px 1px 0 #fff;border:1px solid #666;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;background-image:url(../images/th-bg.png);background-repeat:repeat-x;background-position:left top;background-color:#D7D7D7;-moz-box-shadow:0 0 4px #bbb;-webkit-box-shadow:0 0 4px #bbb;box-shadow:0 0 4px #bbb;line-height:1.2em;position:absolute;z-index:100000;display:none;padding:5px}
+</style>
 {% endblock %}
 
 {% block body %}
@@ -56,14 +59,14 @@
                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td width="190"><label>College/University :</label></td>
-                                    <td>{{ form_widget(education.schoolName) }}<span class="miniError">{{ form_errors(education.schoolName) }}</span></td>
+                                    <td>{{ form_widget(education.schoolName) }}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="miniError">{{ form_errors(education.schoolName) }}</span></td>
                                     <td>&nbsp;</td>
                                     <td>{{ form_label(education.underGraduate) }}</td>
                                     <td>{{ form_widget(education.underGraduate) }}<span class="miniError">{{ form_errors(education.underGraduate) }}</span></td>
                                 </tr>
                                 <tr>
                                     <td><label>Major :</label></td>
-                                    <td>{{ form_widget(education.major) }}<span class="miniError">{{ form_errors(education.major) }}</span></td>
+                                    <td>{{ form_widget(education.major) }}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="miniError">{{ form_errors(education.major) }}</span></td>
                                     <td>&nbsp;</td>
                                     <td><label>Minor :</label></td>
                                     <td>{{ form_widget(education.minor) }}<span class="miniError">{{ form_errors(education.minor) }}</span></td>
@@ -87,15 +90,15 @@
 
                                 <tr>
                                     <td width="190"><label>Start Date :</label></td>
-                                    <td>{{ form_widget(education.startDate) }}<span class="miniError">{{ form_errors(education.startDate) }}</span></td>
+                                    <td>{{ form_widget(education.startDate) }}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="miniError">{{ form_errors(education.startDate) }}</span></td>
                                     <td>&nbsp;</td>
                                     <td width="190"><label>End Date :</label></td>
-                                    <td>{{ form_widget(education.endDate) }}<span class="miniError">{{ form_errors(education.endDate) }}</span></td>
+                                    <td>{{ form_widget(education.endDate) }}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="miniError">{{ form_errors(education.endDate) }}</span></td>
                                 </tr>
 
                                 <tr>
                                     <td><label>Relevant Coursework Taken :</label></td>
-                                    <td>{{ form_widget(education.relevantCourseworkTaken) }}<span class="miniError">{{ form_errors(education.relevantCourseworkTaken) }}</span><small>Separate Multiple Course Names With Commas</small></td>
+                                    <td>{{ form_widget(education.relevantCourseworkTaken) }}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="miniError">{{ form_errors(education.relevantCourseworkTaken) }}</span><small>Separate Multiple Course Names With Commas</small></td>
                                     <td></td>
                                     <td><label>Extracurricular Activity :</label></td>
                                     <td>{{ form_widget(education.extracurricularActivity) }}<span class="miniError">{{ form_errors(education.extracurricularActivity) }}</span><small>Separate Multiple Extracurricular Activities With Commas</small></td>
@@ -178,6 +181,7 @@
 <script src="{{ asset('js/libs/jquery-ui-1.8.24.custom.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/libs/chosen.jquery.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/libs/jquery.livequery.js') }}" type="text/javascript"></script>
+<script src="{{asset('js/tooltip/tooltip.js')}}"></script>
 <script>
     var formElementHTML = '{{ formElementHTML | escape('js') }}';
     function deleteSubForm(currentElement) {
