@@ -64,7 +64,7 @@ class InternshipRepository extends EntityRepository {
             SELECT j.id
             FROM ObjectsInternJumpBundle:Internship j
             JOIN j.company c
-            WHERE c.id = :companyId and j.active = true
+            WHERE c.id = :companyId 
             ')->setParameters(array('companyId' => $companyId));
         return $query->getResult();
     }

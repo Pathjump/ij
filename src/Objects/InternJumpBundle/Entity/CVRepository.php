@@ -105,7 +105,6 @@ class CVRepository extends EntityRepository {
         else{
             $where = "WHERE c.isActive = true and cat.id in (:categoryIdsArray)";  
         }
-        echo $where."<br>";
         $query = $this->getEntityManager()
                         ->createQuery('
             SELECT c.id as cvId,u.id as userId,u.email

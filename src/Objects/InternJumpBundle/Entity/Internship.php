@@ -27,7 +27,7 @@ class Internship {
     /**
      * the company of the internship
      * @var \Objects\InternJumpBundle\Entity\Company $company
-     * @Assert\NotNull
+     * @Assert\NotNull(groups={"newInternship,editInternship"})
      * @ORM\ManyToOne(targetEntity="\Objects\InternJumpBundle\Entity\Company", inversedBy="internships")
      * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)
      */
@@ -35,7 +35,7 @@ class Internship {
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection $categories
-     * @Assert\NotNull
+     * @Assert\NotNull(groups={"newInternship,editInternship"})
      * @ORM\ManyToMany(targetEntity="\Objects\InternJumpBundle\Entity\CVCategory")
      * @ORM\JoinTable(name="internship_category",
      *     joinColumns={@ORM\JoinColumn(name="internship_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)},
@@ -67,21 +67,21 @@ class Internship {
 
     /**
      * @var decimal $Latitude
-     * @Assert\NotNull
+     * @Assert\NotNull(groups={"newInternship,editInternship"})
      * @ORM\Column(name="Latitude", type="decimal", precision=18, scale=12)
      */
     private $Latitude;
 
     /**
      * @var decimal $Longitude
-     * @Assert\NotNull
+     * @Assert\NotNull(groups={"newInternship,editInternship"})
      * @ORM\Column(name="Longitude", type="decimal", precision=18, scale=12)
      */
     private $Longitude;
 
     /**
      * @var string $zipcode
-     * @Assert\NotNull
+     * @Assert\NotNull(groups={"newInternship,editInternship"})
      * @ORM\Column(name="zipcode", type="string", length=255)
      */
     private $zipcode;
@@ -95,7 +95,7 @@ class Internship {
 
     /**
      * @var date $activeFrom
-     * @Assert\NotNull
+     * @Assert\NotNull(groups={"newInternship,editInternship"})
      * @Assert\Date
      * @ORM\Column(name="activeFrom", type="date")
      */
@@ -103,7 +103,7 @@ class Internship {
 
     /**
      * @var date $activeTo
-     * @Assert\NotNull
+     * @Assert\NotNull(groups={"newInternship,editInternship"})
      * @Assert\Date
      * @ORM\Column(name="activeTo", type="date")
      */
@@ -118,35 +118,35 @@ class Internship {
 
     /**
      * @var string $title
-     * @Assert\NotNull
+     * @Assert\NotNull(groups={"newInternship,editInternship"})
      * @ORM\Column(name="title", type="string", length=255)
      */
     private $title;
 
     /**
      * @var text $description
-     * @Assert\NotNull
+     * @Assert\NotNull(groups={"newInternship,editInternship"})
      * @ORM\Column(name="description", type="text")
      */
     private $description;
 
     /**
      * @var text $requirements
-     * @Assert\NotNull
+     * @Assert\NotNull(groups={"newInternship,editInternship"})
      * @ORM\Column(name="requirements", type="text")
      */
     private $requirements;
 
     /**
      * @var string $country
-     * @Assert\NotNull
+     * @Assert\NotNull(groups={"newInternship,editInternship"})
      * @ORM\Column(name="country", type="string", length=255)
      */
     private $country;
 
     /**
      * @var string $city
-     * @Assert\NotNull
+     * @Assert\NotNull(groups={"newInternship,editInternship"})
      * @ORM\Column(name="city", type="string", length=255)
      */
     private $city;
@@ -160,7 +160,7 @@ class Internship {
 
     /**
      * @var text $address
-     * @Assert\NotNull
+     * @Assert\NotNull(groups={"newInternship,editInternship"})
      * @ORM\Column(name="address", type="text")
      */
     private $address;
@@ -432,7 +432,7 @@ class Internship {
 
     /**
      * this function will check if the internship time is valid
-     * @Assert\True(message = "The active to date must be greater than the active from date")
+     * @Assert\True(groups={"newInternship,editInternship"},message = "The active to date must be greater than the active from date")
      */
     public function isActiveToCorrect() {
         if ($this->getActiveTo() > $this->getActiveFrom()) {
@@ -443,7 +443,7 @@ class Internship {
 
     /**
      * this function will check if the internship time is valid
-     * @Assert\True(message = "The active from date must be greater than or equal the current date")
+     * @Assert\True(groups={"newInternship"},message = "The active from date must be greater than or equal the current date")
      */
     public function isFromDateCorrect() {
         $nowDate = new \DateTime('today');

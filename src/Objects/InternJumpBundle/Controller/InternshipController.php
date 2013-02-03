@@ -331,7 +331,12 @@ class InternshipController extends Controller {
         $request = $this->getRequest();
         //get after 1 year date
         $afterOneYearDate = new \DateTime('+1 year');
-        $form = $this->createFormBuilder($entity)
+        
+        //get validation group
+        $formValidationGroups [] = 'newInternship';
+
+        //create a add new job form
+        $form = $this->createFormBuilder($entity, array('validation_groups' => $formValidationGroups))
                 ->add('activeFrom', 'date', array('attr' => array('class' => 'activeFrom'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('activeTo', 'date', array('attr' => array('class' => 'activeTo'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('title')
@@ -452,7 +457,11 @@ class InternshipController extends Controller {
                     'message' => $message,));
         }
 
-        $editForm = $this->createFormBuilder($entity)
+                //get validation group
+        $formValidationGroups [] = 'editInternship';
+
+        //create a add new job form
+        $editForm = $this->createFormBuilder($entity,  array('validation_groups' => $formValidationGroups))
                 ->add('activeFrom', 'date', array('attr' => array('class' => 'activeFrom'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('activeTo', 'date', array('attr' => array('class' => 'activeTo'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('title')
