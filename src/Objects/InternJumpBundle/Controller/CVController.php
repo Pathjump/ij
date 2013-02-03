@@ -119,8 +119,8 @@ class CVController extends ObjectsController {
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('ObjectsInternJumpBundle:CV')->find($id);
         if (!$entity) {
-            $message = $this->container->getParameter('cv_not_found_error_msg');
-            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+             $message = $this->container->getParameter('cv_not_found_error_msg');
+             return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
                         'message' => $message,));
         }
         $this->checkUserOwnObject($entity);
