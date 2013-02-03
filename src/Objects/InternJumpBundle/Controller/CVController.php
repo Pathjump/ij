@@ -119,7 +119,9 @@ class CVController extends ObjectsController {
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('ObjectsInternJumpBundle:CV')->find($id);
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find CV');
+            $message = $this->container->getParameter('cv_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
         $this->checkUserOwnObject($entity);
         //get the request object
@@ -186,7 +188,9 @@ class CVController extends ObjectsController {
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('ObjectsInternJumpBundle:CV')->find($id);
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find resume');
+            $message = $this->container->getParameter('cv_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
         $this->checkUserOwnObject($entity);
         //get the request object
@@ -319,7 +323,9 @@ class CVController extends ObjectsController {
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('ObjectsInternJumpBundle:CV')->find($id);
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find resume');
+            $message = $this->container->getParameter('cv_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
         $this->checkUserOwnObject($entity);
         $editForm = $this->createForm(new CVType(), $entity);
@@ -341,7 +347,9 @@ class CVController extends ObjectsController {
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('ObjectsInternJumpBundle:CV')->find($id);
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find CV');
+            $message = $this->container->getParameter('cv_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
         $this->checkUserOwnObject($entity);
         $editForm = $this->createForm(new CVType(), $entity);
@@ -372,7 +380,9 @@ class CVController extends ObjectsController {
             $em = $this->getDoctrine()->getEntityManager();
             $entity = $em->getRepository('ObjectsInternJumpBundle:CV')->find($id);
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find CV');
+                $message = $this->container->getParameter('cv_not_found_error_msg');
+                return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
             }
             $this->checkUserOwnObject($entity);
             $em->remove($entity);

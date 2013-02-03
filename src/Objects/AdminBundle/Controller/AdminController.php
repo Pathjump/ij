@@ -98,8 +98,22 @@ class AdminController extends Controller {
             $config['facebook_mesasage'] = $container->getParameter('facebook_mesasage');
             $config['internjumb_copyright'] = $container->getParameter('internjumb_copyright');
             $config['info_email'] = $container->getParameter('info_email');
-            
+            $config['user_not_found_error_msg'] = $container->getParameter('user_not_found_error_msg');
+            $config['company_not_found_error_msg'] = $container->getParameter('company_not_found_error_msg');
+            $config['cv_not_found_error_msg'] = $container->getParameter('cv_not_found_error_msg');
+            $config['interview_not_found_error_msg'] = $container->getParameter('interview_not_found_error_msg');
+            $config['request_not_found_error_msg'] = $container->getParameter('request_not_found_error_msg');
+            $config['question_not_found_error_msg'] = $container->getParameter('question_not_found_error_msg');
+            $config['interest_not_found_error_msg'] = $container->getParameter('interest_not_found_error_msg');
+            $config['education_not_found_error_msg'] = $container->getParameter('education_not_found_error_msg');
+            $config['emp_history_not_found_error_msg'] = $container->getParameter('emp_history_not_found_error_msg');
+            $config['skill_not_found_error_msg'] = $container->getParameter('skill_not_found_error_msg');
+            $config['task_not_found_error_msg'] = $container->getParameter('task_not_found_error_msg');
+            $config['user_message_not_found_error_msg'] = $container->getParameter('user_message_not_found_error_msg');
+            $config['company_message_not_found_error_msg'] = $container->getParameter('company_message_not_found_error_msg');
+            $config['internship_not_found_error_msg'] = $container->getParameter('internship_not_found_error_msg');
 
+      
             //make form to fill it with data
             $form = $this->createFormBuilder($config)
                     ->add('contact_us_email', 'email')
@@ -158,7 +172,23 @@ class AdminController extends Controller {
                     ->add('contact_info_name', 'text')
                     ->add('contact_info_address_part1', 'text')
                     ->add('contact_info_address_part2', 'text')
-                               
+                    ->add('user_not_found_error_msg', 'textarea')
+                    ->add('company_not_found_error_msg', 'textarea')
+                    ->add('cv_not_found_error_msg', 'textarea')
+                    ->add('interview_not_found_error_msg', 'textarea')
+                    ->add('request_not_found_error_msg', 'textarea')
+                    ->add('question_not_found_error_msg', 'textarea')
+                    ->add('interest_not_found_error_msg', 'textarea')
+                    ->add('education_not_found_error_msg', 'textarea')
+                    ->add('emp_history_not_found_error_msg', 'textarea')
+                    ->add('skill_not_found_error_msg', 'textarea')
+                    ->add('task_not_found_error_msg', 'textarea')
+                    ->add('user_message_not_found_error_msg', 'textarea')
+                    ->add('company_message_not_found_error_msg', 'textarea')
+                    ->add('internship_not_found_error_msg', 'textarea')
+                    
+                      
+                    
                     ->getForm();
 
             $request = $this->getRequest();
@@ -357,6 +387,51 @@ class AdminController extends Controller {
                     }
                        
 
+                    
+                    if ($formDataArray['user_not_found_error_msg'] != $container->getParameter('user_not_found_error_msg')) {
+                        $firstFileChange = TRUE;
+                    }
+                    if ($formDataArray['company_not_found_error_msg'] != $container->getParameter('company_not_found_error_msg')) {
+                        $firstFileChange = TRUE;
+                    }
+                    if ($formDataArray['cv_not_found_error_msg'] != $container->getParameter('cv_not_found_error_msg')) {
+                        $firstFileChange = TRUE;
+                    }
+                    if ($formDataArray['interview_not_found_error_msg'] != $container->getParameter('interview_not_found_error_msg')) {
+                        $firstFileChange = TRUE;
+                    }
+                    if ($formDataArray['request_not_found_error_msg'] != $container->getParameter('request_not_found_error_msg')) {
+                        $firstFileChange = TRUE;
+                    }
+                    if ($formDataArray['question_not_found_error_msg'] != $container->getParameter('question_not_found_error_msg')) {
+                        $firstFileChange = TRUE;
+                    }
+                    if ($formDataArray['interest_not_found_error_msg'] != $container->getParameter('interest_not_found_error_msg')) {
+                        $firstFileChange = TRUE;
+                    }
+                    if ($formDataArray['education_not_found_error_msg'] != $container->getParameter('education_not_found_error_msg')) {
+                        $firstFileChange = TRUE;
+                    }
+                    if ($formDataArray['emp_history_not_found_error_msg'] != $container->getParameter('emp_history_not_found_error_msg')) {
+                        $firstFileChange = TRUE;
+                    }
+                    if ($formDataArray['skill_not_found_error_msg'] != $container->getParameter('skill_not_found_error_msg')) {
+                        $firstFileChange = TRUE;
+                    }
+                    if ($formDataArray['task_not_found_error_msg'] != $container->getParameter('task_not_found_error_msg')) {
+                        $firstFileChange = TRUE;
+                    }
+                    if ($formDataArray['user_message_not_found_error_msg'] != $container->getParameter('user_message_not_found_error_msg')) {
+                        $firstFileChange = TRUE;
+                    }
+                    if ($formDataArray['company_message_not_found_error_msg'] != $container->getParameter('company_message_not_found_error_msg')) {
+                        $firstFileChange = TRUE;
+                    }
+                    if ($formDataArray['internship_not_found_error_msg'] != $container->getParameter('internship_not_found_error_msg')) {
+                        $firstFileChange = TRUE;
+                    }
+                    
+
                     //check if we need to open the first file to change it is config
                     if ($firstFileChange) {
 
@@ -441,6 +516,22 @@ class AdminController extends Controller {
                             $value['parameters']['contact_info_address_part1'] = $formDataArray['contact_info_address_part1'];
                             $value['parameters']['contact_info_address_part2'] = $formDataArray['contact_info_address_part2'];
 
+                            $value['parameters']['user_not_found_error_msg'] = $formDataArray['user_not_found_error_msg'];
+                            $value['parameters']['company_not_found_error_msg'] = $formDataArray['company_not_found_error_msg'];
+                            $value['parameters']['cv_not_found_error_msg'] = $formDataArray['cv_not_found_error_msg'];
+                            $value['parameters']['interview_not_found_error_msg'] = $formDataArray['interview_not_found_error_msg'];
+                            $value['parameters']['request_not_found_error_msg'] = $formDataArray['request_not_found_error_msg'];
+                            $value['parameters']['question_not_found_error_msg'] = $formDataArray['question_not_found_error_msg'];
+                            $value['parameters']['interest_not_found_error_msg'] = $formDataArray['interest_not_found_error_msg'];
+                            $value['parameters']['education_not_found_error_msg'] = $formDataArray['education_not_found_error_msg'];
+                            $value['parameters']['emp_history_not_found_error_msg'] = $formDataArray['emp_history_not_found_error_msg'];
+                            $value['parameters']['skill_not_found_error_msg'] = $formDataArray['skill_not_found_error_msg'];
+                            $value['parameters']['task_not_found_error_msg'] = $formDataArray['task_not_found_error_msg'];
+                            $value['parameters']['user_message_not_found_error_msg'] = $formDataArray['user_message_not_found_error_msg'];
+                            $value['parameters']['company_message_not_found_error_msg'] = $formDataArray['company_message_not_found_error_msg'];
+                            $value['parameters']['internship_not_found_error_msg'] = $formDataArray['internship_not_found_error_msg'];
+
+                            
                             //dump to make spaces and format of the file before update it
                             $dumper = new \Symfony\Component\Yaml\Dumper();
                             $yaml = $dumper->dump($value, 3);

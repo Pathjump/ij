@@ -177,11 +177,15 @@ class UserMessageController extends ObjectsController {
         try {
             $entity = $em->getRepository('ObjectsInternJumpBundle:Message')->getUserMessage($id);
         } catch (\Exception $e) {
-            throw $this->createNotFoundException('Unable to find the required Message');
+            $message = $this->container->getParameter('user_message_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
         //check if the message is deleted
         if ($entity->getUserDeleted()) {
-            throw $this->createNotFoundException('Unable to find the required Message');
+            $message = $this->container->getParameter('user_message_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
         //check if the user can see the message
         if ($entity->getUser()->getId() != $user->getId()) {
@@ -266,11 +270,15 @@ class UserMessageController extends ObjectsController {
         try {
             $entity = $em->getRepository('ObjectsInternJumpBundle:Message')->getUserMessage($id);
         } catch (\Exception $e) {
-            throw $this->createNotFoundException('Unable to find the required Message');
+            $message = $this->container->getParameter('user_message_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
         //check if the message is deleted
         if ($entity->getUserDeleted()) {
-            throw $this->createNotFoundException('Unable to find the required Message');
+            $message = $this->container->getParameter('user_message_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
         //check if the user can delete the message
         if ($entity->getUser()->getId() != $user->getId()) {
@@ -340,7 +348,9 @@ class UserMessageController extends ObjectsController {
             //check if the requested user exist
             $company = $em->getRepository('ObjectsInternJumpBundle:Company')->findOneByLoginName($userName);
             if (!$company) {
-                throw $this->createNotFoundException('Unable to find the required Company');
+                $message = $this->container->getParameter('company_not_found_error_msg');
+                return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
             }
             //check if the user can send this company messages
             if (!isset($companies[$company->getId()])) {

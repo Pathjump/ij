@@ -50,7 +50,9 @@ class InternshipController extends Controller {
 
 
         if (!$company) {
-            throw $this->createNotFoundException('this company does not exist.');
+            $message = $this->container->getParameter('company_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                    'message' => $message,));
         }
 
         //the results per page number
@@ -140,14 +142,18 @@ class InternshipController extends Controller {
         $interviewRepo = $em->getRepository('ObjectsInternJumpBundle:Interview');
 
         if (!$entity) {
-            throw $this->createNotFoundException('this Internship does not exist.');
+            $message = $this->container->getParameter('internship_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                    'message' => $message,));
         } else {
             //check if not the owner company
             //so will check for job active or not 
             if (FALSE === $this->get('security.context')->isGranted('ROLE_COMPANY') || $this->get('security.context')->getToken()->getUser()->getId() != $entity->getCompany()->getId()) {
                 $todayDate = new \DateTime('today');
                 if (!$entity->getActive() || $entity->getActiveTo() < $todayDate || $entity->getActiveFrom() > $todayDate) {
-                    throw $this->createNotFoundException('this Internship does not exist.');
+                    $message = $this->container->getParameter('internship_not_found_error_msg');
+                    return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                    'message' => $message,));
                 }
             }
         }
@@ -441,7 +447,9 @@ class InternshipController extends Controller {
         $entity = $em->getRepository('ObjectsInternJumpBundle:Internship')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('this Internship does not exist.');
+            $message = $this->container->getParameter('internship_not_found_error_msg');
+              return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                    'message' => $message,));
         }
 
         $editForm = $this->createFormBuilder($entity)
@@ -506,7 +514,9 @@ class InternshipController extends Controller {
         $job = $em->getRepository('ObjectsInternJumpBundle:Internship')->find($id);
 
         if (!$job) {
-            throw $this->createNotFoundException('this Internship does not exist.');
+            $message = $this->container->getParameter('internship_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                    'message' => $message,));
         }
         //get job company
         $jobCompany = $job->getCompany();
@@ -540,7 +550,9 @@ class InternshipController extends Controller {
         $interestRepo = $em->getRepository('ObjectsInternJumpBundle:Interest');
 
         if (!$job) {
-            throw $this->createNotFoundException('this Internship does not exist.');
+            $message = $this->container->getParameter('internship_not_found_error_msg');
+              return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                    'message' => $message,));
         }
 
         //get job company

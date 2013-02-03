@@ -292,7 +292,9 @@ class EducationController extends ObjectsController {
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('ObjectsInternJumpBundle:Education')->find($id);
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find required Education');
+            $message = $this->container->getParameter('education_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
         $this->checkUserOwnObject($entity);
         $editForm = $this->createForm(new EducationType(), $entity, array('validation_groups' => 'education'));
@@ -314,7 +316,9 @@ class EducationController extends ObjectsController {
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('ObjectsInternJumpBundle:Education')->find($id);
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find required Education');
+            $message = $this->container->getParameter('education_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
         $this->checkUserOwnObject($entity);
         $editForm = $this->createForm(new EducationType(), $entity, array('validation_groups' => 'education'));
@@ -361,7 +365,9 @@ class EducationController extends ObjectsController {
             $em = $this->getDoctrine()->getEntityManager();
             $entity = $em->getRepository('ObjectsInternJumpBundle:Education')->find($id);
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find required Education');
+                $message = $this->container->getParameter('education_not_found_error_msg');
+                return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
             }
             $this->checkUserOwnObject($entity);
             //get the user object

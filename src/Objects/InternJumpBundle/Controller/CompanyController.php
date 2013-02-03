@@ -797,7 +797,9 @@ class CompanyController extends Controller {
         //get the interview object
         $interview = $interviewRepo->find($interviewId);
         if (!$interview || $interview->getCompany()->getId() != $company->getId()) {
-            throw $this->createNotFoundException('this Interview does not exist.');
+            $message = $this->container->getParameter('interview_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
 
         return $this->render('ObjectsInternJumpBundle:Company:interviewShow.html.twig', array(
@@ -822,7 +824,9 @@ class CompanyController extends Controller {
         //get the question
         $question = $companyQuestionRepo->find($questionId);
         if (!$question) {
-            throw $this->createNotFoundException('this question does not exist.');
+            $message = $this->container->getParameter('question_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
 
         //get the company
@@ -1293,7 +1297,9 @@ class CompanyController extends Controller {
         //get user object
         $userObject = $userRepo->findOneBy(array('loginName' => $userLoginName));
         if (!$userObject) {
-            throw $this->createNotFoundException('this User does not exist.');
+            $message = $this->container->getParameter('user_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
 
         //create new question object

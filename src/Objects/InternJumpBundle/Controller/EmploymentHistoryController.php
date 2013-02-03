@@ -128,7 +128,9 @@ class EmploymentHistoryController extends ObjectsController {
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('ObjectsInternJumpBundle:EmploymentHistory')->find($id);
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find EmploymentHistory entity.');
+            $message = $this->container->getParameter('emp_history_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
         $this->checkUserOwnObject($entity);
         $editForm = $this->createForm(new EmploymentHistoryType(), $entity);
@@ -150,7 +152,9 @@ class EmploymentHistoryController extends ObjectsController {
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('ObjectsInternJumpBundle:EmploymentHistory')->find($id);
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find EmploymentHistory entity.');
+            $message = $this->container->getParameter('emp_history_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
         $this->checkUserOwnObject($entity);
         $editForm = $this->createForm(new EmploymentHistoryType(), $entity);
@@ -191,7 +195,9 @@ class EmploymentHistoryController extends ObjectsController {
             $em = $this->getDoctrine()->getEntityManager();
             $entity = $em->getRepository('ObjectsInternJumpBundle:EmploymentHistory')->find($id);
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find EmploymentHistory entity.');
+                $message = $this->container->getParameter('emp_history_not_found_error_msg');
+                return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
             }
             $this->checkUserOwnObject($entity);
             //get the user object

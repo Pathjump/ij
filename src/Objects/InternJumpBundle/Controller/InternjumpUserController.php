@@ -426,7 +426,9 @@ class InternjumpUserController extends ObjectsController {
         //get the userInternship object
         $userInternship = $userInternshipRepo->find($userInternshipId);
         if (!$userInternship || $userInternship->getUser()->getId() != $user->getId()) {
-            throw $this->createNotFoundException('this request  does not exist.');
+              $message = $this->container->getParameter('request_not_found_error_msg');
+              return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                    'message' => $message,));
         }
 
 
@@ -508,7 +510,9 @@ class InternjumpUserController extends ObjectsController {
         //get the interview object
         $interview = $interviewRepo->find($interviewId);
         if (!$interview || $interview->getUser()->getId() != $user->getId()) {
-            throw $this->createNotFoundException('this Interview does not exist.');
+              $message = $this->container->getParameter('interview_not_found_error_msg');
+              return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                    'message' => $message,));
         }
 
         //get the company
@@ -599,7 +603,9 @@ class InternjumpUserController extends ObjectsController {
         //get the interest object
         $interest = $interestRepo->find($interestId);
         if (!$interest || $interest->getUser()->getId() != $user->getId()) {
-            throw $this->createNotFoundException('this Interest does not exist.');
+              $message = $this->container->getParameter('interest_not_found_error_msg');
+              return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                    'message' => $message,));
         }
 
         //get the interest cv
@@ -873,7 +879,9 @@ class InternjumpUserController extends ObjectsController {
         $userCv = $cvRepo->find($cvId);
 
         if (!$userCv || $userCv->getUser()->getId() != $user->getId()) {
-            throw $this->createNotFoundException('this cv does not exist.');
+              $message = $this->container->getParameter('cv_not_found_error_msg');
+              return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                    'message' => $message,));
         }
 
         //get user companies questions
@@ -931,14 +939,18 @@ class InternjumpUserController extends ObjectsController {
         $userObject = $userRepo->findOneBy(array('loginName' => $userLoginName));
 
         if (!$userObject) {
-            throw $this->createNotFoundException('this User does not exist.');
+              $message = $this->container->getParameter('user_not_found_error_msg');
+              return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                    'message' => $message,));
         }
 
         //get user cv
         $userCv = $cvRepo->find($cvId);
 
         if (!$userCv || $userCv->getUser()->getId() != $userObject->getId() || $userCv->getIsActive() == FALSE) {
-            throw $this->createNotFoundException('this cv does not exist.');
+              $message = $this->container->getParameter('cv_not_found_error_msg');
+              return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                    'message' => $message,));
         }
 
         //increment cv views number

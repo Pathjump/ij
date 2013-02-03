@@ -252,7 +252,9 @@ class TaskController extends ObjectsController {
 
         //If no Task Found
         if (!$task) {
-            throw $this->createNotFoundException('Unable to find Task entity.');
+            $message = $this->container->getParameter('task_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
 
         //If Task Found then check if the Current User is the Task Owner
@@ -325,7 +327,9 @@ class TaskController extends ObjectsController {
         $em = $this->getDoctrine()->getEntityManager();
         $task = $em->getRepository('ObjectsInternJumpBundle:Task')->getTaskById($id);
         if (!$task) {
-            throw $this->createNotFoundException('Unable to find Task entity.');
+            $message = $this->container->getParameter('task_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
 
         //If Task Found then check if the Current User is the Task Owner
@@ -529,7 +533,9 @@ class TaskController extends ObjectsController {
         $task = $em->getRepository('ObjectsInternJumpBundle:Task')->find($id);
 
         if (!$task) {
-            throw $this->createNotFoundException('Unable to find Task entity.');
+            $message = $this->container->getParameter('task_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
 
         //If Task Found then check if the Current User is the Task Owner
@@ -603,7 +609,9 @@ class TaskController extends ObjectsController {
         $task = $em->getRepository('ObjectsInternJumpBundle:Task')->find($id);
 
         if (!$task) {
-            throw $this->createNotFoundException('Unable to find Task entity.');
+            $message = $this->container->getParameter('task_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
 
 
@@ -727,7 +735,9 @@ class TaskController extends ObjectsController {
 
             $taskUser = $task->getUser();
             if (!$task) {
-                throw $this->createNotFoundException('Unable to find Task entity.');
+                $message = $this->container->getParameter('task_not_found_error_msg');
+                return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
             }
 
             //If Task Found then check if the Current Company is the Task Owner
