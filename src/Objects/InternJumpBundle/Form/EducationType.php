@@ -15,7 +15,7 @@ class EducationType extends AbstractType {
         }
         $builder
                 ->add('schoolName')
-                ->add('underGraduate', 'choice', array('choices' => array('Undergraduate', 'graduate'), 'expanded' => true, 'required' => FALSE, 'label' => 'Degree Type :', 'attr' => array('class' => 'underGraduate')))
+                ->add('underGraduate', 'choice', array('choices' => array('Undergraduate', 'Graduate'), 'expanded' => true, 'required' => FALSE, 'label' => 'Degree Type :', 'attr' => array('class' => 'underGraduate')))
                 ->add('major', NULL, array('required' => FALSE))
                 ->add('minor', NULL, array('required' => FALSE))
                 ->add('majorGPA', 'number', array('precision' => 2, 'required' => FALSE))
