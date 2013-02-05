@@ -41,6 +41,8 @@ class GlobalUniqueValidator extends ConstraintValidator {
                 if (get_class($company) != get_class($object)) {
                     $valid = FALSE;
                 } else {
+                    //reset valid to true incase the user if set it to false
+                    $valid = TRUE;
                     //check if the object we found is not the same as the one we validate
                     if ($company->getId() != $object->getId()) {
                         $valid = FALSE;
