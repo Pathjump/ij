@@ -13,21 +13,73 @@ use Objects\InternJumpBundle\Entity\City;
 class CompanyController extends Controller {
 
     /**
+     * the industries companies list page
+     * @author Mahmoud
+     * @param string $industrySlug
+     * @param string $orderBy
+     * @param string $orderDirection
+     * @param integer $page
+     * @return Response
+     * @throws 404
+     */
+    public function industryCompaniesAction($industrySlug, $page, $orderBy, $orderDirection) {
+        $industry = $this->getDoctrine()->getEntityManager()->getRepository('ObjectsInternJumpBundle:CVCategory')->findOneBySlug($industrySlug);
+        if (!isset($industry)) {
+            throw $this->createNotFoundException('Can not find the requested industry.');
+        }
+        if (!isset($orderBy)) {
+            $orderBy = 'name';
+        }
+        if (!isset($orderDirection)) {
+            $orderDirection = 'asc';
+        }
+        $itemsPerPage = 1;
+        //get the user messages
+        $data = $this->getDoctrine()->getEntityManager()->getRepository('ObjectsInternJumpBundle:Company')->getIndustryCompanies($industry->getId(), $orderBy, $orderDirection, $page, $itemsPerPage);
+        $entities = $data['entities'];
+        $count = $data['count'];
+        //calculate the last page number
+        $lastPageNumber = (int) ($count / $itemsPerPage);
+        if (($count % $itemsPerPage) > 0) {
+            $lastPageNumber++;
+        }
+        $paginationParameters = array(
+            'industrySlug' => $industrySlug,
+            'orderBy' => $orderBy,
+            'orderDirection' => $orderDirection
+        );
+        return $this->render('ObjectsInternJumpBundle:Company:industryCompanies.html.twig', array(
+                    'industry' => $industry,
+                    'page' => $page,
+                    'itemsPerPage' => $itemsPerPage,
+                    'count' => $count,
+                    'lastPageNumber' => $lastPageNumber,
+                    'paginationParameters' => $paginationParameters,
+                    'entities' => $entities
+                ));
+    }
+
+    /**
      * the company public profile page
      * @author Mahmoud
-     * @param string $industryName
+     * @param string $industrySlug
      * @param string $loginName
      * @return Response
      * @throws 404
      */
-    public function companyPublicProfileAction($industryName, $loginName) {
-        $company = $this->getDoctrine()->getEntityManager()->getRepository('ObjectsInternJumpBundle:Company')->findOneByLoginName($loginName);
+    public function companyPublicProfileAction($industrySlug, $loginName) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $company = $em->getRepository('ObjectsInternJumpBundle:Company')->findOneByLoginName($loginName);
         if (!isset($company)) {
-            throw $this->createNotFoundException('Can not find the requested company');
+            throw $this->createNotFoundException('Can not find the requested company.');
+        }
+        $industry = $em->getRepository('ObjectsInternJumpBundle:CVCategory')->findOneBySlug($industrySlug);
+        if (!isset($industry)) {
+            throw $this->createNotFoundException('Can not find the requested industry.');
         }
         return $this->render('ObjectsInternJumpBundle:Company:publicProfile.html.twig', array(
                     'company' => $company,
-                    'industryName' => $industryName
+                    'industry' => $industry
                 ));
     }
 

@@ -76,6 +76,12 @@ add_interest:
     pattern: /add_interest/{loginName}/{cvId}
     defaults: { _controller: ObjectsInternJumpBundle:Company:addInterest }
 
+industry_companies:
+    pattern:  /{industrySlug}/{page}/{orderBy}/{orderDirection}
+    defaults: { _controller: "ObjectsInternJumpBundle:Company:industryCompanies", page: 1, orderBy: ~, orderDirection: ~ }
+    requirements:
+        page: \d+
+
 company_public_profile:
-    pattern:  /{industryName}/{loginName}
+    pattern:  /{industrySlug}/{loginName}
     defaults: { _controller: "ObjectsInternJumpBundle:Company:companyPublicProfile" }
