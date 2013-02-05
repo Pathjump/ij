@@ -13,15 +13,57 @@ use Objects\InternJumpBundle\Entity\City;
 class CompanyController extends Controller {
 
     /**
+     * the search for company action
+     * @author Mahmoud
+     * @param string $orderBy
+     * @param string $orderDirection
+     * @param integer $page
+     * @return Response
+     */
+    public function searchForCompanyAction($page, $orderBy, $orderDirection) {
+        $itemsPerPage = 10;
+        $searchString = $this->getRequest()->get('searchString');
+        if (!isset($orderBy)) {
+            $orderBy = 'name';
+        }
+        if (!isset($orderDirection)) {
+            $orderDirection = 'asc';
+        }
+        //get the user messages
+        $data = $this->getDoctrine()->getEntityManager()->getRepository('ObjectsInternJumpBundle:Company')->searchForCompany($searchString, $orderBy, $orderDirection, $page, $itemsPerPage);
+        $entities = $data['entities'];
+        $count = $data['count'];
+        //calculate the last page number
+        $lastPageNumber = (int) ($count / $itemsPerPage);
+        if (($count % $itemsPerPage) > 0) {
+            $lastPageNumber++;
+        }
+        $paginationParameters = array(
+            'searchString' => $searchString,
+            'orderBy' => $orderBy,
+            'orderDirection' => $orderDirection
+        );
+        return $this->render('ObjectsInternJumpBundle:Company:searchForCompany.html.twig', array(
+                    'searchString' => $searchString,
+                    'page' => $page,
+                    'itemsPerPage' => $itemsPerPage,
+                    'count' => $count,
+                    'lastPageNumber' => $lastPageNumber,
+                    'paginationParameters' => $paginationParameters,
+                    'entities' => $entities
+                ));
+    }
+
+    /**
      * list the cv categories (industries)
      * @author Mahmoud
      * @return Response
      */
-    public function employersAction(){
+    public function employersAction() {
         $entities = $this->getDoctrine()->getEntityManager()->getRepository('ObjectsInternJumpBundle:CVCategory')->findAll();
         return $this->render('ObjectsInternJumpBundle:Company:industries.html.twig', array(
-            'entities' => $entities
-            ));
+                    'entities' => $entities
+                ));
     }
 
     /**
@@ -35,7 +77,8 @@ class CompanyController extends Controller {
      * @throws 404
      */
     public function industryCompaniesAction($industrySlug, $page, $orderBy, $orderDirection) {
-        $industry = $this->getDoctrine()->getEntityManager()->getRepository('ObjectsInternJumpBundle:CVCategory')->findOneBySlug($industrySlug);
+        $em = $this->getDoctrine()->getEntityManager();
+        $industry = $em->getRepository('ObjectsInternJumpBundle:CVCategory')->findOneBySlug($industrySlug);
         if (!isset($industry)) {
             throw $this->createNotFoundException('Can not find the requested industry.');
         }
@@ -47,7 +90,7 @@ class CompanyController extends Controller {
         }
         $itemsPerPage = 10;
         //get the user messages
-        $data = $this->getDoctrine()->getEntityManager()->getRepository('ObjectsInternJumpBundle:Company')->getIndustryCompanies($industry->getId(), $orderBy, $orderDirection, $page, $itemsPerPage);
+        $data = $em->getRepository('ObjectsInternJumpBundle:Company')->getIndustryCompanies($industry->getId(), $orderBy, $orderDirection, $page, $itemsPerPage);
         $entities = $data['entities'];
         $count = $data['count'];
         //calculate the last page number

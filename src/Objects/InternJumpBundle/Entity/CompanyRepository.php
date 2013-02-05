@@ -13,6 +13,42 @@ use Doctrine\ORM\EntityRepository;
 class CompanyRepository extends EntityRepository {
 
     /**
+     * search for a company
+     * the main use in CompanyController:searchForCompanyAction
+     * @author Mahmoud
+     * @param integer $queryString
+     * @param integer $orderBy
+     * @param integer $orderDirection
+     * @param integer $page
+     * @param integer $maxResults
+     * @return array the count index contains the count of returned objects, the entities index contains the objects
+     */
+    public function searchForCompany($queryString, $orderBy, $orderDirection, $page = 1, $maxResults = 10) {
+        $data = array(
+            'count' => 0,
+            'enities' => array()
+        );
+        if ($page >= 1) {
+            $page--;
+            $mainQuery = '
+                FROM ObjectsInternJumpBundle:Company c
+                JOIN c.professions p
+                WHERE c.name LIKE :queryString
+                AND c.locked = 0
+                AND c.enabled = 1';
+            $parameters = array('queryString' => "%$queryString%");
+            $query = $this->getEntityManager()->createQuery("SELECT c, p $mainQuery ORDER BY c." . $orderBy . " $orderDirection")->setParameters($parameters);
+            $countQuery = $this->getEntityManager()->createQuery("SELECT COUNT(c.id) $mainQuery")->setParameters($parameters);
+            $query->setFirstResult($page * $maxResults);
+            $query->setMaxResults($maxResults);
+            $result = $countQuery->getResult();
+            $data['count'] = $result[0][1];
+            $data['entities'] = $query->getResult();
+        }
+        return $data;
+    }
+
+    /**
      * get the industry companies
      * the main use in CompanyController:industryCompaniesAction
      * @author Mahmoud

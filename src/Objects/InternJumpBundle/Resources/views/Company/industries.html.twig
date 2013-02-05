@@ -5,6 +5,11 @@
                 <section id="comJobList">
                     <div class="wrapper">
                         <aside class="copmanyInfo">
+                            <div style="float: right;">
+                                <form action="{{ path('search_for_company') }}">
+                                    <input name="searchString" placeholder="Search For Company" />
+                                </form>
+                            </div>
                             <div>
                                 <a href="{{ path('site_homepage') }}">Home</a> / <a href="{{ path('employers') }}">Employers</a>
                             </div>

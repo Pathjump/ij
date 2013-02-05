@@ -10,6 +10,11 @@
 <section id="msgsBox">
     <div class="wrapper">
         <div class="inboxBlock">
+            <div style="float: right;">
+                <form action="{{ path('search_for_company') }}">
+                    <input name="searchString" placeholder="Search For Company" />
+                </form>
+            </div>
             <div>
                 <a href="{{ path('site_homepage') }}">Home</a> / <a href="{{ path('employers') }}">Employers</a> / <a href="{{ path('industry_companies', {'industrySlug': industry.slug}) }}">{{ industry }}</a>
             </div>
