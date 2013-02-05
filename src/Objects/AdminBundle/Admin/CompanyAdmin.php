@@ -20,20 +20,20 @@ class CompanyAdmin extends Admin {
 
     /**
      * this variable holds the route name prefix for this actions
-     * @var string 
+     * @var string
      */
     protected $baseRouteName = 'company_admin';
 
     /**
      * this variable holds the url route prefix for this actions
-     * @var string 
+     * @var string
      */
     protected $baseRoutePattern = 'company';
 
     /**
      * this function configure the list action fields
      * @author Ahmed
-     * @param ListMapper $listMapper 
+     * @param ListMapper $listMapper
      */
     public function configureListFields(ListMapper $listMapper) {
         $listMapper
@@ -46,6 +46,11 @@ class CompanyAdmin extends Admin {
                 ->add('telephone')
                 ->add('fax')
                 ->add('url', NULL, array('template' => 'ObjectsAdminBundle:General:list_url.html.twig'))
+                ->add('facebookUrl')
+                ->add('twitterUrl')
+                ->add('googlePlusUrl')
+                ->add('linkedInUrl')
+                ->add('youtubeUrl')
                 ->add('zipcode')
                 ->add('country')
                 ->add('city')
@@ -71,7 +76,7 @@ class CompanyAdmin extends Admin {
     /**
      * this function configure the show action fields
      * @author Ahmed
-     * @param ShowMapper $showMapper 
+     * @param ShowMapper $showMapper
      */
     public function configureShowField(ShowMapper $showMapper) {
         $showMapper
@@ -84,6 +89,11 @@ class CompanyAdmin extends Admin {
                 ->add('telephone')
                 ->add('fax')
                 ->add('url', NULL, array('template' => 'ObjectsAdminBundle:General:show_url.html.twig'))
+                ->add('facebookUrl')
+                ->add('twitterUrl')
+                ->add('googlePlusUrl')
+                ->add('linkedInUrl')
+                ->add('youtubeUrl')
                 ->add('zipcode')
                 ->add('country')
                 ->add('city')
@@ -104,7 +114,7 @@ class CompanyAdmin extends Admin {
      * this function configure the list action filters fields
      * @todo add the date filters if sonata project implemented it
      * @author Ahmed
-     * @param DatagridMapper $datagridMapper 
+     * @param DatagridMapper $datagridMapper
      */
     public function configureDatagridFilters(DatagridMapper $datagridMapper) {
         $datagridMapper
@@ -117,6 +127,11 @@ class CompanyAdmin extends Admin {
                 ->add('telephone')
                 ->add('fax')
                 ->add('url')
+                ->add('facebookUrl')
+                ->add('twitterUrl')
+                ->add('googlePlusUrl')
+                ->add('linkedInUrl')
+                ->add('youtubeUrl')
                 ->add('zipcode')
                 ->add('country')
                 ->add('city')
@@ -135,7 +150,7 @@ class CompanyAdmin extends Admin {
     /**
      * this function configure the new, edit form fields
      * @author Ahmed
-     * @param FormMapper $formMapper 
+     * @param FormMapper $formMapper
      */
     public function configureFormFields(FormMapper $formMapper) {
         $currentDate = new \DateTime();
@@ -168,7 +183,7 @@ class CompanyAdmin extends Admin {
                     },
                     'attr' => array('class' => 'chosen')))
                 //->add('establishmentDate', 'date', array('years' => range('1900', $currentDate->format('Y'))))
-                
+
                 ->add('country', 'choice', array(
                     'choices' => $countries,
                     'attr' => array('class' => 'chosen countrySelect')
@@ -189,10 +204,15 @@ class CompanyAdmin extends Admin {
                 ->add('telephone')
                 ->add('fax')
                 ->add('url')
+                ->add('facebookUrl')
+                ->add('twitterUrl')
+                ->add('googlePlusUrl')
+                ->add('linkedInUrl')
+                ->add('youtubeUrl')
                 ->add('file', 'file', array('required' => false, 'label' => 'image'))
                 ->add('locked', NULL, array('required' => false))
                 ->add('enabled', NULL, array('required' => false))
-                ->add('isHome', NULL, array('required' => false))            
+                ->add('isHome', NULL, array('required' => false))
                 ->end()
                 ->setHelps(array(
                     'locked' => 'to prevent the user from logging into his account',
