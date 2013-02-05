@@ -85,7 +85,7 @@
                 {% endif %}
                 <span style="color: red; font-weight: bold; margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                 </div>
-                
+
                 <br>
 
                 {#<label>Establishment Date:</label>
@@ -128,6 +128,41 @@
                 {% endif %}
                 <br>
 
+                <label>Facebook Url:</label>
+                {{ form_widget(form.facebookUrl) }}
+                {% if form_errors(form.facebookUrl) %}
+                <span class="triangle-border left">{{ form_errors(form.facebookUrl) }}</span>
+                {% endif %}
+                <br>
+
+                <label>Twitter Url:</label>
+                {{ form_widget(form.twitterUrl) }}
+                {% if form_errors(form.twitterUrl) %}
+                <span class="triangle-border left">{{ form_errors(form.twitterUrl) }}</span>
+                {% endif %}
+                <br>
+
+                <label>Google+ Url:</label>
+                {{ form_widget(form.googlePlusUrl) }}
+                {% if form_errors(form.googlePlusUrl) %}
+                <span class="triangle-border left">{{ form_errors(form.googlePlusUrl) }}</span>
+                {% endif %}
+                <br>
+
+                <label>LinkedIn Url:</label>
+                {{ form_widget(form.linkedInUrl) }}
+                {% if form_errors(form.linkedInUrl) %}
+                <span class="triangle-border left">{{ form_errors(form.linkedInUrl) }}</span>
+                {% endif %}
+                <br>
+
+                <label>Youtube Url:</label>
+                {{ form_widget(form.youtubeUrl) }}
+                {% if form_errors(form.youtubeUrl) %}
+                <span class="triangle-border left">{{ form_errors(form.youtubeUrl) }}</span>
+                {% endif %}
+                <br>
+
                 <label>Company Address:</label>
                 {{ form_widget(form.address) }}
                 {% if form_errors(form.address) %}
@@ -135,7 +170,6 @@
                 {% endif %}
                 <span style="color: red; font-weight: bold; margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                 <br>
-               
 
                 <label>City:</label>
                 {{ form_widget(form.city) }}
@@ -169,7 +203,7 @@
                 <span class="triangle-border left">{{ form_errors(form.country) }}</span>
                 {% endif %}
                 <br>
-                
+
                 {{ form_widget(form.Latitude,{'attr' : {'value' : default_latitude}}) }}
                 {{ form_widget(form.Longitude,{'attr' : {'value' : default_longitude}}) }}
 

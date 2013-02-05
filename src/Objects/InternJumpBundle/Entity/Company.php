@@ -172,7 +172,7 @@ class Company implements AdvancedUserInterface {
      * @ORM\Column(name="isHome", type="boolean")
      */
     private $isHome = FALSE;
-    
+
     /**
      * @ORM\Column(type="string", length="255")
      *
@@ -251,6 +251,41 @@ class Company implements AdvancedUserInterface {
     private $url;
 
     /**
+     * @var string $facebookUrl
+     * @Assert\Url(groups={"signup", "edit"})
+     * @ORM\Column(name="facebookUrl", type="string", length=255, nullable=true)
+     */
+    private $facebookUrl;
+
+    /**
+     * @var string $twitterUrl
+     * @Assert\Url(groups={"signup", "edit"})
+     * @ORM\Column(name="twitterUrl", type="string", length=255, nullable=true)
+     */
+    private $twitterUrl;
+
+    /**
+     * @var string $googlePlusUrl
+     * @Assert\Url(groups={"signup", "edit"})
+     * @ORM\Column(name="googlePlusUrl", type="string", length=255, nullable=true)
+     */
+    private $googlePlusUrl;
+
+    /**
+     * @var string $linkedInUrl
+     * @Assert\Url(groups={"signup", "edit"})
+     * @ORM\Column(name="linkedInUrl", type="string", length=255, nullable=true)
+     */
+    private $linkedInUrl;
+
+    /**
+     * @var string $youtubeUrl
+     * @Assert\Url(groups={"signup", "edit"})
+     * @ORM\Column(name="youtubeUrl", type="string", length=255, nullable=true)
+     */
+    private $youtubeUrl;
+
+    /**
      * @var string $zipcode
      * @Assert\NotNull(groups={"signup", "edit", "adminsignup", "adminedit"})
      * @Assert\MinLength(limit = "3", message = "zipcode must be {{ limit }} or more charcters", groups={"signup", "edit", "adminsignup", "adminedit"})
@@ -322,7 +357,8 @@ class Company implements AdvancedUserInterface {
         return array(
             'id', 'loginName', 'email', 'password', 'confirmationCode', 'establishmentDate',
             'createdAt', 'name', 'url', 'city', 'country', 'state', 'address', 'fax',
-            'locked', 'enabled', 'salt', 'image', 'zipcode', 'Latitude', 'Longitude', 'telephone'
+            'locked', 'enabled', 'salt', 'image', 'zipcode', 'Latitude', 'Longitude', 'telephone', 'youtubeUrl',
+            'linkedInUrl', 'googlePlusUrl', 'twitterUrl', 'facebookUrl'
         );
     }
 
@@ -342,7 +378,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get image
      *
-     * @return string 
+     * @return string
      */
     public function getImage() {
         return $this->image;
@@ -443,7 +479,7 @@ class Company implements AdvancedUserInterface {
     }
 
     /**
-     * @return string the relative path of image starting from web directory 
+     * @return string the relative path of image starting from web directory
      */
     public function getWebPath() {
         return NULL === $this->image ? '/img/company-default-img.jpg' : '/' . $this->getUploadDir() . '/' . $this->image;
@@ -475,7 +511,7 @@ class Company implements AdvancedUserInterface {
     }
 
     /**
-     * this function will set a valid random password for the user 
+     * this function will set a valid random password for the user
      */
     public function setRandomPassword() {
         $this->setUserPassword(rand());
@@ -484,7 +520,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId() {
         return $this->id;
@@ -502,7 +538,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName() {
         return $this->name;
@@ -520,7 +556,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get country
      *
-     * @return string 
+     * @return string
      */
     public function getCountry() {
         return $this->country;
@@ -538,7 +574,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get city
      *
-     * @return string 
+     * @return string
      */
     public function getCity() {
         return $this->city;
@@ -556,7 +592,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get state
      *
-     * @return string 
+     * @return string
      */
     public function getState() {
         return $this->state;
@@ -574,7 +610,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get address
      *
-     * @return text 
+     * @return text
      */
     public function getAddress() {
         return $this->address;
@@ -592,7 +628,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get establishmentDate
      *
-     * @return date 
+     * @return date
      */
     public function getEstablishmentDate() {
         return $this->establishmentDate;
@@ -610,7 +646,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail() {
         return $this->email;
@@ -628,7 +664,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get telephone
      *
-     * @return string 
+     * @return string
      */
     public function getTelephone() {
         return $this->telephone;
@@ -646,7 +682,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get fax
      *
-     * @return string 
+     * @return string
      */
     public function getFax() {
         return $this->fax;
@@ -664,7 +700,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl() {
         return $this->url;
@@ -682,7 +718,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get zipcode
      *
-     * @return string 
+     * @return string
      */
     public function getZipcode() {
         return $this->zipcode;
@@ -700,7 +736,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get companyRoles
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getCompanyRoles() {
         return $this->companyRoles;
@@ -727,7 +763,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get tasks
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getTasks() {
         return $this->tasks;
@@ -745,7 +781,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get companyNotifications
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getCompanyNotifications() {
         return $this->companyNotifications;
@@ -763,7 +799,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get userNotifications
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getUserNotifications() {
         return $this->userNotifications;
@@ -781,7 +817,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get questions
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getQuestions() {
         return $this->questions;
@@ -799,7 +835,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get interests
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getInterests() {
         return $this->interests;
@@ -817,7 +853,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get interviews
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getInterviews() {
         return $this->interviews;
@@ -835,7 +871,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get internships
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getInternships() {
         return $this->internships;
@@ -853,7 +889,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get Latitude
      *
-     * @return decimal 
+     * @return decimal
      */
     public function getLatitude() {
         return $this->Latitude;
@@ -871,7 +907,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get Longitude
      *
-     * @return decimal 
+     * @return decimal
      */
     public function getLongitude() {
         return $this->Longitude;
@@ -889,7 +925,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get user
      *
-     * @return Objects\UserBundle\Entity\User 
+     * @return Objects\UserBundle\Entity\User
      */
     public function getUser() {
         return $this->user;
@@ -897,7 +933,7 @@ class Company implements AdvancedUserInterface {
 
     /**
      * Implementation of getRoles for the UserInterface.
-     * 
+     *
      * @return array An array of Roles
      */
     public function getRoles() {
@@ -961,7 +997,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get oldPassword
      *
-     * @return string 
+     * @return string
      */
     public function getOldPassword() {
         return $this->oldPassword;
@@ -1066,7 +1102,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get createdAt
      *
-     * @return date 
+     * @return date
      */
     public function getCreatedAt() {
         return $this->createdAt;
@@ -1085,7 +1121,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get loginName
      *
-     * @return string 
+     * @return string
      */
     public function getLoginName() {
         return $this->loginName;
@@ -1112,7 +1148,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get confirmationCode
      *
-     * @return string 
+     * @return string
      */
     public function getConfirmationCode() {
         return $this->confirmationCode;
@@ -1130,7 +1166,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get locked
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getLocked() {
         return $this->locked;
@@ -1148,7 +1184,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get enabled
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEnabled() {
         return $this->enabled;
@@ -1199,12 +1235,12 @@ class Company implements AdvancedUserInterface {
     /**
      * Get messages
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getMessages() {
         return $this->messages;
     }
-    
+
     /**
      * this function will return the user country name
      * @return NULL|string the country name
@@ -1218,24 +1254,21 @@ class Company implements AdvancedUserInterface {
         return NULL;
     }
 
-
     /**
      * Set isHome
      *
      * @param boolean $isHome
      */
-    public function setIsHome($isHome)
-    {
+    public function setIsHome($isHome) {
         $this->isHome = $isHome;
     }
 
     /**
      * Get isHome
      *
-     * @return boolean 
+     * @return boolean
      */
-    public function getIsHome()
-    {
+    public function getIsHome() {
         return $this->isHome;
     }
 
@@ -1244,18 +1277,116 @@ class Company implements AdvancedUserInterface {
      *
      * @param Objects\InternJumpBundle\Entity\CVCategory $professions
      */
-    public function addCVCategory(\Objects\InternJumpBundle\Entity\CVCategory $professions)
-    {
+    public function addCVCategory(\Objects\InternJumpBundle\Entity\CVCategory $professions) {
         $this->professions[] = $professions;
     }
 
     /**
      * Get professions
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
-    public function getProfessions()
-    {
+    public function getProfessions() {
         return $this->professions;
     }
+
+    /**
+     * Set createdAt
+     *
+     * @param date $createdAt
+     */
+    public function setCreatedAt($createdAt) {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * Set facebookUrl
+     *
+     * @param string $facebookUrl
+     */
+    public function setFacebookUrl($facebookUrl) {
+        $this->facebookUrl = $facebookUrl;
+    }
+
+    /**
+     * Get facebookUrl
+     *
+     * @return string
+     */
+    public function getFacebookUrl() {
+        return $this->facebookUrl;
+    }
+
+    /**
+     * Set twitterUrl
+     *
+     * @param string $twitterUrl
+     */
+    public function setTwitterUrl($twitterUrl) {
+        $this->twitterUrl = $twitterUrl;
+    }
+
+    /**
+     * Get twitterUrl
+     *
+     * @return string
+     */
+    public function getTwitterUrl() {
+        return $this->twitterUrl;
+    }
+
+    /**
+     * Set googlePlusUrl
+     *
+     * @param string $googlePlusUrl
+     */
+    public function setGooglePlusUrl($googlePlusUrl) {
+        $this->googlePlusUrl = $googlePlusUrl;
+    }
+
+    /**
+     * Get googlePlusUrl
+     *
+     * @return string
+     */
+    public function getGooglePlusUrl() {
+        return $this->googlePlusUrl;
+    }
+
+    /**
+     * Set linkedInUrl
+     *
+     * @param string $linkedInUrl
+     */
+    public function setLinkedInUrl($linkedInUrl) {
+        $this->linkedInUrl = $linkedInUrl;
+    }
+
+    /**
+     * Get linkedInUrl
+     *
+     * @return string
+     */
+    public function getLinkedInUrl() {
+        return $this->linkedInUrl;
+    }
+
+    /**
+     * Set youtubeUrl
+     *
+     * @param string $youtubeUrl
+     */
+    public function setYoutubeUrl($youtubeUrl) {
+        $this->youtubeUrl = $youtubeUrl;
+    }
+
+    /**
+     * Get youtubeUrl
+     *
+     * @return string
+     */
+    public function getYoutubeUrl() {
+        return $this->youtubeUrl;
+    }
+
 }

@@ -13,6 +13,25 @@ use Objects\InternJumpBundle\Entity\City;
 class CompanyController extends Controller {
 
     /**
+     * the company public profile page
+     * @author Mahmoud
+     * @param string $industryName
+     * @param string $loginName
+     * @return Response
+     * @throws 404
+     */
+    public function companyPublicProfileAction($industryName, $loginName) {
+        $company = $this->getDoctrine()->getEntityManager()->getRepository('ObjectsInternJumpBundle:Company')->findOneByLoginName($loginName);
+        if (!isset($company)) {
+            throw $this->createNotFoundException('Can not find the requested company');
+        }
+        return $this->render('ObjectsInternJumpBundle:Company:publicProfile.html.twig', array(
+                    'company' => $company,
+                    'industryName' => $industryName
+                ));
+    }
+
+    /**
      * this function used to add inerest to user
      * @author Ahmed
      * @param int $loginName
@@ -258,7 +277,7 @@ class CompanyController extends Controller {
         $request = $this->getRequest();
         //prepare the form validation constrains
         $collectionConstraint = new Collection(array(
-                    'email' => new Email()
+            'email' => new Email()
                 ));
         //create the form
         $form = $this->createFormBuilder(null, array(
@@ -406,6 +425,11 @@ class CompanyController extends Controller {
                 ->add('telephone')
                 ->add('fax')
                 ->add('url')
+                ->add('facebookUrl')
+                ->add('twitterUrl')
+                ->add('googlePlusUrl')
+                ->add('linkedInUrl')
+                ->add('youtubeUrl')
                 ->add('zipcode')
                 ->add('Latitude', 'hidden')
                 ->add('Longitude', 'hidden')
@@ -631,7 +655,7 @@ class CompanyController extends Controller {
         try {
             $em->flush();
         } catch (\Exception $e) {
-            
+
         }
     }
 
@@ -656,7 +680,7 @@ class CompanyController extends Controller {
         }
         //Get State Repo
         $stateRepo = $em->getRepository('ObjectsInternJumpBundle:State');
-        //Get The NewYork State which is decided to be set as a default state 
+        //Get The NewYork State which is decided to be set as a default state
         $defaultState = $stateRepo->findOneBy(array('slug' => 'new_york'));
         //Get the default state id to set it in the script chesen
         $defaultStateID = $defaultState->getId();
@@ -682,7 +706,7 @@ class CompanyController extends Controller {
                     'second_name' => 'RePassword',
                     'invalid_message' => "The passwords don't match"))
                 ->add('country', 'choice', array('preferred_choices' => array('US'), 'choices' => $allCountriesArray, 'attr' => array('class' => 'chzn-select', 'style' => 'width:312px;')))
-                ->add('city', NULL, array('attr' => array( 'style' => 'width:312px;')))
+                ->add('city', NULL, array('attr' => array('style' => 'width:312px;')))
                 ->add('state', 'choice', array('required' => FALSE, 'attr' => array('class' => 'chzn-select', 'style' => 'width:312px;')))
                 ->add('address', 'text')
                 //->add('establishmentDate', 'date', array('attr' => array('class' => 'establishmentDate'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
@@ -695,6 +719,11 @@ class CompanyController extends Controller {
                 ->add('telephone')
                 ->add('fax')
                 ->add('url')
+                ->add('facebookUrl')
+                ->add('twitterUrl')
+                ->add('googlePlusUrl')
+                ->add('linkedInUrl')
+                ->add('youtubeUrl')
                 ->add('zipcode')
                 ->add('Latitude', 'hidden')
                 ->add('Longitude', 'hidden')
@@ -1024,7 +1053,7 @@ class CompanyController extends Controller {
                 ->add('country', 'choice', array(
                     'choices' => $allCountriesArray
                 ))
-                ->add('city', NULL, array('attr' => array( 'style' => 'width:250px;')))
+                ->add('city', NULL, array('attr' => array('style' => 'width:250px;')))
                 ->add('state', 'choice', array('empty_value' => '--- choose state ---', 'required' => false))
                 ->add('address')
                 ->add('details')

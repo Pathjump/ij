@@ -28,6 +28,7 @@
                             <span class="alert sucs">
                 {{ message | trans }}
                                 </span>
+                <br>
                 {% endif %}
 
                 {% if form_errors(form) %}
@@ -70,12 +71,12 @@
                 {% if form_errors(form.userPassword) %}
                  <span class="triangle-border left">{{ form_errors(form.userPassword) }}</span>
                 {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>                 
+                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                  <br>
 
                 <label>Confirm Password:</label>
                 {{ form_widget(form.userPassword.RePassword) }}
-                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>                
+                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                 <br>
 
                  <label>Company Email:</label>
@@ -83,7 +84,7 @@
                 {% if form_errors(form.email) %}
                  <span class="triangle-border left">{{ form_errors(form.email) }}</span>
                 {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>                 
+                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                 <span>{% trans %}You will need to activate your acount if you update your email{% endtrans %}</span>
                                     <br>
 
@@ -96,7 +97,7 @@
                 {% if form_errors(form.professions) %}
                                         <span class="triangle-border left">{{ form_errors(form.professions) }}</span>
                 {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>                
+                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                                     </div>
                                     <br>
 
@@ -121,7 +122,6 @@
                                         <span class="sepa"></span>
                                         <br>
 
-                                        
 
                                         <label>Telephone:</label>
                 {{ form_widget(form.telephone) }}
@@ -144,12 +144,47 @@
                 {% endif %}
                                         <br>
 
+                                        <label>Facebook Url:</label>
+                {{ form_widget(form.facebookUrl) }}
+                {% if form_errors(form.facebookUrl) %}
+                                        <span class="triangle-border left">{{ form_errors(form.facebookUrl) }}</span>
+                {% endif %}
+                                        <br>
+
+                                        <label>Twitter Url:</label>
+                {{ form_widget(form.twitterUrl) }}
+                {% if form_errors(form.twitterUrl) %}
+                                        <span class="triangle-border left">{{ form_errors(form.twitterUrl) }}</span>
+                {% endif %}
+                                        <br>
+
+                                        <label>Google+ Url:</label>
+                {{ form_widget(form.googlePlusUrl) }}
+                {% if form_errors(form.googlePlusUrl) %}
+                                        <span class="triangle-border left">{{ form_errors(form.googlePlusUrl) }}</span>
+                {% endif %}
+                                        <br>
+
+                                        <label>LinkedIn Url:</label>
+                {{ form_widget(form.linkedInUrl) }}
+                {% if form_errors(form.linkedInUrl) %}
+                                        <span class="triangle-border left">{{ form_errors(form.linkedInUrl) }}</span>
+                {% endif %}
+                                        <br>
+
+                                        <label>Youtube Url:</label>
+                {{ form_widget(form.youtubeUrl) }}
+                {% if form_errors(form.youtubeUrl) %}
+                                        <span class="triangle-border left">{{ form_errors(form.youtubeUrl) }}</span>
+                {% endif %}
+                                        <br>
+
                 <label>Company Address:</label>
                 {{ form_widget(form.address) }}
                 {% if form_errors(form.address) %}
                   <span class="triangle-border left">{{ form_errors(form.address) }}</span>
                 {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>                  
+                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                 <br>
 
 
@@ -172,20 +207,20 @@
                 {% if form_errors(form.zipcode) %}
                                         <span class="triangle-border left">{{ form_errors(form.zipcode) }}</span>
                 {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>                                        
+                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
                 <a href="javascript:void(0)" id="getMyPosition">Update Position On Map</a>
                 <img src="{{asset('img/loadingfacebox.gif')}}" id="getMyPositionImg" style="display: none;"/>
-                
+
                                         <br>
 
-                                        
+
                 <label>Country:</label>
                 {{ form_widget(form.country) }}
                 {% if form_errors(form.country) %}
                    <span class="triangle-border left">{{ form_errors(form.country) }}</span>
                 {% endif %}
                 <br>
-                                        
+
                 {{ form_widget(form.Latitude) }}
                 {{ form_widget(form.Longitude) }}
 

@@ -1,0 +1,55 @@
+{% extends '::base.html.twig' %}
+{% block title %}company {{ company }}{% endblock %}
+
+{% block body %}
+
+                <section id="comJobList">
+                    <div class="wrapper">
+                        <aside class="copmanyInfo">
+                            <h1>{{ company }}</h1>
+                            <div class="infoBlock">
+                                <div class="logo">
+                                    <img src="{{ company.getTimThumbUrl(105, 120) }}" alt="{{ company }}" width="105" height="120" />
+                                    <div style="padding-top: 10px;">
+                                        {% if company.facebookUrl %}
+                                        <a href="{{ company.facebookUrl }}" target="_blank" rel="nofollow"><img src="{{ asset('img/facebook.png') }}" alt="facebook icon" width="24" height="24" /></a>
+                                        {% endif %}
+                                        {% if company.twitterUrl %}
+                                        <a href="{{ company.twitterUrl }}" target="_blank" rel="nofollow"><img src="{{ asset('img/twitter.png') }}" alt="twitter icon" width="24" height="24" /></a>
+                                        {% endif %}
+                                        {% if company.googlePlusUrl %}
+                                        <a href="{{ company.googlePlusUrl }}" target="_blank" rel="nofollow"><img src="{{ asset('img/google_plus.png') }}" alt="g+ icon" width="24" height="24" /></a>
+                                        {% endif %}
+                                        {% if company.linkedInUrl %}
+                                        <a href="{{ company.linkedInUrl }}" target="_blank" rel="nofollow"><img src="{{ asset('img/linkedin.png') }}" alt="linkedin icon" width="24" height="24" /></a>
+                                        {% endif %}
+                                        {% if company.youtubeUrl %}
+                                        <a href="{{ company.youtubeUrl }}" target="_blank" rel="nofollow"><img src="{{ asset('img/youtube.png') }}" alt="youtube icon" width="24" height="24" /></a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="info">
+                                    <label>Name: </label><span>{{ company }}</span>
+                                    <br>
+                                    <label>Industry Name: </label><span>{{ industryName }}</span>
+                                    <br>
+                                    <label>Address: </label><span>{{ company.address }}</span>
+                                    <br>
+                                    <span>{{ company.city }}, {{ company.state }} {{ company.zipcode }}</span>
+                                    <br>
+                                    <span>{{ company.getCountryName() }}</span>
+                                    <br>
+                                    <label>Website Link: </label><span><a href="{{ company.url }}" target="_blank">{{ company.url }}</a></span>
+                                    <br>
+                                </div>
+
+                                <div class="map" style="width: 475px;vertical-align: bottom;">
+                                    <a style="background: none;" href="{{ path('internship', {'loginName': company.loginName}) }}">View Job Listing</a>
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
+                </section>
+{% endblock %}
+
+
