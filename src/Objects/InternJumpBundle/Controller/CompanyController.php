@@ -13,6 +13,18 @@ use Objects\InternJumpBundle\Entity\City;
 class CompanyController extends Controller {
 
     /**
+     * list the cv categories (industries)
+     * @author Mahmoud
+     * @return Response
+     */
+    public function employersAction(){
+        $entities = $this->getDoctrine()->getEntityManager()->getRepository('ObjectsInternJumpBundle:CVCategory')->findAll();
+        return $this->render('ObjectsInternJumpBundle:Company:industries.html.twig', array(
+            'entities' => $entities
+            ));
+    }
+
+    /**
      * the industries companies list page
      * @author Mahmoud
      * @param string $industrySlug
@@ -33,7 +45,7 @@ class CompanyController extends Controller {
         if (!isset($orderDirection)) {
             $orderDirection = 'asc';
         }
-        $itemsPerPage = 1;
+        $itemsPerPage = 10;
         //get the user messages
         $data = $this->getDoctrine()->getEntityManager()->getRepository('ObjectsInternJumpBundle:Company')->getIndustryCompanies($industry->getId(), $orderBy, $orderDirection, $page, $itemsPerPage);
         $entities = $data['entities'];

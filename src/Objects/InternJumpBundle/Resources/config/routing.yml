@@ -14,6 +14,10 @@ ObjectsInternJumpBundle_company:
     resource: "@ObjectsInternJumpBundle/Resources/config/routing/company.yml"
     prefix:   /company
 
+employers:
+    pattern:  /company
+    defaults: { _controller: "ObjectsInternJumpBundle:Company:employers" }
+
 company_message:
     resource: "@ObjectsInternJumpBundle/Resources/config/routing/company_message.yml"
     prefix:   /company/messages
@@ -85,7 +89,7 @@ termsOfUse:
 aboutUs:
     pattern:  /about-us
     defaults: { _controller: "ObjectsInternJumpBundle:Internjump:aboutUs" }
-    
+
 contactUs:
     pattern:  /contact-us
     defaults: { _controller: "ObjectsInternJumpBundle:Internjump:ContactUs" }
@@ -93,26 +97,25 @@ contactUs:
 FAQ_page:
     pattern:  /FAQ
     defaults: { _controller: "ObjectsInternJumpBundle:Internjump:FAQ" }
-    
+
 schools:
     pattern:  /schools
     defaults: { _controller: "ObjectsInternJumpBundle:Internjump:schools" }
- 
+
 resources:
     pattern:  /Resources/{page}
     defaults: { _controller: "ObjectsInternJumpBundle:Internjump:AllResources", page: 1 }
-    
+
 show_resources:
     pattern:  /Resource/{id}
     defaults: { _controller: "ObjectsInternJumpBundle:Internjump:showOneResource" }
-    
-    
+
+
 campus_resps:
     pattern:  /CampusReps
-    defaults: { _controller: "ObjectsInternJumpBundle:Internjump:campusReps" }  
-    
-    
+    defaults: { _controller: "ObjectsInternJumpBundle:Internjump:campusReps" }
+
+
 mail_404:
     pattern:  /errorEmail
-    defaults: { _controller: "ObjectsInternJumpBundle:Internjump:errorPage404Mail" }  
-  
+    defaults: { _controller: "ObjectsInternJumpBundle:Internjump:errorPage404Mail" }

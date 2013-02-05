@@ -10,6 +10,9 @@
 <section id="msgsBox">
     <div class="wrapper">
         <div class="inboxBlock">
+            <div>
+                <a href="{{ path('site_homepage') }}">Home</a> / <a href="{{ path('employers') }}">Employers</a> / <a href="{{ path('industry_companies', {'industrySlug': industry.slug}) }}">{{ industry }}</a>
+            </div>
             <h1 style="background: none;padding-left: 0px;">{{ industry | title }}</h1>
             <div class="tabber simpleTabs">
                 <div class="tabbertab tabbertabdefault">

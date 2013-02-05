@@ -5,6 +5,9 @@
                 <section id="comJobList">
                     <div class="wrapper">
                         <aside class="copmanyInfo">
+                            <div>
+                                <a href="{{ path('site_homepage') }}">Home</a> / <a href="{{ path('employers') }}">Employers</a> / <a href="{{ path('industry_companies', {'industrySlug': industry.slug}) }}">{{ industry }}</a> / <a href="{{ path('industry_companies', {'industrySlug': industry.slug, 'loginName': company.loginName}) }}">{{ company }}</a>
+                            </div>
                             <h1>{{ company }}</h1>
                             <div class="infoBlock">
                                 <div class="logo">
