@@ -84,7 +84,7 @@
                     <div class="topNote">
                 {% if is_granted('ROLE_NOTACTIVE_COMPANY') %}
                             <span class="memberArea">
-                                <img src="{{asset('images/companies-logos/')}}{{app.user.image}}"/>
+                                <img src="{{app.user.getWebPath()}}" alt="{{app.user}}" />
                                 Hi, <a href="{{path('internship',{'loginName' : app.user.loginName})}}">{{app.user.loginName}}</a>
                                 <span class="links">
 
