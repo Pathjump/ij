@@ -6465,7 +6465,16 @@ ul.innerNav {
 }
 
 
+/* Company Listing
+-------------------------- */
+.coListingTree {
+	font: bold 12px/24px tahoma;
+	color: #666;
+}
 
+.coListingTree a:last-child {
+	color: #022d71;
+}
 
 
 
