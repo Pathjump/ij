@@ -49,12 +49,11 @@ class CVCategoryRepository extends EntityRepository {
      */
     public function autocompletecategories($text) {
         $em = $this->getEntityManager();
-        $dql = "SELECT cat.id, cat.name 
+        $dql = "SELECT cat.id, cat.name
            FROM ObjectsInternJumpBundle:CVCategory cat
-           WHERE cat.name LIKE '" . $text . "%'     
+           WHERE cat.name LIKE :text
            ORDER BY cat.name asc";
-
-        $result = $em->createQuery($dql)
+        $result = $em->createQuery($dql)->setParameter('text', "$text%")
                 ->getResult();
         return $result;
     }
