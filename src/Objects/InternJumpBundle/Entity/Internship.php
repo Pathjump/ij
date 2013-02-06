@@ -27,7 +27,7 @@ class Internship {
     /**
      * the company of the internship
      * @var \Objects\InternJumpBundle\Entity\Company $company
-     * @Assert\NotNull(groups={"newInternship,editInternship"})
+     * @Assert\NotNull(groups={"newInternship","editInternship"})
      * @ORM\ManyToOne(targetEntity="\Objects\InternJumpBundle\Entity\Company", inversedBy="internships")
      * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)
      */
@@ -35,7 +35,7 @@ class Internship {
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection $categories
-     * @Assert\NotNull(groups={"newInternship,editInternship"})
+     * @Assert\NotNull(groups={"newInternship","editInternship"})
      * @ORM\ManyToMany(targetEntity="\Objects\InternJumpBundle\Entity\CVCategory")
      * @ORM\JoinTable(name="internship_category",
      *     joinColumns={@ORM\JoinColumn(name="internship_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)},
@@ -67,21 +67,21 @@ class Internship {
 
     /**
      * @var decimal $Latitude
-     * @Assert\NotNull(groups={"newInternship,editInternship"})
+     * @Assert\NotNull(groups={"newInternship","editInternship"})
      * @ORM\Column(name="Latitude", type="decimal", precision=18, scale=12)
      */
     private $Latitude;
 
     /**
      * @var decimal $Longitude
-     * @Assert\NotNull(groups={"newInternship,editInternship"})
+     * @Assert\NotNull(groups={"newInternship","editInternship"})
      * @ORM\Column(name="Longitude", type="decimal", precision=18, scale=12)
      */
     private $Longitude;
 
     /**
      * @var string $zipcode
-     * @Assert\NotNull(groups={"newInternship,editInternship"})
+     * @Assert\NotNull(groups={"newInternship","editInternship"})
      * @ORM\Column(name="zipcode", type="string", length=255)
      */
     private $zipcode;
@@ -95,7 +95,7 @@ class Internship {
 
     /**
      * @var date $activeFrom
-     * @Assert\NotNull(groups={"newInternship,editInternship"})
+     * @Assert\NotNull(groups={"newInternship","editInternship"})
      * @Assert\Date
      * @ORM\Column(name="activeFrom", type="date")
      */
@@ -103,7 +103,7 @@ class Internship {
 
     /**
      * @var date $activeTo
-     * @Assert\NotNull(groups={"newInternship,editInternship"})
+     * @Assert\NotNull(groups={"newInternship","editInternship"})
      * @Assert\Date
      * @ORM\Column(name="activeTo", type="date")
      */
@@ -118,35 +118,35 @@ class Internship {
 
     /**
      * @var string $title
-     * @Assert\NotNull(groups={"newInternship,editInternship"})
+     * @Assert\NotNull(groups={"newInternship","editInternship"})
      * @ORM\Column(name="title", type="string", length=255)
      */
     private $title;
 
     /**
      * @var text $description
-     * @Assert\NotNull(groups={"newInternship,editInternship"})
+     * @Assert\NotNull(groups={"newInternship","editInternship"})
      * @ORM\Column(name="description", type="text")
      */
     private $description;
 
     /**
      * @var text $requirements
-     * @Assert\NotNull(groups={"newInternship,editInternship"})
+     * @Assert\NotNull(groups={"newInternship","editInternship"})
      * @ORM\Column(name="requirements", type="text")
      */
     private $requirements;
 
     /**
      * @var string $country
-     * @Assert\NotNull(groups={"newInternship,editInternship"})
+     * @Assert\NotNull(groups={"newInternship","editInternship"})
      * @ORM\Column(name="country", type="string", length=255)
      */
     private $country;
 
     /**
      * @var string $city
-     * @Assert\NotNull(groups={"newInternship,editInternship"})
+     * @Assert\NotNull(groups={"newInternship","editInternship"})
      * @ORM\Column(name="city", type="string", length=255)
      */
     private $city;
@@ -160,7 +160,7 @@ class Internship {
 
     /**
      * @var text $address
-     * @Assert\NotNull(groups={"newInternship,editInternship"})
+     * @Assert\NotNull(groups={"newInternship","editInternship"})
      * @ORM\Column(name="address", type="text")
      */
     private $address;
@@ -181,7 +181,7 @@ class Internship {
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId() {
         return $this->id;
@@ -190,7 +190,7 @@ class Internship {
     /**
      * Get createdAt
      *
-     * @return date 
+     * @return date
      */
     public function getCreatedAt() {
         return $this->createdAt;
@@ -208,7 +208,7 @@ class Internship {
     /**
      * Get activeFrom
      *
-     * @return date 
+     * @return date
      */
     public function getActiveFrom() {
         return $this->activeFrom;
@@ -226,7 +226,7 @@ class Internship {
     /**
      * Get activeTo
      *
-     * @return date 
+     * @return date
      */
     public function getActiveTo() {
         return $this->activeTo;
@@ -244,7 +244,7 @@ class Internship {
     /**
      * Get active
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getActive() {
         return $this->active;
@@ -262,7 +262,7 @@ class Internship {
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle() {
         return $this->title;
@@ -280,7 +280,7 @@ class Internship {
     /**
      * Get description
      *
-     * @return text 
+     * @return text
      */
     public function getDescription() {
         return $this->description;
@@ -298,7 +298,7 @@ class Internship {
     /**
      * Get country
      *
-     * @return string 
+     * @return string
      */
     public function getCountry() {
         return $this->country;
@@ -316,7 +316,7 @@ class Internship {
     /**
      * Get city
      *
-     * @return string 
+     * @return string
      */
     public function getCity() {
         return $this->city;
@@ -334,7 +334,7 @@ class Internship {
     /**
      * Get state
      *
-     * @return string 
+     * @return string
      */
     public function getState() {
         return $this->state;
@@ -352,7 +352,7 @@ class Internship {
     /**
      * Get address
      *
-     * @return text 
+     * @return text
      */
     public function getAddress() {
         return $this->address;
@@ -370,7 +370,7 @@ class Internship {
     /**
      * Get company
      *
-     * @return Objects\InternJumpBundle\Entity\Company 
+     * @return Objects\InternJumpBundle\Entity\Company
      */
     public function getCompany() {
         return $this->company;
@@ -388,7 +388,7 @@ class Internship {
     /**
      * Get interviews
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getInterviews() {
         return $this->interviews;
@@ -406,7 +406,7 @@ class Internship {
     /**
      * Get usersInternships
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getUsersInternships() {
         return $this->usersInternships;
@@ -424,7 +424,7 @@ class Internship {
     /**
      * Get tasks
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getTasks() {
         return $this->tasks;
@@ -432,7 +432,7 @@ class Internship {
 
     /**
      * this function will check if the internship time is valid
-     * @Assert\True(groups={"newInternship,editInternship"},message = "The active to date must be greater than the active from date")
+     * @Assert\True(groups={"newInternship","editInternship"},message = "The active to date must be greater than the active from date")
      */
     public function isActiveToCorrect() {
         if ($this->getActiveTo() > $this->getActiveFrom()) {
@@ -476,7 +476,7 @@ class Internship {
     /**
      * Get Latitude
      *
-     * @return decimal 
+     * @return decimal
      */
     public function getLatitude() {
         return $this->Latitude;
@@ -494,7 +494,7 @@ class Internship {
     /**
      * Get Longitude
      *
-     * @return decimal 
+     * @return decimal
      */
     public function getLongitude() {
         return $this->Longitude;
@@ -512,7 +512,7 @@ class Internship {
     /**
      * Get zipcode
      *
-     * @return string 
+     * @return string
      */
     public function getZipcode() {
         return $this->zipcode;
@@ -530,7 +530,7 @@ class Internship {
     /**
      * Get requirements
      *
-     * @return text 
+     * @return text
      */
     public function getRequirements() {
         return $this->requirements;
@@ -548,7 +548,7 @@ class Internship {
     /**
      * Get categories
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getCategories() {
         return $this->categories;
