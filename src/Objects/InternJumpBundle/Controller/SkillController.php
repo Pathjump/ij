@@ -107,7 +107,6 @@ class SkillController extends ObjectsController {
             //return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
             $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
             return $this->redirect($this->generateUrl('login'));
-        
         }
         $em = $this->getDoctrine()->getEntityManager();
         $skillRepo = $em->getRepository('ObjectsInternJumpBundle:Skill');
@@ -135,7 +134,7 @@ class SkillController extends ObjectsController {
         //get the user object
         $user = $this->get('security.context')->getToken()->getUser();
         if (count($user->getSkills()) == 0) {
-            //add one education entity to the user
+            //add one skill entity to the user
             $user->addSkill(new Skill());
         }
         //create an education form
