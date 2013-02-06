@@ -27,7 +27,7 @@ class Skill {
 
     /**
      * @var string $title
-     * @Assert\NotNull
+     * @Assert\NotBlank(groups={"Default", "skill"})
      * @ORM\Column(name="title", type="string", length=255, unique=true)
      */
     private $title;
@@ -45,7 +45,7 @@ class Skill {
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId() {
         return $this->id;
@@ -63,7 +63,7 @@ class Skill {
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle() {
         return $this->title;
@@ -81,12 +81,12 @@ class Skill {
     /**
      * Get usersCount
      *
-     * @return string 
+     * @return string
      */
     public function getUsersCount() {
         return $this->usersCount;
     }
-    
+
     /**
      * @ORM\PrePersist()
      */
