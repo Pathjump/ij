@@ -10,7 +10,7 @@ web_profiler:
     intercept_redirects: true
 
 swiftmailer:
-    delivery_address:  dev@isymfony.net
+    delivery_address:  dev@isymfony.com
 
 monolog:
     handlers:
