@@ -16,7 +16,7 @@
                             <br>
                             <h1>Company listing by industry</h1>
                             <div class="infoBlock">
-                                <ul class="industriList">
+                                <ul class="industriList clearfix">
                                     {% for industry in  entities %}
                                     <li>
                                         <a href="{{ path('industry_companies', {'industrySlug': industry.slug}) }}">{{ industry }}</a>
