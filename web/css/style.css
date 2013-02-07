@@ -6470,6 +6470,8 @@ ul.innerNav {
 .coListingTree {
 	font: bold 12px/24px tahoma;
 	color: #666;
+	border-bottom: 1px solid #b9cce9;
+	padding-bottom: 5px;
 }
 
 .coListingTree a:last-of-type,
@@ -6535,7 +6537,6 @@ div.joinFree a:hover {
 h1.industiTitle {
 	font: bold 24px/65px arial;
 	color: #04398c;
-	border-top: 1px solid #b9cce9;
 	text-shadow: #0 1px 1px #FFFFFF;
 }
 
