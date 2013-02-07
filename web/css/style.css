@@ -6490,18 +6490,22 @@ ul.innerNav {
     	font: 12px/24px tahoma;
 }
 
-.coListingTree .coListingSrch input :focus {
+.coListingTree .coListingSrch input:focus {
 	color: #555;
 	border: 1px solid #68a0f8;
+}
+
+ul.industriList {
+	margin: 0 0 30px 90px;
 }
 
 ul.industriList li {
 	font: 25px/32px arial;
 	list-style: inside;
 	color: #ccc;
-	display: inline-block;
+	float: left;
 	vertical-align: top;
-	width: 47%;
+	width: 33%;
 }
 
 ul.industriList li a {
@@ -6510,6 +6514,18 @@ ul.industriList li a {
 }
 
 ul.industriList li a:hover {
+	color: #0063ff;
+}
+
+div.joinFree {
+	font: 20px/2 "Times New Roman", Times, serif;
+	text-align: center;
+	color: #333;
+}
+
+div.joinFree a {
+	display: block;
+	font-stlye: italic;
 	color: #0063ff;
 }
 
