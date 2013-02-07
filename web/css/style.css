@@ -6547,6 +6547,32 @@ h1.industiTitle {
 	width: auto !important;
 }
 
+#comJobList .wrapper .copmanyInfo .infoBlock.oneCompany .info a {
+	color: #0096ff;
+}
+
+#comJobList .wrapper .copmanyInfo .infoBlock.oneCompany .info a:hover {
+	text-decoration: underline;
+}
+
+#comJobList .wrapper .copmanyInfo .infoBlock.oneCompany .map a {
+	color: #555;
+	border: 3px solid #4bacc6;
+	border-radius: 5px;
+	background: #d9eaee;
+	display: block.
+	line-height: 30px;
+	padding: 0 10px;
+}
+
+#comJobList .wrapper .copmanyInfo .infoBlock.oneCompany .map a:hover {
+	color: #000;
+	text-shadow: 0 1px 1px #fff;
+}
+
+
+
+
 
 .ir { display: block; border: 0; text-indent: -999em; overflow: hidden; background-color: transparent; background-repeat: no-repeat; text-align: left; direction: ltr; *line-height: 0; }
 .ir br { display: none; }
