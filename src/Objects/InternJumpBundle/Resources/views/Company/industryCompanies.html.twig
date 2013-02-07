@@ -10,15 +10,15 @@
 <section id="msgsBox">
     <div class="wrapper">
         <div class="inboxBlock">
-            <div style="float: right;">
+            <div class="coListingTree">
+                <a href="{{ path('site_homepage') }}">Home</a> / <a href="{{ path('employers') }}">Employers</a> / <a href="{{ path('industry_companies', {'industrySlug': industry.slug}) }}">{{ industry }}</a>
+            <div class="coListingSrch">
                 <form action="{{ path('search_for_company') }}">
                     <input name="searchString" placeholder="Search For Company" />
                 </form>
             </div>
-            <div>
-                <a href="{{ path('site_homepage') }}">Home</a> / <a href="{{ path('employers') }}">Employers</a> / <a href="{{ path('industry_companies', {'industrySlug': industry.slug}) }}">{{ industry }}</a>
             </div>
-            <h1 style="background: none;padding-left: 0px;">{{ industry | title }}</h1>
+            <h1 class="industiTitle">{{ industry | title }}</h1>
             <div class="tabber simpleTabs">
                 <div class="tabbertab tabbertabdefault">
                     <div id="outboxTab" class="simpleTabsContent">
