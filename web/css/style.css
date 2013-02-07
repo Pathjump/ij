@@ -6518,15 +6518,19 @@ ul.industriList li a:hover {
 }
 
 div.joinFree {
-	font: 20px/2 "Times New Roman", Times, serif;
+	font: italic 24px/2 "Times New Roman", Times, serif;
 	text-align: center;
 	color: #333;
 }
 
 div.joinFree a {
 	display: block;
-	font-stlye: italic;
+	font-weight: bold;
 	color: #0063ff;
+}
+
+div.joinFree a:hover {
+	color: #0096ff;
 }
 
 
