@@ -1310,7 +1310,7 @@ a.button:hover, button.button:hover {
 }
 
 .pging li:hover,
-.pging li.crnt, {
+.pging li.crnt {
     background: #696969;
     border: 1px solid rgba(0,0,0,0);
     color: #fff;
@@ -6524,13 +6524,19 @@ div.joinFree {
 }
 
 div.joinFree a {
-	display: block;
 	font-weight: bold;
 	color: #0063ff;
 }
 
 div.joinFree a:hover {
 	color: #0096ff;
+}
+
+h1.industiTitle {
+	font: bold 24px/65px arial;
+	color: #04398c;
+	border-top: 1px solid #b9cce9;
+	text-shadow: #0 1px 1px #FFFFFF;
 }
 
 
