@@ -6468,10 +6468,10 @@ ul.innerNav {
 /* Company Listing
 -------------------------- */
 .coListingTree {
-	font: bold 12px/24px tahoma;
+	font: bold 12px/28px tahoma;
 	color: #666;
 	border-bottom: 1px solid #b9cce9;
-	padding-bottom: 5px;
+	padding-bottom: 7px;
 }
 
 .coListingTree a:last-of-type,
