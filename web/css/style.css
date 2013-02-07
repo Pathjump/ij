@@ -6490,6 +6490,7 @@ ul.innerNav {
     	text-indent: 5px;
     	color: #ccc;
     	font: 12px/24px tahoma;
+    	background: url(../img/search_button.png) 98% center no-repeat #fff;
 }
 
 .coListingTree .coListingSrch input:focus {
@@ -6560,13 +6561,14 @@ h1.industiTitle {
 	border: 3px solid #4bacc6;
 	border-radius: 5px;
 	background: #d9eaee;
-	display: block.
+	display: block;
 	line-height: 30px;
 	padding: 0 10px;
 }
 
 #comJobList .wrapper .copmanyInfo .infoBlock.oneCompany .map a:hover {
 	color: #000;
+	text-decoration: none;
 	text-shadow: 0 1px 1px #fff;
 }
 
