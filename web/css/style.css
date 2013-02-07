@@ -6472,10 +6472,46 @@ ul.innerNav {
 	color: #666;
 }
 
-.coListingTree a:last-child {
-	color: #022d71;
+.coListingTree a:last-of-type,
+.coListingTree a:hover {
+	color: #0063ff;
 }
 
+.coListingTree .coListingSrch {
+	float: right;
+}
+
+.coListingTree .coListingSrch input {
+	border: 1px solid #ddd;
+	height: 24px;
+    	width: 200px;
+    	text-indent: 5px;
+    	color: #ccc;
+    	font: 12px/24px tahoma;
+}
+
+.coListingTree .coListingSrch input :focus {
+	color: #555;
+	border: 1px solid #68a0f8;
+}
+
+ul.industriList li {
+	font: 25px/32px arial;
+	list-style: inside;
+	color: #ccc;
+	display: inline-block;
+	vertical-align: top;
+	width: 47%;
+}
+
+ul.industriList li a {
+	font: 17px/32px arial;
+	color: #666;
+}
+
+ul.industriList li a:hover {
+	color: #0063ff;
+}
 
 
 
