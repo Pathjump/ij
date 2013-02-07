@@ -10,7 +10,7 @@
 <section id="msgsBox">
     <div class="wrapper">
         <div class="inboxBlock">
-            <div class="coListingTree">
+            <div class="coListingTree clearfix">
                 <a href="{{ path('site_homepage') }}">Home</a> / <a href="{{ path('employers') }}">Employers</a> / <a href="{{ path('industry_companies', {'industrySlug': industry.slug}) }}">{{ industry }}</a>
             <div class="coListingSrch">
                 <form action="{{ path('search_for_company') }}">
