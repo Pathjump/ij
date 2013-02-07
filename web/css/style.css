@@ -6539,6 +6539,13 @@ h1.industiTitle {
 	text-shadow: #0 1px 1px #FFFFFF;
 }
 
+#msgsBox.industListTable .wrapper div.simpleTabsContent .msgsTable {
+	text-align: center;
+}
+
+#msgsBox.industListTable .wrapper div.simpleTabsContent .msgsTable td {
+	width: auto !important;
+}
 
 
 .ir { display: block; border: 0; text-indent: -999em; overflow: hidden; background-color: transparent; background-repeat: no-repeat; text-align: left; direction: ltr; *line-height: 0; }
