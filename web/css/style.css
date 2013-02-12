@@ -2175,7 +2175,7 @@ form .chzn-choices, .chzn-single {
     color: #007dcd;
     font: 11px Arial, Helvetica, sans-serif;
     display: inline-block;
-    margin-left: 25px;
+    /*margin-left: 25px;*/
 }
 
 #comJobList .wrapper .jobWrapper li div.details span.valid {

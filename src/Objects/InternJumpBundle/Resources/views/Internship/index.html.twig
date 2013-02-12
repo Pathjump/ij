@@ -183,7 +183,6 @@
                                                             <div class="title">
                                                                 <h2><a href="{{path('internship_show',{'id' : entity.id})}}">{{ entity.title }}</a>
                                                                 </h2>
-                                                                <h4>{{ entity.getCountryName }}</h4>
                                                                 <span class="share">
                             {% if not is_granted('ROLE_COMPANY')%}
                                                                         <div class="fb-like" data-href="{{ url('internship_show', {'id' : entity.id} ) }}" data-send="false" data-layout="button_count" data-width="110" data-show-faces="true" ></div>    
@@ -204,12 +203,11 @@
                                                                     </div>
 
                                                                     <div class="details">
-                                                                        <h2>{{ entity.title }}</h2>
                                                                         <span class="date"><strong>Post Date:</strong> {{ entity.createdAt|date('d/m/Y') }}</span>
                                                                         <span class="valid"><strong>To :</strong> {{ entity.activeTo|date('d M. Y') }} </span>
                                                                         <span class="valid"><strong>Active From :</strong>{{ entity.activeFrom|date('d M. Y') }}</span>
 
-                                                                        <p>{{ entity.description|raw }}</p>
+                                                                        <p>{{ entity.city }}  |  {%if entity.state %}{{ entity.state }}  |{% endif %}  {{ entity.getCountryName }}</p>
                                                                     </div>
                                                                 </li>
 {% else %}
