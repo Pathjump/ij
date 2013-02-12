@@ -340,9 +340,9 @@ class InternshipController extends Controller {
                 ->add('activeFrom', 'date', array('attr' => array('class' => 'activeFrom'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('activeTo', 'date', array('attr' => array('class' => 'activeTo'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('title')
-                ->add('description')
+                ->add('description',null,array('required' => FALSE))
                 ->add('requirements')
-                ->add('categories')
+                ->add('categories',null,array('required' => FALSE))
                 ->add('country', 'choice', array(
                     'choices' => $allCountriesArray,
                     'preferred_choices' => array($company->getCountry()),
@@ -465,9 +465,9 @@ class InternshipController extends Controller {
                 ->add('activeFrom', 'date', array('attr' => array('class' => 'activeFrom'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('activeTo', 'date', array('attr' => array('class' => 'activeTo'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('title')
-                ->add('description')
+                ->add('description',null,array('required' => FALSE))
                 ->add('requirements')
-                ->add('categories')
+                ->add('categories',null,array('required' => FALSE))
                 ->add('country', 'choice', array(
                     'choices' => $allCountriesArray))
                 ->add('city', NULL, array('attr' => array('style' => 'width:310px;')))

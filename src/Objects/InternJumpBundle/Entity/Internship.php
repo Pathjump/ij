@@ -4,6 +4,7 @@ namespace Objects\InternJumpBundle\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\ExecutionContext;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Locale\Locale;
 
@@ -11,6 +12,7 @@ use Symfony\Component\Locale\Locale;
  * Objects\InternJumpBundle\Entity\Internship
  *
  * @ORM\Table()
+ * @Assert\Callback(methods={"isCategoriesCorrect"},groups={"newInternship","editInternship"})
  * @ORM\Entity(repositoryClass="Objects\InternJumpBundle\Entity\InternshipRepository")
  */
 class Internship {
@@ -454,14 +456,16 @@ class Internship {
     }
 
     /**
-     * this function will check if the internship has at least one category
-     * @Assert\True(message = "The internship must have at least one category")
+     * this function will check if the cv has more than one category
+     * @author Ahmed
+     * @param \Symfony\Component\Validator\ExecutionContext $context
      */
-    public function isCategoriesCorrect() {
-        if (count($this->getCategories()) > 0) {
-            return TRUE;
+    public function isCategoriesCorrect(ExecutionContext $context) {
+        if ($this->categories && count($this->categories) == 0) {
+            $propertyPath = $context->getPropertyPath() . '.categories';
+            $context->setPropertyPath($propertyPath);
+            $context->addViolation('You must select at least one category', array(), NULL);
         }
-        return FALSE;
     }
 
     /**
