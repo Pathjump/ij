@@ -13,6 +13,63 @@ use Objects\InternJumpBundle\Entity\City;
 class CompanyController extends Controller {
 
     /**
+     * this function used to resend activation mail to not actice company
+     * @author ahmed
+     */
+    public function reActivationAction() {
+        //get the container object
+        $container = $this->container;
+        //get the translator object
+        $translator = $this->get('translator');
+        //get the session object
+        $session = $this->getRequest()->getSession();
+        //get the entity manager
+        $em = $this->getDoctrine()->getEntityManager();
+        //check if we have a logged company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {
+            $session->setFlash('note', $translator->trans('You need to Login first.'));
+            return $this->redirect($this->generateUrl('login'));
+        }
+
+        //check if the user is already active
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            //set a notice flag
+            $session->setFlash('notice', $translator->trans('Your acount is active.'));
+            return $this->redirect($this->generateUrl('company_edit'));
+        }
+
+        //get the logedin user
+        $company = $this->get('security.context')->getToken()->getUser();
+
+        //get the not active role object
+        $role = $em->getRepository('ObjectsUserBundle:Role')->findOneByName('ROLE_NOTACTIVE_COMPANY');
+        //check if the user already has the role
+        if (!$company->getCompanyRoles()->contains($role)) {
+            //add the role to the user
+            $company->addRole($role);
+        }
+        //prepare the body of the email
+        $body = $this->renderView('ObjectsInternJumpBundle:Company:welcome_to_site.txt.twig', array(
+                    'company' => $company,
+                    'password' => $company->getUserPassword(),
+                    'Email' => $this->container->getParameter('contact_us_email'),
+                        ));
+        //prepare the message object
+        $message = \Swift_Message::newInstance()
+                ->setSubject($translator->trans('activate your account'))
+                ->setFrom($container->getParameter('mailer_user'))
+                ->setTo($company->getEmail())
+                ->setBody($body)
+        ;
+        //send the activation mail to the user
+        $this->get('mailer')->send($message);
+        //set the success flag in the session
+        $session->setFlash('success', $this->get('translator')->trans('check your email for your activation link'));
+        //redirect the user to portal
+        return $this->redirect($this->generateUrl('internship', array('loginName' => $company->getLoginName())));
+    }
+
+    /**
      * the search for company action
      * @author Mahmoud
      * @param string $orderBy
@@ -384,7 +441,7 @@ class CompanyController extends Controller {
         $request = $this->getRequest();
         //prepare the form validation constrains
         $collectionConstraint = new Collection(array(
-            'email' => new Email()
+                    'email' => new Email()
                 ));
         //create the form
         $form = $this->createFormBuilder(null, array(
@@ -588,7 +645,7 @@ class CompanyController extends Controller {
                     //prepare the message object
                     $message = \Swift_Message::newInstance()
                             ->setSubject($translator->trans('activate your account'))
-                            ->setFrom($container->getParameter('contact_us_email'))
+                            ->setFrom($container->getParameter('mailer_user'))
                             ->setTo($company->getEmail())
                             ->setBody($body)
                     ;
@@ -762,7 +819,7 @@ class CompanyController extends Controller {
         try {
             $em->flush();
         } catch (\Exception $e) {
-
+            
         }
     }
 
@@ -871,7 +928,7 @@ class CompanyController extends Controller {
                 //prepare the message object
                 $message = \Swift_Message::newInstance()
                         ->setSubject($this->get('translator')->trans('Welcome to InternJump, verification required.'))
-                        ->setFrom($this->container->getParameter('contact_us_email'))
+                        ->setFrom($this->container->getParameter('mailer_user'))
                         ->setTo($company->getEmail())
                         ->setBody($body)
                 ;

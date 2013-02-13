@@ -93,6 +93,7 @@
 
                             {% if not is_granted('ROLE_COMPANY') %}
                                 <span class="activeMsg">Please activate your account</span>
+                                <a href="{{path('company_reActivation')}}">Resend activation email</a>
                             {% endif %}
                             </span>
                 {% elseif is_granted('ROLE_NOTACTIVE') %}

@@ -91,3 +91,7 @@ industry_companies:
 company_public_profile:
     pattern:  /{industrySlug}/{loginName}
     defaults: { _controller: "ObjectsInternJumpBundle:Company:companyPublicProfile" }
+
+company_reActivation:
+    pattern:  /activation/code/resend
+    defaults: { _controller: "ObjectsInternJumpBundle:Company:reActivation" }
