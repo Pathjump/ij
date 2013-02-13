@@ -51,9 +51,11 @@
                                     <br>
                                 </div>
 
+                                {% if viewJobsLink %}
                                 <div class="map" style="width: 475px;vertical-align: bottom;">
                                     <a style="background: none;" href="{{ path('internship', {'loginName': company.loginName}) }}">View Job Listing</a>
                                 </div>
+                                {% endif %}
                             </div>
                         </aside>
                     </div>

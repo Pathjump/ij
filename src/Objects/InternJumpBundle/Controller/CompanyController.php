@@ -50,10 +50,10 @@ class CompanyController extends Controller {
         }
         //prepare the body of the email
         $body = $this->renderView('ObjectsInternJumpBundle:Company:welcome_to_site.txt.twig', array(
-                    'company' => $company,
-                    'password' => $company->getUserPassword(),
-                    'Email' => $this->container->getParameter('contact_us_email'),
-                        ));
+            'company' => $company,
+            'password' => $company->getUserPassword(),
+            'Email' => $this->container->getParameter('contact_us_email'),
+                ));
         //prepare the message object
         $message = \Swift_Message::newInstance()
                 ->setSubject($translator->trans('activate your account'))
@@ -189,9 +189,15 @@ class CompanyController extends Controller {
         if (!isset($industry)) {
             throw $this->createNotFoundException('Can not find the requested industry.');
         }
+        $companyJobsCount = $em->getRepository('ObjectsInternJumpBundle:Internship')->countCompanyJobs($company->getId(), false);
+        $viewJobsLink = false;
+        if ($companyJobsCount[0]['jobsCount'] > 0) {
+            $viewJobsLink = true;
+        }
         return $this->render('ObjectsInternJumpBundle:Company:publicProfile.html.twig', array(
                     'company' => $company,
-                    'industry' => $industry
+                    'industry' => $industry,
+                    'viewJobsLink' => $viewJobsLink
                 ));
     }
 
@@ -441,7 +447,7 @@ class CompanyController extends Controller {
         $request = $this->getRequest();
         //prepare the form validation constrains
         $collectionConstraint = new Collection(array(
-                    'email' => new Email()
+            'email' => new Email()
                 ));
         //create the form
         $form = $this->createFormBuilder(null, array(
@@ -819,7 +825,7 @@ class CompanyController extends Controller {
         try {
             $em->flush();
         } catch (\Exception $e) {
-            
+
         }
     }
 
