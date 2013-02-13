@@ -69,10 +69,12 @@ class CompanyRepository extends EntityRepository {
             $mainQuery = '
                 FROM ObjectsInternJumpBundle:Company c
                 JOIN c.professions p
+                JOIN c.companyRoles r
                 WHERE p.id = :industryId
+                AND r.name in(:activeRoleName)
                 AND c.locked = 0
                 AND c.enabled = 1';
-            $parameters = array('industryId' => $industryId);
+            $parameters = array('industryId' => $industryId,'activeRoleName'=> 'ROLE_COMPANY');
             $query = $this->getEntityManager()->createQuery("SELECT c $mainQuery ORDER BY c." . $orderBy . " $orderDirection")->setParameters($parameters);
             $countQuery = $this->getEntityManager()->createQuery("SELECT COUNT(c.id) $mainQuery")->setParameters($parameters);
             $query->setFirstResult($page * $maxResults);
