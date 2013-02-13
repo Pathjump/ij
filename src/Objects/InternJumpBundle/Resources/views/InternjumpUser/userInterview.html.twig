@@ -63,7 +63,7 @@
                     </div>
 
                     <div class="intDetails">
-                        <span><strong>Date : </strong> {{interview.interviewDate|date('j F Y')}}</span>
+                        <span><strong>Date : </strong> {{interview.interviewDate|date('j F Y h:i:s A')}}</span>
                         <span><strong>Country : </strong> {{interview.getCountryName}}</span>
                         <span><strong>City : </strong> {{interview.city}}</span>
                         {% if interview.state %}

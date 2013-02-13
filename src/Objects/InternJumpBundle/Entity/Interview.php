@@ -96,10 +96,10 @@ class Interview {
     private $details;
 
     /**
-     * @var date $interviewDate
+     * @var datetime $interviewDate
      * @Assert\NotNull(groups={"interview"})
-     * @Assert\Date(groups={"interview"})
-     * @ORM\Column(name="interviewDate", type="date")
+     * @Assert\DateTime(groups={"interview"})
+     * @ORM\Column(name="interviewDate", type="datetime")
      */
     private $interviewDate;
 
@@ -205,7 +205,7 @@ class Interview {
     /**
      * Set interviewDate
      *
-     * @param date $interviewDate
+     * @param datetime $interviewDate
      */
     public function setInterviewDate($interviewDate) {
         $this->interviewDate = $interviewDate;
@@ -214,7 +214,7 @@ class Interview {
     /**
      * Get interviewDate
      *
-     * @return date 
+     * @return datetime 
      */
     public function getInterviewDate() {
         return $this->interviewDate;

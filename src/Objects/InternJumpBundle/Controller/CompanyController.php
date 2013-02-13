@@ -1213,7 +1213,7 @@ class CompanyController extends Controller {
                     'class' => 'ObjectsInternJumpBundle:Internship',
                     'choices' => $companyJobs
                 ))
-                ->add('interviewDate', 'date', array('attr' => array('class' => 'interviewDate'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
+                ->add('interviewDate', 'date', array('attr' => array('class' => 'interviewDate'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd H:mm'))
                 ->add('country', 'choice', array(
                     'choices' => $allCountriesArray
                 ))
