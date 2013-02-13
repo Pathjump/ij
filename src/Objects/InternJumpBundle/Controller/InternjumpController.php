@@ -23,21 +23,45 @@ class InternjumpController extends ObjectsController {
      * @author Ola
      */
     public function errorPage404Mailaction(){
+       
         
         //get url from request param
         $url= $this->getRequest()->get('url');
+        //get browser name from request param
+        $browser= $this->getRequest()->get('browser');
+        //get broswer version from request param
+        $version= $this->getRequest()->get('version');
+        //get Os name from request param
+        $os= $this->getRequest()->get('os');
         
+        //get Current logged in user if exist 
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            //get logedin user objects
+            $user = $this->get('security.context')->getToken()->getUser();
+            $uname = "Student: ".$user->getLoginName()." - ".$user->getEmail(); 
+        } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {
+            //get logedin company objects
+            $company = $this->get('security.context')->getToken()->getUser();
+            $uname = "Company: ".$company->getLoginName()." - ".$user->getEmail(); 
+        }
+        else{
+            $uname="Anonymous";
+        }
         //prepare message for email
                 $message = \Swift_Message::newInstance()
                 ->setSubject("404 error User Report Issue")
                 ->setFrom($this->container->getParameter('contact_us_email'))
-                ->setTo($this->container->getParameter('contact_us_email'))
-                ->setBody("User has reported issue [404 error page] with the following URL:".$url)
-                
-        ;
+                ->setTo('olaobjects@yahoo.com')//$this->container->getParameter('contact_us_email'))
+                ->setBody($this->container->get('templating')->render('ObjectsInternJumpBundle:Internjump:404Report.html.twig', array(
+                                    'username' => $uname,
+                                    'errorUrl' => $url,
+                                    'userBrowser' => $browser,
+                                    'browserVersion' => $version,
+                                    'userOs' => $os,
+                                    
+                                )));
         //send the mail
         $this->container->get('mailer')->send($message);
-        
         return $this->render('ObjectsInternJumpBundle:Internjump:mail404.html.twig');
     }
 
