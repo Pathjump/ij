@@ -64,7 +64,7 @@ class InternshipRepository extends EntityRepository {
             SELECT j.id
             FROM ObjectsInternJumpBundle:Internship j
             JOIN j.company c
-            WHERE c.id = :companyId 
+            WHERE c.id = :companyId
             ')->setParameters(array('companyId' => $companyId));
         return $query->getResult();
     }
@@ -144,8 +144,8 @@ class InternshipRepository extends EntityRepository {
 
     /**
      * this function will get all company jobs count
+     * second use in CompanyController:companyPublicProfileAction
      * @author Ahmed
-     * $companyId
      * @param int $companyId
      */
     public function countCompanyJobs($companyId, $owner) {
@@ -188,7 +188,7 @@ class InternshipRepository extends EntityRepository {
     }
 
     /**
-     * this function will get all Latest jobs according to certain cv categories 
+     * this function will get all Latest jobs according to certain cv categories
      * @author Ola
      * @param type $categories
      * @return array of jobs
@@ -203,7 +203,7 @@ class InternshipRepository extends EntityRepository {
             FROM ObjectsInternJumpBundle:Internship j
             JOIN j.company c
             JOIN j.categories cat
-            WHERE j.active = true 
+            WHERE j.active = true
             AND  j.activeFrom <= :today
             AND  j.activeTo >= :today
             AND cat.id IN (:categories)
@@ -214,7 +214,7 @@ class InternshipRepository extends EntityRepository {
     }
 
     /**
-     * this function will get all jobs search results according to sent parameters 
+     * this function will get all jobs search results according to sent parameters
      * @author Ola
      * @param string $title
      * @param string $country
@@ -282,7 +282,7 @@ class InternshipRepository extends EntityRepository {
     }
 
     /**
-     * this function will count all jobs search results according to sent parameters 
+     * this function will count all jobs search results according to sent parameters
      * @author Ola
      * @param string $title
      * @param string $country
@@ -300,7 +300,7 @@ class InternshipRepository extends EntityRepository {
             FROM ObjectsInternJumpBundle:Internship j
             JOIN j.company c
             JOIN j.categories cat
-            WHERE j.active = true 
+            WHERE j.active = true
             ';
         if ($title != 'empty') {
             $query .= ' and j.title LIKE :title OR j.description LIKE :title'; // OR j.position LIKE :title
