@@ -11,21 +11,8 @@
     <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
     
 
-{% if app.session.hasFlash('notice') %}
-<span class="alert">
-    {{ app.session.flash('notice') | raw }}
-</span>
-{% endif %}
-{% if app.session.hasFlash('success') %}
-<span class="alert">
-    {{ app.session.flash('success') | raw }}
-</span>
-{% endif %}
-{% if app.session.hasFlash('error') %}
-<span class="alert">
-    {{ app.session.flash('error') | raw }}
-</span>
-{% endif %}
+    
+    
     {% if app.session.hasFlash('note') %}
 <span class="alert">
     {{ app.session.flash('note') | raw }}
