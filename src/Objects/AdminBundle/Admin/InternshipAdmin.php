@@ -49,7 +49,7 @@ class InternshipAdmin extends Admin {
                 ->add('active')
                 ->add('title')
                 //->add('position')
-                ->add('description')
+                ->add('description', NULL, array('template' => 'ObjectsAdminBundle:General:list_description.html.twig'))
                 ->add('requirements')
                 ->add('company')
                 ->add('_action', 'actions', array(

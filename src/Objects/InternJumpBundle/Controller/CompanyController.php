@@ -64,7 +64,7 @@ class CompanyController extends Controller {
         //send the activation mail to the user
         $this->get('mailer')->send($message);
         //set the success flag in the session
-        $session->setFlash('success', $this->get('translator')->trans('check your email for your activation link'));
+        $session->setFlash('success', $this->get('translator')->trans('A new activation email has been sent. Please check your email, be patient as it may take 5 to 10 minutes. Be sure to check your spam folder and if possible add noreply@internjump.com to your address book. If you do not receive the activation email, please feel free to contact us via email so we activate your account'));
         //redirect the user to portal
         return $this->redirect($this->generateUrl('internship', array('loginName' => $company->getLoginName())));
     }
