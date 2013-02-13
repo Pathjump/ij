@@ -51,7 +51,7 @@ class InternjumpController extends ObjectsController {
                 $message = \Swift_Message::newInstance()
                 ->setSubject("404 error User Report Issue")
                 ->setFrom($this->container->getParameter('contact_us_email'))
-                ->setTo('olaobjects@yahoo.com')//$this->container->getParameter('contact_us_email'))
+                ->setTo('ali@internjump.com')//$this->container->getParameter('contact_us_email'))
                 ->setBody($this->container->get('templating')->render('ObjectsInternJumpBundle:Internjump:404Report.html.twig', array(
                                     'username' => $uname,
                                     'errorUrl' => $url,
