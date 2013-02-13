@@ -6573,7 +6573,7 @@ h1.industiTitle {
 }
 
 
-.comntSection {
+.notActiveUserMessage {
     color: #900;
     font: bold 13px/1.5 arial;
     margin: 0 auto;
@@ -6581,7 +6581,7 @@ h1.industiTitle {
     width: 100%;
 }
 
-.comntSection a {
+.notActiveUserMessage a {
     color: #09f;
     display: block;
     background: #eee;
@@ -6592,7 +6592,7 @@ h1.industiTitle {
     text-align: center;
 }
 
-.comntSection a:hover {
+.notActiveUserMessage a:hover {
     color: #06f;
     background: #ddd;
 }
