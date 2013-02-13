@@ -14,12 +14,12 @@ class InternjumpUserController extends ObjectsController {
      * @author ahmed
      */
     public function uploadCvAction() {
-        
+
         //read the cv file
         $document_file = '/opt/lampp/htdocs/internjump/src/Objects/InternJumpBundle/Entity/../../../../web/cvFiles/2nd.doc';
         $text_from_doc = shell_exec('antiword ' . $document_file);
 //        $text_from_doc = shell_exec('abiword --to=html ' . $document_file);
-               
+
         echo $text_from_doc;
         exit;
         //explode it for each new line
@@ -40,7 +40,7 @@ class InternjumpUserController extends ObjectsController {
                 $objectiveFlag = TRUE;
             }
         }
-        
+
         //try to get the skills
         $cvDataArray ['skills'] = '';
         $skillsFlag = FALSE;
@@ -54,8 +54,8 @@ class InternjumpUserController extends ObjectsController {
                 $skillsFlag = TRUE;
             }
         }
-        
-        
+
+
         print_r($cvDataArray);
         exit;
 
@@ -426,9 +426,9 @@ class InternjumpUserController extends ObjectsController {
         //get the userInternship object
         $userInternship = $userInternshipRepo->find($userInternshipId);
         if (!$userInternship || $userInternship->getUser()->getId() != $user->getId()) {
-              $message = $this->container->getParameter('request_not_found_error_msg');
-              return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
-                    'message' => $message,));
+            $message = $this->container->getParameter('request_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
 
 
@@ -510,9 +510,9 @@ class InternjumpUserController extends ObjectsController {
         //get the interview object
         $interview = $interviewRepo->find($interviewId);
         if (!$interview || $interview->getUser()->getId() != $user->getId()) {
-              $message = $this->container->getParameter('interview_not_found_error_msg');
-              return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
-                    'message' => $message,));
+            $message = $this->container->getParameter('interview_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
 
         //get the company
@@ -603,9 +603,9 @@ class InternjumpUserController extends ObjectsController {
         //get the interest object
         $interest = $interestRepo->find($interestId);
         if (!$interest || $interest->getUser()->getId() != $user->getId()) {
-              $message = $this->container->getParameter('interest_not_found_error_msg');
-              return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
-                    'message' => $message,));
+            $message = $this->container->getParameter('interest_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
 
         //get the interest cv
@@ -879,9 +879,9 @@ class InternjumpUserController extends ObjectsController {
         $userCv = $cvRepo->find($cvId);
 
         if (!$userCv || $userCv->getUser()->getId() != $user->getId()) {
-              $message = $this->container->getParameter('cv_not_found_error_msg');
-              return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
-                    'message' => $message,));
+            $message = $this->container->getParameter('cv_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
 
         //get user companies questions
@@ -939,18 +939,18 @@ class InternjumpUserController extends ObjectsController {
         $userObject = $userRepo->findOneBy(array('loginName' => $userLoginName));
 
         if (!$userObject) {
-              $message = $this->container->getParameter('user_not_found_error_msg');
-              return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
-                    'message' => $message,));
+            $message = $this->container->getParameter('user_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
 
         //get user cv
         $userCv = $cvRepo->find($cvId);
 
         if (!$userCv || $userCv->getUser()->getId() != $userObject->getId() || $userCv->getIsActive() == FALSE) {
-              $message = $this->container->getParameter('cv_not_found_error_msg');
-              return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
-                    'message' => $message,));
+            $message = $this->container->getParameter('cv_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
 
         //increment cv views number
@@ -1096,6 +1096,15 @@ class InternjumpUserController extends ObjectsController {
         //get jobs search results array
         $userSearchResults = $internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $page, $jobsPerPage);
 
+        //Limit the details to only 200 character
+        foreach ($userSearchResults as &$job) {
+            $jobDesc = strip_tags($job->getDescription());
+            if (strlen($jobDesc) > 200) {
+                $job->setDescription(substr($jobDesc, 0, 200) . '...');
+            }else{
+                $job->setDescription($jobDesc);
+            }
+        }
         /* pagenation part */
         //get count of all search result jobs
         $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, 1, null));
