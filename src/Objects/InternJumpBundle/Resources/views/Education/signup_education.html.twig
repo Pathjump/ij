@@ -84,7 +84,7 @@
                                     <td width="190" class="graduateDegreeRow"{% if not education.vars.value.underGraduate %} style="display: none;"{% endif %}><label>Graduate Degree :</label></td>
                                     <td class="graduateDegreeRow"{% if not education.vars.value.underGraduate %} style="display: none;"{% endif %}>{{ form_widget(education.graduateDegree) }}<span class="miniError">{{ form_errors(education.graduateDegree) }}</span></td>
                                     <td colspan="3">&nbsp;</td>
-                                    <td width="190" class="underGraduateDegreeRow"{% if education.vars.value.underGraduate is sameas(null) or education.vars.value.underGraduate %} style="display: none;"{% endif %}><label>Undergraduate Degree :</label></td>
+                                    <td width="190" class="underGraduateDegreeRow"{% if education.vars.value.underGraduate is sameas(null) or education.vars.value.underGraduate %} style="display: none;"{% endif %}><label>UnderGraduate Degree :</label></td>
                                     <td class="underGraduateDegreeRow"{% if education.vars.value.underGraduate is sameas(null) or education.vars.value.underGraduate %} style="display: none;"{% endif %}>{{ form_widget(education.underGraduateDegree) }}<span class="miniError">{{ form_errors(education.underGraduateDegree) }}</span></td>
                                 </tr>
 
@@ -155,7 +155,7 @@
             <td width="190" class="graduateDegreeRow" style="display: none;"><label>Graduate Degree :</label></td>
             <td class="graduateDegreeRow" style="display: none;">{{ form_widget(form.educations.vars.prototype.graduateDegree) }}</td>
             <td colspan="3">&nbsp;</td>
-            <td width="190" class="underGraduateDegreeRow" style="display: none;"><label>Undergraduate Degree :</label></td>
+            <td width="190" class="underGraduateDegreeRow" style="display: none;"><label>UnderGraduate Degree :</label></td>
             <td class="underGraduateDegreeRow" style="display: none;">{{ form_widget(form.educations.vars.prototype.underGraduateDegree) }}</td>
         </tr>
 
