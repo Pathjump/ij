@@ -2549,7 +2549,7 @@ form .chzn-choices, .chzn-single {
     font: 12px/2 Arial, Helvetica, sans-serif;
     list-style-image: url(../img/listStyle.png);
     margin: 10px 20px 0;
-    float: left;
+    /*float: left;*/
     width: 330px;
 }
 
@@ -6573,8 +6573,29 @@ h1.industiTitle {
 }
 
 
+.comntSection {
+    color: #900;
+    font: bold 13px/1.5 arial;
+    margin: 0 auto;
+    max-width: 700px;
+    width: 100%;
+}
 
+.comntSection a {
+    color: #09f;
+    display: block;
+    background: #eee;
+    line-height: 24px;
+    border-radius: 3px;
+    margin: 0 auto;
+    width: 120px;
+    text-align: center;
+}
 
+.comntSection a:hover {
+    color: #06f;
+    background: #ddd;
+}
 
 .ir { display: block; border: 0; text-indent: -999em; overflow: hidden; background-color: transparent; background-repeat: no-repeat; text-align: left; direction: ltr; *line-height: 0; }
 .ir br { display: none; }
