@@ -37,6 +37,13 @@ class User implements AdvancedUserInterface {
     private $id;
 
     /**
+     * the required languages for the internship
+     * @var \Doctrine\Common\Collections\ArrayCollection $languages
+     * @ORM\OneToMany(targetEntity="\Objects\InternJumpBundle\Entity\UserLanguage", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    private $languages;
+    
+    /**
      * @var integer $educationsPoints
      *
      * @ORM\Column(name="educationsPoints", type="integer")
@@ -1469,5 +1476,25 @@ class User implements AdvancedUserInterface {
     public function getPersonalQuestionAnswers()
     {
         return $this->personalQuestionAnswers;
+    }
+
+    /**
+     * Add languages
+     *
+     * @param Objects\InternJumpBundle\Entity\UserLanguage $languages
+     */
+    public function addUserLanguage(\Objects\InternJumpBundle\Entity\UserLanguage $languages)
+    {
+        $this->languages[] = $languages;
+    }
+
+    /**
+     * Get languages
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getLanguages()
+    {
+        return $this->languages;
     }
 }

@@ -6622,3 +6622,15 @@ h1.industiTitle {
     h2, h3 { page-break-after: avoid; }
 }
 
+#form_positionType input[type="radio"],#form_workLocation input[type="radio"],.newLangauge tr td input[type="radio"]{
+    margin-left: 20px;
+    margin-right: 5px;
+}
+.newLangauge tr td{
+    padding:3px 10px;
+    
+}
+
+.langaugesContainer {
+    width: 467px;
+}

@@ -45,6 +45,16 @@ class Internship {
      * )
      */
     private $categories;
+    
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection $keywords
+     * @ORM\ManyToMany(targetEntity="\Objects\InternJumpBundle\Entity\Keywords")
+     * @ORM\JoinTable(name="internship_keyword",
+     *     joinColumns={@ORM\JoinColumn(name="internship_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="keyword_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)}
+     * )
+     */
+    private $keywords;
 
     /**
      * the interviews of the internship
@@ -52,6 +62,13 @@ class Internship {
      * @ORM\OneToMany(targetEntity="\Objects\InternJumpBundle\Entity\Interview", mappedBy="internship", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private $interviews;
+
+    /**
+     * the required languages for the internship
+     * @var \Doctrine\Common\Collections\ArrayCollection $languages
+     * @ORM\OneToMany(targetEntity="\Objects\InternJumpBundle\Entity\InternshipLanguage", mappedBy="internship", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    private $languages;
 
     /**
      * the internships of the users
@@ -81,6 +98,55 @@ class Internship {
      */
     private $Longitude;
 
+    /**
+     * @var decimal $numberOfOpenings
+     * @Assert\NotNull(groups={"newInternship","editInternship"})
+     * @ORM\Column(name="numberOfOpenings", type="integer")
+     */
+    private $numberOfOpenings;
+    
+    /**
+     * @var decimal $minimumGPA
+     * @Assert\NotNull(groups={"newInternship","editInternship"})
+     * @ORM\Column(name="minimumGPA", type="decimal", precision=1, scale=1)
+     */
+    private $minimumGPA;
+    
+    /**
+     * @var string $positionType
+     * @Assert\NotNull(groups={"newInternship","editInternship"})
+     * @ORM\Column(name="positionType", type="string", length=255)
+     */
+    private $positionType;
+    
+    /**
+     * @var string $skills
+     * @Assert\NotNull(groups={"newInternship","editInternship"})
+     * @ORM\Column(name="skills", type="string", length=255)
+     */
+    private $skills;
+    
+    /**
+     * @var string $compensation
+     * @Assert\NotNull(groups={"newInternship","editInternship"})
+     * @ORM\Column(name="compensation", type="string", length=255)
+     */
+    private $compensation;
+    
+    /**
+     * @var string $workLocation
+     * @Assert\NotNull(groups={"newInternship","editInternship"})
+     * @ORM\Column(name="workLocation", type="string", length=255)
+     */
+    private $workLocation;
+    
+    /**
+     * @var string $sessionPeriod
+     * @Assert\NotNull(groups={"newInternship","editInternship"})
+     * @ORM\Column(name="sessionPeriod", type="string", length=255)
+     */
+    private $sessionPeriod;
+    
     /**
      * @var string $zipcode
      * @Assert\NotNull(groups={"newInternship","editInternship"})
@@ -178,6 +244,8 @@ class Internship {
         $this->interviews = new ArrayCollection();
         $this->usersInternships = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->languages = new ArrayCollection();
+        $this->keywords = new ArrayCollection();
     }
 
     /**
@@ -589,4 +657,203 @@ class Internship {
         return NULL;
     }
 
+    /**
+     * Set educations
+     *
+     * @param Doctrine\Common\Collections\Collection $languages
+     */
+    public function setLanguages($languages) {
+        $this->languages = $languages;
+        foreach ($languages as $language) {
+            $language->setInternship($this);
+        }
+    }
+
+    /**
+     * Add languages
+     *
+     * @param Objects\InternJumpBundle\Entity\InternshipLanguage $languages
+     */
+    public function addInternshipLanguage(\Objects\InternJumpBundle\Entity\InternshipLanguage $languages) {
+        $this->languages[] = $languages;
+    }
+
+    /**
+     * Get languages
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getLanguages() {
+        return $this->languages;
+    }
+
+
+    /**
+     * Set positionType
+     *
+     * @param string $positionType
+     */
+    public function setPositionType($positionType)
+    {
+        $this->positionType = $positionType;
+    }
+
+    /**
+     * Get positionType
+     *
+     * @return string 
+     */
+    public function getPositionType()
+    {
+        return $this->positionType;
+    }
+
+    /**
+     * Set minimumGPA
+     *
+     * @param decimal $minimumGPA
+     */
+    public function setMinimumGPA($minimumGPA)
+    {
+        $this->minimumGPA = $minimumGPA;
+    }
+
+    /**
+     * Get minimumGPA
+     *
+     * @return decimal 
+     */
+    public function getMinimumGPA()
+    {
+        return $this->minimumGPA;
+    }
+
+    /**
+     * Set workLocation
+     *
+     * @param string $workLocation
+     */
+    public function setWorkLocation($workLocation)
+    {
+        $this->workLocation = $workLocation;
+    }
+
+    /**
+     * Get workLocation
+     *
+     * @return string 
+     */
+    public function getWorkLocation()
+    {
+        return $this->workLocation;
+    }
+
+    /**
+     * Set numberOfOpenings
+     *
+     * @param integer $numberOfOpenings
+     */
+    public function setNumberOfOpenings($numberOfOpenings)
+    {
+        $this->numberOfOpenings = $numberOfOpenings;
+    }
+
+    /**
+     * Get numberOfOpenings
+     *
+     * @return integer 
+     */
+    public function getNumberOfOpenings()
+    {
+        return $this->numberOfOpenings;
+    }
+
+    /**
+     * Set skills
+     *
+     * @param string $skills
+     */
+    public function setSkills($skills)
+    {
+        $this->skills = $skills;
+    }
+
+    /**
+     * Get skills
+     *
+     * @return string 
+     */
+    public function getSkills()
+    {
+        return $this->skills;
+    }
+
+    /**
+     * Set compensation
+     *
+     * @param string $compensation
+     */
+    public function setCompensation($compensation)
+    {
+        $this->compensation = $compensation;
+    }
+
+    /**
+     * Get compensation
+     *
+     * @return string 
+     */
+    public function getCompensation()
+    {
+        return $this->compensation;
+    }
+
+    /**
+     * Set sessionPeriod
+     *
+     * @param string $sessionPeriod
+     */
+    public function setSessionPeriod($sessionPeriod)
+    {
+        $this->sessionPeriod = $sessionPeriod;
+    }
+
+    /**
+     * Get sessionPeriod
+     *
+     * @return string 
+     */
+    public function getSessionPeriod()
+    {
+        return $this->sessionPeriod;
+    }
+
+    /**
+     * Add keywords
+     *
+     * @param Objects\InternJumpBundle\Entity\Keywords $keywords
+     */
+    public function addKeywords(\Objects\InternJumpBundle\Entity\Keywords $keywords)
+    {
+        $this->keywords[] = $keywords;
+    }
+
+    /**
+     * Set educations
+     *
+     * @param Doctrine\Common\Collections\Collection $keywords
+     */
+    public function setKeywords($keywords) {
+        $this->keywords = $keywords;
+    }
+    
+    /**
+     * Get keywords
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getKeywords()
+    {
+        return $this->keywords;
+    }
 }

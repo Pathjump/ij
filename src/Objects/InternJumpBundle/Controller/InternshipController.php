@@ -7,6 +7,7 @@ use Objects\InternJumpBundle\Entity\Internship;
 use Objects\InternJumpBundle\Form\InternshipType;
 use Symfony\Component\HttpFoundation\Response;
 use Objects\InternJumpBundle\Entity\City;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Internship controller.
@@ -52,7 +53,7 @@ class InternshipController extends Controller {
         if (!$company) {
             $message = $this->container->getParameter('company_not_found_error_msg');
             return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
-                    'message' => $message,));
+                        'message' => $message,));
         }
 
         //the results per page number
@@ -144,7 +145,7 @@ class InternshipController extends Controller {
         if (!$entity) {
             $message = $this->container->getParameter('internship_not_found_error_msg');
             return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
-                    'message' => $message,));
+                        'message' => $message,));
         } else {
             //check if not the owner company
             //so will check for job active or not 
@@ -153,7 +154,7 @@ class InternshipController extends Controller {
                 if (!$entity->getActive() || $entity->getActiveTo() < $todayDate || $entity->getActiveFrom() > $todayDate) {
                     $message = $this->container->getParameter('internship_not_found_error_msg');
                     return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
-                    'message' => $message,));
+                                'message' => $message,));
                 }
             }
         }
@@ -318,6 +319,12 @@ class InternshipController extends Controller {
         $entity->setCompany($company);
         $entity->setAddress($company->getAddress());
 
+        //add one langauge entity to the internship
+        $newInternshipLanguage = new \Objects\InternJumpBundle\Entity\InternshipLanguage();
+//        $newInternshipLanguage->setLanguage(new \Objects\InternJumpBundle\Entity\Language());
+        $entity->addInternshipLanguage($newInternshipLanguage);
+
+
         //Get State Repo
         $stateRepo = $em->getRepository('ObjectsInternJumpBundle:State');
         //Get The NewYork State which is decided to be set as a default state 
@@ -331,18 +338,55 @@ class InternshipController extends Controller {
         $request = $this->getRequest();
         //get after 1 year date
         $afterOneYearDate = new \DateTime('+1 year');
-        
+
         //get validation group
         $formValidationGroups [] = 'newInternship';
 
+        //minimumGPA list
+        $minimumGPAArray = array();
+        $No = 0.1;
+        for ($index = 1; $index <= 40; $index++) {
+            $minimumGPAArray ["$No"] = $No;
+            $No += 0.1;
+        }
+        //numberOfOpenings list
+        $numberOfOpeningsArray = array();
+        for ($index = 1; $index <= 30; $index++) {
+            $numberOfOpeningsArray [$index] = $index;
+        }
+
+        //sessionPeriod list
+        $nowYear = date("Y");
+        $nextYear = $nowYear + 1;
+        $sessionPeriodArray = array(
+            'ASAP' => 'ASAP',
+            'Flexable' => 'Flexable',
+            'As Defined' => 'As Defined',
+            'Spring 2013' => 'Spring ' . $nowYear,
+            'Summer ' . $nowYear => 'Summer ' . $nowYear,
+            'Fall ' . $nowYear => 'Fall ' . $nowYear,
+            'Winter ' . $nowYear => 'Winter ' . $nowYear,
+            'Spring ' . $nextYear => 'Spring ' . $nextYear,
+            'Summer ' . $nextYear => 'Summer ' . $nextYear,
+            'Fall ' . $nextYear => 'Fall ' . $nextYear,
+            'Winter ' . $nextYear => 'Winter ' . $nextYear
+        );
         //create a add new job form
         $form = $this->createFormBuilder($entity, array('validation_groups' => $formValidationGroups))
+                ->add('positionType', 'choice', array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'expanded' => true))
+                ->add('workLocation', 'choice', array('choices' => array('Office' => 'Office', 'Virtual' => 'Virtual', 'Doesn’t Matter' => 'Doesn’t Matter'), 'expanded' => true))
+                ->add('minimumGPA', 'choice', array('choices' => $minimumGPAArray))
+                ->add('numberOfOpenings', 'choice', array('choices' => $numberOfOpeningsArray))
+                ->add('sessionPeriod', 'choice', array('choices' => $sessionPeriodArray))
                 ->add('activeFrom', 'date', array('attr' => array('class' => 'activeFrom'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('activeTo', 'date', array('attr' => array('class' => 'activeTo'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('title')
-                ->add('description',null,array('required' => FALSE))
+                ->add('skills')
+                ->add('keywords', 'text', array('required' => FALSE))
+                ->add('compensation')
+                ->add('description', null, array('required' => FALSE))
                 ->add('requirements')
-                ->add('categories',null,array('required' => FALSE))
+                ->add('categories', null, array('required' => FALSE))
                 ->add('country', 'choice', array(
                     'choices' => $allCountriesArray,
                     'preferred_choices' => array($company->getCountry()),
@@ -352,6 +396,7 @@ class InternshipController extends Controller {
                 ->add('address', 'text')
                 ->add('zipcode')
                 ->add('active', null, array('required' => FALSE))
+                ->add('languages', 'collection', array('type' => new \Objects\InternJumpBundle\Form\InternshipLanguageType(), 'allow_add' => true, 'allow_delete' => true, 'by_reference' => false))
                 ->add('Latitude', 'hidden')
                 ->add('Longitude', 'hidden')
                 ->getForm();
@@ -362,6 +407,30 @@ class InternshipController extends Controller {
             if ($form->isValid()) {
                 //get the user object from the form
                 $entity = $form->getData();
+
+                //check for keywords
+                $keywrodsRepo = $em->getRepository('ObjectsInternJumpBundle:Keywords');
+                if ($entity->getKeywords()) {
+                    //expload the keywords
+                    $keywordsArray = explode(',', $entity->getKeywords());
+                    $newArrayColection = new ArrayCollection();
+                    foreach ($keywordsArray as $onekeyword) {
+                        //check if keyword exist
+                        $keyword = $keywrodsRepo->findOneBy(array('name' => trim($onekeyword)));
+                        if ($keyword) {
+                            $entity->setKeywords($newArrayColection);
+                            $entity->addKeywords($keyword);
+                        } else {
+                            $newKeyWords = new \Objects\InternJumpBundle\Entity\Keywords();
+                            $newKeyWords->setName(trim($onekeyword));
+                            $em->persist($newKeyWords);
+                            $em->flush();
+                            
+                            $entity->setKeywords($newArrayColection);
+                            $entity->addKeywords($newKeyWords);
+                        }
+                    }
+                }
 
                 $em = $this->getDoctrine()->getEntityManager();
                 $em->persist($entity);
@@ -378,15 +447,15 @@ class InternshipController extends Controller {
                 }
                 //get suitable cvs for this job categories
                 if (sizeof($categoryIdsArray) > 0) {
-                    
+
                     //Now Get Country and State to compare them with useres' before sending them emails
                     //get Job Country
                     $country = $entity->getCountry();
                     //get Job State
                     $state = $entity->getState();
                     //get suitable users' cvs
-                    $suitableCvs = $cvRepo->getNewJobSuitableCvs($categoryIdsArray,$country,$state);
-                    
+                    $suitableCvs = $cvRepo->getNewJobSuitableCvs($categoryIdsArray, $country, $state);
+
                     $newJobLink = $container->get('router')->generate('internship_show', array('id' => $entity->getId()), TRUE);
                     $messageText = $container->getParameter('new_job_to_suitable_users_message_text');
                     $subject = $container->getParameter('new_job_to_suitable_users_subject_text');
@@ -453,21 +522,57 @@ class InternshipController extends Controller {
 
         if (!$entity) {
             $message = $this->container->getParameter('internship_not_found_error_msg');
-              return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
-                    'message' => $message,));
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
 
-                //get validation group
+        //get validation group
         $formValidationGroups [] = 'editInternship';
 
+        $minimumGPAArray = array();
+        $No = 0.1;
+        for ($index = 1; $index <= 40; $index++) {
+            $minimumGPAArray ["$No"] = $No;
+            $No += 0.1;
+        }
+
+        $numberOfOpeningsArray = array();
+        for ($index = 1; $index <= 30; $index++) {
+            $numberOfOpeningsArray [$index] = $index;
+        }
+
+        //sessionPeriod list
+        $nowYear = date("Y");
+        $nextYear = $nowYear + 1;
+        $sessionPeriodArray = array(
+            'ASAP' => 'ASAP',
+            'Flexable' => 'Flexable',
+            'As Defined' => 'As Defined',
+            'Spring 2013' => 'Spring ' . $nowYear,
+            'Summer ' . $nowYear => 'Summer ' . $nowYear,
+            'Fall ' . $nowYear => 'Fall ' . $nowYear,
+            'Winter ' . $nowYear => 'Winter ' . $nowYear,
+            'Spring ' . $nextYear => 'Spring ' . $nextYear,
+            'Summer ' . $nextYear => 'Summer ' . $nextYear,
+            'Fall ' . $nextYear => 'Fall ' . $nextYear,
+            'Winter ' . $nextYear => 'Winter ' . $nextYear
+        );
         //create a add new job form
-        $editForm = $this->createFormBuilder($entity,  array('validation_groups' => $formValidationGroups))
+        $editForm = $this->createFormBuilder($entity, array('validation_groups' => $formValidationGroups))
+                ->add('positionType', 'choice', array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'expanded' => true))
+                ->add('workLocation', 'choice', array('choices' => array('Office' => 'Office', 'Virtual' => 'Virtual', 'Doesn’t Matter' => 'Doesn’t Matter'), 'expanded' => true))
+                ->add('minimumGPA', 'choice', array('choices' => $minimumGPAArray))
+                ->add('numberOfOpenings', 'choice', array('choices' => $numberOfOpeningsArray))
+                ->add('sessionPeriod', 'choice', array('choices' => $sessionPeriodArray))
                 ->add('activeFrom', 'date', array('attr' => array('class' => 'activeFrom'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('activeTo', 'date', array('attr' => array('class' => 'activeTo'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('title')
-                ->add('description',null,array('required' => FALSE))
+                ->add('keywords', null, array('required' => FALSE))
+                ->add('skills')
+                ->add('compensation')
+                ->add('description', null, array('required' => FALSE))
                 ->add('requirements')
-                ->add('categories',null,array('required' => FALSE))
+                ->add('categories', null, array('required' => FALSE))
                 ->add('country', 'choice', array(
                     'choices' => $allCountriesArray))
                 ->add('city', NULL, array('attr' => array('style' => 'width:310px;')))
@@ -475,6 +580,7 @@ class InternshipController extends Controller {
                 ->add('address', 'text')
                 ->add('zipcode')
                 ->add('active', null, array('required' => FALSE))
+                ->add('languages', 'collection', array('type' => new \Objects\InternJumpBundle\Form\InternshipLanguageType(), 'allow_add' => true, 'allow_delete' => true, 'by_reference' => false))
                 ->add('Latitude', 'hidden')
                 ->add('Longitude', 'hidden')
                 ->getForm();
@@ -525,7 +631,7 @@ class InternshipController extends Controller {
         if (!$job) {
             $message = $this->container->getParameter('internship_not_found_error_msg');
             return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
-                    'message' => $message,));
+                        'message' => $message,));
         }
         //get job company
         $jobCompany = $job->getCompany();
@@ -560,8 +666,8 @@ class InternshipController extends Controller {
 
         if (!$job) {
             $message = $this->container->getParameter('internship_not_found_error_msg');
-              return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
-                    'message' => $message,));
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
         }
 
         //get job company

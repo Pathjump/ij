@@ -31,7 +31,26 @@
                     {{ form_widget(edit_form.title) }}
                         <span class="miniError">{{ form_errors(edit_form.title) }}</span>
                         <br>
+                        
+                        <label>Session Period</label>
+                    {{ form_widget(edit_form.sessionPeriod,{'attr' : {'class' :  'chzn-select','style' : 'width:310px;'}}) }}
+                        <span class="miniError">{{ form_errors(edit_form.sessionPeriod) }}</span>
+                        <br>
 
+                        <label>Position type</label>
+                    {{ form_widget(edit_form.positionType) }}
+                        <span class="miniError">{{ form_errors(edit_form.positionType) }}</span>
+                        <br>
+                        
+                        <label>Minimum GPA</label>
+                    {{ form_widget(edit_form.minimumGPA,{'attr' : {'class' :  'chzn-select','style' : 'width:310px;'}}) }}
+                        <span class="miniError">{{ form_errors(edit_form.minimumGPA) }}</span>
+                        <br>
+
+                        <label>Number of openings</label>
+                    {{ form_widget(edit_form.numberOfOpenings,{'attr' : {'class' :  'chzn-select','style' : 'width:310px;'}}) }}
+                        <span class="miniError">{{ form_errors(edit_form.numberOfOpenings) }}</span>
+                        <br>
 
 
                         <label>Category</label>
@@ -68,7 +87,27 @@
                     {{ form_widget(edit_form.address) }}
                             <span class="miniError">{{ form_errors(edit_form.address) }}</span>
                             <br>
+                            
+                            <label>Keywords</label>
+                    {{ form_widget(edit_form.keywords,{'attr' : {'class' :  'chzn-select','style' : 'width:310px;'}}) }}
+                            <span class="miniError">{{ form_errors(edit_form.keywords) }}</span>
+                            <br>
 
+                            <label>Work Location</label>
+                    {{ form_widget(edit_form.workLocation) }}
+                        <span class="miniError">{{ form_errors(edit_form.workLocation) }}</span>
+                        <br>
+                        
+                        <label>Skills</label>
+                    {{ form_widget(edit_form.skills) }}
+                        <span class="miniError">{{ form_errors(edit_form.skills) }}</span>
+                        <br>
+                        
+                        <label>Compensation</label>
+                    {{ form_widget(edit_form.compensation) }}
+                        <span class="miniError">{{ form_errors(edit_form.compensation) }}</span>
+                        <br>
+                        
                             <label>City</label>
                     {{ form_widget(edit_form.city) }}
                             <span class="miniError">{{ form_errors(edit_form.country) }}</span>
@@ -116,6 +155,43 @@
                                 <div id="map_canvas" style="height:328px;width:906px;"></div>
                             </div>
                         </div>
+                        
+                        <aside> 
+                            <label>Languages</label>
+                            <div class="btns">
+                                Click "<strong>+</strong>" to add another language / "<strong>-</strong>" to remove last added language&nbsp;&nbsp;&nbsp;
+                                <input type="button" id="btnAdd" value="+" />
+                                <input disabled="disabled" type="button" id="btnDel" value="-" />
+                            </div>
+
+                            <div class="langaugesContainer">
+        {% for oneLanguage in edit_form.languages %}
+                                    <div class="newLangauge">
+                            {% if not loop.first %}
+                                            <a class="subDelete" href="javascript:void(0);" onclick="deleteSubForm(this);">-</a>
+                            {% endif %}
+                                            <table>
+                                                <tr>
+                                                    <td>Language</td>
+                                                    <td>{{ form_widget(oneLanguage.language) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Spoken</td>
+                                                    <td>{{ form_widget(oneLanguage.spokenFluency) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Written</td>
+                                                    <td>{{ form_widget(oneLanguage.writtenFluency) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Read</td>
+                                                    <td>{{ form_widget(oneLanguage.readFluency) }}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+        {% endfor %}
+                                    </div>
+                                </aside>
 
                 {{ form_widget(edit_form.Latitude) }}
                 {{ form_widget(edit_form.Longitude) }}
@@ -136,7 +212,42 @@
 
 {% block javascripts %}
 {{parent()}}
+
+{% set formElementHTML %}
+{% spaceless %}
+                <div class="newLangauge">
+                    <a class="subDelete" href="javascript:void(0);" onclick="deleteSubForm(this);">-</a>
+                    <table>
+                        <tr>
+                            <td>Language</td>
+                            <td>{{ form_widget(edit_form.languages.vars.prototype.language) }}</td>
+                        </tr>
+                        <tr>
+                            <td>Spoken</td>
+                            <td>{{ form_widget(edit_form.languages.vars.prototype.spokenFluency) }}</td>
+                        </tr>
+                        <tr>
+                            <td>Written</td>
+                            <td>{{ form_widget(edit_form.languages.vars.prototype.writtenFluency) }}</td>
+                        </tr>
+                        <tr>
+                            <td>Read</td>
+                            <td>{{ form_widget(edit_form.languages.vars.prototype.readFluency) }}</td>
+                        </tr>
+                    </table>
+                </div>
+{% endspaceless %}
+{% endset %}
+
         <script>
+            //ths part for add / remove langauge form
+                    var formElementHTML = '{{ formElementHTML | escape('js') }}';
+                    function deleteSubForm(currentElement) {
+                        $(currentElement).parent().remove();
+                    }
+                
+                    ///////////////////////////////////////////
+                    
         var jobCity = '{{entity.city}}';
         var jobState = '{{entity.state}}';
         var latitude = '{{entity.Latitude}}';
@@ -147,6 +258,28 @@
         var getPositionUrl = '{{url('get_position',{'zipcode' : ''})}}';
         var cityAutoCompleteUrl = "{{ path('city_auto_complete') }}";
         $(document).ready(function(){
+            //ths part for add / remove langauge form
+                    $('#btnAdd').click(function() {
+                        var tempHtml = formElementHTML;
+                        var subFormNumbers = [];
+                        $('[name^="form[languages]"]').each(function(){
+                            subFormNumber = parseInt($(this).attr('name').match(/\d+/)[0]);
+                            if($.inArray(subFormNumber, subFormNumbers) == -1) {
+                                subFormNumbers.push(subFormNumber);
+                            }
+                        });
+                        $('.langaugesContainer').append(tempHtml.replace(/\$\$name\$\$/g, (subFormNumbers.sort().pop() + 1)));
+                        $('#btnDel').removeAttr('disabled');
+                    });
+                    $('#btnDel').click(function() {
+                        if($('.langaugesContainer').children().length == 2) {
+                        $('#btnDel').attr('disabled','disabled');
+                    }
+                    $('.langaugesContainer').children().last().remove();
+                    });
+        
+            ////////////////////////////////////////////
+            
             setInterval(function(){
                 //Loader Script
                 $('#loading').width($('#loading').parent().width());
