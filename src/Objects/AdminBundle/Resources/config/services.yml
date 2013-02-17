@@ -106,3 +106,9 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, label: Personal Questions }
         arguments: [null, Objects\InternJumpBundle\Entity\PersonalQuestion, ObjectsAdminBundle:PersonalQuestionAdmin]         
+        
+  languages_admin:
+        class: Objects\AdminBundle\Admin\languagesAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Languages }
+        arguments: [null, Objects\InternJumpBundle\Entity\Language, ObjectsAdminBundle:languagesAdmin]       

@@ -382,7 +382,7 @@ class InternshipController extends Controller {
                 ->add('activeTo', 'date', array('attr' => array('class' => 'activeTo'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('title')
                 ->add('skills')
-                ->add('keywords', 'text', array('required' => FALSE))
+//                ->add('keywords', 'text', array('required' => FALSE))
                 ->add('compensation')
                 ->add('description', null, array('required' => FALSE))
                 ->add('requirements')
@@ -410,23 +410,24 @@ class InternshipController extends Controller {
 
                 //check for keywords
                 $keywrodsRepo = $em->getRepository('ObjectsInternJumpBundle:Keywords');
-                if ($entity->getKeywords()) {
+                
+                if ($request->get('keywords')) {
                     //expload the keywords
-                    $keywordsArray = explode(',', $entity->getKeywords());
-                    $newArrayColection = new ArrayCollection();
+                    $keywordsArray = explode(',', $request->get('keywords'));
+//                    $newArrayColection = new ArrayCollection();
                     foreach ($keywordsArray as $onekeyword) {
                         //check if keyword exist
                         $keyword = $keywrodsRepo->findOneBy(array('name' => trim($onekeyword)));
                         if ($keyword) {
-                            $entity->setKeywords($newArrayColection);
+//                            $entity->setKeywords($newArrayColection);
                             $entity->addKeywords($keyword);
                         } else {
                             $newKeyWords = new \Objects\InternJumpBundle\Entity\Keywords();
                             $newKeyWords->setName(trim($onekeyword));
                             $em->persist($newKeyWords);
                             $em->flush();
-                            
-                            $entity->setKeywords($newArrayColection);
+
+//                            $entity->setKeywords($newArrayColection);
                             $entity->addKeywords($newKeyWords);
                         }
                     }
@@ -557,6 +558,19 @@ class InternshipController extends Controller {
             'Fall ' . $nextYear => 'Fall ' . $nextYear,
             'Winter ' . $nextYear => 'Winter ' . $nextYear
         );
+
+        //get internship keywords
+        $keywords = $entity->getKeywords();
+        $keywordsString = "";
+        $index = sizeof($keywords);
+        foreach ($keywords as $keyword) {
+            if ($index > 1)
+                $keywordsString .= $keyword->getName() . ',';
+            else
+                $keywordsString .= $keyword->getName();
+            $index--;
+        }
+
         //create a add new job form
         $editForm = $this->createFormBuilder($entity, array('validation_groups' => $formValidationGroups))
                 ->add('positionType', 'choice', array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'expanded' => true))
@@ -567,7 +581,7 @@ class InternshipController extends Controller {
                 ->add('activeFrom', 'date', array('attr' => array('class' => 'activeFrom'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('activeTo', 'date', array('attr' => array('class' => 'activeTo'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('title')
-                ->add('keywords', null, array('required' => FALSE))
+//                ->add('keywords', null, array('required' => FALSE))
                 ->add('skills')
                 ->add('compensation')
                 ->add('description', null, array('required' => FALSE))
@@ -592,6 +606,31 @@ class InternshipController extends Controller {
                 //get the user object from the form
                 $entity = $editForm->getData();
 
+                //check for keywords
+                if ($request->get('keywords')) {
+                    $keywords = explode(",", $request->get('keywords'));
+                    //remove internship keywords
+                    $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
+                    $internshipObject = $internshipRepo->find($id);
+                    $internshipObject->deleteKeywords();
+
+                    foreach ($keywords as $keyword) {
+                        //check if keyword exist
+                        $keywordsRepo = $em->getRepository('ObjectsInternJumpBundle:Keywords');
+                        $keywordObject = $keywordsRepo->findOneBy(array('name' => $keyword));
+                        if ($keywordObject) {
+                            $entity->addKeywords($keywordObject);
+                        } else {
+                            $newKeyWords = new \Objects\InternJumpBundle\Entity\Keywords();
+                            $newKeyWords->setName(trim($keyword));
+                            $em->persist($newKeyWords);
+                            $em->flush();
+
+                            $entity->addKeywords($newKeyWords);
+                        }
+                    }
+                }
+
                 $entity->setCompany($company);
                 $em->persist($entity);
                 $em->flush();
@@ -609,6 +648,7 @@ class InternshipController extends Controller {
                     'entity' => $entity,
                     'company' => $company,
                     'edit_form' => $editForm->createView(),
+                    'keywordsString' => $keywordsString,
                     'no_zipcode_message_new_job_page' => $this->container->getParameter('no_zipcode_message_new_job_page'),
                     'map_change_location_message' => $this->container->getParameter('map_change_location_message_new_job_page'),
                     'formName' => $this->container->getParameter('companyEditJob_FormName'),

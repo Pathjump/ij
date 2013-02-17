@@ -856,4 +856,12 @@ class Internship {
     {
         return $this->keywords;
     }
+    
+    /**
+     * delete keywords
+     * 
+     */
+    public function deleteKeywords() {
+            $this->keywords = new ArrayCollection();
+    }
 }

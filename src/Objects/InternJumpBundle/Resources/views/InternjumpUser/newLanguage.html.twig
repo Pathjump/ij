@@ -1,0 +1,87 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}New Language{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+<section id="student-01">
+    <div class="wrapper">
+
+        <!--Edit-skils-->
+        <div class="Edit-Objectives">
+            <!--form Name-->
+            <h1>{%if formName%}{{formName}}{%endif%}:</h1>
+            <hr/>
+            {% if app.session.hasFlash('notice') %}
+            <span class="alert fail">
+            {{ app.session.flash('notice') | raw }}
+            </span>
+            {% endif %}
+            {% if app.session.hasFlash('success') %}
+            <span class="alert success">
+            {{ app.session.flash('success') | raw }}
+            </span>
+            {% endif %}
+            {% if app.session.hasFlash('error') %}
+            <span class="alert error">
+            {{ app.session.flash('error') | raw }}
+            </span>
+            {% endif %}
+            {% if form_errors(form) %}
+            <span class="alert error">
+            {{ form_errors(form) }}
+            </span>
+            {% endif %}
+            <div id="newEducation" class="edit-objectives-box">
+                <form action="{{ path('user_languages') }}" method="POST">
+                    <!--form Desc-->
+                    <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
+                    <label>Language :</label>
+                    {{ form_widget(form.language,{'attr' : {'class' :  'chzn-select','style' : 'width:310px;'}}) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.language) }}</span>
+                    <br/>
+                    
+                    <label>Spoken :</label>
+                    {{ form_widget(form.spokenFluency) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.spokenFluency) }}</span>
+                    <br/>
+                    
+                    <label>Written :</label>
+                    {{ form_widget(form.writtenFluency) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.writtenFluency) }}</span>
+                    <br/>
+                    <label>Read :</label>
+                    {{ form_widget(form.readFluency) }}
+                    <br/>
+                    <span class="miniError">{{ form_errors(form.readFluency) }}</span>
+                    <br/>
+                    
+                    
+                    {{ form_rest(form) }}
+                    <div class="low-btns">
+                        <input type="submit" class="submit" value="Save">
+                    </div>
+                </form>
+                    <div class="clear"></div>
+            </div>
+            <!-- End Skils Box-->
+        </div>
+    </div><!--end of wrapper -->
+</section>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('js/libs/chosen.jquery.min.js') }}" type="text/javascript"></script>
+<script>
+    $(document).ready(function() {
+        $('#logedInStudent,#newLanguage').addClass('crnt');
+        $('.chzn-select').chosen();
+    });
+</script>
+{% endblock %}

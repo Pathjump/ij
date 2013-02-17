@@ -133,6 +133,12 @@ class AdminSiteFormsController extends Controller {
             $config['companyEditJob_FormDesc'] = $container->getParameter('companyEditJob_FormDesc');
   
 
+            /****************User Add/Edit Languages*****************/
+            $config['studentAddLanguage_FormName'] = $container->getParameter('studentAddLanguage_FormName');
+            $config['studentAddLanguage_FormDesc'] = $container->getParameter('studentAddLanguage_FormDesc');
+            $config['studentEditLanguage_FormName'] = $container->getParameter('studentEditLanguage_FormName');
+            $config['studentEditLanguage_FormDesc'] = $container->getParameter('studentEditLanguage_FormDesc');
+            
                   
             //make form to fill it with data
             $form = $this->createFormBuilder($config)
@@ -205,6 +211,11 @@ class AdminSiteFormsController extends Controller {
                     /****************Company/Employer Edit Internship/Job*****************/
                     ->add('companyEditJob_FormName', 'text')
                     ->add('companyEditJob_FormDesc', 'textarea', array('required'=> false))
+                    /****************User Add/Edit Languages*****************/
+                    ->add('studentAddLanguage_FormName', 'text')
+                    ->add('studentAddLanguage_FormDesc', 'textarea', array('required'=> false))
+                    ->add('studentEditLanguage_FormName', 'text')
+                    ->add('studentEditLanguage_FormDesc', 'textarea', array('required'=> false))
                     ->getForm();
 
             $request = $this->getRequest();
@@ -394,6 +405,19 @@ class AdminSiteFormsController extends Controller {
                     if ($formDataArray['companyEditJob_FormDesc'] != $container->getParameter('companyEditJob_FormDesc')) {
                         $firstFileChange = TRUE;
                     }
+                    /****************User Add/Edit Languages*****************/
+                    if ($formDataArray['studentAddLanguage_FormName'] != $container->getParameter('studentAddLanguage_FormName')) {
+                        $firstFileChange = TRUE;
+                    }
+                    if ($formDataArray['studentAddLanguage_FormDesc'] != $container->getParameter('studentAddLanguage_FormDesc')) {
+                        $firstFileChange = TRUE;
+                    }
+                    if ($formDataArray['studentEditLanguage_FormName'] != $container->getParameter('studentEditLanguage_FormName')) {
+                        $firstFileChange = TRUE;
+                    }
+                    if ($formDataArray['studentEditLanguage_FormDesc'] != $container->getParameter('studentEditLanguage_FormDesc')) {
+                        $firstFileChange = TRUE;
+                    }
   
   
                     //check if we need to open the first file to change it is config
@@ -510,8 +534,13 @@ class AdminSiteFormsController extends Controller {
                             /****************Company/Employer Edit Internship/Job*****************/
                             $value['parameters']['companyEditJob_FormName'] = $formDataArray['companyEditJob_FormName'];
                             $value['parameters']['companyEditJob_FormDesc'] = $formDataArray['companyEditJob_FormDesc'];
-  
-  
+                            
+                            /****************User Add/Edit Languages*****************/
+                            $value['parameters']['studentAddLanguage_FormName'] = $formDataArray['studentAddLanguage_FormName'];
+                            $value['parameters']['studentAddLanguage_FormDesc'] = $formDataArray['studentAddLanguage_FormDesc'];
+                            $value['parameters']['studentEditLanguage_FormName'] = $formDataArray['studentEditLanguage_FormName'];
+                            $value['parameters']['studentEditLanguage_FormDesc'] = $formDataArray['studentEditLanguage_FormDesc'];
+                            
                             //dump to make spaces and format of the file before update it
                             $dumper = new \Symfony\Component\Yaml\Dumper();
                             $yaml = $dumper->dump($value, 3);

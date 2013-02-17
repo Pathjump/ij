@@ -119,3 +119,11 @@ campus_resps:
 mail_404:
     pattern:  /errorEmail
     defaults: { _controller: "ObjectsInternJumpBundle:Internjump:errorPage404Mail" }
+    
+user_languages:
+    pattern:  /language/new
+    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:userLanguages" }    
+    
+user_edit_language:
+    pattern:  /language/edit/{id}
+    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:userEditLanguage" }       

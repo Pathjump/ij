@@ -6,8 +6,105 @@ use Symfony\Component\HttpFoundation\Response;
 use Objects\APIBundle\Controller\TwitterController;
 use Objects\APIBundle\Controller\FacebookController;
 use Objects\APIBundle\Controller\LinkedinController;
+use Objects\InternJumpBundle\Entity\UserLanguage;
+use Objects\InternJumpBundle\Form\UserLanguageType;
 
 class InternjumpUserController extends ObjectsController {
+
+    /**
+     * this function used to edit langauge
+     * @author ahmed
+     * @param integer $id
+     */
+    public function userEditLanguageAction($id) {
+        //check for logrdin company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            //redirect to login page if user not loggedin
+            return $this->redirect($this->generateUrl('login'));
+        }
+
+        $em = $this->getDoctrine()->getEntityManager();
+        //get request object
+        $request = $this->getRequest();
+
+        //get loggedin user objects
+        $user = $this->get('security.context')->getToken()->getUser();
+        $languageRepo = $em->getRepository('ObjectsInternJumpBundle:UserLanguage');
+        //check if this language exist
+        $language = $languageRepo->find($id);
+        if (!$language) {
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => "This language dosn't exist."));
+        }
+
+        //check if this user the owner
+        if ($user->getId() == $language->getUser()->getId()) {
+            $form = $this->createForm(new UserLanguageType(), $language);
+
+            if ($request->getMethod() == 'POST') {
+                $form->bindRequest($request);
+                if ($form->isValid()) {
+                    //save the new language
+                    $em->flush();
+
+
+                    return $this->redirect($this->generateUrl('user_edit_language', array('id' => $id)));
+                }
+            }
+
+            return $this->render('ObjectsInternJumpBundle:InternjumpUser:editLanguage.html.twig', array(
+                        'form' => $form->createView(),
+                        'id' => $id,
+                        'formName' => $this->container->getParameter('studentEditLanguage_FormName'),
+                        'formDesc' => $this->container->getParameter('studentEditLanguage_FormDesc'),
+                    ));
+        } else {
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => "You can't edit this language."));
+        }
+    }
+
+    /**
+     * this function used to add languages for active users
+     * @author ahmed
+     */
+    public function userLanguagesAction() {
+        //check for logrdin company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            //redirect to login page if user not loggedin
+            return $this->redirect($this->generateUrl('login'));
+        }
+
+        $em = $this->getDoctrine()->getEntityManager();
+        //get request object
+        $request = $this->getRequest();
+
+        //get loggedin user objects
+        $user = $this->get('security.context')->getToken()->getUser();
+        //create new user language
+        $newUserLanguage = new UserLanguage();
+        $newUserLanguage->setUser($user);
+        $form = $this->createForm(new UserLanguageType(), $newUserLanguage);
+
+        if ($request->getMethod() == 'POST') {
+            $form->bindRequest($request);
+            if ($form->isValid()) {
+                //save the new language
+                $em->persist($newUserLanguage);
+                $em->flush();
+
+
+                return $this->redirect($this->generateUrl('student_task', array('loginName' => $user->getLoginName())));
+            }
+        }
+
+        return $this->render('ObjectsInternJumpBundle:InternjumpUser:newLanguage.html.twig', array(
+                    'newUserLanguage' => $newUserLanguage,
+                    'form' => $form->createView(),
+                    'formName' => $this->container->getParameter('studentAddLanguage_FormName'),
+                    'formDesc' => $this->container->getParameter('studentAddLanguage_FormDesc'),
+                ));
+    }
 
     /**
      * this function used to upload users cv file
@@ -1101,7 +1198,7 @@ class InternjumpUserController extends ObjectsController {
             $jobDesc = strip_tags($job->getDescription());
             if (strlen($jobDesc) > 200) {
                 $job->setDescription(substr($jobDesc, 0, 200) . '...');
-            }else{
+            } else {
                 $job->setDescription($jobDesc);
             }
         }
