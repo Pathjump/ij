@@ -19,7 +19,7 @@ class CVRepository extends EntityRepository {
      * @param integer $maxResults
      * @return array the count index contains the count of returned objects, the entities index contains the objects
      */
-    public function searchForCVs($searchString, $countryId, $cityId, $stateId, $selectedSkillsIds, $selectedCategories, $experienceYears, $page = 1, $maxResults = 10) {
+    public function searchForCVs($searchString, $countryId, $cityId, $stateId, $languageId, $languageReadLevel, $languageWrittenLevel, $languageSpokenLevel, $selectedSkillsIds, $selectedCategories, $experienceYears, $page = 1, $maxResults = 10) {
         $data = array(
             'count' => 0,
             'enities' => array()
@@ -33,6 +33,7 @@ class CVRepository extends EntityRepository {
                 LEFT JOIN cv.skills s
                 LEFT JOIN cv.employmentHistory e
                 LEFT JOIN cv.categories c
+                LEFT JOIN u.languages l
                 WHERE cv.isActive = 1
                 AND u.locked = 0
                 AND u.enabled = 1
@@ -44,6 +45,22 @@ class CVRepository extends EntityRepository {
             if ($countryId) {
                 $mainQuery .= ' AND u.country = :countryId';
                 $parameters['countryId'] = $countryId;
+            }
+            if ($languageId) {
+                $mainQuery .= ' AND l.language = :languageId';
+                $parameters['languageId'] = $languageId;
+                if ($languageReadLevel) {
+                    $mainQuery .= ' AND l.readFluency = :languageReadLevel';
+                    $parameters['languageReadLevel'] = $languageReadLevel;
+                }
+                if ($languageWrittenLevel) {
+                    $mainQuery .= ' AND l.writtenFluency = :languageWrittenLevel';
+                    $parameters['languageWrittenLevel'] = $languageWrittenLevel;
+                }
+                if ($languageSpokenLevel) {
+                    $mainQuery .= ' AND l.spokenFluency = :languageSpokenLevel';
+                    $parameters['languageSpokenLevel'] = $languageSpokenLevel;
+                }
             }
             if ($cityId) {
                 $mainQuery .= ' AND u.city = :cityId';
@@ -90,20 +107,20 @@ class CVRepository extends EntityRepository {
      * @author Ahmed edited by Ola
      * @param array $categoryIdsArray
      */
-    public function getNewJobSuitableCvs($categoryIdsArray,$country = NULL, $state = NULL) {
-        
-        $where = ""; 
+    public function getNewJobSuitableCvs($categoryIdsArray, $country = NULL, $state = NULL) {
+
+        $where = "";
         //if country and state are set with values
-        if($country != NULL && $state != NULL){
-            $where = "WHERE c.isActive = true and cat.id in (:categoryIdsArray) AND u.country = '$country' AND u.state = '$state'"; 
+        if ($country != NULL && $state != NULL) {
+            $where = "WHERE c.isActive = true and cat.id in (:categoryIdsArray) AND u.country = '$country' AND u.state = '$state'";
         }
         //if country is set and state not set
-        elseif($country != NULL && $state == NULL){
-            $where = "WHERE c.isActive = true and cat.id in (:categoryIdsArray) AND u.country = '$country'"; 
+        elseif ($country != NULL && $state == NULL) {
+            $where = "WHERE c.isActive = true and cat.id in (:categoryIdsArray) AND u.country = '$country'";
         }
         //both are not set [both null]
-        else{
-            $where = "WHERE c.isActive = true and cat.id in (:categoryIdsArray)";  
+        else {
+            $where = "WHERE c.isActive = true and cat.id in (:categoryIdsArray)";
         }
         $query = $this->getEntityManager()
                         ->createQuery('
@@ -111,7 +128,7 @@ class CVRepository extends EntityRepository {
             FROM ObjectsInternJumpBundle:CV c
             JOIN c.user u
             JOIN c.categories cat
-            '.$where.'
+            ' . $where . '
             group by u.email
             ')->setParameter('categoryIdsArray', $categoryIdsArray);
 

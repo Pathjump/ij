@@ -159,4 +159,13 @@ class UserLanguage {
         return $this->language;
     }
 
+    public function getValidLanguagesOptions() {
+        return array(
+            'None' => 'None',
+            'Novice' => 'Novice',
+            'Intermediate' => 'Intermediate',
+            'Advanced' => 'Advanced'
+        );
+    }
+
 }

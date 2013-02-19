@@ -99,6 +99,42 @@
                     </select>
                     <br>
 
+                    <h2>Language</h2>
+                    <select onchange="refreshPage(1);return false;" name="language-id" id="form_language" data-placeholder="Choose a language..." class="chzn-select" style="width: 225px">
+                        <option value=""></option>
+                        {% for language in languages %}
+                            <option value="{{ language.id }}"{% if language.id == languageId %} selected="selected"{% endif %}>{{ language }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+
+                    <h2>Language Read Level</h2>
+                    <select onchange="refreshPage(1);return false;" name="language-read-option" data-placeholder="Choose Read Level..." class="chzn-select" style="width: 225px">
+                        <option value=""></option>
+                        {% for option in languagesOptions %}
+                            <option value="{{ option }}"{% if option == languageReadLevel %} selected="selected"{% endif %}>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+
+                    <h2>Language Spoken Level</h2>
+                    <select onchange="refreshPage(1);return false;" name="language-spoken-option" data-placeholder="Choose Read Level..." class="chzn-select" style="width: 225px">
+                        <option value=""></option>
+                        {% for option in languagesOptions %}
+                            <option value="{{ option }}"{% if option == languageSpokenLevel %} selected="selected"{% endif %}>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+
+                    <h2>Language Written Level</h2>
+                    <select onchange="refreshPage(1);return false;" name="language-written-option" data-placeholder="Choose Read Level..." class="chzn-select" style="width: 225px">
+                        <option value=""></option>
+                        {% for option in languagesOptions %}
+                            <option value="{{ option }}"{% if option == languageWrittenLevel %} selected="selected"{% endif %}>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+
                     <button type="submit" class="submit">Search</button>
                     <div class="clear"></div>
                 </div>
