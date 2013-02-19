@@ -13,7 +13,7 @@ class InternshipLanguageType extends AbstractType {
                 ->add('writtenFluency', 'choice', array('choices' => array('None' => 'None', 'Novice' => 'Novice', 'Intermediate' => 'Intermediate', 'Advanced' => 'Advanced'), 'expanded' => true, 'label' => 'Written :'))
                 ->add('readFluency', 'choice', array('choices' => array('None' => 'None', 'Novice' => 'Novice', 'Intermediate' => 'Intermediate', 'Advanced' => 'Advanced'), 'expanded' => true, 'label' => 'Read :'))
 //                ->add('internship')
-                ->add('language', 'entity', array('class' => 'ObjectsInternJumpBundle:Language'))
+                ->add('language', 'entity', array('class' => 'ObjectsInternJumpBundle:Language', 'required' => false))
         ;
     }
 
