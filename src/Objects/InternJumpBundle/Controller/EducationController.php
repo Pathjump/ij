@@ -158,6 +158,7 @@ class EducationController extends ObjectsController {
 
     /**
      * signup third step
+     * @author Mahmoud
      */
     public function signupEducationAction() {
         //get the request object
@@ -198,7 +199,7 @@ class EducationController extends ObjectsController {
                 }
                 //save the user data
                 $this->getDoctrine()->getEntityManager()->flush();
-                return $this->redirect($this->generateUrl('signup_cv'));
+                return $this->redirect($this->generateUrl('signup_language'));
             }
         }
         return $this->render('ObjectsInternJumpBundle:Education:signup_education.html.twig', array(
@@ -227,7 +228,7 @@ class EducationController extends ObjectsController {
      *
      */
     public function newAction() {
- 
+
         if (false === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
             $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
             return $this->redirect($this->generateUrl('login'));
@@ -288,7 +289,7 @@ class EducationController extends ObjectsController {
             $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
             return $this->redirect($this->generateUrl('login',array('access_method' => 'facebook')));
         }
-        
+
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('ObjectsInternJumpBundle:Education')->find($id);
         if (!$entity) {

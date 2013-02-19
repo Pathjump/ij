@@ -32,7 +32,7 @@ class UserLanguage {
 
     /**
      * the internship of the language
-     * @Assert\NotNull()
+     * @Assert\NotNull(groups={"language", "Default"})
      * @var \Objects\InternJumpBundle\Entity\Language $language
      * @ORM\ManyToOne(targetEntity="\Objects\InternJumpBundle\Entity\Language", inversedBy="users")
      * @ORM\JoinColumn(name="language_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)
@@ -41,21 +41,21 @@ class UserLanguage {
 
     /**
      * @var string $spokenFluency
-     * @Assert\NotNull()
+     * @Assert\NotNull(groups={"language", "Default"})
      * @ORM\Column(name="spokenFluency", type="string", length=255)
      */
     private $spokenFluency;
 
     /**
      * @var string $writtenFluency
-     * @Assert\NotNull()
+     * @Assert\NotNull(groups={"language", "Default"})
      * @ORM\Column(name="writtenFluency", type="string", length=255)
      */
     private $writtenFluency;
 
     /**
      * @var string $readFluency
-     * @Assert\NotNull()
+     * @Assert\NotNull(groups={"language", "Default"})
      * @ORM\Column(name="readFluency", type="string", length=255)
      */
     private $readFluency;
@@ -146,7 +146,7 @@ class UserLanguage {
      *
      * @param Objects\InternJumpBundle\Entity\Language $language
      */
-    public function setLanguage(\Objects\InternJumpBundle\Entity\Language $language) {
+    public function setLanguage(\Objects\InternJumpBundle\Entity\Language $language = null) {
         $this->language = $language;
     }
 

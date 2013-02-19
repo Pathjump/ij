@@ -14,6 +14,8 @@ parameters:
   studentSignUpCvExperience_FormDesc: null
   studentSignUpCvSuccess_FormName: 'Congratulations on your first resume with InternJump'
   studentSignUpCvSuccess_FormDesc: 'You are just a step away from securing a killer internship'
+  studentSignUpLanguage_FormName: 'ADD Languages'
+  studentSignUpLanguage_FormDesc: 'ADD Languages'
   studentEditAccount_FormName: 'Edit Account'
   studentEditAccount_FormDesc: null
   studentEditResume_FormName: 'Update Resume'
