@@ -168,7 +168,9 @@ a.subDelete{
 
 div.underGraduate label{
     display: inline-block;
-    width: 93%;
+    vertical-align: sub;
+    width: 42%;
+    margin-left: 5px;
 }
 
 input#btnAdd, input#btnDel, a.subDelete {
@@ -222,4 +224,10 @@ input#btnAdd:hover, input#btnDel:hover, a.subDelete:hover {
     font: 18px "Arena Condensed";
     color: #f58220;
     margin-top: 25px;
+}
+
+td .chzn-containerو
+.yellowCont form td > input,
+.yellowCont form td > textarea {
+    vertical-align: middle;
 }
