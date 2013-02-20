@@ -225,8 +225,8 @@ class InternshipRepository extends EntityRepository {
      * @param int $page
      * @return array of jobs
      */
-    public function getJobsSearchResult($title, $country, $city, $state, $category, $company, $page, $jobsPerPage) {
-
+    public function getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray, $page, $jobsPerPage) {
+//print_r($keywordsArray);exit;
         if ($page < 1) {
             return array();
         }
@@ -241,12 +241,16 @@ class InternshipRepository extends EntityRepository {
             FROM ObjectsInternJumpBundle:Internship j
             JOIN j.company c
             JOIN j.categories cat
+            JOIN j.keywords kw
+            JOIN j.languages il
+            JOIN il.language l
             WHERE j.active = true AND  j.activeFrom <= :today AND  j.activeTo >= :today
             ';
         //j.id,j.title,j.description, j.position, j.createdAt, j.activeFrom, j.activeTo, j.country, c.id AS companyId, c.name AS companyName
         if ($title != 'empty') {
-            $query .= ' and j.title LIKE :title OR j.description LIKE :title'; // OR j.position LIKE :title
+            $query .= ' AND (j.title LIKE :title OR  j.description LIKE :title OR kw.name IN (:keywords) ) '; // OR j.position LIKE :title
             $para ['title'] = "%" . $title . "%";
+            $para ['keywords'] = $keywordsArray;
         }
         if ($country != 'empty') {
             $query .= ' AND j.country = :country';
@@ -268,8 +272,13 @@ class InternshipRepository extends EntityRepository {
             $query .= ' AND c.id = :company';
             $para ['company'] = $company;
         }
-
+        if ($lang != 'empty'){
+             $query .= ' AND l = :lang';
+             $para ['lang'] = $lang;
+        }
+//print_r($query);exit;
         $query .= ' GROUP BY j.id  ORDER BY j.createdAt DESC';
+        
         $query = $this->getEntityManager()->createQuery($query);
         $query->setParameters($para);
 

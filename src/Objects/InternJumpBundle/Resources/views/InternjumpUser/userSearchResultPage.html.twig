@@ -1,3 +1,6 @@
+
+{% extends '::base.html.twig' %}
+{% block body %}
 <ul class="pging">
                                 {% if lastPageNumber > 1 %}
                     {% if page > 1 %}
@@ -70,3 +73,4 @@ No Results found
 {% endif %}
                 {% endif %}
                                             </ul>
+{% endblock %}

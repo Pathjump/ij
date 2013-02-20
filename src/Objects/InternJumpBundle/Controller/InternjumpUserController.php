@@ -1193,6 +1193,9 @@ class InternjumpUserController extends ObjectsController {
             $allCompanysArray [$value['id']] = $value['name'];
         }
 
+        //All Languages
+        $allLanguagesArray = array('class' => 'ObjectsInternJumpBundle:Language', 'property' => 'name', 'empty_value' => '--- choose Language ---');//, 'expanded' => true, 'multiple' => true, 'required' => false);
+        
         //get the request object
         $request = $this->getRequest();
 
@@ -1209,7 +1212,8 @@ class InternjumpUserController extends ObjectsController {
                 ))
                 ->add('company', 'choice', array('empty_value' => '--- choose company ---',
             'choices' => $allCompanysArray
-                ));
+                ))
+                ->add('language', 'entity', $allLanguagesArray);
         //create the form
         $form = $formBuilder->getForm();
 
@@ -1221,19 +1225,25 @@ class InternjumpUserController extends ObjectsController {
      * This function for search ajax action
      * @author Ola
      */
-    public function searchAction($title, $country, $city, $state, $category, $company, $page) {
+    public function searchAction($title, $country, $city, $state, $category, $company, $lang, $page) {
         $request = $request = $this->getRequest();
 
-        if (!$request->isXmlHttpRequest()) {
-            return new Response("Faild");
-        }
+        //to check if Ajax Request
+//        if (!$request->isXmlHttpRequest()) {
+//            return new Response("Faild");
+//        }
 
+        /****to get array of keywords from search text ****/
+        $keywordsArray = explode(" ", $title);
+
+//        print_r($keywordsArray);exit;
+        //get number of jobs per page
         $jobsPerPage = $this->container->getParameter('jobs_per_search_results_page');
 
         $em = $this->getDoctrine()->getEntityManager();
         $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
         //get jobs search results array
-        $userSearchResults = $internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $page, $jobsPerPage);
+        $userSearchResults = $internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray, $page, $jobsPerPage);
 
         //Limit the details to only 200 character
         foreach ($userSearchResults as &$job) {
@@ -1246,7 +1256,7 @@ class InternjumpUserController extends ObjectsController {
         }
         /* pagenation part */
         //get count of all search result jobs
-        $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, 1, null));
+        $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company,$lang, $keywordsArray, 1, null));
 
         $lastPageNumber = (int) ($userSearchResultsCount / $jobsPerPage);
         if (($userSearchResultsCount % $jobsPerPage) > 0) {
@@ -1263,7 +1273,7 @@ class InternjumpUserController extends ObjectsController {
                     'title' => $title,
                     'country' => $country,
                     'city' => $city,
-                    'state' => $state, 'category' => $category, 'company' => $company
+                    'state' => $state, 'category' => $category, 'company' => $company, 'lang' => $lang,
                 ));
     }
 

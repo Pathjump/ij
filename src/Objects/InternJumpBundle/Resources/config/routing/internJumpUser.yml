@@ -96,8 +96,8 @@ user_search_page:
 
 
 user_search_ajax:
-    pattern:  /search/{title}/{country}/{city}/{state}/{category}/{company}/{page}
-    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:search",country: null, city: null, state: null, category: null, company: null, page: 1 } 
+    pattern:  /search/{title}/{country}/{city}/{state}/{category}/{company}/{lang}/{page}
+    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:search",country: null, city: null, state: null, category: null, company: null, lang: null, page: 1 } 
     
 auto_complete_url:
     pattern:  /autocompleteurl
