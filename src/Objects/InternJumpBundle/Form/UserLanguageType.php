@@ -13,7 +13,7 @@ class UserLanguageType extends AbstractType {
                 ->add('writtenFluency', 'choice', array('choices' => array('None' => 'None', 'Novice' => 'Novice', 'Intermediate' => 'Intermediate', 'Advanced' => 'Advanced'), 'expanded' => true, 'label' => 'Written :'))
                 ->add('readFluency', 'choice', array('choices' => array('None' => 'None', 'Novice' => 'Novice', 'Intermediate' => 'Intermediate', 'Advanced' => 'Advanced'), 'expanded' => true, 'label' => 'Read :'))
 //            ->add('user')
-                ->add('language', 'entity', array('class' => 'ObjectsInternJumpBundle:Language', 'required' => false))
+                ->add('language', 'entity', array('class' => 'ObjectsInternJumpBundle:Language', 'required' => false, 'attr' => array('data-placeholder' => "Choose a Language ...", 'class' => 'chzn-select')))
         ;
     }
 
