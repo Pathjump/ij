@@ -10,6 +10,10 @@ ObjectsInternJumpBundle_internJumpUser:
     resource: "@ObjectsInternJumpBundle/Resources/config/routing/internJumpUser.yml"
     prefix:   /internJumpUser
 
+company_message:
+    resource: "@ObjectsInternJumpBundle/Resources/config/routing/company_message.yml"
+    prefix:   /company/messages
+    
 ObjectsInternJumpBundle_company:
     resource: "@ObjectsInternJumpBundle/Resources/config/routing/company.yml"
     prefix:   /company
@@ -17,10 +21,6 @@ ObjectsInternJumpBundle_company:
 employers:
     pattern:  /company
     defaults: { _controller: "ObjectsInternJumpBundle:Company:employers" }
-
-company_message:
-    resource: "@ObjectsInternJumpBundle/Resources/config/routing/company_message.yml"
-    prefix:   /company/messages
 
 user_message:
     resource: "@ObjectsInternJumpBundle/Resources/config/routing/user_message.yml"
