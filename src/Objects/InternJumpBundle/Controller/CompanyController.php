@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\Email;
 use Objects\InternJumpBundle\Entity\City;
+use Objects\InternJumpBundle\Entity\UserLanguage;
 
 class CompanyController extends Controller {
 
@@ -258,6 +259,7 @@ class CompanyController extends Controller {
 
     /**
      * the company search for cv page
+     * @author Mahmoud
      */
     public function searchForCVAction() {
         //get the request object
@@ -275,6 +277,10 @@ class CompanyController extends Controller {
         $countryId = $request->get('country-id', $company->getCountry());
         $cityId = $request->get('city');
         $stateId = $request->get('state');
+        $languageId = $request->get('language-id');
+        $languageReadLevel = $request->get('language-read-option');
+        $languageWrittenLevel = $request->get('language-written-option');
+        $languageSpokenLevel = $request->get('language-spoken-option');
         $selectedSkillsIds = $request->get('skills-ids', array());
         $experienceYears = $request->get('experience-siyears', array());
         $selectedCategories = $request->get('selected-categories');
@@ -293,9 +299,10 @@ class CompanyController extends Controller {
         //get the filters data
         $countries = $em->getRepository('ObjectsInternJumpBundle:Country')->findAll();
         $skills = $em->getRepository('ObjectsInternJumpBundle:Skill')->findAll();
+        $languages = $em->getRepository('ObjectsInternJumpBundle:Language')->findAll();
         $parentCategories = $em->getRepository('ObjectsInternJumpBundle:CVCategory')->getAllParentCategories();
         //search for cvs
-        $data = $em->getRepository('ObjectsInternJumpBundle:CV')->searchForCVs($searchString, $countryId, $cityId, $stateId, $selectedSkillsIds, $selectedCategories, $experienceYears, $page, $itemsPerPage);
+        $data = $em->getRepository('ObjectsInternJumpBundle:CV')->searchForCVs($searchString, $countryId, $cityId, $stateId, $languageId, $languageReadLevel, $languageWrittenLevel, $languageSpokenLevel, $selectedSkillsIds, $selectedCategories, $experienceYears, $page, $itemsPerPage);
         $entities = $data['entities'];
         $count = $data['count'];
         //calculate the last page number
@@ -303,6 +310,7 @@ class CompanyController extends Controller {
         if (($count % $itemsPerPage) > 0) {
             $lastPageNumber++;
         }
+        $userLanguage = new UserLanguage();
         $twigParameters = array(
             'page' => $page,
             'lastPageNumber' => $lastPageNumber,
@@ -318,7 +326,13 @@ class CompanyController extends Controller {
             'experienceYears' => $experienceYears,
             'parentCategories' => $parentCategories,
             'selectedCategories' => $selectedCategories,
-            'cvs' => $entities
+            'cvs' => $entities,
+            'languages' => $languages,
+            'languageId' => $languageId,
+            'languageReadLevel' => $languageReadLevel,
+            'languageSpokenLevel' => $languageSpokenLevel,
+            'languageWrittenLevel' => $languageWrittenLevel,
+            'languagesOptions' => $userLanguage->getValidLanguagesOptions()
         );
         if ($request->isXmlHttpRequest()) {
             return $this->render('ObjectsInternJumpBundle:CV:company_search_ajax.html.twig', $twigParameters);

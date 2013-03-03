@@ -50,6 +50,10 @@ signup_education:
     pattern:  /user/signup/third/step
     defaults: { _controller: "ObjectsInternJumpBundle:Education:signupEducation" }
 
+signup_language:
+    pattern:  /user/signup/fourth/step
+    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:signupLanguage" }
+
 signup_cv_skills:
     pattern:  /cv/second/step
     defaults: { _controller: "ObjectsInternJumpBundle:Skill:signupCVSkills" }
@@ -119,11 +123,11 @@ campus_resps:
 mail_404:
     pattern:  /errorEmail
     defaults: { _controller: "ObjectsInternJumpBundle:Internjump:errorPage404Mail" }
-    
+
 user_languages:
     pattern:  /language/new
-    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:userLanguages" }    
-    
+    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:userLanguages" }
+
 user_edit_language:
     pattern:  /language/edit/{id}
-    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:userEditLanguage" }       
+    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:userEditLanguage" }

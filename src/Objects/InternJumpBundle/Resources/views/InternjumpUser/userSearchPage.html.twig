@@ -40,6 +40,9 @@ Internship Search
             <aside>
                 <label>Companies</label>
 {{form_widget(form.company, { 'attr': {'class': 'chzn-select','style':'width:160px;', 'id' : 'company_search'} })}}
+                <span class="or">Or</span> 
+                <label>Language</label>
+{{form_widget(form.language, { 'attr': {'class': 'chzn-select','style':'width:160px;', 'id' : 'language_search'} })}}
             </aside>
         </div>
         <!--Search-Internships-->
@@ -99,7 +102,7 @@ Internship Search
     
     
     var countryCitiesStatesUrl = '{{url('get_countey_cities_states',{'countryId' : ''})}}';
-    var searchJobsUrl= '{{url('user_search_ajax', {'title' : '','country' : '','city' : '','state' : '','category' : '','company' :  '','page' :  1})}}';
+    var searchJobsUrl= '{{url('user_search_ajax', {'title' : '','country' : '','city' : '','state' : '','category' : '','company' :  '','lang' :  '','page' :  1})}}';
     var autoCompleteUrl='{{url('auto_complete_url')}}';
     var cityAutoCompleteUrl= '{{url('city_auto_complete_url')}}';
     var text="empty"
@@ -108,6 +111,7 @@ Internship Search
     var state="empty";
     var category="empty"; 
     var company="empty";
+    var language="empty";
     
     </script>
 
@@ -117,7 +121,7 @@ Internship Search
     });
 
     $('#search_button').click(function(){
-    var searchJobsUrl= '{{url('user_search_ajax', {'title' : '','country' : '','city' : '','state' : '','category' : '','company' :  '','page' :  1})}}';
+    var searchJobsUrl= '{{url('user_search_ajax', {'title' : '','country' : '','city' : '','state' : '','category' : '','company' :  '','lang' :  '','page' :  1})}}';
     $('.loading').show();
 
     if($('#search_text').val()!= ""){ var text=$('#search_text').val();}
@@ -138,13 +142,16 @@ Internship Search
     if($('#form_company').val()!= ""){ var company=$('#form_company').val();}
     else{ var company="empty";}
 
+    if($('#form_language').val()!= ""){ var language=$('#form_language').val();}
+    else{ var language="empty";}
 
-    if(text || country || city || state || category || company){
+
+    if(text || country || city || state || category || company || language){
     $('#search_error').hide();
                         {% if app.request.get('access_method') == 'facebook' %}
-                        searchJobsUrl=searchJobsUrl+"/"+text+"/"+country+"/"+city+"/"+state+"/"+category+"/"+company+"?access_method=facebook";
+                            searchJobsUrl=searchJobsUrl+"/"+text+"/"+country+"/"+city+"/"+state+"/"+category+"/"+company+"/"+language"?access_method=facebook";
                         {% else %}
-                            searchJobsUrl=searchJobsUrl+"/"+text+"/"+country+"/"+city+"/"+state+"/"+category+"/"+company;
+                            searchJobsUrl=searchJobsUrl+"/"+text+"/"+country+"/"+city+"/"+state+"/"+category+"/"+company+"/"+language;
                     {%endif%}
                         
     $.ajax({
@@ -205,9 +212,9 @@ Internship Search
                 select: function( event, ui ) {
                     result = ui.item.value;
                     {% if app.request.get('access_method') == 'facebook' %}
-                        searchJobsUrl=searchJobsUrl+"/empty/empty/empty/empty/"+result+"/empty"+"?access_method=facebook";
+                        searchJobsUrl=searchJobsUrl+"/empty/empty/empty/empty/"+result+"/empty"+"/empty"+"?access_method=facebook";
                     {% else %}
-                        searchJobsUrl=searchJobsUrl+"/empty/empty/empty/empty/"+result+"/empty";
+                        searchJobsUrl=searchJobsUrl+"/empty/empty/empty/empty/"+result+"/empty"+"/empty";
                     {%endif%}
                     $.ajax({
                     url: searchJobsUrl,

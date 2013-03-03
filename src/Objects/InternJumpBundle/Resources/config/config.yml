@@ -1,6 +1,6 @@
 parameters:
-  new_job_to_suitable_users_message_text: 'Check Out InternJump''s New Postings'
-  new_job_to_suitable_users_subject_text: 'New Internships'
+  new_job_to_suitable_users_message_text: 'Hi, just wanted to let you know that there has been new internships and entry-level job postings. Amongst others, we thought the following would be a good match for you. Check it out:'
+  new_job_to_suitable_users_subject_text: 'New Internships / Entry-Level Job Posted'
   skills_autocomplete_number: 10
   refresh_notification_time: 30
   contact_us_email: info@internjump.com

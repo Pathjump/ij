@@ -4,7 +4,6 @@ namespace Objects\InternJumpBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Objects\InternJumpBundle\Entity\UserLanguage
@@ -12,8 +11,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Objects\InternJumpBundle\Entity\UserLanguageRepository")
  */
-class UserLanguage
-{
+class UserLanguage {
+
     /**
      * @var integer $id
      *
@@ -30,45 +29,43 @@ class UserLanguage
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)
      */
     private $user;
-    
+
     /**
      * the internship of the language
-     * @Assert\NotNull()
+     * @Assert\NotNull(groups={"language", "Default"})
      * @var \Objects\InternJumpBundle\Entity\Language $language
      * @ORM\ManyToOne(targetEntity="\Objects\InternJumpBundle\Entity\Language", inversedBy="users")
      * @ORM\JoinColumn(name="language_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)
      */
     private $language;
-    
+
     /**
      * @var string $spokenFluency
-     * @Assert\NotNull()
+     * @Assert\NotNull(groups={"language", "Default"})
      * @ORM\Column(name="spokenFluency", type="string", length=255)
      */
     private $spokenFluency;
 
     /**
      * @var string $writtenFluency
-     * @Assert\NotNull()
+     * @Assert\NotNull(groups={"language", "Default"})
      * @ORM\Column(name="writtenFluency", type="string", length=255)
      */
     private $writtenFluency;
 
     /**
      * @var string $readFluency
-     * @Assert\NotNull()
+     * @Assert\NotNull(groups={"language", "Default"})
      * @ORM\Column(name="readFluency", type="string", length=255)
      */
     private $readFluency;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -77,18 +74,16 @@ class UserLanguage
      *
      * @param string $spokenFluency
      */
-    public function setSpokenFluency($spokenFluency)
-    {
+    public function setSpokenFluency($spokenFluency) {
         $this->spokenFluency = $spokenFluency;
     }
 
     /**
      * Get spokenFluency
      *
-     * @return string 
+     * @return string
      */
-    public function getSpokenFluency()
-    {
+    public function getSpokenFluency() {
         return $this->spokenFluency;
     }
 
@@ -97,18 +92,16 @@ class UserLanguage
      *
      * @param string $writtenFluency
      */
-    public function setWrittenFluency($writtenFluency)
-    {
+    public function setWrittenFluency($writtenFluency) {
         $this->writtenFluency = $writtenFluency;
     }
 
     /**
      * Get writtenFluency
      *
-     * @return string 
+     * @return string
      */
-    public function getWrittenFluency()
-    {
+    public function getWrittenFluency() {
         return $this->writtenFluency;
     }
 
@@ -117,18 +110,16 @@ class UserLanguage
      *
      * @param string $readFluency
      */
-    public function setReadFluency($readFluency)
-    {
+    public function setReadFluency($readFluency) {
         $this->readFluency = $readFluency;
     }
 
     /**
      * Get readFluency
      *
-     * @return string 
+     * @return string
      */
-    public function getReadFluency()
-    {
+    public function getReadFluency() {
         return $this->readFluency;
     }
 
@@ -137,18 +128,16 @@ class UserLanguage
      *
      * @param Objects\UserBundle\Entity\User $user
      */
-    public function setUser(\Objects\UserBundle\Entity\User $user)
-    {
+    public function setUser(\Objects\UserBundle\Entity\User $user) {
         $this->user = $user;
     }
 
     /**
      * Get user
      *
-     * @return Objects\UserBundle\Entity\User 
+     * @return Objects\UserBundle\Entity\User
      */
-    public function getUser()
-    {
+    public function getUser() {
         return $this->user;
     }
 
@@ -157,18 +146,26 @@ class UserLanguage
      *
      * @param Objects\InternJumpBundle\Entity\Language $language
      */
-    public function setLanguage(\Objects\InternJumpBundle\Entity\Language $language)
-    {
+    public function setLanguage(\Objects\InternJumpBundle\Entity\Language $language = null) {
         $this->language = $language;
     }
 
     /**
      * Get language
      *
-     * @return Objects\InternJumpBundle\Entity\Language 
+     * @return Objects\InternJumpBundle\Entity\Language
      */
-    public function getLanguage()
-    {
+    public function getLanguage() {
         return $this->language;
     }
+
+    public function getValidLanguagesOptions() {
+        return array(
+            'None' => 'None',
+            'Novice' => 'Novice',
+            'Intermediate' => 'Intermediate',
+            'Advanced' => 'Advanced'
+        );
+    }
+
 }

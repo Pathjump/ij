@@ -4,7 +4,6 @@ namespace Objects\InternJumpBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Objects\InternJumpBundle\Entity\InternshipLanguage
@@ -12,8 +11,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Objects\InternJumpBundle\Entity\InternshipLanguageRepository")
  */
-class InternshipLanguage
-{
+class InternshipLanguage {
+
     /**
      * @var integer $id
      *
@@ -30,7 +29,7 @@ class InternshipLanguage
      * @ORM\JoinColumn(name="internship_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)
      */
     private $internship;
-    
+
     /**
      * the internship of the language
      * @Assert\NotNull()
@@ -39,7 +38,7 @@ class InternshipLanguage
      * @ORM\JoinColumn(name="language_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)
      */
     private $language;
-    
+
     /**
      * @var string $spokenFluency
      * @Assert\NotNull()
@@ -61,14 +60,12 @@ class InternshipLanguage
      */
     private $readFluency;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
     
@@ -81,18 +78,16 @@ class InternshipLanguage
      *
      * @param string $spokenFluency
      */
-    public function setSpokenFluency($spokenFluency)
-    {
+    public function setSpokenFluency($spokenFluency) {
         $this->spokenFluency = $spokenFluency;
     }
 
     /**
      * Get spokenFluency
      *
-     * @return string 
+     * @return string
      */
-    public function getSpokenFluency()
-    {
+    public function getSpokenFluency() {
         return $this->spokenFluency;
     }
 
@@ -101,18 +96,16 @@ class InternshipLanguage
      *
      * @param string $writtenFluency
      */
-    public function setWrittenFluency($writtenFluency)
-    {
+    public function setWrittenFluency($writtenFluency) {
         $this->writtenFluency = $writtenFluency;
     }
 
     /**
      * Get writtenFluency
      *
-     * @return string 
+     * @return string
      */
-    public function getWrittenFluency()
-    {
+    public function getWrittenFluency() {
         return $this->writtenFluency;
     }
 
@@ -121,18 +114,16 @@ class InternshipLanguage
      *
      * @param string $readFluency
      */
-    public function setReadFluency($readFluency)
-    {
+    public function setReadFluency($readFluency) {
         $this->readFluency = $readFluency;
     }
 
     /**
      * Get readFluency
      *
-     * @return string 
+     * @return string
      */
-    public function getReadFluency()
-    {
+    public function getReadFluency() {
         return $this->readFluency;
     }
 
@@ -141,18 +132,16 @@ class InternshipLanguage
      *
      * @param Objects\InternJumpBundle\Entity\Internship $internship
      */
-    public function setInternship(\Objects\InternJumpBundle\Entity\Internship $internship)
-    {
+    public function setInternship(\Objects\InternJumpBundle\Entity\Internship $internship) {
         $this->internship = $internship;
     }
 
     /**
      * Get internship
      *
-     * @return Objects\InternJumpBundle\Entity\Internship 
+     * @return Objects\InternJumpBundle\Entity\Internship
      */
-    public function getInternship()
-    {
+    public function getInternship() {
         return $this->internship;
     }
 
@@ -161,18 +150,17 @@ class InternshipLanguage
      *
      * @param Objects\InternJumpBundle\Entity\Language $language
      */
-    public function setLanguage(\Objects\InternJumpBundle\Entity\Language $language)
-    {
+    public function setLanguage(\Objects\InternJumpBundle\Entity\Language $language) {
         $this->language = $language;
     }
 
     /**
      * Get language
      *
-     * @return Objects\InternJumpBundle\Entity\Language 
+     * @return Objects\InternJumpBundle\Entity\Language
      */
-    public function getLanguage()
-    {
+    public function getLanguage() {
         return $this->language;
     }
+
 }

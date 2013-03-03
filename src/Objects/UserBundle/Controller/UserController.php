@@ -149,7 +149,6 @@ class UserController extends ObjectsController {
         if (!$rediretUrl) {
             //check if firewall redirected the user
             $rediretUrl = $session->get('_security.target_path');
-            echo $rediretUrl;
             if (!$rediretUrl) {
                 //check if company
                 if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {
@@ -2043,7 +2042,7 @@ class UserController extends ObjectsController {
         try {
             $em->flush();
         } catch (\Exception $e) {
-            
+
         }
     }
 

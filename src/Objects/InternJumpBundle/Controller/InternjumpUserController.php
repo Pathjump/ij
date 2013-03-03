@@ -12,6 +12,48 @@ use Objects\InternJumpBundle\Form\UserLanguageType;
 class InternjumpUserController extends ObjectsController {
 
     /**
+     * signup fourth step
+     * @author Mahmoud
+     */
+    public function signupLanguageAction() {
+        //get the request object
+        $request = $this->getRequest();
+        //get the user object
+        $user = $this->get('security.context')->getToken()->getUser();
+        if (count($user->getLanguages()) == 0) {
+            //add one education entity to the user
+            $user->addUserLanguage(new UserLanguage());
+        }
+        //create an education form
+        $formBuilder = $this->createFormBuilder($user, array(
+                    'validation_groups' => 'language'
+                ))
+                ->add('languages', 'collection', array('type' => new UserLanguageType(), 'allow_add' => true, 'allow_delete' => true, 'by_reference' => false));
+        //create the form
+        $form = $formBuilder->getForm();
+        //check if this is the user posted his data
+        if ($request->getMethod() == 'POST') {
+            //fill the form data from the request
+            $form->bindRequest($request);
+            //check if the form values are correct
+            if ($form->isValid()) {
+                $user = $form->getData();
+                foreach ($user->getLanguages() as $language) {
+                    $language->setUser($user);
+                }
+                //save the user data
+                $this->getDoctrine()->getEntityManager()->flush();
+                return $this->redirect($this->generateUrl('signup_cv'));
+            }
+        }
+        return $this->render('ObjectsInternJumpBundle:InternjumpUser:signup_language.html.twig', array(
+                    'form' => $form->createView(),
+                    'formName' => $this->container->getParameter('studentSignUpLanguage_FormName'),
+                    'formDesc' => $this->container->getParameter('studentSignUpLanguage_FormDesc'),
+                ));
+    }
+
+    /**
      * this function used to edit langauge
      * @author ahmed
      * @param integer $id
@@ -166,11 +208,11 @@ class InternjumpUserController extends ObjectsController {
         //get the logedin user
         $user = $this->get('security.context')->getToken()->getUser();
 
-        //create new cv 
+        //create new cv
         $newCV = new \Objects\InternJumpBundle\Entity\CV();
         $newCV->setUser($user);
 
-        // creating the upload form 
+        // creating the upload form
         $formValidationGroups = array('cvFile');
         $form = $this->createFormBuilder($newCV, array(
                     'validation_groups' => $formValidationGroups
@@ -400,7 +442,7 @@ class InternjumpUserController extends ObjectsController {
     }
 
     /**
-     * this function will show user notifications 
+     * this function will show user notifications
      * @author Ahmed
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -775,7 +817,7 @@ class InternjumpUserController extends ObjectsController {
         //get the notification
         $notification = $userNotificationRepo->find($notificationId);
 
-        //check if this company is the owner 
+        //check if this company is the owner
         if ($notification->getUser()->getId() == $user->getId()) {
             $notification->setIsNew(FALSE);
             $em->flush();
@@ -862,7 +904,7 @@ class InternjumpUserController extends ObjectsController {
         //get the question
         $question = $companyQuestionRepo->find($questionId);
 
-        //check if the logedin user is the owner 
+        //check if the logedin user is the owner
         if ($question->getUser()->getId() == $user->getId()) {
             $question->setAnswer($answerText);
             $em->flush();
@@ -906,7 +948,7 @@ class InternjumpUserController extends ObjectsController {
         //get the question
         $question = $companyQuestionRepo->find($questionId);
 
-        //check if the logedin user is the owner 
+        //check if the logedin user is the owner
         if ($question->getUser()->getId() == $user->getId()) {
             $question->setShowOnCV($status);
             $em->flush();
@@ -938,7 +980,7 @@ class InternjumpUserController extends ObjectsController {
 
         //get user cv
         $userCv = $cvRepo->find($cvId);
-        //check if the logedin user is the owner 
+        //check if the logedin user is the owner
         if ($userCv->getUser()->getId() == $user->getId()) {
             $userCv->setIsActive($status);
             $em->flush();
@@ -1113,7 +1155,7 @@ class InternjumpUserController extends ObjectsController {
     }
 
     /**
-     * This function for displaying user search page and fill drop down lists with data 
+     * This function for displaying user search page and fill drop down lists with data
      * @author  Ola
      */
     public function StudentInternshipsSearchAction() {
@@ -1151,6 +1193,9 @@ class InternjumpUserController extends ObjectsController {
             $allCompanysArray [$value['id']] = $value['name'];
         }
 
+        //All Languages
+        $allLanguagesArray = array('class' => 'ObjectsInternJumpBundle:Language', 'property' => 'name', 'empty_value' => '--- choose Language ---');//, 'expanded' => true, 'multiple' => true, 'required' => false);
+        
         //get the request object
         $request = $this->getRequest();
 
@@ -1167,7 +1212,8 @@ class InternjumpUserController extends ObjectsController {
                 ))
                 ->add('company', 'choice', array('empty_value' => '--- choose company ---',
             'choices' => $allCompanysArray
-                ));
+                ))
+                ->add('language', 'entity', $allLanguagesArray);
         //create the form
         $form = $formBuilder->getForm();
 
@@ -1179,19 +1225,25 @@ class InternjumpUserController extends ObjectsController {
      * This function for search ajax action
      * @author Ola
      */
-    public function searchAction($title, $country, $city, $state, $category, $company, $page) {
+    public function searchAction($title, $country, $city, $state, $category, $company, $lang, $page) {
         $request = $request = $this->getRequest();
 
-        if (!$request->isXmlHttpRequest()) {
-            return new Response("Faild");
-        }
+        //to check if Ajax Request
+//        if (!$request->isXmlHttpRequest()) {
+//            return new Response("Faild");
+//        }
 
+        /****to get array of keywords from search text ****/
+        $keywordsArray = explode(" ", $title);
+
+//        print_r($keywordsArray);exit;
+        //get number of jobs per page
         $jobsPerPage = $this->container->getParameter('jobs_per_search_results_page');
 
         $em = $this->getDoctrine()->getEntityManager();
         $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
         //get jobs search results array
-        $userSearchResults = $internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $page, $jobsPerPage);
+        $userSearchResults = $internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray, $page, $jobsPerPage);
 
         //Limit the details to only 200 character
         foreach ($userSearchResults as &$job) {
@@ -1204,7 +1256,7 @@ class InternjumpUserController extends ObjectsController {
         }
         /* pagenation part */
         //get count of all search result jobs
-        $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, 1, null));
+        $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company,$lang, $keywordsArray, 1, null));
 
         $lastPageNumber = (int) ($userSearchResultsCount / $jobsPerPage);
         if (($userSearchResultsCount % $jobsPerPage) > 0) {
@@ -1221,13 +1273,13 @@ class InternjumpUserController extends ObjectsController {
                     'title' => $title,
                     'country' => $country,
                     'city' => $city,
-                    'state' => $state, 'category' => $category, 'company' => $company
+                    'state' => $state, 'category' => $category, 'company' => $company, 'lang' => $lang,
                 ));
     }
 
     /**
      * @author Ola
-     * to get all categories which start match with first 3 letters of entered text 
+     * to get all categories which start match with first 3 letters of entered text
      * @return json array of jobs
      */
     public function autocompleteAction() {
@@ -1238,7 +1290,7 @@ class InternjumpUserController extends ObjectsController {
 
         //get cv repo
         $cvCategoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
-        //get autocomplete results 
+        //get autocomplete results
         $autoresult = $cvCategoryRepo->autocompletecategories($text);
 
         $response = new Response(json_encode($autoresult));
@@ -1247,7 +1299,7 @@ class InternjumpUserController extends ObjectsController {
 
     /**
      * @author Ola
-     * to get all cities which start match with first 3 letters of entered text 
+     * to get all cities which start match with first 3 letters of entered text
      * @return json array of cities
      */
     public function citiesAutocompleteAction() {
@@ -1259,7 +1311,7 @@ class InternjumpUserController extends ObjectsController {
 
         //get City repo
         $cvCityRepo = $em->getRepository('ObjectsInternJumpBundle:City');
-        //get autocomplete results 
+        //get autocomplete results
         $autoresult = $cvCityRepo->autocompletecities($text, $country);
 
         $response = new Response(json_encode($autoresult));

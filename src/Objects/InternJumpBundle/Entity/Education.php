@@ -118,7 +118,7 @@ class Education {
      * @param \Symfony\Component\Validator\ExecutionContext $context
      */
     public function isEndDateCorrect(ExecutionContext $context) {
-        if ($this->endDate && $this->endDate > (date('Y') )) {
+        if ($this->endDate && $this->endDate > (date('Y') + 7)) {
             $propertyPath = $context->getPropertyPath() . '.endDate';
             $context->setPropertyPath($propertyPath);
             $context->addViolation('End date must be less than 7 years from the current year', array(), NULL);

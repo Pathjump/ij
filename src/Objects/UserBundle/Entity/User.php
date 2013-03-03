@@ -39,10 +39,11 @@ class User implements AdvancedUserInterface {
     /**
      * the required languages for the internship
      * @var \Doctrine\Common\Collections\ArrayCollection $languages
+     * @Assert\Valid(groups={"language"})
      * @ORM\OneToMany(targetEntity="\Objects\InternJumpBundle\Entity\UserLanguage", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private $languages;
-    
+
     /**
      * @var integer $educationsPoints
      *
@@ -62,7 +63,7 @@ class User implements AdvancedUserInterface {
      * @ORM\OneToMany(targetEntity="\Objects\InternJumpBundle\Entity\Message", mappedBy="user", cascade={"remove"}, orphanRemoval=true)
      */
     private $messages;
-    
+
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection $personalQuestionAnswers
      * @ORM\OneToMany(targetEntity="\Objects\InternJumpBundle\Entity\PersonalQuestionAnswer", mappedBy="user", cascade={"remove"}, orphanRemoval=true)
@@ -481,6 +482,7 @@ class User implements AdvancedUserInterface {
         $this->messages = new ArrayCollection();
         $this->tasks = new ArrayCollection();
         $this->personalQuestionAnswers = new ArrayCollection();
+        $this->languages = new ArrayCollection();
     }
 
     /**
@@ -1463,18 +1465,16 @@ class User implements AdvancedUserInterface {
      *
      * @param Objects\InternJumpBundle\Entity\PersonalQuestionAnswer $personalQuestionAnswers
      */
-    public function addPersonalQuestionAnswer(\Objects\InternJumpBundle\Entity\PersonalQuestionAnswer $personalQuestionAnswers)
-    {
+    public function addPersonalQuestionAnswer(\Objects\InternJumpBundle\Entity\PersonalQuestionAnswer $personalQuestionAnswers) {
         $this->personalQuestionAnswers[] = $personalQuestionAnswers;
     }
 
     /**
      * Get personalQuestionAnswers
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
-    public function getPersonalQuestionAnswers()
-    {
+    public function getPersonalQuestionAnswers() {
         return $this->personalQuestionAnswers;
     }
 
@@ -1483,18 +1483,26 @@ class User implements AdvancedUserInterface {
      *
      * @param Objects\InternJumpBundle\Entity\UserLanguage $languages
      */
-    public function addUserLanguage(\Objects\InternJumpBundle\Entity\UserLanguage $languages)
-    {
+    public function addUserLanguage(\Objects\InternJumpBundle\Entity\UserLanguage $languages) {
         $this->languages[] = $languages;
     }
 
     /**
      * Get languages
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
-    public function getLanguages()
-    {
+    public function getLanguages() {
         return $this->languages;
     }
+
+    /**
+     * Set languages
+     *
+     * @return Doctrine\Common\Collections\Collection $languages
+     */
+    public function setLanguages($languages) {
+        $this->languages = $languages;
+    }
+
 }
