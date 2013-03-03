@@ -227,6 +227,11 @@ class CompanyAdmin extends Admin {
      */
     public function preUpdate($company) {
         $company->preUpload();
+        $company->setValidPassword();
+    }
+    
+    public function prePersist($company) {
+        $company->setValidPassword();
     }
 
     /**

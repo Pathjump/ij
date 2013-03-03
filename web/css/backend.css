@@ -1,4 +1,5 @@
-.chzn-container {
+.chzn-container,
+.select2-container {
     width: 410px !important;
 }
 .chzn-drop {

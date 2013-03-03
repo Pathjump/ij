@@ -111,4 +111,17 @@ services:
         class: Objects\AdminBundle\Admin\languagesAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, label: Languages }
-        arguments: [null, Objects\InternJumpBundle\Entity\Language, ObjectsAdminBundle:languagesAdmin]       
+        arguments: [null, Objects\InternJumpBundle\Entity\Language, ObjectsAdminBundle:languagesAdmin] 
+        
+  Internship_language_admin:
+        class: Objects\AdminBundle\Admin\internshipLanguageAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: InternshipLanguage }
+        arguments: [null, Objects\InternJumpBundle\Entity\InternshipLanguage, ObjectsAdminBundle:internshipLanguage]
+        
+        
+  keywords_admin:
+        class: Objects\AdminBundle\Admin\keywordsAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Keywords }
+        arguments: [null, Objects\InternJumpBundle\Entity\Keywords, ObjectsAdminBundle:keywords]        

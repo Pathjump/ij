@@ -41,6 +41,14 @@ class InternshipAdmin extends Admin {
                 ->add('city')
                 ->add('state')
                 ->add('address')
+                ->add('minimumGPA')
+                ->add('skills')
+                ->add('compensation')
+                ->add('keywords')
+                ->add('numberOfOpenings')
+                ->add('sessionPeriod')
+                ->add('positionType')
+                ->add('workLocation')
                 ->add('Longitude')
                 ->add('Latitude')
                 ->add('createdAt')
@@ -52,6 +60,8 @@ class InternshipAdmin extends Admin {
                 ->add('description', NULL, array('template' => 'ObjectsAdminBundle:General:list_description.html.twig'))
                 ->add('requirements')
                 ->add('company')
+                ->add('categories')
+                ->add('languages')
                 ->add('_action', 'actions', array(
                     'actions' => array(
                         'view' => array(),
@@ -75,6 +85,14 @@ class InternshipAdmin extends Admin {
                 ->add('city')
                 ->add('state')
                 ->add('address')
+                ->add('keywords')
+                ->add('minimumGPA')
+                ->add('skills')
+                ->add('compensation')
+                ->add('numberOfOpenings')
+                ->add('sessionPeriod')
+                ->add('positionType')
+                ->add('workLocation')
                 ->add('Longitude')
                 ->add('Latitude')
                 ->add('createdAt')
@@ -86,6 +104,7 @@ class InternshipAdmin extends Admin {
                 ->add('description')
                 ->add('requirements')
                 ->add('company')
+                ->add('languages')
                 ->add('categories')
         ;
     }
@@ -104,6 +123,11 @@ class InternshipAdmin extends Admin {
                 ->add('city')
                 ->add('state')
                 ->add('address')
+                ->add('minimumGPA')
+                ->add('numberOfOpenings')
+                ->add('sessionPeriod')
+                ->add('positionType')
+                ->add('workLocation')
                 ->add('Longitude')
                 ->add('Latitude')
                 ->add('createdAt')
@@ -137,12 +161,47 @@ class InternshipAdmin extends Admin {
             $cities[$this->getSubject()->getCity()] = $this->getSubject()->getCity();
             $states[$this->getSubject()->getState()] = $this->getSubject()->getState();
         }
+
+        //numberOfOpenings list
+        $numberOfOpeningsArray = array();
+        for ($index = 1; $index <= 30; $index++) {
+            $numberOfOpeningsArray [$index] = $index;
+        }
+
+        //sessionPeriod list
+        $nowYear = date("Y");
+        $nextYear = $nowYear + 1;
+        $sessionPeriodArray = array(
+            'ASAP' => 'ASAP',
+            'Flexable' => 'Flexable',
+            'As Defined' => 'As Defined',
+            'Spring 2013' => 'Spring ' . $nowYear,
+            'Summer ' . $nowYear => 'Summer ' . $nowYear,
+            'Fall ' . $nowYear => 'Fall ' . $nowYear,
+            'Winter ' . $nowYear => 'Winter ' . $nowYear,
+            'Spring ' . $nextYear => 'Spring ' . $nextYear,
+            'Summer ' . $nextYear => 'Summer ' . $nextYear,
+            'Fall ' . $nextYear => 'Fall ' . $nextYear,
+            'Winter ' . $nextYear => 'Winter ' . $nextYear
+        );
+
+        //minimumGPA list
+        $minimumGPAArray = array();
+        $No = 0.1;
+        for ($index = 1; $index <= 40; $index++) {
+            $minimumGPAArray ["$No"] = $No;
+            $No += 0.1;
+        }
         $formMapper
                 ->with('Required Fields')
                 ->add('company', 'sonata_type_model', array('required' => true), array('edit' => 'list', 'admin_code' => 'company_list_admin'))
-                ->add('zipcode','text',array('attr' => array('class' => 'zipcode')))
-                ->add('Longitude','text',array('attr' => array('class' => 'longitude')))
-                ->add('Latitude','text',array('attr' => array('class' => 'latitude')))
+                ->add('languages', 'sonata_type_collection', array('required' => false), array(
+                    'edit' => 'inline',
+                    'inline' => 'table'
+                ))
+                ->add('zipcode', 'text', array('attr' => array('class' => 'zipcode')))
+                ->add('Longitude', 'text', array('attr' => array('class' => 'longitude')))
+                ->add('Latitude', 'text', array('attr' => array('class' => 'latitude')))
                 ->add('country', 'choice', array(
                     'choices' => $countries,
                     'attr' => array('class' => 'chosen countrySelect')
@@ -157,16 +216,54 @@ class InternshipAdmin extends Admin {
                     'required' => false
                 ))
                 ->add('address')
+                ->add('minimumGPA', 'choice', array('choices' => $minimumGPAArray, 'attr' => array('class' => 'chosen')))
+                ->add('skills')
+                ->add('compensation')
+                ->add('keywords', 'sonata_type_model', array('required' => true, 'attr' => array('class' => 'chosen')), array('edit' => 'inline'))
+                ->add('numberOfOpenings', 'choice', array('choices' => $numberOfOpeningsArray, 'attr' => array('class' => 'chosen')))
+                ->add('sessionPeriod', 'choice', array('choices' => $sessionPeriodArray, 'attr' => array('class' => 'chosen')))
+                ->add('positionType', 'choice', array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'expanded' => true))
+                ->add('workLocation', 'choice', array('choices' => array('Office' => 'Office', 'Virtual' => 'Virtual', 'Doesn’t Matter' => 'Doesn’t Matter'), 'expanded' => true))
                 ->add('activeFrom', 'date', array('years' => range($currentDate->format('Y'), $currentDate->format('Y') + 5)))
                 ->add('activeTo', 'date', array('years' => range($currentDate->format('Y'), $currentDate->format('Y') + 5)))
                 ->add('active', NULL, array('required' => false))
-                ->add('categories', 'sonata_type_model', array('attr' => array('class' => 'chosen')))
+                ->add('categories', 'sonata_type_model', array('attr' => array('class' => 'chosen'), 'required' => FALSE))
                 ->add('title')
-                //->add('position')
                 ->add('description')
                 ->add('requirements')
                 ->end()
         ;
+    }
+
+    /**
+     * @author ahmed
+     * @param object $internship
+     */
+    public function prePersist($internship) {
+        //add the new internship to languages
+        foreach ($internship->getLanguages() as $language) {
+            $language->setInternship($internship);
+        }
+    }
+    
+    public function preUpdate($internship) {
+        //add the new internship to languages
+        foreach ($internship->getLanguages() as $language) {
+            $language->setInternship($internship);
+        }
+    }
+
+    /**
+     * this function is used to set a different validation group for the form
+     */
+    public function getFormBuilder() {
+        if (is_null($this->getSubject()->getId())) {
+            $this->formOptions = array('validation_groups' => 'newInternship');
+        } else {
+            $this->formOptions = array('validation_groups' => 'editInternship');
+        }
+        $formBuilder = parent::getFormBuilder();
+        return $formBuilder;
     }
 
 }

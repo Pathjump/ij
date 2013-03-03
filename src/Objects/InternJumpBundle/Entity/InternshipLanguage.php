@@ -71,6 +71,10 @@ class InternshipLanguage
     {
         return $this->id;
     }
+    
+    public function __toString() {
+        return $this->language. ' | Spoken : '.$this->spokenFluency. ' | Written : '.$this->writtenFluency. ' | Read : '.$this->readFluency;
+    }
 
     /**
      * Set spokenFluency

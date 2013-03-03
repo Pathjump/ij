@@ -224,6 +224,7 @@ class UserAdmin extends Admin {
      */
     public function prePersist($user) {
         $user->setRequiredData();
+        $user->setValidPassword();
     }
 
     /**
@@ -232,6 +233,7 @@ class UserAdmin extends Admin {
     public function preUpdate($user) {
         $user->setRequiredData();
         $user->preUpload();
+        $user->setValidPassword();
     }
 
 }

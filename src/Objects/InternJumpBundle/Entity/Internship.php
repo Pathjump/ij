@@ -13,6 +13,7 @@ use Symfony\Component\Locale\Locale;
  *
  * @ORM\Table()
  * @Assert\Callback(methods={"isCategoriesCorrect"},groups={"newInternship","editInternship"})
+ * @Assert\Callback(methods={"isLanguagesCorrect"},groups={"newInternship","editInternship"})
  * @ORM\Entity(repositoryClass="Objects\InternJumpBundle\Entity\InternshipRepository")
  */
 class Internship {
@@ -537,6 +538,19 @@ class Internship {
     }
 
     /**
+     * this function will check if the cv has more than one category
+     * @author Ahmed
+     * @param \Symfony\Component\Validator\ExecutionContext $context
+     */
+    public function isLanguagesCorrect(ExecutionContext $context) {
+        if ($this->languages && count($this->languages) == 0) {
+            $propertyPath = $context->getPropertyPath() . '.languages';
+            $context->setPropertyPath($propertyPath);
+            $context->addViolation('You must select at least one language', array(), NULL);
+        }
+    }
+    
+    /**
      * Set Latitude
      *
      * @param decimal $latitude
@@ -675,6 +689,10 @@ class Internship {
      * @param Objects\InternJumpBundle\Entity\InternshipLanguage $languages
      */
     public function addInternshipLanguage(\Objects\InternJumpBundle\Entity\InternshipLanguage $languages) {
+        $this->languages[] = $languages;
+    }
+    
+    public function addLanguages(\Objects\InternJumpBundle\Entity\InternshipLanguage $languages){
         $this->languages[] = $languages;
     }
 

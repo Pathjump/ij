@@ -26,7 +26,7 @@
 
 <div style="float: right;">
     <a href="javascript:void(0)" id="getMyLocation" style="font-size: 15px;font-weight: bold;float: right;">Get my location</a>
-<img src="{{asset('img/loadingfacebox.gif')}}" id="getMyPositionImg" style="display: none;float: right;"/>
+    <img src="{{asset('img/loadingfacebox.gif')}}" id="getMyPositionImg" style="display: none;float: right;"/>
     <div id="map_canvas" style="height:300px;width:300px;"></div>
 
 </div>
@@ -36,6 +36,10 @@
 <script>
     var map_change_location_message = 'click on other point to change your location';
   $(document).ready(function(){
+      if($('input.latitude').val() && $('input.longitude').val()){
+      initialize($('input.latitude').val(),$('input.longitude').val());
+        }
+      
 
     $('#getMyLocation').click(function(){
         var zipcode = $('input.zipcode').val();
@@ -62,7 +66,7 @@
                     //hide loading img
                     $('#getMyPositionImg').hide();
 
-                    initialize();
+                    initialize(latitude,longitude);
                 }
             });
         }else{
@@ -73,7 +77,7 @@
 
 
 
-function initialize() {
+function initialize(latitude,longitude) {
     var latlng = new google.maps.LatLng(latitude,longitude);
 
     var myOptions = {
@@ -96,25 +100,22 @@ function initialize() {
 
     google.maps.event.addListener(map, 'click', function(event) {
         infowindow.close();
-        var position = marker.getPosition();
-        position = position.toString();
-        position = position.split(',');
-        position['0'] = position['0'].replace("(", "");
-        position['1'] = position['1'].replace(")", "");
+        var currentLat = event.latLng.lat();
+        var currentLng = event.latLng.lng();
 
-        var newPosition = "<strong>Lat : </strong>"+position['0']+"<br><strong>Lng : </strong>"+position['1'];
+        var newPosition = "<strong>Lat : </strong>"+currentLat+"<br><strong>Lng : </strong>"+currentLng;
 
         infowindow.setContent(newPosition);
         infowindow.open(map, marker);
 
         marker.setPosition(event.latLng);
         //set lat and lng to input fields
-        $('input.latitude').val(position['0']);
-        $('input.longitude').val(position['1']);
+        $('input.latitude').val(currentLat);
+        $('input.longitude').val(currentLng);
     });
 }
 
-</script>
+    </script>
 {% endif %}
     <script type="text/javascript" src="{{asset('js/ckeditor/ckeditor.js')}}"></script>
 

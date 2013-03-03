@@ -158,7 +158,7 @@ class EducationAdmin extends Admin {
 //                ->add('grade', 'choice', array('choices' => $education->getValidGrades()))
 //                ->add('degree', 'choice', array('choices' => $education->getValidDegrees()))
 //                ->end()
-                ->add('user')
+//                ->add('user')
                 ->add('schoolName')
                 ->add('underGraduate')
                 ->add('major')
