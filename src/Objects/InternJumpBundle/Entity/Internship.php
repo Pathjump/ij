@@ -121,9 +121,13 @@ class Internship {
     private $positionType;
     
     /**
-     * @var string $skills
-     * @Assert\NotNull(groups={"newInternship","editInternship"})
-     * @ORM\Column(name="skills", type="string", length=255)
+     * the cv skills
+     * @var \Doctrine\Common\Collections\ArrayCollection $skills
+     * @ORM\ManyToMany(targetEntity="\Objects\InternJumpBundle\Entity\Skill")
+     * @ORM\JoinTable(name="internship_skills",
+     *     joinColumns={@ORM\JoinColumn(name="internship_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="skill_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)}
+     * )
      */
     private $skills;
     
@@ -787,26 +791,6 @@ class Internship {
     }
 
     /**
-     * Set skills
-     *
-     * @param string $skills
-     */
-    public function setSkills($skills)
-    {
-        $this->skills = $skills;
-    }
-
-    /**
-     * Get skills
-     *
-     * @return string 
-     */
-    public function getSkills()
-    {
-        return $this->skills;
-    }
-
-    /**
      * Set compensation
      *
      * @param string $compensation
@@ -881,5 +865,29 @@ class Internship {
      */
     public function deleteKeywords() {
             $this->keywords = new ArrayCollection();
+    }
+
+    /**
+     * Add skills
+     *
+     * @param Objects\InternJumpBundle\Entity\Skill $skills
+     */
+    public function addSkill(\Objects\InternJumpBundle\Entity\Skill $skills)
+    {
+        $this->skills[] = $skills;
+    }
+    
+    public function setSkills($skills){
+        $this->skills = $skills;
+    }
+
+    /**
+     * Get skills
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getSkills()
+    {
+        return $this->skills;
     }
 }

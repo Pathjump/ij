@@ -217,7 +217,7 @@ class InternshipAdmin extends Admin {
                 ))
                 ->add('address')
                 ->add('minimumGPA', 'choice', array('choices' => $minimumGPAArray, 'attr' => array('class' => 'chosen')))
-                ->add('skills')
+                ->add('skills', 'sonata_type_model', array('required' => true, 'attr' => array('class' => 'chosen')), array('edit' => 'inline'))
                 ->add('compensation')
                 ->add('keywords', 'sonata_type_model', array('required' => true, 'attr' => array('class' => 'chosen')), array('edit' => 'inline'))
                 ->add('numberOfOpenings', 'choice', array('choices' => $numberOfOpeningsArray, 'attr' => array('class' => 'chosen')))

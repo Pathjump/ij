@@ -89,9 +89,18 @@
                         <h1>Minimum GPA</h1>
                         <p>{{ entity.minimumGPA }}</p>
 
-                        <h1>Skills</h1>
-                        <p>{{ entity.skills }}</p>
-
+                        {% if entity.skills %}
+                            <h1>Skills</h1>
+                            <p>
+                            {% for skill in entity.skills %}
+                                {% if not loop.last %}
+                                {{ skill.title }} ,
+                                {% else %}
+                                {{ skill.title }}
+                                {% endif %}
+                            {% endfor %}
+                                    </p>
+                        {% endif %}
                         <h1>Number of openings</h1>
                         <p>{{ entity.numberOfOpenings }}</p>
 
