@@ -36,6 +36,8 @@
                     {% else %}
                          {% if entity.active and jobAvailabilityFlag == 1 and is_granted('ROLE_USER') and addedBeforeFlag == 1%}
                 <a href="javascript:void(0)" id="jobApply" class="apply">apply now</a>
+                {% elseif is_granted('IS_AUTHENTICATED_ANONYMOUSLY') %}
+                <a href="javascript:void(0)" id="notActiveUserApply" class="apply">apply now</a>
                          {% endif %}
                          {% if addedBeforeFlag == 0 and is_granted('ROLE_USER') %}
                 <a href="javascript:void(0)" class="jobApplySuccess apply">{{job_added_before_message}}  </a>

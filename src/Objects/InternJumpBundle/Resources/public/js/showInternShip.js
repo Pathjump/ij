@@ -15,6 +15,10 @@ $(document).ready(function(){
         });
     });
     
+    $('#notActiveUserApply').click(function(){
+       jAlert("You need to register to apply.");
+    });
+    
     $("#jobApply").fancybox({
         'href'              : getUserCvsUrl,
         'type'              : 'ajax',

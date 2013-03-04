@@ -461,7 +461,7 @@ class CompanyController extends Controller {
         $request = $this->getRequest();
         //prepare the form validation constrains
         $collectionConstraint = new Collection(array(
-            'email' => new Email()
+                    'email' => new Email()
                 ));
         //create the form
         $form = $this->createFormBuilder(null, array(
@@ -618,7 +618,7 @@ class CompanyController extends Controller {
                 ->add('Latitude', 'hidden')
                 ->add('Longitude', 'hidden')
                 ->add('file', 'file', array('required' => false, 'label' => 'Logo', 'attr' => array('onchange' => 'readURL(this);')))
-                ->add('professions')
+                ->add('professions', null, array('required' => FALSE))
         ;
         //check if the old password is required
         if ($oldPassword) {
@@ -839,7 +839,7 @@ class CompanyController extends Controller {
         try {
             $em->flush();
         } catch (\Exception $e) {
-
+            
         }
     }
 
@@ -912,7 +912,7 @@ class CompanyController extends Controller {
                 ->add('Latitude', 'hidden')
                 ->add('Longitude', 'hidden')
                 ->add('file', 'file', array('required' => false, 'label' => 'Logo', 'attr' => array('onchange' => 'readURL(this);')))
-                ->add('professions')
+                ->add('professions', null, array('required' => FALSE))
         ;
         //create the form
         $form = $formBuilder->getForm();
