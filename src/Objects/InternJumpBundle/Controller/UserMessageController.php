@@ -41,7 +41,6 @@ class UserMessageController extends ObjectsController {
      * @param integer $itemsPerPage
      */
     public function getMessagesAction($box, $page, $itemsPerPage) {
-        
         if (false === $this->get('security.context')->isGranted('ROLE_USER')) {
             $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
             return $this->redirect($this->generateUrl('login'));
@@ -88,7 +87,6 @@ class UserMessageController extends ObjectsController {
             $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
             return $this->redirect($this->generateUrl('login'));
         }
-        
         //get the user object
         $user = $this->get('security.context')->getToken()->getUser();
         //get the request object
@@ -209,7 +207,6 @@ class UserMessageController extends ObjectsController {
             $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
             return $this->redirect($this->generateUrl('login'));
         }
-        
         //get the message object if valid
         $entity = $this->getValidMessageObject($id);
         //initialize the go back url to inbox
@@ -234,7 +231,6 @@ class UserMessageController extends ObjectsController {
             $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
             return $this->redirect($this->generateUrl('login'));
         }
-        
         //get the message object if valid
         $entity = $this->getValidMessageObject($id);
         //create a delete form
@@ -261,7 +257,6 @@ class UserMessageController extends ObjectsController {
             $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
             return $this->redirect($this->generateUrl('login'));
         }
-        
         //get the entity manager
         $em = $this->getDoctrine()->getEntityManager();
         //get the user object
@@ -413,6 +408,10 @@ class UserMessageController extends ObjectsController {
      * @param string $userName the user name to send to
      */
     public function createAction($userName = NULL) {
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('login'));
+        }
         //create a default object
         $entity = new Message();
         $form = $this->createNewMessageForm($entity, $userName);

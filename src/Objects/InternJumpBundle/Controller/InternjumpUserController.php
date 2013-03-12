@@ -16,6 +16,10 @@ class InternjumpUserController extends ObjectsController {
      * @author Mahmoud
      */
     public function signupLanguageAction() {
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('login'));
+        }
         //get the request object
         $request = $this->getRequest();
         //get the user object
@@ -1195,7 +1199,7 @@ class InternjumpUserController extends ObjectsController {
 
         //All Languages
         $allLanguagesArray = array('class' => 'ObjectsInternJumpBundle:Language', 'property' => 'name', 'empty_value' => '--- choose Language ---');//, 'expanded' => true, 'multiple' => true, 'required' => false);
-        
+
         //get the request object
         $request = $this->getRequest();
 

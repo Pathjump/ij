@@ -129,6 +129,10 @@ class SkillController extends ObjectsController {
      * @author Mahmoud
      */
     public function signupCVSkillsAction() {
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('login'));
+        }
         //get the request object
         $request = $this->getRequest();
         //get the user object

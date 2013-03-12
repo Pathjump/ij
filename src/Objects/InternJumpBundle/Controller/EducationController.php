@@ -161,6 +161,10 @@ class EducationController extends ObjectsController {
      * @author Mahmoud
      */
     public function signupEducationAction() {
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('login'));
+        }
         //get the request object
         $request = $this->getRequest();
         //get the user object
@@ -228,7 +232,6 @@ class EducationController extends ObjectsController {
      *
      */
     public function newAction() {
-
         if (false === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
             $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
             return $this->redirect($this->generateUrl('login'));
@@ -248,6 +251,10 @@ class EducationController extends ObjectsController {
      *
      */
     public function createAction() {
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('login'));
+        }
         $entity = new Education();
         //get the user object
         $user = $this->get('security.context')->getToken()->getUser();
@@ -289,7 +296,6 @@ class EducationController extends ObjectsController {
             $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
             return $this->redirect($this->generateUrl('login',array('access_method' => 'facebook')));
         }
-
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('ObjectsInternJumpBundle:Education')->find($id);
         if (!$entity) {
@@ -314,6 +320,10 @@ class EducationController extends ObjectsController {
      *
      */
     public function updateAction($id) {
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('login'));
+        }
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('ObjectsInternJumpBundle:Education')->find($id);
         if (!$entity) {
@@ -359,6 +369,10 @@ class EducationController extends ObjectsController {
      *
      */
     public function deleteAction($id) {
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('login'));
+        }
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
         $form->bindRequest($request);

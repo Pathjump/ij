@@ -19,6 +19,10 @@ class CVController extends ObjectsController {
      * the cv create first step
      */
     public function signupCVAction() {
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('login'));
+        }
         //get the request object
         $request = $this->getRequest();
         //get the user object
@@ -84,6 +88,10 @@ class CVController extends ObjectsController {
      * @author Mahmoud
      */
     public function signupCVSuccessAction() {
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('login'));
+        }
         //get the user object
         $user = $this->get('security.context')->getToken()->getUser();
         return $this->render('ObjectsInternJumpBundle:CV:signup_cv_success.html.twig', array(
@@ -115,7 +123,7 @@ class CVController extends ObjectsController {
             $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
             return $this->redirect($this->generateUrl('login'));
         }
-        
+
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('ObjectsInternJumpBundle:CV')->find($id);
         if (!$entity) {
@@ -179,12 +187,10 @@ class CVController extends ObjectsController {
      * @param integer $id
      */
     public function editCVSkillsAction($id) {
-        
         if (false === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
             $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
             return $this->redirect($this->generateUrl('login'));
         }
-        
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('ObjectsInternJumpBundle:CV')->find($id);
         if (!$entity) {
@@ -246,12 +252,10 @@ class CVController extends ObjectsController {
      *
      */
     public function newAction() {
-        
         if (false === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
             $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
             return $this->redirect($this->generateUrl('login'));
         }
-        
         $entity = new CV();
         $form = $this->createForm(new CVType(), $entity);
         return $this->render('ObjectsInternJumpBundle:CV:new.html.twig', array(
@@ -267,6 +271,10 @@ class CVController extends ObjectsController {
      *
      */
     public function createAction() {
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('login'));
+        }
         //get the user object
         $user = $this->get('security.context')->getToken()->getUser();
         $entity = new CV();
@@ -315,7 +323,6 @@ class CVController extends ObjectsController {
      *
      */
     public function editAction($id) {
-         
         if (false === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
             $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
             return $this->redirect($this->generateUrl('login'));
@@ -344,6 +351,10 @@ class CVController extends ObjectsController {
      *
      */
     public function updateAction($id) {
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('login'));
+        }
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('ObjectsInternJumpBundle:CV')->find($id);
         if (!$entity) {
@@ -373,6 +384,10 @@ class CVController extends ObjectsController {
      *
      */
     public function deleteAction($id) {
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('login'));
+        }
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
         $form->bindRequest($request);
