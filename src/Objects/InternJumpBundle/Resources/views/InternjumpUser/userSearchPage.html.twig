@@ -149,7 +149,7 @@ Internship Search
     if(text || country || city || state || category || company || language){
     $('#search_error').hide();
                         {% if app.request.get('access_method') == 'facebook' %}
-                            searchJobsUrl=searchJobsUrl+"/"+text+"/"+country+"/"+city+"/"+state+"/"+category+"/"+company+"/"+language"?access_method=facebook";
+                            searchJobsUrl=searchJobsUrl+"/"+text+"/"+country+"/"+city+"/"+state+"/"+category+"/"+company+"/"+language+"?access_method=facebook";
                         {% else %}
                             searchJobsUrl=searchJobsUrl+"/"+text+"/"+country+"/"+city+"/"+state+"/"+category+"/"+company+"/"+language;
                     {%endif%}
