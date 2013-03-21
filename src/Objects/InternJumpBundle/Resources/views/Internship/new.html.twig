@@ -267,6 +267,11 @@
                 var defaultStateName = '{{defaultStateName}}';
 
                 $(document).ready(function(){
+                    //check none for language levels as default
+                    $('#form_languages_0_spokenFluency_None').attr('checked', 'checked');
+                    $('#form_languages_0_writtenFluency_None').attr('checked', 'checked');
+                    $('#form_languages_0_readFluency_None').attr('checked', 'checked');
+                    
                     //ths part for add / remove langauge form
                     $('#btnAdd').click(function() {
                         var tempHtml = formElementHTML;
