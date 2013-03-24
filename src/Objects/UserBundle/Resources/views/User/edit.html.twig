@@ -112,9 +112,9 @@
                             <td>{{ form_widget(form.about) }}<span class="miniError">{{ form_errors(form.about) }}</span></td>
                             <td width="75">&nbsp;</td>
 
-                            {{ form_errors(form.file) }}
                             <td><label>{% trans %}Your Image{% endtrans %}:</label></td>
                             <td class="userImg">
+                                {{ form_errors(form.file) }}
                                 <span class="file-wrapper">
                                     {{ form_widget(form.file) }}
                                     <span class="button">Browse</span>

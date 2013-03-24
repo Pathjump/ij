@@ -319,7 +319,7 @@ class User implements AdvancedUserInterface {
     private $imageHandeled = FALSE;
 
     /**
-     * @Assert\Image(groups={"image"})
+     * @Assert\Image(groups={"image", "signup_second", "edit", "adminsignup", "adminedit"}, maxSize = "1024k")
      * @var \Symfony\Component\HttpFoundation\File\UploadedFile
      */
     public $file;
