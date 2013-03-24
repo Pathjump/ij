@@ -7,7 +7,7 @@
 <form  action="{{ url('admin_change_constants') }}" method="post" {{ form_enctype(form) }}>
     {{ form_errors(form) }}
         <table>
-          <tr><td><h3>Site Email(s): </h3></td><td></td><td></td></tr>
+            <tr><td><h3>Site Email(s): </h3></td><td></td><td></td></tr>
             <tr>
                 <td>Contact Us Email</td>
                 <td>{{ form_widget(form.contact_us_email) }}</td>
@@ -35,7 +35,7 @@
                 <td>{{ form_widget(form.site_meta_description) }}</td>
 
             </tr>
-                        <tr>
+            <tr>
                 <td>Site analytics: </td>
                 <td>{{ form_widget(form.analytics) }}</td>
 
@@ -266,120 +266,165 @@
 
             <tr>
 
-           <tr><td><h3>Contact Page: </h3></td><td></td><td></td></tr>
-           <tr>
-               <td>Contact form subjects: <i>(Separated by Comma ",")</i></td> 
+            <tr><td><h3>Contact Page: </h3></td><td></td><td></td></tr>
+            <tr>
+                <td>Contact form subjects: <i>(Separated by Comma ",")</i></td> 
                 <td>{{ form_widget(form.contact_detinations) }}</td>
             </tr>
-                       <tr>
-               <td>Name: <i>Contact Info</i></td> 
+            <tr>
+                <td>Name: <i>Contact Info</i></td> 
                 <td>{{ form_widget(form.contact_info_name) }}</td>
             </tr>
-                       <tr>
-               <td>Address part1: <i>Contact Info</i></td> 
+            <tr>
+                <td>Address part1: <i>Contact Info</i></td> 
                 <td>{{ form_widget(form.contact_info_address_part1) }}</td>
             </tr>
-                       <tr>
-               <td>Address part2: <i>Contact Info</i></td> 
+            <tr>
+                <td>Address part2: <i>Contact Info</i></td> 
                 <td>{{ form_widget(form.contact_info_address_part2) }}</td>
             </tr>
-            
-            
-  
-  
 
-           <tr><td><h3>Resource Page: </h3></td><td></td><td></td></tr>
-           <tr>
-               <td>Resources per page<i>[in display page]</i>: </td> 
+
+
+
+
+            <tr><td><h3>Resource Page: </h3></td><td></td><td></td></tr>
+            <tr>
+                <td>Resources per page<i>[in display page]</i>: </td> 
                 <td>{{ form_widget(form.resource_per_page) }}</td>
             </tr>
 
             <tr>
-                
-           <tr><td><h3>Inside Facebook [Student 'Your privacy' Message]: </h3></td><td></td><td></td></tr>
-           <tr>
-               <td>Message:<i>[fixed in Header]</i>: </td> 
+
+            <tr><td><h3>Inside Facebook [Student 'Your privacy' Message]: </h3></td><td></td><td></td></tr>
+            <tr>
+                <td>Message:<i>[fixed in Header]</i>: </td> 
                 <td>{{ form_widget(form.facebook_mesasage) }}</td>
             </tr>
 
             <tr>
-                
-           <tr><td><h3>Footer copyright llc: </h3></td><td></td><td></td></tr>
-           <tr>
+
+            <tr><td><h3>Footer copyright llc: </h3></td><td></td><td></td></tr>
+            <tr>
                 <td>Copyright Text: </td> 
                 <td>{{ form_widget(form.internjumb_copyright) }}</td>
             </tr>
 
             <tr>
-               
-                
-           <tr><td><h3>"Not Found" Error Messages: </h3></td><td></td><td></td></tr>
-           <tr>
+
+
+            <tr><td><h3>"Not Found" Error Messages: </h3></td><td></td><td></td></tr>
+            <tr>
                 <td>User Not Found Error Message: </td> 
                 <td>{{ form_widget(form.user_not_found_error_msg) }}</td>
             </tr>
-            
-                     <tr>
+
+            <tr>
                 <td>Company Not Found Error Message: </td> 
                 <td>{{ form_widget(form.company_not_found_error_msg) }}</td>
             </tr>
-                     <tr>
+            <tr>
                 <td>Resume/CV Not Found Error Message: </td> 
                 <td>{{ form_widget(form.cv_not_found_error_msg) }}</td>
             </tr>
-                     <tr>
+            <tr>
                 <td>Interview Not Found Error Message: </td> 
                 <td>{{ form_widget(form.interview_not_found_error_msg) }}</td>
             </tr>
-                     <tr>
+            <tr>
                 <td>Request Not Found Error Message: </td> 
                 <td>{{ form_widget(form.request_not_found_error_msg) }}</td>
             </tr>
-            
-                     <tr>
+
+            <tr>
                 <td>Question Not Found Error Message: </td> 
                 <td>{{ form_widget(form.question_not_found_error_msg) }}</td>
             </tr>
-                     <tr>
+            <tr>
                 <td>Interest Not Found Error Message: </td> 
                 <td>{{ form_widget(form.interest_not_found_error_msg) }}</td>
             </tr>
-                     <tr>
+            <tr>
                 <td>Education Not Found Error Message: </td> 
                 <td>{{ form_widget(form.education_not_found_error_msg) }}</td>
             </tr>
-                     <tr>
+            <tr>
                 <td>Employment History Not Found Error Message: </td> 
                 <td>{{ form_widget(form.emp_history_not_found_error_msg) }}</td>
             </tr>
-                     <tr>
+            <tr>
                 <td>Skill Not Found Error Message: </td> 
                 <td>{{ form_widget(form.skill_not_found_error_msg) }}</td>
             </tr>
-                     <tr>
+            <tr>
                 <td>Task Not Found Error Message: </td> 
                 <td>{{ form_widget(form.task_not_found_error_msg) }}</td>
             </tr>
-            
-                     <tr>
+
+            <tr>
                 <td>User Message Not Found Error Message: </td> 
                 <td>{{ form_widget(form.user_message_not_found_error_msg) }}</td>
             </tr>
-                     <tr>
+            <tr>
                 <td>Company Message Not Found Error Message: </td> 
                 <td>{{ form_widget(form.company_message_not_found_error_msg) }}</td>
             </tr>
-                     <tr>
+            <tr>
                 <td>Internship Not Found Error Message: </td> 
                 <td>{{ form_widget(form.internship_not_found_error_msg) }}</td>
             </tr>
 
+
+            <tr><td><h3>User Worth Page Settings: </h3></td><td></td><td></td></tr>
             <tr>
-                  
-                
-            <td>{{ form_rest(form) }}</td>
-            <td><button type="submit" class="btn">Submit</button></td>
-            <td></td>
+                <td>Default Statrting Salary: </td> 
+                <td>${{ form_widget(form.worth_default_statrting_salary) }}</td>
+            </tr>
+            <tr>
+                <td>Experience Boost Value: </td> 
+                <td>${{ form_widget(form.worth_experience_boost_value) }}</td>
+            </tr>
+            <tr>
+                <td>Experience Boost Value: </td> 
+                <td>${{ form_widget(form.worth_year_boost) }}</td>
+            </tr>
+            <tr>
+                <td>NO Educations Message: </td> 
+                <td>{{ form_widget(form.worth_no_education) }}</td>
+            </tr>
+            <tr>
+                <td>Educations End Date Empty Message: </td> 
+                <td>{{ form_widget(form.worth_education_end_date_empty) }}</td>
+            </tr>
+            <tr>
+                <td>Educations Major Empty Message: </td> 
+                <td>{{ form_widget(form.worth_education_major_empty) }}</td>
+            </tr>
+            <tr>
+                <td>No Major Match Skills Message: </td> 
+                <td>{{ form_widget(form.worth_no_major_skills_match) }}</td>
+            </tr>
+            <tr>
+                <td>No Employment History Message: </td> 
+                <td>{{ form_widget(form.worth_no_experience) }}</td>
+            </tr>
+            <tr>
+                <td>No Skills Message: </td> 
+                <td>{{ form_widget(form.worth_no_skills) }}</td>
+            </tr>
+            <tr>
+                <td>Publish Worth Result On Facebook Message: </td> 
+                <td>{{ form_widget(form.worth_facebook_message) }}</td>
+            </tr>
+
+
+
+            <tr>
+
+
+                <td>{{ form_rest(form) }}</td>
+                <td><button type="submit" class="btn">Submit</button></td>
+                <td></td>
 
             </tr>
         </table>

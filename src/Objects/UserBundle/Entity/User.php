@@ -37,6 +37,13 @@ class User implements AdvancedUserInterface {
     private $id;
 
     /**
+     * @var integer $currentWorth
+     *
+     * @ORM\Column(name="currentWorth", type="integer", nullable=true)
+     */
+    private $currentWorth = 1;
+    
+    /**
      * the required languages for the internship
      * @var \Doctrine\Common\Collections\ArrayCollection $languages
      * @Assert\Valid(groups={"language"})
@@ -1505,4 +1512,23 @@ class User implements AdvancedUserInterface {
         $this->languages = $languages;
     }
 
+    /**
+     * Set currentWorth
+     *
+     * @param integer $currentWorth
+     */
+    public function setCurrentWorth($currentWorth)
+    {
+        $this->currentWorth = $currentWorth;
+    }
+
+    /**
+     * Get currentWorth
+     *
+     * @return integer 
+     */
+    public function getCurrentWorth()
+    {
+        return $this->currentWorth;
+    }
 }

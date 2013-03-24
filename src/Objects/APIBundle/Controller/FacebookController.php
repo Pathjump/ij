@@ -21,7 +21,7 @@ class FacebookController extends ObjectsController {
      * @param string $linkText (text written in the link)
      * @return html facebook link with desired css class and text
      */
-    public function facebookButtonAction($facebookUserHandleRoute, $permissions, $cssClass='', $linkText = '') {
+    public function facebookButtonAction($facebookUserHandleRoute, $permissions, $cssClass = '', $linkText = '') {
         $request = $this->getRequest();
         //get the session object
         $session = $request->getSession();
@@ -115,7 +115,7 @@ class FacebookController extends ObjectsController {
         $translator = $this->get('translator');
 
 
-        $session->set('facebookFalg',TRUE);
+        $session->set('facebookFalg', TRUE);
 
         $faceuser = $session->get('facebook_user');
         $shortLive_access_token = $session->get('facebook_short_live_access_token');
@@ -261,6 +261,23 @@ class FacebookController extends ObjectsController {
     }
 
     /**
+     * this function used to retuen user friends
+     * @author ahmed
+     * @param type $uid
+     * @param type $accessToken
+     * @return type
+     */
+    public static function getUserFriends($uid, $accessToken) {
+        $url = "https://graph.facebook.com/$uid/friends?access_token=$accessToken";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return $result;
+    }
+
+    /**
      * method to post on page/app wall
      * @author Mirehan
      */
@@ -351,12 +368,12 @@ class FacebookController extends ObjectsController {
 
         //get the image extension from the url
         $extension = array_pop($urlParts);
-        
+
         $extension = explode('.', $extension);
-        
+
         $extension = array_pop($extension);
-       
-        
+
+
         //mahmoud
         //check if the upload directory exists
         if (!@is_dir($uploadDir)) {

@@ -1,0 +1,111 @@
+{% extends '::base.html.twig' %}
+
+
+
+{% block title %}
+{{parent()}} - How much are you worth
+{%endblock%}
+
+
+
+{%block body%}
+
+<div id="main" role="main">
+
+    <section id="comJobList">
+        <div class="wrapper">
+
+            <aside class="resourcesWrapper">
+                <h1>How much are you worth</h1>
+{% if facebook is defined %}    
+Before you can proceed,link your FB account  <br/>              
+{% render "ObjectsAPIBundle:Facebook:facebookButton" with {'facebookUserHandleRoute' : 'facebook_link','permissions': 'email,publish_stream','cssClass' : 'face' , 'linkText' : 'Connect with your Facebook account' | trans} %}
+{% elseif userTotalWorth is defined %}
+YOUR CURRENT WORTH IS: ${{userTotalWorth}}
+{% if ImproveResultsMessageArray %}
+<ul>
+    {% for message in ImproveResultsMessageArray %}
+        <li>
+        {{message}}
+                </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<br/><br/><br/>
+{% if userFriendsWorth %}
+<h2>How much your friends are worth</h2>
+<ul>
+    {% for userFriendWorth in userFriendsWorth %}
+        <li>
+            <strong>{{userFriendWorth.name}}</strong>&nbsp;&nbsp;&nbsp;
+            <p>${{userFriendWorth.worth}}</p>
+        </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<div id="chart" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+{% endif %}
+            </aside>
+
+
+        </div>
+    </section>
+
+
+</div>
+
+
+{%endblock%}
+
+{%block javascripts%}
+ {{parent()}}
+<script src="{{asset('js/Highcharts-3.0.0/highcharts.js')}}"></script>
+
+<script>        
+$(function () {
+        $('#chart').highcharts({
+            chart: {
+                type: 'line',
+                marginRight: 130,
+                marginBottom: 25
+            },
+            title: {
+                text: 'Your projected worth over the next 5 years',
+                x: -20 //center
+            },
+            xAxis: {
+                categories: [{% if fiveYearsWorthArray %}{% for year,worth in fiveYearsWorthArray %}'{{year}}',{% endfor %}{% endif %}]
+            },
+            yAxis: {
+                title: {
+                    text: 'Worth'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function() {
+                        return '<strong>'+this.x +'</strong><br/>$'+ this.y ;
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -10,
+                y: 100,
+                borderWidth: 0
+            },
+            series: [{
+                name: 'worth',
+                data: [{% if fiveYearsWorthArray %}{% for year,worth in fiveYearsWorthArray %}{{worth}},{% endfor %}{% endif %}]
+            }]
+        });
+    });
+</script>        
+{%endblock%}

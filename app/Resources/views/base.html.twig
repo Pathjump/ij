@@ -184,6 +184,7 @@
                                             {#<li id="schoolsLink" ><a href="{{path('schools')}}">Schools</a></li>#}
                                             <li id="employersLink"><a href="{{path('employers')}}">Industries</a></li>
                                             <li id="resourceLink" ><a href="{{path('resources')}}">Resources</a></li>
+                                            {#<li id="worthLink"><a href="{{ path('howMuchAreYouWorth') }}">How Much Are You Worth</a></li>#}
                                             {#<li id="contactUsLink" ><a href="{{path('contactUs')}}">Contact Us</a></li>#}
                                             {% endif %}
                             {% else %}
@@ -195,6 +196,7 @@
                                             <li id="resourceLink" ><a href="{{path('resources')}}">Resources</a></li>
                                             <li id="employersLink"><a href="{{path('employers')}}">Industries</a></li>
                                             {#<li id="contactUsLink" ><a href="{{path('contactUs')}}">Contact Us</a></li>#}
+                                            {#<li id="worthLink"><a href="{{ path('login') }}">How Much Are You Worth</a></li>#}
                                             <li id="loginLink"><a href="{{ path('login') }}">Login</a></li>
                             {% endif %}
                                         </ul>

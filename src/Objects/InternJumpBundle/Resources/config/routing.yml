@@ -131,3 +131,7 @@ user_languages:
 user_edit_language:
     pattern:  /language/edit/{id}
     defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:userEditLanguage" }
+    
+howMuchAreYouWorth:
+    pattern:  /howmuchareyouworth
+    defaults: { _controller: "ObjectsInternJumpBundle:Internjump:howMuchAreYouWorth" }    
