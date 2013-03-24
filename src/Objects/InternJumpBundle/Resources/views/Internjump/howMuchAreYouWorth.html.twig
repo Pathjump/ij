@@ -62,7 +62,7 @@ YOUR CURRENT WORTH IS: ${{userTotalWorth}}
 {%block javascripts%}
  {{parent()}}
 <script src="{{asset('js/Highcharts-3.0.0/highcharts.js')}}"></script>
-
+{% elseif userTotalWorth is defined %}
 <script>        
 $(function () {
         $('#chart').highcharts({
@@ -107,5 +107,6 @@ $(function () {
             }]
         });
     });
-</script>        
+</script>  
+{% endif %}
 {%endblock%}
