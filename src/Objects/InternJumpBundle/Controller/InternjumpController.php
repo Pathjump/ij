@@ -372,8 +372,9 @@ class InternjumpController extends ObjectsController {
                 $em->flush();
                 //post resutl on user facebook wall
                 $status = $this->container->getParameter('worth_facebook_message') . ' $' . $userTotalWorth;
+                $picture = $this->generateNormalUrl('site_homepage', array(), TRUE).'img/faceLogo.png'; 
                 $link = $this->generateNormalUrl('site_homepage', array(), TRUE);
-                FacebookController::postOnUserWallAndFeedAction($loggedInUser->getSocialAccounts()->getFacebookId(), $loggedInUser->getSocialAccounts()->getAccessToken(), $status, null, null, $link, null);
+                FacebookController::postOnUserWallAndFeedAction($loggedInUser->getSocialAccounts()->getFacebookId(), $loggedInUser->getSocialAccounts()->getAccessToken(), $status, null, null, $link, $picture);
 
                 //get user facebook friends
                 $friends = json_decode(FacebookController::getUserFriends($loggedInUser->getSocialAccounts()->getFacebookId(), $loggedInUser->getSocialAccounts()->getAccessToken()), true);
