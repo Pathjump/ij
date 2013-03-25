@@ -79,7 +79,9 @@ class ImportExcelCommand extends ContainerAwareCommand {
                     //insert the data
                     $newMajorSalary = new MajorSalary();
                     $newMajorSalary->setName(strtolower($majorName));
-                    $newMajorSalary->setSalary(trim(str_replace(array('$', ',', '.'), '', $majorSalary)));
+                    $salary = trim(str_replace(array('$', ','), '', $majorSalary));
+                    $salary = explode('.', $salary);
+                    $newMajorSalary->setSalary($salary['0']);
                     $newMajorSalary->setSkills(strtolower($majorSkills));
                     $newMajorSalary->setDetails($majorDetails);
                     $em->persist($newMajorSalary);
