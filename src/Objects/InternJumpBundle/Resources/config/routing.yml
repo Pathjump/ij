@@ -133,5 +133,5 @@ user_edit_language:
     defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:userEditLanguage" }
     
 howMuchAreYouWorth:
-    pattern:  /howmuchareyouworth
+    pattern:  /findyourworth
     defaults: { _controller: "ObjectsInternJumpBundle:Internjump:howMuchAreYouWorth" }    

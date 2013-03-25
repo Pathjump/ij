@@ -3,7 +3,7 @@
 
 
 {% block title %}
-{{parent()}} - How much are you worth
+{{parent()}} - Find your worth
 {%endblock%}
 
 
@@ -16,7 +16,7 @@
         <div class="wrapper">
 
             <aside class="resourcesWrapper">
-                <h1>How much are you worth</h1>
+                <h1>Find your worth</h1>
 {% if facebook is defined %}    
 Before you can proceed,link your FB account  <br/>              
 {% render "ObjectsAPIBundle:Facebook:facebookButton" with {'facebookUserHandleRoute' : 'facebook_link','permissions': 'email,publish_stream','cssClass' : 'face' , 'linkText' : 'Connect with your Facebook account' | trans} %}
@@ -71,6 +71,7 @@ $(function () {
                 marginRight: 130,
                 marginBottom: 25
             },
+            credits: { enabled: false },
             title: {
                 text: 'Your projected worth over the next 5 years',
                 x: -20 //center

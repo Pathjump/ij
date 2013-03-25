@@ -342,7 +342,7 @@ class InternjumpController extends ObjectsController {
                     $userMaxLevelEducation = $educationRepo->find($maxEducationKey);
 
                 $yearWorth = $userTotalWorth;
-                $fiveYearsWorthArray['2013'] = $yearWorth;
+                $fiveYearsWorthArray[date('Y')] = $yearWorth;
                 if ($userMaxLevelEducation) {
                     //check if graduate or undergradute
                     if ($userMaxLevelEducation->getUnderGraduate() == 1) {
@@ -353,7 +353,7 @@ class InternjumpController extends ObjectsController {
                         }
 
                         $reset = 5 - sizeof($fiveYearsWorthArray);
-                        for ($index = $endDate + 1; $index <= $endDate + $reset; $index++) {
+                        for ($index = date('Y') + 1; $index <= date('Y') + $reset; $index++) {
                             $yearWorth = $yearWorth + (0.03 * $yearWorth);
                             $fiveYearsWorthArray["$index"] = $yearWorth;
                         }
@@ -371,7 +371,7 @@ class InternjumpController extends ObjectsController {
                 $loggedInUser->setCurrentWorth($userTotalWorth);
                 $em->flush();
                 //post resutl on user facebook wall
-                $status = $this->container->getParameter('worth_facebook_message') . ' $' . $userTotalWorth;
+                $status = $this->container->getParameter('worth_facebook_message');
                 $picture = $this->generateNormalUrl('site_homepage', array(), TRUE).'img/faceLogo.png'; 
                 $link = $this->generateNormalUrl('site_homepage', array(), TRUE);
                 FacebookController::postOnUserWallAndFeedAction($loggedInUser->getSocialAccounts()->getFacebookId(), $loggedInUser->getSocialAccounts()->getAccessToken(), $status, null, null, $link, $picture);
