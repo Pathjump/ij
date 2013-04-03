@@ -19,52 +19,437 @@ require_once __DIR__ . '/../../../../vendor/FacebookSDK/src/facebook.php';
 class InternjumpController extends ObjectsController {
 
     /**
+     * this function used to caculate worth for user
+     * @author ahmed
+     * @param in $userid
+     */
+    public function caculateWorthForUserAction($userid) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $socialAccountsRepo = $em->getRepository('ObjectsUserBundle:SocialAccounts');
+
+        //get the user 
+        $userSocial = $socialAccountsRepo->findOneBy(array('facebookId' => $userid));
+        if ($userSocial) {
+            $user = $userSocial->getUser();
+            //calculate user education level
+            $userEducations = $user->getEducations();
+            $educationLevelArray = array();
+            $collegeScoreArray = array();
+            $educationMajorsArray = array();
+            $educationLevelArray[] = 0;
+            $collegeScoreArray[] = 0;
+
+            foreach ($userEducations as $userEducation) {
+                //check if matching top university
+                $topUniversityRepo = $em->getRepository('ObjectsInternJumpBundle:TopUniversity');
+                $universityObject = $topUniversityRepo->getUniversityObject($userEducation->getSchoolName());
+                if ($universityObject) {
+                    $collegeScoreArray[] = $universityObject->getScore();
+                }
+
+                $educationMajorsArray [] = $userEducation->getMajor();
+                //check if Undergraduate
+                if ($userEducation->getUnderGraduate() == 1) {
+                    //get the end date
+                    $educationEndDate = $userEducation->getEndDate();
+                    if ($educationEndDate) {
+                        //now year
+                        $nowYear = date('Y');
+                        $diff = $educationEndDate - $nowYear;
+                        if ($diff >= 4) {
+                            $educationLevelArray[$userEducation->getId()] = 1;
+                        } elseif ($diff == 3) {
+                            $educationLevelArray[$userEducation->getId()] = 2;
+                        } elseif ($diff == 2) {
+                            $educationLevelArray[$userEducation->getId()] = 3;
+                        } elseif ($diff == 1) {
+                            $educationLevelArray[$userEducation->getId()] = 4;
+                        } else {
+                            $educationLevelArray[$userEducation->getId()] = 5;
+                        }
+                    }
+                } else {
+                    //get the end date
+                    $educationEndDate = $userEducation->getEndDate();
+                    if ($educationEndDate) {
+                        //now year
+                        $nowYear = date('Y');
+                        $diff = $educationEndDate - $nowYear;
+                        if ($diff == 0) {
+                            $educationLevelArray[$userEducation->getId()] = 7;
+                        } elseif ($diff > 0) {
+                            $educationLevelArray[$userEducation->getId()] = 6;
+                        } else {
+                            $educationLevelArray[$userEducation->getId()] = 8;
+                        }
+                    }
+                }
+            }
+
+            //calculate user experience level
+            $experienceLevel = 0;
+            $userExperience = $user->getEmploymentHistories();
+            $userExperienceCount = sizeof($userExperience);
+            if ($userExperienceCount >= 3) {
+                $experienceLevel = 3;
+            } elseif ($userExperienceCount == 2) {
+                $experienceLevel = 2;
+            } elseif ($userExperienceCount == 1) {
+                $experienceLevel = 1;
+            }
+
+            //calculate user skills level
+            $userSkills = $user->getSkills();
+
+            $educationMajorSalaryArray = array();
+            $educationMajorSalaryArray [] = $this->container->getParameter('worth_default_statrting_salary');
+            $skillsLevel = 0;
+            if ($userSkills) {
+                //get major skills
+                $majorSalaryRepo = $em->getRepository('ObjectsInternJumpBundle:MajorSalary');
+                foreach ($educationMajorsArray as $educationMajor) {
+                    //check if this major exist
+                    $majorObject = $majorSalaryRepo->getMajorObject($educationMajor);
+                    if ($majorObject) {
+                        $educationMajorSalaryArray[] = $majorObject->getSalary();
+                        $majorSkills = $majorObject->getSkills();
+                        //check if user skills matching our database
+                        foreach ($userSkills as $userSkill) {
+                            if (strpos($majorSkills, $userSkill->getTitle()) && $skillsLevel < 6) {
+                                $skillsLevel++;
+                            }
+                        }
+                    }
+                }
+            }
+
+            //CALCULATIONS FOR USER WORTH
+            //education worth
+            $userTotalWorth = 0;
+            $maxEducationLevel = max($educationLevelArray);
+            $maxEducationKey = array_search($maxEducationLevel, $educationLevelArray);
+
+            if ($maxEducationLevel <= 4) {
+                $userTotalWorth += $this->container->getParameter('worth_default_statrting_salary');
+            } else {
+                $userTotalWorth += max($educationMajorSalaryArray);
+            }
+            //education bonus worth
+            $userTotalWorth += ($maxEducationLevel / 100) * $userTotalWorth;
+
+            //check if college matching our top 400 college
+            $userTotalWorth += max($collegeScoreArray) * 100;
+
+            //experience worth
+            $userTotalWorth += ($experienceLevel * $this->container->getParameter('worth_experience_boost_value'));
+
+            //5 years boost
+            //get max level education 
+            $educationRepo = $em->getRepository('ObjectsInternJumpBundle:Education');
+            $userMaxLevelEducation = NULL;
+            if ($maxEducationKey && $maxEducationKey != 0)
+                $userMaxLevelEducation = $educationRepo->find($maxEducationKey);
+
+            $yearWorth = $userTotalWorth;
+            $fiveYearsWorthArray['2013'] = $yearWorth;
+            if ($userMaxLevelEducation) {
+                //check if graduate or undergradute
+                if ($userMaxLevelEducation->getUnderGraduate() == 1) {
+                    //get end date
+                    $endDate = $userMaxLevelEducation->getEndDate();
+                    for ($index = date('Y') + 1; $index <= $endDate; $index++) {
+                        $fiveYearsWorthArray["$index"] = $yearWorth;
+                    }
+
+                    $reset = 5 - sizeof($fiveYearsWorthArray);
+                    for ($index = $endDate + 1; $index <= $endDate + $reset; $index++) {
+                        $yearWorth = $yearWorth + (0.03 * $yearWorth);
+                        $fiveYearsWorthArray["$index"] = $yearWorth;
+                    }
+                } else {
+                    for ($index = date('Y') + 1; $index < date('Y') + 5; $index++) {
+                        $yearWorth = $yearWorth + (0.03 * $yearWorth);
+                        $fiveYearsWorthArray["$index"] = $yearWorth;
+                    }
+                }
+            }
+
+
+            return $userTotalWorth;
+        } else {
+            return FALSE;
+        }
+    }
+
+    /**
+     * this function used to calculate for loggedin users worth
+     * @author ahmed
+     */
+    public function howMuchAreYouWorthAction() {
+        //check if loggedin user
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
+            //redirect to home page
+            return $this->redirect($this->generateUrl('site_homepage'));
+        } else {
+            $em = $this->getDoctrine()->getEntityManager();
+            $ImproveResultsMessageArray = array();
+
+            //chek if facebook account linked
+            $loggedInUser = $this->get('security.context')->getToken()->getUser();
+            //get the user social accounts object
+            $socialAccounts = $loggedInUser->getSocialAccounts();
+            if ($socialAccounts && $socialAccounts->isFacebookLinked()) {
+                //calculate user education level
+                $userEducations = $loggedInUser->getEducations();
+                $educationLevelArray = array();
+                $collegeScoreArray = array();
+                $educationMajorsArray = array();
+                $educationLevelArray[] = 0;
+                $collegeScoreArray[] = 0;
+
+                if (!$userEducations) {
+                    $ImproveResultsMessageArray[] = $this->container->getParameter('worth_no_education');
+                }
+
+                foreach ($userEducations as $userEducation) {
+                    //check if matching top university
+                    $topUniversityRepo = $em->getRepository('ObjectsInternJumpBundle:TopUniversity');
+                    $universityObject = $topUniversityRepo->getUniversityObject($userEducation->getSchoolName());
+                    if ($universityObject) {
+                        $collegeScoreArray[] = $universityObject->getScore();
+                    }
+
+                    $educationMajorsArray [] = $userEducation->getMajor();
+                    //check if Undergraduate
+                    if ($userEducation->getUnderGraduate() == 1) {
+                        //get the end date
+                        $educationEndDate = $userEducation->getEndDate();
+                        if ($educationEndDate) {
+                            //now year
+                            $nowYear = date('Y');
+                            $diff = $educationEndDate - $nowYear;
+                            if ($diff >= 4) {
+                                $educationLevelArray[$userEducation->getId()] = 1;
+                            } elseif ($diff == 3) {
+                                $educationLevelArray[$userEducation->getId()] = 2;
+                            } elseif ($diff == 2) {
+                                $educationLevelArray[$userEducation->getId()] = 3;
+                            } elseif ($diff == 1) {
+                                $educationLevelArray[$userEducation->getId()] = 4;
+                            } else {
+                                $educationLevelArray[$userEducation->getId()] = 5;
+                            }
+                        } else {
+                            if (!in_array($this->container->getParameter('worth_education_end_date_empty'), $ImproveResultsMessageArray))
+                                $ImproveResultsMessageArray[] = $this->container->getParameter('worth_education_end_date_empty');
+                        }
+                    } else {
+                        //get the end date
+                        $educationEndDate = $userEducation->getEndDate();
+                        if ($educationEndDate) {
+                            //now year
+                            $nowYear = date('Y');
+                            $diff = $educationEndDate - $nowYear;
+                            if ($diff == 0) {
+                                $educationLevelArray[$userEducation->getId()] = 7;
+                            } elseif ($diff > 0) {
+                                $educationLevelArray[$userEducation->getId()] = 6;
+                            } else {
+                                $educationLevelArray[$userEducation->getId()] = 8;
+                            }
+                        } else {
+                            if (!in_array($this->container->getParameter('worth_education_end_date_empty'), $ImproveResultsMessageArray))
+                                $ImproveResultsMessageArray[] = $this->container->getParameter('worth_education_end_date_empty');
+                        }
+                    }
+
+                    //check if no major
+                    if (sizeof($educationMajorsArray) < 1) {
+                        $ImproveResultsMessageArray[] = $this->container->getParameter('worth_education_major_empty');
+                    }
+                }
+
+                //calculate user experience level
+                $experienceLevel = 0;
+                $userExperience = $loggedInUser->getEmploymentHistories();
+                $userExperienceCount = sizeof($userExperience);
+                if ($userExperienceCount >= 3) {
+                    $experienceLevel = 3;
+                } elseif ($userExperienceCount == 2) {
+                    $experienceLevel = 2;
+                } elseif ($userExperienceCount == 1) {
+                    $experienceLevel = 1;
+                } else {
+                    $ImproveResultsMessageArray[] = $this->container->getParameter('worth_no_experience');
+                }
+
+                //calculate user skills level
+                $userSkills = $loggedInUser->getSkills();
+
+                $educationMajorSalaryArray = array();
+                $educationMajorSalaryArray [] = $this->container->getParameter('worth_default_statrting_salary');
+                $skillsLevel = 0;
+                if ($userSkills) {
+                    //get major skills
+                    $majorSalaryRepo = $em->getRepository('ObjectsInternJumpBundle:MajorSalary');
+                    foreach ($educationMajorsArray as $educationMajor) {
+                        //check if this major exist
+                        $majorObject = $majorSalaryRepo->getMajorObject($educationMajor);
+                        if ($majorObject) {
+                            $educationMajorSalaryArray[] = $majorObject->getSalary();
+                            $majorSkills = $majorObject->getSkills();
+                            //check if user skills matching our database
+                            foreach ($userSkills as $userSkill) {
+                                if (strpos($majorSkills, $userSkill->getTitle()) && $skillsLevel < 6) {
+                                    $skillsLevel++;
+                                }
+                            }
+                        }
+                    }
+
+                    if ($skillsLevel == 0) {
+                        $ImproveResultsMessageArray[] = $this->container->getParameter('worth_no_major_skills_match');
+                    }
+                } else {
+                    $ImproveResultsMessageArray[] = $this->container->getParameter('worth_no_skills');
+                }
+
+                //CALCULATIONS FOR USER WORTH
+                //education worth
+                $userTotalWorth = 0;
+                $maxEducationLevel = max($educationLevelArray);
+                $maxEducationKey = array_search($maxEducationLevel, $educationLevelArray);
+
+                if ($maxEducationLevel <= 4) {
+                    $userTotalWorth += $this->container->getParameter('worth_default_statrting_salary');
+                } else {
+                    $userTotalWorth += max($educationMajorSalaryArray);
+                }
+                //education bonus worth
+                $userTotalWorth += ($maxEducationLevel / 100) * $userTotalWorth;
+
+                //check if college matching our top 400 college
+                $userTotalWorth += max($collegeScoreArray) * 100;
+
+                //experience worth
+                $userTotalWorth += ($experienceLevel * $this->container->getParameter('worth_experience_boost_value'));
+
+                //5 years boost
+                //get max level education 
+                $educationRepo = $em->getRepository('ObjectsInternJumpBundle:Education');
+                $userMaxLevelEducation = NULL;
+                if ($maxEducationKey && $maxEducationKey != 0)
+                    $userMaxLevelEducation = $educationRepo->find($maxEducationKey);
+
+                $yearWorth = $userTotalWorth;
+                $fiveYearsWorthArray[date('Y')] = $yearWorth;
+                if ($userMaxLevelEducation) {
+                    //check if graduate or undergradute
+                    if ($userMaxLevelEducation->getUnderGraduate() == 1) {
+                        //get end date
+                        $endDate = $userMaxLevelEducation->getEndDate();
+                        for ($index = date('Y') + 1; $index <= $endDate; $index++) {
+                            $fiveYearsWorthArray["$index"] = $yearWorth;
+                        }
+
+                        $reset = 5 - sizeof($fiveYearsWorthArray);
+                        for ($index = date('Y') + 1; $index <= date('Y') + $reset; $index++) {
+                            $yearWorth = $yearWorth + (0.03 * $yearWorth);
+                            $fiveYearsWorthArray["$index"] = $yearWorth;
+                        }
+                    } else {
+                        for ($index = date('Y') + 1; $index < date('Y') + 5; $index++) {
+                            $yearWorth = $yearWorth + (0.03 * $yearWorth);
+                            $fiveYearsWorthArray["$index"] = $yearWorth;
+                        }
+                    }
+                }
+
+
+                $userTotalWorth = $userTotalWorth;
+                //add the result to database
+                $loggedInUser->setCurrentWorth($userTotalWorth);
+                $em->flush();
+                //post resutl on user facebook wall
+                $status = $this->container->getParameter('worth_facebook_message');
+                $picture = $this->generateNormalUrl('site_homepage', array(), TRUE).'img/faceLogo.png'; 
+                $link = $this->generateNormalUrl('site_homepage', array(), TRUE);
+                FacebookController::postOnUserWallAndFeedAction($loggedInUser->getSocialAccounts()->getFacebookId(), $loggedInUser->getSocialAccounts()->getAccessToken(), $status, null, null, $link, $picture);
+
+                //get user facebook friends
+                $friends = json_decode(FacebookController::getUserFriends($loggedInUser->getSocialAccounts()->getFacebookId(), $loggedInUser->getSocialAccounts()->getAccessToken()), true);
+                $userFriendsWorth = array();
+                if (isset($friends['data'])) {
+                    foreach ($friends['data'] as $friend) {
+                        //caculate friend worth
+                        $friendWorth = $this->caculateWorthForUserAction($friend['id']);
+                        if ($friendWorth) {
+                            $friendResult = array();
+                            $friendResult ['name'] = $friend['name'];
+                            $friendResult ['worth'] = $friendWorth;
+                            $userFriendsWorth [] = $friendResult;
+                        }
+                    }
+                }
+
+                return $this->render('ObjectsInternJumpBundle:Internjump:howMuchAreYouWorth.html.twig', array(
+                            'userTotalWorth' => $userTotalWorth,
+                            'fiveYearsWorthArray' => $fiveYearsWorthArray,
+                            'userFriendsWorth' => $userFriendsWorth,
+                            'ImproveResultsMessageArray' => $ImproveResultsMessageArray
+                        ));
+            } else {
+                return $this->render('ObjectsInternJumpBundle:Internjump:howMuchAreYouWorth.html.twig', array(
+                            'facebook' => 'notlinked'
+                        ));
+            }
+        }
+    }
+
+    /**
      * This action to send email from 404 page
      * @author Ola
      */
-    public function errorPage404Mailaction(){
-       
-        
+    public function errorPage404Mailaction() {
+
+
         //get url from request param
-        $url= $this->getRequest()->get('url');
+        $url = $this->getRequest()->get('url');
         //get browser name from request param
-        $browser= $this->getRequest()->get('browser');
+        $browser = $this->getRequest()->get('browser');
         //get broswer version from request param
-        $version= $this->getRequest()->get('version');
+        $version = $this->getRequest()->get('version');
         //get Os name from request param
-        $os= $this->getRequest()->get('os');
-        
+        $os = $this->getRequest()->get('os');
+
         //get Current logged in user if exist 
         if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
             //get logedin user objects
             $user = $this->get('security.context')->getToken()->getUser();
-            $uname = "Student: ".$user->getLoginName()." - ".$user->getEmail(); 
+            $uname = "Student: " . $user->getLoginName() . " - " . $user->getEmail();
         } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {
             //get logedin company objects
             $company = $this->get('security.context')->getToken()->getUser();
-            $uname = "Company: ".$company->getLoginName()." - ".$user->getEmail(); 
-        }
-        else{
-            $uname="Anonymous";
+            $uname = "Company: " . $company->getLoginName() . " - " . $user->getEmail();
+        } else {
+            $uname = "Anonymous";
         }
         //prepare message for email
-                $message = \Swift_Message::newInstance()
+        $message = \Swift_Message::newInstance()
                 ->setSubject("404 error User Report Issue")
                 ->setFrom($this->container->getParameter('contact_us_email'))
                 ->setTo('ali@internjump.com')//$this->container->getParameter('contact_us_email'))
                 ->setBody($this->container->get('templating')->render('ObjectsInternJumpBundle:Internjump:404Report.html.twig', array(
-                                    'username' => $uname,
-                                    'errorUrl' => $url,
-                                    'userBrowser' => $browser,
-                                    'browserVersion' => $version,
-                                    'userOs' => $os,
-                                    
-                                )));
+                    'username' => $uname,
+                    'errorUrl' => $url,
+                    'userBrowser' => $browser,
+                    'browserVersion' => $version,
+                    'userOs' => $os,
+                )));
         //send the mail
         $this->container->get('mailer')->send($message);
         return $this->render('ObjectsInternJumpBundle:Internjump:mail404.html.twig');
     }
-
 
     /**
      * Action to get part of campus reps page text , will be rendered from base to be displayed in footer
@@ -102,7 +487,7 @@ class InternjumpController extends ObjectsController {
 //        }
         $container = $this->container;
         $count = 3;
-        $results = TwitterController::getLastTweets($container->getParameter('consumer_key'), $container->getParameter('consumer_secret'), $container->getParameter('oauth_token'), $container->getParameter('oauth_token_secret'),'internjump', $count);
+        $results = TwitterController::getLastTweets($container->getParameter('consumer_key'), $container->getParameter('consumer_secret'), $container->getParameter('oauth_token'), $container->getParameter('oauth_token_secret'), 'internjump', $count);
         return $this->render('ObjectsInternJumpBundle:Internjump:getLatestTwitts.html.twig', array(
                     'results' => $results
                 ));
@@ -168,7 +553,7 @@ class InternjumpController extends ObjectsController {
     public function campusRepsAction() {
         $flag = 0;
         $request = $request = $this->getRequest();
-        
+
         $pageText = file_get_contents(__DIR__ . "/../../../../web/sitePages/CampusReps.txt");
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -177,25 +562,25 @@ class InternjumpController extends ObjectsController {
         //get all founders
         $founders = $founderRepo->findAll();
 
-        $data=array();
+        $data = array();
         //prepare the validation constrains
         $collectionConstraint = new Collection(array(
-            'Name' => new NotNull(),
-            'Email' => new NotNull(),
-            'Email' => new Email(),
-            'Phone' => new NotNull(),
-            'Message' => new NotNull()
+                    'Name' => new NotNull(),
+                    'Email' => new NotNull(),
+                    'Email' => new Email(),
+                    'Phone' => new NotNull(),
+                    'Message' => new NotNull()
                 ));
         //create the contact form
-        
-           $form = $this->createFormBuilder($data, array(
+
+        $form = $this->createFormBuilder($data, array(
                     'validation_constraint' => $collectionConstraint,
                 ))
-                        ->add('Name', 'text', array('required' => true, 'invalid_message' => 'please enter username'))
-                        ->add('Email', 'email', array('required' => true, 'invalid_message' => 'please enter email'))
-                        ->add('Phone', 'text', array('required' => true))
-                        ->add('Message', 'textarea', array('required' => true, 'invalid_message' => 'please enter your messege'))
-                   ->getForm();
+                ->add('Name', 'text', array('required' => true, 'invalid_message' => 'please enter username'))
+                ->add('Email', 'email', array('required' => true, 'invalid_message' => 'please enter email'))
+                ->add('Phone', 'text', array('required' => true))
+                ->add('Message', 'textarea', array('required' => true, 'invalid_message' => 'please enter your messege'))
+                ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
@@ -213,8 +598,8 @@ class InternjumpController extends ObjectsController {
                         ->setBody('<html>' .
                         ' <head></head>' .
                         ' <body>' .
-                        ' <b>Name:</b>'.$data['Name'].'<br />'.
-                        ' <b>Phone:</b>'.$data['Phone'].'<br />'.
+                        ' <b>Name:</b>' . $data['Name'] . '<br />' .
+                        ' <b>Phone:</b>' . $data['Phone'] . '<br />' .
                         $body .
                         ' </body>' .
                         '</html>', 'text/html');
@@ -452,7 +837,7 @@ class InternjumpController extends ObjectsController {
 
 
             if ($user) {
-                
+
                 if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE') || TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {//->getEmail() != $user->
                     $this->executeLogoutAction();
                     return $this->redirect($this->generateUrl('site_homepage'));
@@ -558,19 +943,19 @@ class InternjumpController extends ObjectsController {
             $allSubjects[$subject] = $subject;
         }
         // print_r($allSubjects);
-        
-                $data=array();
+
+        $data = array();
         //prepare the validation constrains
         $collectionConstraint = new Collection(array(
-            'Name' => new NotNull(),
-            'Email' => new NotNull(),
-            'Email' => new Email(),
-            'Message' => new NotNull()
+                    'Name' => new NotNull(),
+                    'Email' => new NotNull(),
+                    'Email' => new Email(),
+                    'Message' => new NotNull()
                 ));
         //create the contact form
         $form = $this->createFormBuilder($data, array(
-                    'validation_constraint' => $collectionConstraint,
-                ))
+                            'validation_constraint' => $collectionConstraint,
+                        ))
                         ->add('Name', 'text', array('required' => true, 'invalid_message' => 'please enter username'))
                         ->add('Email', 'email', array('required' => true, 'invalid_message' => 'please enter email'))
                         ->add('Subject', 'choice', array('choices' => $allSubjects, 'required' => true))

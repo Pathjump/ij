@@ -70,3 +70,13 @@ parameters:
   user_message_not_found_error_msg: 'This Message does not exist.'
   company_message_not_found_error_msg: 'This Message does not exist.'
   internship_not_found_error_msg: 'This position is no longer available.'
+  worth_default_statrting_salary: 24000
+  worth_experience_boost_value: 2000
+  worth_no_education: 'Add your educations'
+  worth_education_end_date_empty: 'Fill in all your educations end date'
+  worth_education_major_empty: 'Fill in all your educations major'
+  worth_no_major_skills_match: 'Your skills is not relevant to your major'
+  worth_no_experience: 'Add your employment histories'
+  worth_no_skills: 'Add your skills'
+  worth_year_boost: 3
+  worth_facebook_message: 'My expected worth on internjump is'
