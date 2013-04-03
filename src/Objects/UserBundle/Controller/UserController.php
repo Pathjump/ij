@@ -1790,7 +1790,7 @@ class UserController extends ObjectsController {
                     $user->setEmail($userData['email-address']);
                 }
                 //set the user dateOfBirth
-                if (isset($userData['date-of-birth'])) {
+                if (isset($userData['date-of-birth']) && isset($userData['date-of-birth']['year']) && isset($userData['date-of-birth']['month']) && isset($userData['date-of-birth']['day'])) {
                     $user->setDateOfBirth(new \DateTime($userData['date-of-birth']['year'] . '-' . $userData['date-of-birth']['month'] . '-' . $userData['date-of-birth']['day']));
                 }
                 //set the user adress
