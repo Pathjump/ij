@@ -57,7 +57,7 @@ class Skill {
      * @param string $title
      */
     public function setTitle($title) {
-        $this->title = $title;
+        $this->title = trim($title);
     }
 
     /**

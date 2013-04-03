@@ -79,8 +79,8 @@ class User implements AdvancedUserInterface {
 
     /**
      * the users
-     * @var \Doctrine\Common\Collections\ArrayCollection $skills
-     * @ORM\ManyToMany(targetEntity="\Objects\InternJumpBundle\Entity\Skill", inversedBy="users", cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\ManyToMany(targetEntity="\Objects\InternJumpBundle\Entity\Skill", cascade={"persist"})
      * @ORM\JoinTable(name="user_skills",
      *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)},
      *     inverseJoinColumns={@ORM\JoinColumn(name="skill_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)}

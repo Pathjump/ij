@@ -5,6 +5,7 @@ namespace Objects\InternJumpBundle\Controller;
 use Objects\InternJumpBundle\Entity\Skill;
 use Objects\InternJumpBundle\Form\SkillType;
 use Symfony\Component\HttpFoundation\Response;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Skill controller.
@@ -121,7 +122,7 @@ class SkillController extends ObjectsController {
                     'userSkills' => $userSkills,
                     'formName' => $this->container->getParameter('studentEditSkill_FormName'),
                     'formDesc' => $this->container->getParameter('studentEditSkill_FormDesc'),
-                ));
+        ));
     }
 
     /**
@@ -137,6 +138,12 @@ class SkillController extends ObjectsController {
         $request = $this->getRequest();
         //get the user object
         $user = $this->get('security.context')->getToken()->getUser();
+        //the current user skills ids
+        $currentSkillsIds = array();
+        foreach ($user->getSkills() as $userSkill) {
+            //add the skill to the user skills ids array
+            $currentSkillsIds[$userSkill->getId()] = TRUE;
+        }
         if (count($user->getSkills()) == 0) {
             //add one skill entity to the user
             $user->addSkill(new Skill());
@@ -157,43 +164,42 @@ class SkillController extends ObjectsController {
                 $skillRepo = $em->getRepository('ObjectsInternJumpBundle:Skill');
                 //the new skills array
                 $newTitles = array();
-                //the current user skills ids
-                $currentSkillsIds = array();
+                $skillsIds = array();
+                $skills = new ArrayCollection();
                 foreach ($user->getSkills() as $userSkill) {
-                    //check if we added this skill before
-                    if ($userSkill->getId()) {
-                        //add the skill to the user skills ids array
-                        $currentSkillsIds[$userSkill->getId()] = TRUE;
-                    }
-                }
-                foreach ($user->getSkills() as $userSkill) {
-                    //remove the new object
-                    $user->getSkills()->removeElement($userSkill);
                     //check if we have this skill in our database
                     $skill = $skillRepo->findOneByTitle($userSkill->getTitle());
                     if ($skill) {
-                        //add the database object
-                        $user->addSkill($skill);
-                        //check if we increased this skill before
-                        if (!isset($currentSkillsIds[$skill->getId()])) {
-                            //increase the users count for this skill
-                            $skillRepo->increaseSkillUsersCount($skill->getId());
+                        $em->refresh($userSkill);
+                        if (!isset($skillsIds[$skill->getId()])) {
+                            //add the database object
+                            $skills->add($skill);
+                            $skillsIds[$skill->getId()] = true;
+                            //check if we increased this skill before
+                            if (!isset($currentSkillsIds[$skill->getId()])) {
+                                //increase the users count for this skill
+                                $skillRepo->increaseSkillUsersCount($skill->getId());
+                            }
                         }
                     } else {
                         //check if we added this skill before
                         if (!isset($newTitles[$userSkill->getTitle()])) {
                             //add the new skill
                             $newTitles[$userSkill->getTitle()] = true;
-                            $user->addSkill($userSkill);
+                            $newSkill = new Skill();
+                            $newSkill->setTitle($userSkill->getTitle());
+                            $em->persist($newSkill);
+                            $skills->add($newSkill);
                         }
                     }
                 }
+                $user->setSkills($skills);
                 //set the skills to the cv
                 $cv = $user->getCvs()->first();
                 //set the cv skills
-                $cv->setSkills($user->getSkills());
+                $cv->setSkills($skills);
                 //set the cv skills points
-                $cv->setSkillsPoints(count($cv->getSkills()) * $this->container->getParameter('skill_point'));
+                $cv->setSkillsPoints(count($skills) * $this->container->getParameter('skill_point'));
                 //update the total points
                 $cv->setTotalPoints();
                 //save the user data
@@ -205,7 +211,7 @@ class SkillController extends ObjectsController {
                     'form' => $form->createView(),
                     'formName' => $this->container->getParameter('studentSignUpCvSkills_FormName'),
                     'formDesc' => $this->container->getParameter('studentSignUpCvSkills_FormDesc'),
-                ));
+        ));
     }
 
     /**
@@ -254,7 +260,7 @@ class SkillController extends ObjectsController {
         return $this->render('ObjectsInternJumpBundle:Skill:allSkills.html.twig', array(
                     'entities' => $skills,
                     'flag' => $flag,
-                ));
+        ));
     }
 
     /**
@@ -291,7 +297,7 @@ class SkillController extends ObjectsController {
                     'entity' => $entity,
                     'delete_form' => $deleteForm->createView(),
                     'flag' => $flag,
-                ));
+        ));
     }
 
     /**
@@ -320,7 +326,7 @@ class SkillController extends ObjectsController {
                     'entity' => $entity,
                     'form' => $form->createView(),
                     'flag' => $flag,
-                ));
+        ));
     }
 
     /**
@@ -380,7 +386,7 @@ class SkillController extends ObjectsController {
                         'entity' => $entity,
                         'form' => $form->createView(),
                         'flag' => $flag,
-                    ));
+            ));
         }
     }
 
@@ -418,7 +424,7 @@ class SkillController extends ObjectsController {
                     'edit_form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),
                     'flag' => $flag,
-                ));
+        ));
     }
 
     /**
@@ -460,7 +466,7 @@ class SkillController extends ObjectsController {
                     'entity' => $entity,
                     'edit_form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),
-                ));
+        ));
     }
 
     /**
@@ -480,7 +486,7 @@ class SkillController extends ObjectsController {
             if (!$entity) {
                 $message = $this->container->getParameter('skill_not_found_error_msg');
                 return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
-                        'message' => $message,));
+                            'message' => $message,));
             }
 
             $em->remove($entity);
