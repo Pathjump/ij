@@ -167,10 +167,12 @@ class SkillController extends ObjectsController {
                 $skillsIds = array();
                 $skills = new ArrayCollection();
                 foreach ($user->getSkills() as $userSkill) {
+                    if ($userSkill->getId()) {
+                        $em->detach($userSkill);
+                    }
                     //check if we have this skill in our database
                     $skill = $skillRepo->findOneByTitle($userSkill->getTitle());
                     if ($skill) {
-                        $em->refresh($userSkill);
                         if (!isset($skillsIds[$skill->getId()])) {
                             //add the database object
                             $skills->add($skill);
