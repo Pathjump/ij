@@ -560,6 +560,15 @@ class InternjumpController extends ObjectsController {
         $founders = $founderRepo->findAll();
 
         $data = array();
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $company = $this->get('security.context')->getToken()->getUser();
+            $data['Name'] = $company->__toString();
+            $data['Email'] = $company->getEmail();
+        } elseif (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {
+            $company = $this->get('security.context')->getToken()->getUser();
+            $data['Name'] = $company->__toString();
+            $data['Email'] = $company->getEmail();
+        }
         //prepare the validation constrains
         $collectionConstraint = new Collection(array(
             'Name' => new NotBlank(),
@@ -941,6 +950,15 @@ class InternjumpController extends ObjectsController {
         // print_r($allSubjects);
 
         $data = array();
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $company = $this->get('security.context')->getToken()->getUser();
+            $data['Name'] = $company->__toString();
+            $data['Email'] = $company->getEmail();
+        } elseif (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {
+            $company = $this->get('security.context')->getToken()->getUser();
+            $data['Name'] = $company->__toString();
+            $data['Email'] = $company->getEmail();
+        }
         //prepare the validation constrains
         $collectionConstraint = new Collection(array(
             'Name' => new NotBlank(),
