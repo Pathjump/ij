@@ -14,7 +14,7 @@
 <section id="comJobList">
 
     <div class="wrapper">
-        
+
 
         <aside class="quizeWrapper aboutus" >
             {{content|raw}}
@@ -32,27 +32,32 @@
 
 <section class="comntSection" id="contactForm">
 <aside class="addEdiTask">
-    
+
 <div class="contactWrapper">
 {%if flag==1%}
         Your message has been sent Succefully
 {%else%}
 <fieldset>
 <legend>Tell us about yourself</legend>
+{{form_errors(form)}}
 <form action="{{path('campus_resps')}}" method="POST" {{ form_enctype(form) }}>
 
         <label>Name :</label>
             {{form_widget(form.Name)}}
+            {{form_errors(form.Name)}}
         <br>
         <label>Email :</label>
             {{form_widget(form.Email)}}
+            {{form_errors(form.Email)}}
         <br>
         <label>Phone :</label>
             {{form_widget(form.Phone)}}
+            {{form_errors(form.Phone)}}
         <br>
         <label>Your Message :</label>
-            {{form_widget(form.Message, {'attr': {'class': 'task'}})}}
-        
+            {{ form_widget(form.Message, {'attr': {'class': 'task'} }) }}
+            {{form_errors(form.Message)}}
+
         {{form_rest(form)}}
         <input type="submit" value="Send" class="submit">
 </form>

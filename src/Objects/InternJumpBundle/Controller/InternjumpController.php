@@ -4,14 +4,11 @@ namespace Objects\InternJumpBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Objects\InternJumpBundle\Controller\ObjectsController;
-use Symfony\Component\Security\Core\SecurityContext;
 use Objects\APIBundle\Controller\FacebookController;
 use Objects\APIBundle\Controller\TwitterController;
-use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Validator\Constraints\Collection;
-use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Email;
 
 require_once __DIR__ . '/../../../../vendor/FacebookSDK/src/facebook.php';
@@ -27,7 +24,7 @@ class InternjumpController extends ObjectsController {
         $em = $this->getDoctrine()->getEntityManager();
         $socialAccountsRepo = $em->getRepository('ObjectsUserBundle:SocialAccounts');
 
-        //get the user 
+        //get the user
         $userSocial = $socialAccountsRepo->findOneBy(array('facebookId' => $userid));
         if ($userSocial) {
             $user = $userSocial->getUser();
@@ -144,7 +141,7 @@ class InternjumpController extends ObjectsController {
             $userTotalWorth += ($experienceLevel * $this->container->getParameter('worth_experience_boost_value'));
 
             //5 years boost
-            //get max level education 
+            //get max level education
             $educationRepo = $em->getRepository('ObjectsInternJumpBundle:Education');
             $userMaxLevelEducation = NULL;
             if ($maxEducationKey && $maxEducationKey != 0)
@@ -335,7 +332,7 @@ class InternjumpController extends ObjectsController {
                 $userTotalWorth += ($experienceLevel * $this->container->getParameter('worth_experience_boost_value'));
 
                 //5 years boost
-                //get max level education 
+                //get max level education
                 $educationRepo = $em->getRepository('ObjectsInternJumpBundle:Education');
                 $userMaxLevelEducation = NULL;
                 if ($maxEducationKey && $maxEducationKey != 0)
@@ -372,7 +369,7 @@ class InternjumpController extends ObjectsController {
                 $em->flush();
                 //post resutl on user facebook wall
                 $status = $this->container->getParameter('worth_facebook_message');
-                $picture = $this->generateNormalUrl('site_homepage', array(), TRUE).'img/faceLogo.png'; 
+                $picture = $this->generateNormalUrl('site_homepage', array(), TRUE) . 'img/faceLogo.png';
                 $link = $this->generateNormalUrl('site_homepage', array(), TRUE);
                 FacebookController::postOnUserWallAndFeedAction($loggedInUser->getSocialAccounts()->getFacebookId(), $loggedInUser->getSocialAccounts()->getAccessToken(), $status, null, null, $link, $picture);
 
@@ -397,11 +394,11 @@ class InternjumpController extends ObjectsController {
                             'fiveYearsWorthArray' => $fiveYearsWorthArray,
                             'userFriendsWorth' => $userFriendsWorth,
                             'ImproveResultsMessageArray' => $ImproveResultsMessageArray
-                        ));
+                ));
             } else {
                 return $this->render('ObjectsInternJumpBundle:Internjump:howMuchAreYouWorth.html.twig', array(
                             'facebook' => 'notlinked'
-                        ));
+                ));
             }
         }
     }
@@ -422,7 +419,7 @@ class InternjumpController extends ObjectsController {
         //get Os name from request param
         $os = $this->getRequest()->get('os');
 
-        //get Current logged in user if exist 
+        //get Current logged in user if exist
         if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
             //get logedin user objects
             $user = $this->get('security.context')->getToken()->getUser();
@@ -445,7 +442,7 @@ class InternjumpController extends ObjectsController {
                     'userBrowser' => $browser,
                     'browserVersion' => $version,
                     'userOs' => $os,
-                )));
+        )));
         //send the mail
         $this->container->get('mailer')->send($message);
         return $this->render('ObjectsInternJumpBundle:Internjump:mail404.html.twig');
@@ -454,7 +451,7 @@ class InternjumpController extends ObjectsController {
     /**
      * Action to get part of campus reps page text , will be rendered from base to be displayed in footer
      * @author Ola
-     * 
+     *
      */
     public function campusRepsBaseAction() {
         $pageText = file_get_contents(__DIR__ . "/../../../../web/sitePages/CampusReps.txt");
@@ -490,7 +487,7 @@ class InternjumpController extends ObjectsController {
         $results = TwitterController::getLastTweets($container->getParameter('consumer_key'), $container->getParameter('consumer_secret'), $container->getParameter('oauth_token'), $container->getParameter('oauth_token_secret'), 'internjump', $count);
         return $this->render('ObjectsInternJumpBundle:Internjump:getLatestTwitts.html.twig', array(
                     'results' => $results
-                ));
+        ));
     }
 
     /**
@@ -505,7 +502,7 @@ class InternjumpController extends ObjectsController {
                     'title' => 'Privacy',
                     'flag' => '',
                     'content' => $pageText
-                ));
+        ));
     }
 
     /**
@@ -520,7 +517,7 @@ class InternjumpController extends ObjectsController {
                     'title' => 'TermsOfUse',
                     'flag' => '',
                     'content' => $pageText
-                ));
+        ));
     }
 
     /**
@@ -542,7 +539,7 @@ class InternjumpController extends ObjectsController {
                     'flag' => 'yes',
                     'content' => $pageText,
                     'founders' => $founders,
-                ));
+        ));
     }
 
     /**
@@ -565,12 +562,11 @@ class InternjumpController extends ObjectsController {
         $data = array();
         //prepare the validation constrains
         $collectionConstraint = new Collection(array(
-                    'Name' => new NotNull(),
-                    'Email' => new NotNull(),
-                    'Email' => new Email(),
-                    'Phone' => new NotNull(),
-                    'Message' => new NotNull()
-                ));
+            'Name' => new NotBlank(),
+            'Email' => array(new Email(), new NotBlank()),
+            'Phone' => new NotBlank(),
+            'Message' => new NotBlank()
+        ));
         //create the contact form
 
         $form = $this->createFormBuilder($data, array(
@@ -613,7 +609,7 @@ class InternjumpController extends ObjectsController {
                     'founders' => $founders,
                     'form' => $form->createView(),
                     'flag' => $flag,
-                ));
+        ));
     }
 
     /**
@@ -624,7 +620,7 @@ class InternjumpController extends ObjectsController {
         $studentsData = file_get_contents(__DIR__ . '/../../../../web/sitePages/studentsData.txt');
         return $this->render('ObjectsInternJumpBundle:Internjump:studentsData.html.twig', array(
                     'studentsData' => $studentsData
-                ));
+        ));
     }
 
     /**
@@ -635,7 +631,7 @@ class InternjumpController extends ObjectsController {
         $employersData = file_get_contents(__DIR__ . '/../../../../web/sitePages/employersData.txt');
         return $this->render('ObjectsInternJumpBundle:Internjump:employersData.html.twig', array(
                     'employersData' => $employersData
-                ));
+        ));
     }
 
     /**
@@ -798,7 +794,7 @@ class InternjumpController extends ObjectsController {
 
     /**
      * @author Ola
-     * Home page action 
+     * Home page action
      */
     public function homePageAction() {
 
@@ -829,9 +825,9 @@ class InternjumpController extends ObjectsController {
             $flag = "facebook";
             //Yes, inside facebook
             $facebook = new \Facebook(array(
-                        'appId' => '282137608565990',
-                        'secret' => 'c0e978a64bc520a8b677dfa9e57f4746',
-                    ));
+                'appId' => '282137608565990',
+                'secret' => 'c0e978a64bc520a8b677dfa9e57f4746',
+            ));
             // Get User ID
             $user = $facebook->getUser();
 
@@ -858,7 +854,7 @@ class InternjumpController extends ObjectsController {
 //                    //Get the user then Login now
 //                    /****************************/
 //                    $user1 = $em->getRepository('ObjectsUserBundle:User')->findOneBy(array('email' => $user_profile['email']));
-//                    
+//
                 } catch (FacebookApiException $e) {
                     error_log($e);
                     $user = null;
@@ -902,7 +898,7 @@ class InternjumpController extends ObjectsController {
                     'url' => $Url,
                     'homeCompanies' => $homeCompanies,
                     'home_page_video_id' => $this->container->getParameter('home_page_video_id')
-                ));
+        ));
 //        return $this->redirect($this->generateUrl('login', array(), 'true'));
     }
 
@@ -930,7 +926,7 @@ class InternjumpController extends ObjectsController {
 
     /**
      * @author Ola
-     * Action to render and show content of Contact us page from text file 
+     * Action to render and show content of Contact us page from text file
      */
     public function ContactUsAction() {
         $flag = 0;
@@ -947,19 +943,20 @@ class InternjumpController extends ObjectsController {
         $data = array();
         //prepare the validation constrains
         $collectionConstraint = new Collection(array(
-                    'Name' => new NotNull(),
-                    'Email' => new NotNull(),
-                    'Email' => new Email(),
-                    'Message' => new NotNull()
-                ));
+            'Name' => new NotBlank(),
+            'Email' => array(new NotBlank(), new Email()),
+            'Subject' => new NotBlank(),
+            'Message' => new NotBlank()
+        ));
         //create the contact form
         $form = $this->createFormBuilder($data, array(
-                            'validation_constraint' => $collectionConstraint,
-                        ))
-                        ->add('Name', 'text', array('required' => true, 'invalid_message' => 'please enter username'))
-                        ->add('Email', 'email', array('required' => true, 'invalid_message' => 'please enter email'))
-                        ->add('Subject', 'choice', array('choices' => $allSubjects, 'required' => true))
-                        ->add('Message', 'textarea', array('required' => true, 'invalid_message' => 'please enter your messege'))->getForm();
+                    'validation_constraint' => $collectionConstraint,
+                ))
+                ->add('Name', 'text', array('required' => true, 'invalid_message' => 'please enter username'))
+                ->add('Email', 'email', array('required' => true, 'invalid_message' => 'please enter email'))
+                ->add('Subject', 'choice', array('choices' => $allSubjects, 'required' => true))
+                ->add('Message', 'textarea', array('required' => true, 'invalid_message' => 'please enter your messege'))
+                ->getForm();
 
 //        $cachetime=$this->container->getParameter('Time_With_Seconds_To_Cache_ContactUs_Page');
 //        $response=new Response();
@@ -969,7 +966,6 @@ class InternjumpController extends ObjectsController {
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
             if ($form->isValid()) {
-
                 $sendtoemail = $this->container->getParameter('contact_us_email');
                 $data = $form->getData();
                 $body = $data['Message'];
@@ -986,7 +982,7 @@ class InternjumpController extends ObjectsController {
                         ' </body>' .
                         '</html>', 'text/html'
                 );
-                $test = $this->get('mailer')->send($message);
+                $this->get('mailer')->send($message);
                 $flag = 1;
             }
         }
@@ -994,7 +990,7 @@ class InternjumpController extends ObjectsController {
         return $this->render('ObjectsInternJumpBundle:Internjump:ContactUs.html.twig', array(
                     'form' => $form->createView(),
                     'flag' => $flag,
-                )); //,$response
+        )); //,$response
     }
 
     /**
@@ -1011,7 +1007,7 @@ class InternjumpController extends ObjectsController {
 
         return $this->render('ObjectsInternJumpBundle:Internjump:FAQ.html.twig', array(
                     'AskedQuestions' => $AskedQuestions,
-                ));
+        ));
     }
 
     /**
@@ -1024,7 +1020,7 @@ class InternjumpController extends ObjectsController {
         return $this->render('ObjectsInternJumpBundle:Internjump:school.html.twig', array(
                     'schoolsDataUpper' => $schoolsDataUpper,
                     'schoolsDataLower' => $schoolsDataLower
-                ));
+        ));
     }
 
     /**
@@ -1061,7 +1057,7 @@ class InternjumpController extends ObjectsController {
                     'allPosts' => $allPosts,
                     'postsCount' => $postsCount,
                     'lastPageNumber' => $lastPageNumber
-                ));
+        ));
     }
 
     /**
@@ -1073,13 +1069,13 @@ class InternjumpController extends ObjectsController {
         //get post repo
         $postRepo = $em->getRepository('ObjectsInternJumpBundle:Post');
 
-        //Get post 
+        //Get post
         $post = $postRepo->findOneBy(array('id' => $id));
 
 
         return $this->render('ObjectsInternJumpBundle:Internjump:showPost.html.twig', array(
                     'post' => $post,
-                ));
+        ));
     }
 
 }

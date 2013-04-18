@@ -27,7 +27,7 @@
 <li>
 <img width="102" height="120" src="{{asset('img/contact.jpg')}}">
 <a href="#">
-            
+
 <h1>{{contact_info_name}}</h1>
 <h2>{{contact_info_address_part1}}</h2>
 <h2>{{contact_info_address_part2}}</h2></a>
@@ -48,20 +48,25 @@
 {%else%}
 <fieldset>
 <legend>Contact Us</legend>
+{{form_errors(form)}}
 <form action="{{path('contactUs')}}" method="POST" {{ form_enctype(form) }}>
 
         <label>User Name :</label>
             {{form_widget(form.Name)}}
+            {{form_errors(form.Name)}}
         <br>
         <label>Email Address :</label>
             {{form_widget(form.Email)}}
+            {{form_errors(form.Email)}}
         <br>
         <label>Subject</label>
             {{form_widget(form.Subject, {'attr': {'class': 'chzn-select', 'style' : 'width:260px;' } })}}
+            {{form_errors(form.Subject)}}
         <br>
         <label>Your Message :</label>
             {{form_widget(form.Message, {'attr': {'class': 'task'}})}}
-        
+            {{form_errors(form.Message)}}
+
         {{form_rest(form)}}
         <input type="submit" value="Send" class="submit">
 </form>
@@ -89,12 +94,12 @@
 <script src="{{asset('js/libs/chosen.jquery.min.js')}}" type="text/javascript"></script>
 <script>
     $(document).ready(function(){
-        
+
         $('#contactUsLink').addClass('crnt');
-        
+
         $(".chzn-select").chosen({
             allow_single_deselect:true
-        });    
+        });
     });
 </script>
 {%endblock%}
