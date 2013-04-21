@@ -46,7 +46,7 @@ class Internship {
      * )
      */
     private $categories;
-    
+
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection $keywords
      * @ORM\ManyToMany(targetEntity="\Objects\InternJumpBundle\Entity\Keywords")
@@ -105,21 +105,22 @@ class Internship {
      * @ORM\Column(name="numberOfOpenings", type="integer")
      */
     private $numberOfOpenings;
-    
+
     /**
      * @var decimal $minimumGPA
      * @Assert\NotNull(groups={"newInternship","editInternship"})
-     * @ORM\Column(name="minimumGPA", type="decimal", precision=1, scale=1)
+     * @Assert\Max(limit = 4, message = "GPA must be 4 or less.", groups={"newInternship","editInternship"})
+     * @ORM\Column(name="minimumGPA", type="decimal", precision=3, scale=2)
      */
     private $minimumGPA;
-    
+
     /**
      * @var string $positionType
      * @Assert\NotNull(groups={"newInternship","editInternship"})
      * @ORM\Column(name="positionType", type="string", length=255)
      */
     private $positionType;
-    
+
     /**
      * the cv skills
      * @var \Doctrine\Common\Collections\ArrayCollection $skills
@@ -130,28 +131,28 @@ class Internship {
      * )
      */
     private $skills;
-    
+
     /**
      * @var string $compensation
      * @Assert\NotNull(groups={"newInternship","editInternship"})
      * @ORM\Column(name="compensation", type="string", length=255)
      */
     private $compensation;
-    
+
     /**
      * @var string $workLocation
      * @Assert\NotNull(groups={"newInternship","editInternship"})
      * @ORM\Column(name="workLocation", type="string", length=255)
      */
     private $workLocation;
-    
+
     /**
      * @var string $sessionPeriod
      * @Assert\NotNull(groups={"newInternship","editInternship"})
      * @ORM\Column(name="sessionPeriod", type="string", length=255)
      */
     private $sessionPeriod;
-    
+
     /**
      * @var string $zipcode
      * @Assert\NotNull(groups={"newInternship","editInternship"})
@@ -553,7 +554,7 @@ class Internship {
             $context->addViolation('You must select at least one language', array(), NULL);
         }
     }
-    
+
     /**
      * Set Latitude
      *
@@ -695,7 +696,7 @@ class Internship {
     public function addInternshipLanguage(\Objects\InternJumpBundle\Entity\InternshipLanguage $languages) {
         $this->languages[] = $languages;
     }
-    
+
     public function addLanguages(\Objects\InternJumpBundle\Entity\InternshipLanguage $languages){
         $this->languages[] = $languages;
     }
@@ -703,7 +704,7 @@ class Internship {
     /**
      * Get languages
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getLanguages() {
         return $this->languages;
@@ -723,7 +724,7 @@ class Internship {
     /**
      * Get positionType
      *
-     * @return string 
+     * @return string
      */
     public function getPositionType()
     {
@@ -743,7 +744,7 @@ class Internship {
     /**
      * Get minimumGPA
      *
-     * @return decimal 
+     * @return decimal
      */
     public function getMinimumGPA()
     {
@@ -763,7 +764,7 @@ class Internship {
     /**
      * Get workLocation
      *
-     * @return string 
+     * @return string
      */
     public function getWorkLocation()
     {
@@ -783,7 +784,7 @@ class Internship {
     /**
      * Get numberOfOpenings
      *
-     * @return integer 
+     * @return integer
      */
     public function getNumberOfOpenings()
     {
@@ -803,7 +804,7 @@ class Internship {
     /**
      * Get compensation
      *
-     * @return string 
+     * @return string
      */
     public function getCompensation()
     {
@@ -823,7 +824,7 @@ class Internship {
     /**
      * Get sessionPeriod
      *
-     * @return string 
+     * @return string
      */
     public function getSessionPeriod()
     {
@@ -848,20 +849,20 @@ class Internship {
     public function setKeywords($keywords) {
         $this->keywords = $keywords;
     }
-    
+
     /**
      * Get keywords
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getKeywords()
     {
         return $this->keywords;
     }
-    
+
     /**
      * delete keywords
-     * 
+     *
      */
     public function deleteKeywords() {
             $this->keywords = new ArrayCollection();
@@ -876,7 +877,7 @@ class Internship {
     {
         $this->skills[] = $skills;
     }
-    
+
     public function setSkills($skills){
         $this->skills = $skills;
     }
@@ -884,7 +885,7 @@ class Internship {
     /**
      * Get skills
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getSkills()
     {
