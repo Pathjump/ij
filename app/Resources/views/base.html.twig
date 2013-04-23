@@ -1,529 +1,224 @@
-<!doctype html>
-<!--[if lt IE 7]>
-<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en">
-<![endif]-->
-
-<!--[if IE 7]>
-<html class="no-js lt-ie9 lt-ie8" lang="en">
-<![endif]-->
-
-<!--[if IE 8]>
-<html class="no-js lt-ie9" lang="en">
-<![endif]-->
-
-<!--[if gt IE 8]><!-->
-<html class="no-js" lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
     <!--<![endif]-->
     <head>
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
         <meta name="viewport" content="width=device-width"/>
-	<meta name="google-site-verification" content="4h4nUoQOl0ougVoshJ0GYOcDNtwUI-2YOvQCuRLjric" />
+        <meta name="google-site-verification" content="4h4nUoQOl0ougVoshJ0GYOcDNtwUI-2YOvQCuRLjric" />
         {% block meat %}
         <meta name="description" content="{{site_meta_description}}" />
         <meta name="keywords" content="{{site_meta_keywords}}" />
         {% endblock %}
         <title>{% block title %}{{site_meta_title}}{% endblock %}</title>
-        <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css"/>
-        <link href="{{ asset('css/jquery.alerts.css') }}" rel="stylesheet" type="text/css"/>
-        <!--[if gte IE 9]>
-        <link href="{{ asset('css/ie-9.css') }}" rel="stylesheet" type="text/css"/>
-        <![endif]-->
-        <!--[if gte IE 8]>
-        <link href="{{ asset('css/ie-8.css') }}" rel="stylesheet" type="text/css"/>
-        <![endif]-->
+
         {% block stylesheets %}
-        <link href="{{ asset('css/jquery.fancybox.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ asset('css/bootstrap.min.css')}}" rel="stylesheet" media="screen"/>
+        <link href="{{ asset('css/main.css')}}" rel="stylesheet" media="screen"/>
+        <link href="{{ asset('css/bootstrap-responsive.css')}}" rel="stylesheet"/>
+        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,200italic,400italic,700italic' rel='stylesheet' type='text/css'/>
+        <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'/>
+        <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'/>
         {% endblock %}
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
-        <script>
-            if(navigator.appVersion.indexOf('Safari') != -1){
-                if(navigator.appVersion.indexOf('Chrome') != -1){
-                    document.write('<link href="{{ asset('css/chrome.css') }}" rel="stylesheet" type="text/css">');
-                } else {
-                    document.write('<link href="{{ asset('css/safari.css') }}" rel="stylesheet" type="text/css">');
-                }
-            }
-            </script>
-            <script src="{{ asset('js/libs/modernizr-2.5.3.min.js') }}" type="text/javascript"></script>
+
         <div id="fb-root"></div>
         <script>(function(d, s, id) {
-          var js, fjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) return;
-          js = d.createElement(s); js.id = id;
-          js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-          fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));</script>
-            <script>
-            //redirect to facebook if access_method set
-            if (top === self && '{{app.request.get('access_method')}}' != '') {
-                window.location = 'http://apps.facebook.com/internjump/';
-            }
-            else if(top!=self && '{{app.request.get('access_method')}}'!='facebook')
-            {
-                window.location = 'http://internjump.com?access_method=facebook';
-            }
-                </script>
-            </head>
-            <body>
-                <!--[if lt IE 7]>
-                <p class=chromeframe>Your browser is <em>ancient!</em>
-                <a href="http://browsehappy.com/">Upgrade to a different browser</a>
-                or
-                <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p>
-                <![endif]-->
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id))
+                    return;
+                js = d.createElement(s);
+                js.id = id;
+                js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));</script>
+        </head>
+        <body>
+            <div class="loading" style="display: none">
+                <img src="{{ asset('img/loadingfacebox.gif') }}" alt="loader"/>
+                <p>{% trans %}Loading........{% endtrans %}</p>
+            </div>
 
-                <div class="loading" style="display: none">
-                    <img src="{{ asset('img/loadingfacebox.gif') }}" alt="loader"/>
-                    <p>{% trans %}Loading........{% endtrans %}</p>
-                </div>
-
-                <div id="container">
-
-                    <!-- Header Section -->
-                {% if not app.request.get('access_method') %}
-                    <div class="topNote">
-                {% if is_granted('ROLE_NOTACTIVE_COMPANY') %}
-                            <span class="memberArea">
-                                <img src="{{app.user.getWebPath()}}" alt="{{app.user}}" />
-                                Hi, <a href="{{path('internship',{'loginName' : app.user.loginName})}}">{{app.user.loginName}}</a>
-                                <span class="links">
-
-                                </span>
-                                <a href="{{ path('logout') }}">Sign out</a>.
-
-                            {% if not is_granted('ROLE_COMPANY') %}
-                                <span class="activeMsg">Please activate your account</span>
-                                <a href="{{path('company_reActivation')}}">Resend activation email</a>
-                            {% endif %}
-                            </span>
-                {% elseif is_granted('ROLE_NOTACTIVE') %}
-                            <span class="memberArea">
-                                <img src="{{app.user.getTimThumbUrl(32,32)}}" width="32" height="32"/>
-                                Hi, <a href="{{ path('student_task',{'loginName' : app.user.loginName}) }}">{{app.user}}</a> |
-                                <a href="{{path('user_edit')}}">My account</a> |
-                                {% if app.user.socialAccounts %}
-                                <span class="links">
-                                    Linked Accounts:
-                                    <ul>
-                                    {% if app.user.socialAccounts and app.user.socialAccounts.isFacebookLinked() %}
-                                            <li class="face"><a title="Facebook" target="_blank" href="http://www.facebook.com/{{app.user.socialAccounts.facebookId}}">facebook</a></li>
-                                    {% endif %}
-
-                                    {% if app.user.socialAccounts and app.user.socialAccounts.isTwitterLinked() %}
-                                            <li class="twitter"><a title="Twitter" target="_blank" href="https://twitter.com/#!/{{app.user.socialAccounts.screenName}}">twitter</a></li>
-                                    {% endif %}
-
-                                    {% if app.user.socialAccounts and app.user.socialAccounts.isLinkedInLinked() %}
-                                            <li class="linked"><a title="LinkedIn" target="_blank" href="http://www.linkedin.com/profile/view?id={{app.user.socialAccounts.linkedInId}}">linkedin</a></li>
-                                    {% endif %}
-                                        </ul>
-                                    </span> |
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <div class="container">
+                        <a href="{{ path('site_homepage') }}" class="pull-left"><img src="{{ asset('img/Logo.png') }}" /></a>
+                        <div class="Top-Links pull-right">
+                            <ul class="Social-icons  pull-right ">
+                                {% if face_page_url %}
+                                    <li><a target="_blank" href="{{face_page_url}}" class="ico-facebook"></a></li>
                                 {% endif %}
+                                {% if twitter_page_url %}
+                                        <li><a target="_blank" href="{{twitter_page_url}}" class="ico-twitter"></a></li>
+                                {% endif %}
+                                {% if linkledIn_page_url %}
+                                            <li><a target="_blank" href="{{linkledIn_page_url}}" class="ico-google"></a></li>
+                                {% endif %}
+                                            </ul>
+                            {% if is_granted('ROLE_NOTACTIVE_COMPANY') %}
+                                <ul class="log-links pull-right  unstyled">
+                                     <li><a href="{{ path('internship',{'loginName' : app.user.loginName}) }}">Hi, {{app.user.loginName}}</a></li>
+                                     <li><a href="{{ path('logout') }}">Sign out</a></li>
+                                </ul>
+                            {% elseif is_granted('ROLE_NOTACTIVE') %}
+                                <ul class="log-links pull-right  unstyled">
+                                     <li><a href="{{ path('student_task',{'loginName' : app.user.loginName}) }}">Hi, {{app.user.loginName}}</a></li>
+                                     <li><a href="{{ path('logout') }}">Sign out</a></li>
+                                </ul>
+                            {% else %}
+                                            <ul class="log-links pull-right  unstyled">
+                                                <li><a href="{{ path('login') }}">Login</a></li>
+                                                <li><a href="{{path('user_signup')}}" class="muted">Sign up</a></li>
+                                            </ul><!--socila-icons--->
+                            {% endif %}
+                                        </div><!--Top-links-->
 
-                                    <a href="{{ path('logout') }}">Sign out</a>.
+                                        <button data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar collapsed pull-right" type="button">
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                            <span class="icon-bar"></span>
+                                        </button>
+                                        <div class="nav-collapse collapse pull-right">
+                                            <ul class="nav">
+                                                <li class="active" id="employerLink"><a href="{{path('students_data')}}" class="nav-students">Students</a></li>
+                                                <li id="studentLink"><a href="{{path('employers_data')}}" class="nav-companies">Employers</a></li>
+                                                <li id="schoolsLink"><a href="{{path('schools')}}">Schools</a></li>
+                                                <li id="resourceLink"><a href="{{path('resources')}}">Resources</a></li>
+                                            </ul>
+                                        </div><!--/.nav-collapse -->
 
-                                    {% if not is_granted('ROLE_USER') %}
-                                    <span class="activeMsg">Please activate your account</span>
-                                    {% endif %}
-
-                                </span>
-                {% else %}
-                                <b> Are you an employer? Connect with top interns from all around the nation. <a href="{{path('employers_data')}}">More Information</a>.</b>
-                {% endif %}
-
+                                    </div><!--Container-->
+                                </div><!--navbar-inner-->
+                            </div><!--navbar-->
+                            <div class="Subcatego">
+                                {% block subcatego %}{% endblock %}
+                            </div>
+                            <div class="notifsWrapper">
+                            {% block notifications %}
+                                {% if is_granted('ROLE_USER') %}
+                                    {% render "ObjectsInternJumpBundle:InternjumpUser:getUserNotifications" %}
+                                {% elseif is_granted('ROLE_COMPANY') %}
+                                    {% render "ObjectsInternJumpBundle:Company:getCompanyNotifications" %}
+                                {% endif %}
+                            {% endblock %}
                             </div>
 
-                            <header>
-                                <div class="wrapper">
-
-                                    <div class="logo">
-                                        <a href="{{ path('site_homepage') }}" title="InternJump"><img src="{{ asset('img/logo.png') }}" alt="logo" width="93" height="117"/></a>
-                                    </div>
-
-                                    <nav>
-                                        <ul>
-
-                            {% if is_granted('ROLE_NOTACTIVE_COMPANY') %}
-                                            {% if is_granted('ROLE_COMPANY') %}
-                                            <li class="emp" id="logedInComapny">
-                                                <a href="javascript:void(0)">Employers</a>
-                                                <ul id="companyNav">
-						<li id="jobsList"><a href="{{ path('internship',{'loginName' : app.user.loginName}) }}">Home</a></li>
-                                                    <li id="newTask"><a href="{{ path('task_new') }}">Add new task</a></li>
-
-                                                    <li id="newJob"><a href="{{ path('internship_new') }}">Add new internship</a></li>
-                                                    <!--
-                                                    <li id="searchStudents"><a href="{{ path('company_search_for_cv') }}">Search For Students</a></li>
-                                                    -->
-                                                </ul>
-                                            </li>
-                                            {#<li id="faqLink" ><a href="{{path('FAQ_page')}}">FAQ</a></li>#}
-                                            {#<li id="schoolsLink" ><a href="{{path('schools')}}">Schools</a></li>#}
-                                            <li id="employersLink"><a href="{{path('employers')}}">Industries</a></li>
-                                            <li id="resourceLink" ><a href="{{path('resources')}}">Resources</a></li>
-                                            {#<li id="contactUsLink" ><a href="{{path('contactUs')}}">Contact Us</a></li>#}
-                                            {% endif %}
-                            {% elseif is_granted('ROLE_NOTACTIVE') %}
-                                            {% if is_granted('ROLE_USER') %}
-                                            <li class="stu" id="logedInStudent"><a href="javascript:void(0)">Students</a>
-                                                <ul id="studentNav">
-                                                    <li id="userHome"><a href="{{path('student_task',{'loginName' : app.user.loginName})}}">Profile Page</a></li>
-                                                    <li id="jobSearch"><a href="{{ path('user_search_page') }}">Internship Search</a></li>
-                                                    <li id="newEducation"><a href="{{ path('education_new') }}">Education</a></li>
-                                                    <li id="newLanguage"><a href="{{ path('user_languages') }}">Language</a></li>
-                                                    <li id="newEmploymentHistory"><a href="{{ path('employmenthistory_new') }}">Employment History</a></li>
-                                                    <li id="userSkills"><a href="{{ path('addEditUserSkills') }}" title="Your Skills">Skills</a></li>
-                                                    <li id="personalQuestion"><a href="{{ path('personal_questions') }}" title="Personal Questions">Personal Questions</a></li>
-                                    {% if not app.user.score %}
-                                                    <li><a href="{{path('internjumb_quiz')}}">InternJump Personality Quiz</a></li>
-                                    {% endif %}
-                                                </ul>
-                                            </li>
-                                            {#<li id="faqLink" ><a href="{{path('FAQ_page')}}">FAQ</a></li>#}
-                                            {#<li id="schoolsLink" ><a href="{{path('schools')}}">Schools</a></li>#}
-                                            <li id="employersLink"><a href="{{path('employers')}}">Industries</a></li>
-                                            <li id="resourceLink" ><a href="{{path('resources')}}">Resources</a></li>
-                                            {#<li id="worthLink"><a href="{{ path('howMuchAreYouWorth') }}">How Much Are You Worth</a></li>#}
-                                            {#<li id="contactUsLink" ><a href="{{path('contactUs')}}">Contact Us</a></li>#}
-                                            {% endif %}
-                            {% else %}
-                                            <li id="homePageLink"><a href="{{ path('site_homepage') }}"  title="Home Page">Home</a></li>
-                                            <li id="employerLink"><a href="{{path('employers_data')}}">Employers</a></li>
-                                            <li id="studentLink"><a href="{{path('students_data')}}">Students</a></li>
-                                            {#<li id="faqLink" ><a href="{{path('FAQ_page')}}">FAQ</a></li>#}
-                                            <li id="schoolsLink" ><a href="{{path('schools')}}">Schools</a></li>
-                                            <li id="resourceLink" ><a href="{{path('resources')}}">Resources</a></li>
-                                            <li id="employersLink"><a href="{{path('employers')}}">Industries</a></li>
-                                            {#<li id="contactUsLink" ><a href="{{path('contactUs')}}">Contact Us</a></li>#}
-                                            {#<li id="worthLink"><a href="{{ path('login') }}">How Much Are You Worth</a></li>#}
-                                            <li id="loginLink"><a href="{{ path('login') }}">Login</a></li>
+                            {% if app.session.hasFlash('notice') %}
+                                <div class="alert alert-info">
+                                <button type="button" class="close" data-dismiss="alert"> × </button>
+                                {{ app.session.flash('notice') | raw }}
+                                </div>
                             {% endif %}
-                                        </ul>
-                                    </nav>
 
-                                    <!--------------------Responsive New Navigation------------------>
-
-                                    {% if is_granted('ROLE_NOTACTIVE_COMPANY') %}
-
-		{% if is_granted('ROLE_COMPANY') %}
-                                    <ul class="innerNav">
-                                        <li id="resourceLink" ><a href="{{path('resources')}}">Resources</a></li>
-                                        <li id="resourceLink"  class="innerlogo"><img src="{{asset('css/images/innerLogo.png')}}" width="105" height="25"></li>
-                                    </ul>
-
-                                    <div class="innerSubNav">
-                                        <h1>Employer SubMenu Links</h1>
-                                        <ul>
-                                            <li id="jobsList"><a href="{{ path('internship',{'loginName' : app.user.loginName}) }}">Internships List</a></li>
-                                            <li id="newTask"><a href="{{ path('task_new') }}">Add new task</a></li>
-                                            <li id="newJob"><a href="{{ path('internship_new') }}">Add new internship</a></li>
-                                            <li id="searchStudents"><a href="{{ path('company_search_for_cv') }}">Search For Students</a></li>
-                                        </ul>
-                                    </div>
-		{% endif %}
-
-  {% elseif is_granted('ROLE_NOTACTIVE') %}
-                {% if is_granted('ROLE_USER') %}
-                                    <ul class="innerNav">
-                                        <li id="resourceLink" ><a href="{{path('resources')}}">Resources</a></li>
-                                        <li id="resourceLink"  class="innerlogo"><img src="{{asset('css/images/innerLogo.png')}}" width="105" height="25"></li>
-                                    </ul>
-
-                                    <div class="innerSubNav">
-                                        <h1>Student SubMenu Links</h1>
-                                        <ul>
-                                            <li id="userHome"><a href="{{path('student_task',{'loginName' : app.user.loginName})}}">Profile Page</a></li>
-                                            <li id="jobSearch"><a href="{{ path('user_search_page') }}">Internship Search</a></li>
-                                            <li id="newEducation"><a href="{{ path('education_new') }}">Education</a></li>
-                                            <li id="newEmploymentHistory"><a href="{{ path('employmenthistory_new') }}">Employment History</a></li>
-                                            <li id="userSkills"><a href="{{ path('addEditUserSkills') }}" title="Your Skills">Skills</a></li>
-                                            <li id="personalQuestion"><a href="{{ path('personal_questions') }}" title="Personal Questions">Personal Questions</a></li>
-                  {% if not app.user.score %}
-                                            <li><a href="{{path('internjumb_quiz')}}">InternJump Personality Quiz</a></li>
-                  {% endif %}
-                                        </ul>
-                                    </div>
-           {% endif %}
-{% else %}
-                                    <ul class="innerNav">
-                                        <li id="homePageLink"><a href="{{ path('site_homepage') }}"  title="Home Page">Home</a></li>
-                                        <li id="employerLink"><a href="{{path('employers_data')}}">Employers</a></li>
-                                        <li id="studentLink"><a href="{{path('students_data')}}">Students</a></li>
-                                        <li id="schoolsLink" ><a href="{{path('schools')}}">Schools</a></li>
-                                        <li id="resourceLink" ><a href="{{path('resources')}}">Resources</a></li>
-                                        <li id="loginLink"><a href="{{ path('login') }}">Login</a></li>
-                                        <li class="innerBigLogo"><img src="{{asset('css/images/faceLogo.png')}}" weidth="45" height="54"></li>
-                                    </ul>
-{% endif %}
-
-                                    <!------------------End Edit of new navigation----------------->
-
+                            {% if app.session.hasFlash('success') %}
+                                <div class="alert alert-success">
+                                <button type="button" class="close" data-dismiss="alert"> × </button>
+                                {{ app.session.flash('success') | raw }}
                                 </div>
-                            </header>
-                {% else %}
-                            <!-- Header Section
-            ------------------------->
+                            {% endif %}
 
-                            <div class="faceNav">
-                                <img src="{{asset('img/faceLogo.png')}}" width="93" height="117">
-                                <ul>
-                                    <li id="userHome"><a href="{{path('student_task',{'loginName' : app.user.loginName})}}">Profile Page</a></li>
-                                    <li id="jobSearch"><a href="{{ path('user_search_page') }}">Internship Search</a></li>
-                                    <li id="newEducation"><a href="{{ path('education_new') }}">Education</a></li>
-                                    <li id="newEmploymentHistory"><a href="{{ path('employmenthistory_new') }}">Employment History</a></li>
-                                    <li id="userSkills"><a href="{{ path('addEditUserSkills') }}" title="Your Skills">Skills</a></li>
-                                    <li id="personalQuestion"><a href="{{ path('personal_questions') }}" title="Personal Questions">Personal Questions</a></li>
-                                                    {% if not app.user.score %}
-                                    <li><a href="{{path('internjumb_quiz')}}">InternJump Personality Quiz</a></li>
-                                    {% endif %}
-                                </ul>
-
-                                <div class="welcomInvite">
-                                    <span class="name"><a href="{{path('student_task',{'loginName' : app.user.loginName})}}">{{app.user}}</a></span>
-
-                                    <div id="fb-root"></div>
-                                    <script src="http://connect.facebook.net/en_US/all.js"></script>
-                                    <button onclick="sendRequestViaMultiFriendSelector(); return false;"><span>Invite Friends</span></button>
-                                    <script>
-                                      FB.init({
-                                        appId  : '282137608565990',
-                                        oauth  : true,
-                                        frictionlessRequests: true
-                                      });
-
-                                      function sendRequestViaMultiFriendSelector() {
-                                        FB.ui({method: 'apprequests',
-                                          title: 'Who would you like to invite?',
-                                          message: 'Checkout Internjump Application',
-                                          layout:  "iframe",
-                                        }, requestCallback);
-                                      }
-
-                                      function requestCallback(response) {
-                                        // Handle callback here
-                                       console.log(response);
-                                        //alert('done');
-                                      }
-                                        </script>
-{%block facemsg%}
-                                        <p class="facemsg">{{facebook_mesasage}}</p>
-{%endblock%}
-
-                                        <div class="clear"></div>
-                                    </div>
+                            {% if app.session.hasFlash('error') %}
+                                <div class="alert alert-error">
+                                <button type="button" class="close" data-dismiss="alert"> × </button>
+                                {{ app.session.flash('error') | raw }}
                                 </div>
-                {% endif %}
+                            {% endif %}
 
-            {% block notifications %}
-                                <div class="notifsWrapper">
-                {% if is_granted('ROLE_USER') %}
-                {% render "ObjectsInternJumpBundle:InternjumpUser:getUserNotifications" %}
-                {% elseif is_granted('ROLE_COMPANY') %}
-                {% render "ObjectsInternJumpBundle:Company:getCompanyNotifications" %}
-                {% endif %}
+                            {% block body %}{% endblock %}
+
+                            <div class="footer">
+                                <div class="container">
+
+
+
+                                    <div class=" nav-footer  pull-right">
+                                        <ul class="">
+                                            <li><a href="{{ path('site_homepage') }}"> Home   </a></li> |
+                                            <li><a href="{{path('resources')}}">Resources</a></li>|
+                                            <li><a href="{{path('aboutUs')}}">About Us</a></li> |
+                                            <li><a href="{{path('termsOfUse')}}">Terms Of Service</a></li> |
+                                            <li><a href="{{path('privacy')}}">Privacy Policy</a></li> |
+                                            <li><a href="https://internjump.com/internship/internjump">Careers</a></li> |
+                                            <li><a href="{{path('contactUs')}}">Contact Us</a></li>
+                                        </ul>
                                     </div>
-            {% endblock %}
-                                    <!-- xxx END Header Section xxx -->
-
-                                    <!-- Body Section -->
-
-                                    <div id="main" role="main">
-
-                                    {% if app.session.hasFlash('notice') %}
-                                        <span class="alert">
-                {{ app.session.flash('notice') | raw }}
-                                            </span>
-                {% endif %}
-
-                {% if app.session.hasFlash('success') %}
-                                            <span class="alert sucs">
-                {{ app.session.flash('success') | raw }}
-                                                </span>
-                {% endif %}
-
-                {% if app.session.hasFlash('error') %}
-                                                <span class="alert fail">
-                {{ app.session.flash('error') | raw }}
-                                                    </span>
-                {% endif %}
-
-                {% block body %}{% endblock %}
-                                                </div>
-
-                                                <!-- xxx END Body Section xxx -->
-
-                                            {% if not app.request.get('access_method') %}
-                                                <!-- Footer Section -->
-
-                                                <footer>
-                                                    <div class="wrapper">
-
-                                                        <aside>
-                                                            <h1>Navigation</h1>
-                                                            <ul>
-                                                                <li><a href="{{ path('site_homepage') }}" title="Home Page">Home</a></li>
-                                                                <li><a href="{{path('students_data')}}">Students</a></li>
-                                                                <li><a href="{{path('employers_data')}}">Employers</a></li>
-                                                                <li><a href="{{path('FAQ_page')}}">FAQ</a></li>
-                                                                <li><a href="{{path('schools')}}">Schools</a></li>
-                                                                <li><a href="{{path('resources')}}">Resources</a></li>
-                                                                <li><a href="{{path('aboutUs')}}">About Us</a></li>
-                                                                <li><a href="{{path('termsOfUse')}}">Terms Of Service</a></li>
-                                                                <li><a href="{{path('privacy')}}">Privacy Policy</a></li>
-                                                                <li><a href="{{path('contactUs')}}">Contact Us</a></li>
-								<li><a href="https://internjump.com/internship/internjump">Careers</a></li>
-                                                            {#<li><a href="{{path('campus_resps')}}">Campus Resps</a></li>#}
-
-                                                            </ul>
-                                                        </aside>
-
-                                                        <aside>
-                                                            <h1>Twitter Updates</h1>
-                                                        {% render "ObjectsInternJumpBundle:Internjump:getLatestTwitts" %}
-
-                                                        </aside>
-
-                                                        <aside>
-                                                            <h1>Campus Rep!</h1>
-                                                            <span>{% render "ObjectsInternJumpBundle:Internjump:campusRepsBase" %} <br/><a href="{{path('campus_resps')}}">click here</a></span>
-                                                       <div class="clear"></div>
-                                                        </aside>
-
-                                                        <aside class="contact">
-                                                            <h1>Connect with us</h1>
+                                    <a href="" class="pull-left"><img src="{{asset('img/logo-2.png')}}" /></a>
+                                    <ul class="Social-icons-f unstyled  pull-right ">
+                                        <li>Follow us</li>
                                         {% if face_page_url %}
-                                                            <a href="{{face_page_url}}" class="face" onclick="window.open(this.href); return false">Facebook</a>
-                                        {% endif %}
+                                    <li><a target="_blank" href="{{face_page_url}}" class="ico-facebook"></a></li>
+                                {% endif %}
+                                {% if twitter_page_url %}
+                                        <li><a target="_blank" href="{{twitter_page_url}}" class="ico-twitter"></a></li>
+                                {% endif %}
+                                {% if linkledIn_page_url %}
+                                            <li><a target="_blank" href="{{linkledIn_page_url}}" class="ico-google"></a></li>
+                                {% endif %}
+                                    </ul>
 
-                                        {% if twitter_page_url %}
-                                                            <a href="{{twitter_page_url}}" class="twitter" onclick="window.open(this.href); return false">Twitter</a>
-                                        {% endif %}
+                                </div>
+                            </div><!--footer-->
+                            <div class="Copy-Right">
+                                <p>Copyright ©2012 {{internjumb_copyright}}, All rights reserved. </p>
+                            </div><!--Copy-Right--->
 
-                                        {% if linkledIn_page_url %}
-                                                            <a href="{{linkledIn_page_url}}" class="linked" onclick="window.open(this.href); return false">Linkedin</a>
-                                        {% endif %}
+                            <script src="{{asset('js/libs/jquery-1.8.1.js')}}"></script>
+                            <script src="{{asset('js/bootstrap.min.js')}}"></script>
+                            <script src="{{asset('js/plugins.js')}}"></script>
+                            <script src="{{asset('js/main.js')}}"></script>
+                            <script>
+                                $(document).ready(function(){
+                                   {% if is_granted('ROLE_USER') %}
+                                    setInterval(function(){
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: '{{path('get_user_notifications')}}',
+                                            success: function(msg) {
+                                                $('.notifsWrapper').html('');
+                                                $('.notifsWrapper').html(msg);
+                                            }
+                                        });
+                                    },{{refresh_notification_time}}*1000);
+                                    {% elseif is_granted('ROLE_COMPANY') %}
+                                    setInterval(function(){
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: '{{path('get_company_notifications')}}',
+                                            success: function(msg) {
+                                                $('.notifsWrapper').html('');
+                                                $('.notifsWrapper').html(msg);
+                                            }
+                                        });
+                                    },{{refresh_notification_time}}*1000);
+                                    {% endif %}
+                                });
+                                /*
+                                 * this function will update the company notificatins widget
+                                 */
+                                function updateCompanyNotifications(){
+                                    $.ajax({
+                                            type: 'POST',
+                                            url: '{{path('get_company_notifications')}}',
+                                            success: function(msg) {
+                                                $('.notifsWrapper').html('');
+                                                $('.notifsWrapper').html(msg);
+                                            }
+                                        });
+                                }
 
-                                        {% if google_page_url %}
-                                                            <a href="{{google_page_url}}" class="google" onclick="window.open(this.href); return false">Google+</a>
-                                        {% endif %}
-                                                            <img src="{{ asset('img/secured.png') }}" alt="secured" width="208" height="49"/>
-                                                        </aside>
-
-                                                        <div class="clear" style="margin-bottom: 40px;"></div>
-                                                        <!--<div class="powered">Powered By <strong><a href="https://objects.ws" target="_blank" rel="nofollow">Objects</a></strong></div>-->
-                                                        <div class="crights">Copyright ©2012 {{internjumb_copyright}}, All rights reserved. </div>
-                                                    </div>
-                                                </footer>
-
-                                                <!-- xxx END Footer Section xxx -->
-                                            {% endif %}
-                                            </div>
-                                            <!-- xxx END Main Wrapper xxx -->
-
-                                            <script src="{{ asset('js/jquery-1.8.1.js') }}" type="text/javascript"></script>
-
-                                            <script src="{{ asset('js/jquery.alerts.js') }}" type="text/javascript"></script>
-                                            <script>
-                                                var loadingImageUrl = "{{ asset('img/loadingfacebox.gif') }}";
-                                                var closeImageUrl = "{{ asset('img/closefacebox.png') }}";
-                                                {% if app.request.get('access_method') == 'facebook' %}
-                                                $("document").ready(function() {
-                                                    $('a').each(function(){
-                                                        if(!$(this).attr('faceFlag')){
-                                                            if($(this).attr('href') == "javascript:void(0)")
-                                                            {}
-                                                            else{
-                                                                this.href += (/\?/.test(this.href) ? '&' : '?') + 'access_method=facebook';
-                                                            }
-                                                        }
-                                                    });
-                                                    $('form').each(function(){
-                                                        this.action += (/\?/.test(this.action) ? '&' : '?') + 'access_method=facebook';
-                                                    });
-                                                });
-                                                {% endif %}
-                                                </script>
-        {% block javascripts %}
-                                                <!--Fonts Script-->
-                                                <script src="{{ asset('js/jquery.mousewheel-3.0.6.pack.js') }}" type="text/javascript"></script>
-                                                <script src="{{ asset('js/jquery.fancybox.js') }}" type="text/javascript"></script>
-                                                <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
-                                                <script src="http://maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
-        {% endblock %}
-                                                <script>
-                                                    var _gaq=[['_setAccount','{{analytics}}'],['_trackPageview']];
-                                                    (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-                                                        g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-                                                        s.parentNode.insertBefore(g,s)}(document,'script'));
-                                                    </script>
-                                                    <script>
-                                                        $(document).ready(function(){
-                                                            {% if is_granted('ROLE_USER') %}
-                                                            //increment post no of views
-                                                            setInterval(function(){
-                                                                $.ajax({
-                                                                    type: 'POST',
-                                                                    url: '{{path('get_user_notifications')}}',
-                                                                    success: function(msg) {
-                                                                        $('.notifsWrapper').html('');
-                                                                        $('.notifsWrapper').html(msg);
-                                                                    }
-                                                                });
-                                                            },{{refresh_notification_time}}*1000);
-                                                            {% elseif is_granted('ROLE_COMPANY') %}
-                                                            //increment post no of views
-                                                            setInterval(function(){
-                                                                $.ajax({
-                                                                    type: 'POST',
-                                                                    url: '{{path('get_company_notifications')}}',
-                                                                    success: function(msg) {
-                                                                        $('.notifsWrapper').html('');
-                                                                        $('.notifsWrapper').html(msg);
-                                                                    }
-                                                                });
-                                                            },{{refresh_notification_time}}*1000);
-                                                            {% endif %}
-
-
-
-                                                            {% if is_granted('ROLE_NOTACTIVE_COMPANY') or  is_granted('ROLE_NOTACTIVE')%}
-                                                                $('.topNote').attr('class','topNote logged');
-                                                            {%endif%}
-                                                        });
-
-                                                        /*
-                                                        * this function will update the company notificatins widget
-                                                        */
-                                                        function updateCompanyNotifications(){
-                                                            $.ajax({
-                                                                    type: 'POST',
-                                                                    url: '{{path('get_company_notifications')}}',
-                                                                    success: function(msg) {
-                                                                        $('.notifsWrapper').html('');
-                                                                        $('.notifsWrapper').html(msg);
-                                                                    }
-                                                                });
-                                                        }
-
-                                                        /*
-                                                        * this function will update the user notificatins widget
-                                                        */
-                                                        function updateUserNotifications(){
-                                                            $.ajax({
-                                                                    type: 'POST',
-                                                                    url: '{{path('get_user_notifications')}}',
-                                                                    success: function(msg) {
-                                                                        $('.notifsWrapper').html('');
-                                                                        $('.notifsWrapper').html(msg);
-                                                                    }
-                                                                });
-                                                        }
-
-                                                        $('.innerSubNav h1').click(function(){
-                                                        $('.innerSubNav ul').slideToggle(250);
-                                                    });
-
-                                                        </script>
-                                                    </body>
-                                                </html>
+                                /*
+                                * this function will update the user notificatins widget
+                                */
+                                function updateUserNotifications(){
+                                    $.ajax({
+                                            type: 'POST',
+                                            url: '{{path('get_user_notifications')}}',
+                                            success: function(msg) {
+                                                $('.notifsWrapper').html('');
+                                                $('.notifsWrapper').html(msg);
+                                            }
+                                        });
+                                }
+                            </script>
+                        </body>
+                    </html>
