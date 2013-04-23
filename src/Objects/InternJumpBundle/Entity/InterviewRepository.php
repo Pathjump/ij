@@ -13,17 +13,27 @@ use Doctrine\ORM\EntityRepository;
 class InterviewRepository extends EntityRepository
 {
     /**
-     * This is to get all user's All [upcoming] interviews
+     * This is to get user's [upcoming] interviews
+     * Use: in TaskCotroller:studentAllTasksAction AT studentTasks.html.twig [i.e: user portal page in the side bar]
      * @param type $uid
      * @return array of interviews
      */
     public function getUpComingInterviews($uid)
     {
-            $query = $this->getEntityManager()->createQuery("
+        $para= array();
+        $para['userId'] = $uid;
+        $today = new \DateTime('');
+        $todayDate= $today->format('Y-m-d');
+        $para['today'] = $todayDate;
+        $dql = "
             SELECT i
             FROM ObjectsInternJumpBundle:Interview i
-            WHERE i.user = :userid
-            ")->setParameters(array('userid' => $uid));
+            JOIN i.internship ins
+            WHERE i.user = :userId
+            AND ins.activeFrom > :today
+            ";
+
+            $query = $this->getEntityManager()->createQuery($dql)->setParameters($para);//array('userId' => $uid)
         return $query->getResult();
     }
 }

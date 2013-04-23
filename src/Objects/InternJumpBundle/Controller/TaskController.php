@@ -20,7 +20,7 @@ class TaskController extends ObjectsController {
 
         //array that holds cvs categories to get latest jobs of the same categories
         $categ = array();
-        //Number of cvs for status part in portal page 
+        //Number of cvs for status part in portal page
         $numOfCVs = 0;
 
         //Check if inside facebook or Not
@@ -100,11 +100,12 @@ class TaskController extends ObjectsController {
                 $resultObject = $result;
             }
         }
-        
+
         //get interviews Repo
         $interviewRepo = $em->getRepository('ObjectsInternJumpBundle:Interview');
         //get upcoming Interviews
         $upComingInterviews = $interviewRepo->getUpComingInterviews($uid);
+//        print_r($upComingInterviews);exit;
         $upComingInterviewsCount = sizeof($upComingInterviews);
 
         //get jobs that user applied
@@ -1049,14 +1050,14 @@ class TaskController extends ObjectsController {
             $flag6 = ""; //to check if user answered ALL Personal Questions
             $uDataFlag_fn = ""; //to check if user data contains firstname
             $uDataFlag_ln = ""; //to check if user data contains lastname
-            $uDataFlag_ab = ""; //to check if user data contains about 
+            $uDataFlag_ab = ""; //to check if user data contains about
             $uDataFlag_dob = ""; //to check if user data contains date of birth
             $uDataFlag_url = ""; //to check if user data contains url
             $cvDescFlag = ""; // to check if each cv contains describe yourself or not
             $allSocialLinksFlag = ""; // to check if has social or not at all
-            $fbLinkFlag = ""; // to check if user linked his profile to facebook 
-            $twitterLinkFlag = ""; // to check if user linked his profile to twitter 
-            $linkedLinkFlag = ""; // to check if user linked his profile to LinkedIn 
+            $fbLinkFlag = ""; // to check if user linked his profile to facebook
+            $twitterLinkFlag = ""; // to check if user linked his profile to twitter
+            $linkedLinkFlag = ""; // to check if user linked his profile to LinkedIn
 
             $em = $this->getDoctrine()->getEntityManager();
 
@@ -1096,7 +1097,7 @@ class TaskController extends ObjectsController {
             }
 
 
-            //Check if User has education 
+            //Check if User has education
             $edu = $eduacationRepo->getAllEducation($uId);
             if ($edu) {
                 $percent+=10;
