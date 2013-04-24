@@ -93,15 +93,22 @@
                             <div class="Subcatego">
                                 {% block subcatego %}{% endblock %}
                             </div>
-                            <div class="notifsWrapper">
+
                             {% block notifications %}
+                            <div class="page-title">
+                                <div class="container">
+                                    <h1 class="pull-left">{% block pageTitle %}Home{% endblock %}</h1>
+                                    <div class="notifsWrapper">
                                 {% if is_granted('ROLE_USER') %}
                                     {% render "ObjectsInternJumpBundle:InternjumpUser:getUserNotifications" %}
                                 {% elseif is_granted('ROLE_COMPANY') %}
                                     {% render "ObjectsInternJumpBundle:Company:getCompanyNotifications" %}
                                 {% endif %}
-                            {% endblock %}
+                                    </div>
+                                </div><!--container--->
                             </div>
+                            {% endblock %}
+
                             {% if is_granted('ROLE_NOTACTIVE_COMPANY') %}
                                 <div class="alert alert-info">
                                     <h3 class="">Welocme ^^, {{app.user.loginName}}</h3>

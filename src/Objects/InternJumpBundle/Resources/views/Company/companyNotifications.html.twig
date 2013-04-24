@@ -1,15 +1,10 @@
-<div class="page-title">
-    <div class="container">
-        <h1 class="pull-left">notifications</h1>
-
-
-        <ul class="manage-list pull-right">
-            <li><a class="Notifi  active" href="{{path('company_notification')}}"></a>
+<ul class="manage-list pull-right">
+    <li><a class="Notifi  active" href="{{path('company_notification')}}"></a>
                 {% if allCompanyNotificationsCount > 0 %}
-                <span class="noti-num">{{allCompanyNotificationsCount}}</span>
+            <span class="noti-num">{{allCompanyNotificationsCount}}</span>
                 {% endif %}
-            </li>
-            <li><a class="Messag" href="{{path('company_box',{'box' : 'inbox'})}}"></a>
+        </li>
+        <li><a class="Messag" href="{{path('company_box',{'box' : 'inbox'})}}"></a>
                 {% if newMessagesCount > 0 %}
                 <span class="noti-num">{{newMessagesCount}}</span>
                 {% endif %}
@@ -17,5 +12,3 @@
             <li><a class="Sitt" href="{{path('company_edit')}}"></a></li>
         </ul>
 
-    </div><!--container--->
-</div>

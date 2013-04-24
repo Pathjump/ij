@@ -1,7 +1,6 @@
 {% extends '::base.html.twig' %}
 
-{% block notifications %}
-{%endblock%}
+
 
 {%block body%}
 
@@ -36,11 +35,12 @@
                         </ul>
                     </div>
                 </div><!--Worth-conten--->
-
+                {% if not is_granted('ROLE_NOTACTIVE_COMPANY') %}
                 <div class="Find-Statment">
                     Find out how much you are WORTH?
                     <a href="{{path('howMuchAreYouWorth')}}">Start now</a>
                 </div><!--Find-Statment--->
+                {% endif %}
             </div><!--span5-->
             {% endif %}
         </div><!--row-fluid--->

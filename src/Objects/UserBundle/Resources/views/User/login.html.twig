@@ -1,6 +1,10 @@
 {% extends '::base.html.twig' %}
 {% block title %}{% trans %}Login{% endtrans %}{% endblock %}
 
+{% block pageTitle %}
+Login
+{%endblock%}
+
 {% block body %}
 {% include 'ObjectsUserBundle:User:login_popup.html.twig' %}
 {% endblock %}
@@ -8,9 +12,13 @@
 {% block javascripts %}
 {{parent()}}
 <script>
+$(function() {
+	/*$('.Box-a .checkbox  input').ezMark();*/
+	$('input').ezMark();
+	$('.customP input[type="checkbox"]').ezMark({checkboxCls: 'ez-checkbox-green', checkedCls: 'ez-checked-green'})
+});
 $(document).ready(function(){
     $('#loginLink').addClass('crnt');
 });
 </script>
 {% endblock %}
-    
