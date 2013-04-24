@@ -802,88 +802,13 @@ class InternjumpController extends ObjectsController {
     }
 
     /**
-     * @author Ola
+     * @author Ola, ahmed
      * Home page action
      */
     public function homePageAction() {
-
-        //get the request object
-        $request = $this->getRequest();
-        //get the session object
-        $session = $request->getSession();
-
-        //variables for auth
-        $redirectFlag = "";
-        $Url = "";
-
-
         $em = $this->getDoctrine()->getEntityManager();
-        $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
-        //get home page companies logo
-        $homeCompanies = $companyRepo->findBy(array('isHome' => TRUE));
+        $userRepo = $em->getRepository('ObjectsUserBundle:User');
 
-        //Check if inside facebook or Not
-        $url = $this->getRequest()->get('access_method');
-        if (isset($url)) {
-            $url = $this->getRequest()->get('access_method');
-        }
-
-        if ($url == 'facebook') {
-
-
-            $flag = "facebook";
-            //Yes, inside facebook
-            $facebook = new \Facebook(array(
-                'appId' => '282137608565990',
-                'secret' => 'c0e978a64bc520a8b677dfa9e57f4746',
-            ));
-            // Get User ID
-            $user = $facebook->getUser();
-
-
-            if ($user) {
-
-                if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE') || TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {//->getEmail() != $user->
-                    $this->executeLogoutAction();
-                    return $this->redirect($this->generateUrl('site_homepage'));
-                };
-
-
-                try {
-                    // Proceed knowing you have a logged in user who's authenticated.
-                    $graph_url = 'https://graph.facebook.com/me?access_token=' . $facebook->getAccessToken();
-                    $faceUser = json_decode(file_get_contents($graph_url));
-                    $session->set('facebook_user', $faceUser);
-                    $session->set('facebook_short_live_access_token', $facebook->getAccessToken());
-                    $session->set('currentURL', 'http://apps.facebook.com/internjump/');
-                    return $this->redirect($this->generateUrl('facebook_logging', array(), True));
-
-
-//                    /****************************/
-//                    //Get the user then Login now
-//                    /****************************/
-//                    $user1 = $em->getRepository('ObjectsUserBundle:User')->findOneBy(array('email' => $user_profile['email']));
-//
-                } catch (FacebookApiException $e) {
-                    error_log($e);
-                    $user = null;
-                }
-            } else {
-                //not logged in FB user, then GO to fb login;
-                $params = array(
-                    //'scope' => 'read_stream, friends_likes',
-                    'redirect_uri' => 'http://apps.facebook.com/internjump/' // 'http://internjump.com/app_dev.php/'
-                );
-
-                $loginUrl = $facebook->getLoginUrl($params);
-                return $this->redirect($loginUrl);
-            }
-        }
-
-
-
-        $flag = "normal";
-        //echo "Normal";exit;
         //check for logedin user or company
         if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
             //get logedin user objects
@@ -895,20 +820,12 @@ class InternjumpController extends ObjectsController {
             return $this->redirect($this->generateUrl('internship', array('loginName' => $company->getLoginName()), TRUE));
         }
 
+        //get worth users
+        $worthUsers = $userRepo->getWorthUsers(3);
 
-
-
-
-
-        /* NOT LOGGED in */
         return $this->render('ObjectsInternJumpBundle:Internjump:homePage.html.twig', array(
-                    'flag' => $flag,
-                    'reFlag' => $redirectFlag,
-                    'url' => $Url,
-                    'homeCompanies' => $homeCompanies,
-                    'home_page_video_id' => $this->container->getParameter('home_page_video_id')
+                    'worthUsers' => $worthUsers
         ));
-//        return $this->redirect($this->generateUrl('login', array(), 'true'));
     }
 
     /**

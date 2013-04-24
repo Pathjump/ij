@@ -17,10 +17,24 @@ use Doctrine\ORM\EntityRepository;
 class UserRepository extends EntityRepository implements UserProviderInterface {
 
     /**
+     * this function used to get worth users
+     * @author ahmed
+     * @param integer $maxResults
+     */
+    public function getWorthUsers($maxResults){
+        $query = $this->getEntityManager()->createQuery("
+            select u From ObjectsUserBundle:User u
+            where u.currentWorth > 1
+            order by u.currentWorth desc
+        ")->setMaxResults($maxResults);
+        return $query->getResult();
+    }
+
+    /**
      * implementation of loadUserByUsername for UserProviderInterface
      * @param type $username
      * @return type
-     * @throws UsernameNotFoundException 
+     * @throws UsernameNotFoundException
      */
     public function loadUserByUsername($username) {
         $q = $this
@@ -58,7 +72,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
      * implementation of refreshUser for UserProviderInterface
      * @param UserInterface $user
      * @return type
-     * @throws UnsupportedUserException 
+     * @throws UnsupportedUserException
      */
     public function refreshUser(UserInterface $user) {
         $class = get_class($user);
@@ -71,7 +85,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
     /**
      * implementation of supportsClass for UserProviderInterface
      * @param type $class
-     * @return type 
+     * @return type
      */
     public function supportsClass($class) {
         return $this->getEntityName() === $class || is_subclass_of($class, $this->getEntityName()) || 'Objects\InternJumpBundle\Entity\Company' === $class || is_subclass_of($class, 'Objects\InternJumpBundle\Entity\Company');
@@ -101,7 +115,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
      * this function will get the count of the logged in users
      * the UpdateUserLastSeenListener service must be active to return valid number
      * @author Mahmoud
-     * @return integer the count of the logged in users 
+     * @return integer the count of the logged in users
      */
     public function getLoggedUsersCount() {
         $queryString = '

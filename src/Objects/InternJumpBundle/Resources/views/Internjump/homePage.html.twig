@@ -5,145 +5,248 @@
 
 {%block body%}
 
-<section id="page01" class="intro">
-    <div class="wrapper">
+<div class="Your-worth">
+    <div class="container">
 
-        <!--
-        <aside class="video">
-            <h1>Why choose InternJump.com?</h1>
-            <h2>Click on the Play button to find out ..</h2>
-            <div class="videoDiv" style="display: none;">
-            <img src="http://img.youtube.com/vi/{{home_page_video_id}}/0.jpg"/>
+        <div class="row-fluid show-grid">
+            <div class="span7">
+                <div class="worth-img">
+                    <img src="{{asset('img/bg1.png')}}" />
+                </div>
             </div>
-            <div class="player">
-                <span><img src="{{asset('img/playerIcon.png')}}"/></span>
-                <img src="http://img.youtube.com/vi/{{home_page_video_id}}/0.jpg"/>
-            </div>
-            
-        </aside>
-        -->
+            {% if worthUsers | length > 0 %}
+            <div class="span5 pull-right">
 
-        <aside class="jump">
-            <h1>Jump Start Your Career</h1>
-            <p>We know you're ambitious and want that great internship that will help launch your career. Look no further, InternJump works with companies in the leading industries and makes applying and managing internships an easy process.</p>
-            <a href="javascript:void(0)" class="student">Student</a>
-            <a href="javascript:void(0)" class="employer">Employer</a>
-        </aside>
-        <div class="clear"></div>
-    </div>
+                <div class="Worth-box">
+                    <h4>How much are they Worth? </h4>
+                    <div class="Worth-content">
+                        <ul class="thumb-a">
+                            {% for user in worthUsers %}
+                            <li>
+                                <img src="{{user.getTimThumbUrl(97,94)}}" />
+                                <div class="caption text-right">
+                                    <h5>{{user}} - $ {{user.currentWorth}}</h5>
+                                    {% if user.dateOfBirth %}
+                                    <p>Age: {{user.getAge()}} years old</p>
+                                    {% endif %}
+                                    <p>Source of wealth: Facebook</p>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div><!--Worth-conten--->
 
-        <!--
-    <div class="botSec">
-        <div class="botSecTopShadow">
-        </div>
-
-            {% if homeCompanies|length > 0 %}
-        <div class="wrapper">
-            <h1>Great employers to work for..</h1>
-            <ul>
-                {% for company in homeCompanies %}
-                    <li>
-                        <a href="{{path('internship',{'loginName' : company.loginName})}}">
-                        <img src="{{company.getTimThumbUrl(60,80)}}" width="60" height="80"/>
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
+                {% if is_granted('ROLE_USER') %}
+                <div class="Find-Statment">
+                    Find out how much you are WORTH?
+                    <a href="{{path('howMuchAreYouWorth')}}">Start now</a>
+                </div><!--Find-Statment--->
+                {% endif %}
+            </div><!--span5-->
             {% endif %}
-    </div>
-        -->
-</section>
+        </div><!--row-fluid--->
 
-<section id="page02" class="students" style="display: none;">
-    <h1>Students</h1>
-    <div class="wrapper">
-        <a href="{{path('user_signup')}}">Get Started</a>
-    </div>
-</section>
+    </div><!--container-->
+</div><!--Your-worth-->
 
+<div class="Start-form">
+    <div class="container">
 
-<section id="page03" class="employers" style="display: none;">
-    <h1>Employers</h1>
-    <div class="wrapper">
-        <a href="{{path('company_signup')}}">Get Started</a>
-    </div>
-</section>
+        <div class="row-fluid show-grid">
+            <div class="span5">
+                <div class="Form-Text">
+                    <h2><span>Jump</span> Start<br/> Your Career</h2>
+                    <p>We know you're ambitious and want that great internship that will help launch your career.
+                        Look no further,
+                        InternJump works with companies in the leading industries and makes applying and managing internships an easy process.</p>
+                </div>
 
 
-{%if reFlag=="auth"%}
-<script>window.parent.location="https://www.facebook.com/login.php?api_key=282137608565990&skip_api_login=1&display=page&cancel_url=http%3A%2F%2Fapps.facebook.com%2F282137608565990%2F%3Ferror_reason%3Duser_denied%26error%3Daccess_denied%26error_description%3DThe%2Buser%2Bdenied%2Byour%2Brequest.%26state%3D737a56fda2813fa481ecefeceb218a58&next=https%3A%2F%2Fwww.facebook.com%2Fdialog%2Fpermissions.request%3F_path%3Dpermissions.request%26app_id%3D282137608565990%26redirect_uri%3Dhttp%253A%252F%252Fapps.facebook.com%252F282137608565990%252F%26display%3Dpage%26response_type%3Dcode%26state%3D737a56fda2813fa481ecefeceb218a58%26canvas%3D1%26from_login%3D1%26client_id%3D282137608565990&rcount=1"</script>
-{%else%}
-{%if flag=="facebook"%}
+            </div>
+            <div class="span7">
 
-    <script> 
-       
-  FB.getLoginStatus(function(response) {
-      
-  if (response.status === 'connected') {
-    // the user is logged in and has authenticated your
-    // app, and response.authResponse supplies
-    // the user's ID, a valid access token, a signed
-    // request, and the time the access token 
-    // and signed request each expire
-    var uid = response.authResponse.userID;
-    var accessToken = response.authResponse.accessToken;
-    //alert('already auth');
-  } else if (response.status === 'not_authorized') {
-    // the user is logged in to Facebook, 
-    // but has not authenticated your app
-    //alert('yes ,but not auth');
-  } else {
-    // the user isn't logged in to Facebook.
-    //alert('not');
-  }
- });
-        
-        </script>
+                <div class="Home-Search-form">
+                    <form>
+                        <select  Class="Choosen">
+                            <option>job type</option>
+                            <option>job type1</option>
+                            <option>job type2</option>
+                            <option>job type3</option>
+                        </select>
 
-    {%endif%}
+                        <select  Class="Choosen">
+                            <option>city</option>
+                            <option>job type1</option>
+                            <option>job type2</option>
+                            <option>job type3</option>
+                        </select>
+
+                        <select  Class="Choosen">
+                            <option>state</option>
+                            <option>job type1</option>
+                            <option>job type2</option>
+                            <option>job type3</option>
+                        </select>
+
+                        <select  Class="Choosen">
+                            <option>INDUSTRY</option>
+                            <option>job type1</option>
+                            <option>job type2</option>
+                            <option>job type3</option>
+                        </select>
+
+                        <div class="Btn-box">
+
+                            <input class="Start-btn" type="submit"  value="start  now"/>
+                        </div>
+
+                    </form>
+
+                </div>
+                <img src="img/bg2.png" />
+
+            </div>
+        </div><!--row-fluid-->
+
+    </div><!--container--->
+</div><!--Start-form-->
+
+<div class="intrens">
+    <div class="container">
+        <div class="row-fluid show-grid">
+
+            <div class="span7">
+                <h2>intrens, save time & increase your opportunity</h2>
+                <div class="Feaetured-Companies">
+                    <h3>Feaetured <span>Companies</span></h3>
+                    <div class="row-fluid">
+                        <ul class="thumbnails companies-logo">
+                            <li class="span3">
+                                <a class="thumbnail">
+                                    <img src="img/img1.jpg" />
+                                </a>
+                            </li>
+                            <li class="span3">
+                                <a class="thumbnail">
+                                    <img src="img/img1.jpg" />
+                                </a>
+                            </li>
+                            <li class="span3">
+                                <a class="thumbnail">
+                                    <img src="img/bg2.png" />
+                                </a>
+                            </li>
+                            <li class="span3">
+                                <a class="thumbnail">
+                                    <img src="img/img1.jpg" />
+                                </a>
+                            </li>
+                            <li class="span3">
+                                <a class="thumbnail">
+                                    <img src="img/img1.jpg" />
+                                </a>
+                            </li>
+                            <li class="span3">
+                                <a class="thumbnail">
+                                    <img src="img/img1.jpg" />
+                                </a>
+                            </li>
+                        </ul>
+                    </div><!--row-fluid--->
 
 
-{%endif%}
+                    <h3>Recently<span> Hired interns</span></h3>
 
-{%endblock%}
+                    <div class="R-Hired">
+                        <div class="row-fluid">
+                            <ul class="thumbnails">
+                                <li class="span3">
+                                    <div class="thumbnail">
+                                        <img src="img/user.jpg" />
+                                        <div class="caption">
+                                            <div class="titl-blue">Rahimeh
+                                                Andalibian</div>
+                                            New York University, 2014
+                                        </div><!--caption-->
+                                    </div><!--thumbnail-->
+                                </li>
+                                <li class="span3">
+                                    <div class="thumbnail">
+                                        <img src="img/user.jpg" />
+                                        <div class="caption">
+                                            <div class="titl-blue">Rahimeh
+                                                Andalibian</div>
+                                            New York University, 2014
+                                        </div><!--caption-->
+                                    </div><!--thumbnail-->
+                                </li>
+                                <li class="span3">
+                                    <div class="thumbnail">
+                                        <img src="img/user.jpg" />
+                                        <div class="caption">
+                                            <div class="titl-blue">Rahimeh
+                                                Andalibian</div>
+                                            New York University, 2014
+                                        </div><!--caption-->
+                                    </div><!--thumbnail-->
+                                </li>
+                                <li class="span3">
+                                    <div class="thumbnail">
+                                        <img src="img/user.jpg" />
+                                        <div class="caption">
+                                            <div class="titl-blue">Rahimeh
+                                                Andalibian</div>
+                                            New York University, 2014
+                                        </div><!--caption-->
+                                    </div><!--thumbnail-->
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
 
 
-{%block javascripts%}
- {{parent()}}
-<script>        
-$(document).ready(function() {
-    //add crnt class to home link
-    $('#homePageLink').addClass('crnt');
-    //go to student area
-    $('.student,.employer').click(function(){
-        var linkClass = $(this).attr('class');
-        if(linkClass == 'employer'){
-            $('.students').hide();
-            $('.employers').show();
-            $('html,body').animate({ scrollTop: $('.employers').offset().top }, 1500);
-        }else{
-            $('.employers').hide();
-            $('.students').show();
-            $('html,body').animate({ scrollTop: $('.students').offset().top }, 1500);
-        }
-    });
-    
-    
-    $('.player').click(function(){
-        autoPlayVideo('{{home_page_video_id}}','400','260');
-    });
 
 
-});
+                </div><!--Feaetured-Companies-->
+            </div><!--span4-->
 
-function autoPlayVideo(vcode, width, height){
-  $(".videoDiv").append('<iframe class="videoIfram" width="'+width+'" height="'+height+'" src="https://www.youtube.com/embed/'+vcode+'?autoplay=1&loop=1&rel=0&wmode=transparent" frameborder="0" allowfullscreen wmode="Opaque"></iframe>');
-  $('.player').hide();
-  $('.videoDiv').show();
-}
+            <div class="span5">
+                <div class="Latest-In">
+                    <h3>lATEST <span>INTERNSHIPS</span></h3>
+                    <div class="media">
+                        <a href="" class="pull-left"><img src="img/img1.jpg" /></a>
+                        <div class="media-body">
+                            <div class="titl-blue"> Online Content
+                                Manager Internship</div>
+                            ABC Global Systems/ Abc Media Network
+                        </div>
+                        <div class="clearfix"></div>
+                        <a href="" class="pull-left"><img src="img/img1.jpg" /></a>
+                        <div class="media-body">
+                            <div class="titl-blue"> Online Content
+                                Manager Internship</div>
+                            ABC Global Systems/ Abc Media Network
+                        </div>
+                        <div class="clearfix"></div>
+                        <a href="" class="pull-left"><img src="img/img1.jpg" /></a>
+                        <div class="media-body">
+                            <div class="titl-blue"> Online Content
+                                Manager Internship</div>
+                            ABC Global Systems/ Abc Media Network
+                        </div>
+                    </div><!--media-->
 
+                </div><!--Latest-In-->
 
-</script>        
+                <div class="img-ads">
+                    <img src="img/img3.png" />
+                </div>
+            </div><!--span4-->
+
+        </div><!--row-fluid-->
+    </div><!--container-->
+</div><!--intrens-->
+
 {%endblock%}
