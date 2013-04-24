@@ -3,93 +3,156 @@
 {% block title %}{% trans %}Sign up{% endtrans %}{% endblock %}
 
 {% block stylesheets %}
-<link href="{{ asset('css/stuEdu.css') }}" rel="stylesheet" type="text/css"/>
+{{ parent() }}
 <style>
     #tooltip{color:#444;font-size:12px;text-shadow:1px 1px 0 #fff;border:1px solid #666;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;background-repeat:repeat-x;background-position:left top;background-color:#D7D7D7;-moz-box-shadow:0 0 4px #bbb;-webkit-box-shadow:0 0 4px #bbb;box-shadow:0 0 4px #bbb;line-height:1.2em;position:absolute;z-index:100000;display:none;padding:5px}
 </style>
 {% endblock %}
 
 {% block body %}
-<section id="student-01">
-    <div class="wrapper">
-        <h1>FOR STUDENTS<div></div></h1>
 
-        <div class="studentEduBgBlock">
-            <div id="stuEdu02" class="yellowCont">
-                {% if app.session.hasFlash('notice') %}
-                <span class="alert fail">
-                {{ app.session.flash('notice') | raw }}
-                </span>
-                {% endif %}
-                {% if app.session.hasFlash('success') %}
-                <span class="alert success">
-                {{ app.session.flash('success') | raw }}
-                </span>
-                {% endif %}
-                {% if app.session.hasFlash('error') %}
-                <span class="alert error">
-                {{ app.session.flash('error') | raw }}
-                </span>
-                {% endif %}
-                {% if message %}
-                <span class="alert fail">
-                    {{ message | raw }}
-                </span>
-                {% endif %}
-                {% if form_errors(form) %}
-                <span class="alert error">
-                {{ form_errors(form) }}
-                </span>
-                {% endif %}
-                <!--form Name-->
-                <h1>{%if formName%}{{formName}}{%endif%}:</h1>
-                <!--form Desc-->
-                <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
-                <form id="stuEdu" action="{{ path('user_signup') }}" method="post" {{ form_enctype(form) }}>
-                    {% if loginNameRequired %}
-                    <label>{% trans %}Username{% endtrans %}:</label>
-                    {{ form_widget(form.loginName) }}
-                    <span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
-                    <span class="miniError" id="loginName-error"></span>
-                    <span class="miniError">{{ form_errors(form.loginName) }}</span>
-
-                    <br>
-                    {% endif %}
-
-                    <label>{% trans %}Email{% endtrans %}:</label>
-                    {{ form_widget(form.email.Email) }}
-                    <span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
-                    <br>
-                    <span class="miniError" id="mailcheck-message"></span>
-                    <label>{% trans %}Confirm Email{% endtrans %}:</label>
-                    {{ form_widget(form.email.ReEmail) }}
-                    <span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
-                    <span class="miniError">{{ form_errors(form.email) }}</span><br>
-
-                    <label>{% trans %}Password{% endtrans %}:</label>
-                    {{ form_widget(form.userPassword.Password) }}
-                    <span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
-                    <br>
-                    <label>{% trans %}Confirm Password{% endtrans %}:</label>
-                    {{ form_widget(form.userPassword.RePassword) }}
-                    <span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
-                    <span class="miniError">{{ form_errors(form.userPassword) }}</span><br>
-
-                    {{ form_rest(form) }}
-                    <button class="nxt" type="submit" title="{% trans %}Sign up{% endtrans %}" id="user-signup">Next</button>
-                    <div class="clear"></div>
-                </form>
-
-                <div class="sociaLogin">
-                    <h2>Sign up using:</h2>
-                    {% render "ObjectsAPIBundle:Facebook:facebookButton" with {'facebookUserHandleRoute' : 'facebook_logging','permissions': 'email,publish_stream,user_birthday,user_about_me,user_education_history,user_work_history,user_location,user_hometown','cssClass' : 'face' , 'linkText' : 'facebook'} %}<br>
-                    <a class="twitter" onclick="newWindow = window.open('{{ path('twitter_authentication', {'redirectRoute': 'twitter_enter', 'popup': 'yes'}) }}', '{% trans %}Twitter Sign up{% endtrans %}', 'height=200, width=200');if(window.focus)newWindow.focus();return false;" target="_blank" title="{% trans %}Twitter Sign up{% endtrans %}" href="{{ path('twitter_authentication', {'redirectRoute': 'twitter_enter'}) }}">{% trans %}Twitter Sign up{% endtrans %}</a><br>
-                    <a class="linkedin" onclick="newWindow = window.open('{{ path('linkedInButton', {'callbackUrl': 'linkedIn_user_data','popup' : 'yes'}) }}', '{% trans %}LinkedIn Sign up{% endtrans %}', 'height=400, width=600');if(window.focus)newWindow.focus();return false;" target="_blank" title="{% trans %}LinkedIn Sign up{% endtrans %}" href="{{ path('linkedInButton', {'callbackUrl': 'linkedIn_user_data'}) }}">{% trans %}LinkedIn Sign up{% endtrans %}</a>
-                </div>
-            </div>
+        {% if app.session.hasFlash('notice') %}
+        <div class="alert">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('notice') | raw }}
         </div>
-    </div>
-</section>
+        {% endif %}
+
+        {% if app.session.hasFlash('success') %}
+        <div class="alert alert-success">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('success') | raw }}
+        </div>
+        {% endif %}
+
+        {% if app.session.hasFlash('error') %}
+        <div class="alert alert-error">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('error') | raw }}
+        </div>
+        {% endif %}
+
+        {% if message %}
+        <div class="alert">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ message }}
+        </div>
+        {% endif %}
+
+        {% if form_errors(form) %}
+        <div class="alert alert-error">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ form_errors(form) }}
+        </div>
+        {% endif %}
+
+        <div class="container Main-content">
+
+            <div class="Student">
+
+                <h3>{% if formName %}{{ formName }}{% endif %}</h3>
+                <p>{% if formDesc %}{{ formDesc }}{% endif %}</p>
+                <div class="row-fluid show-grid">
+
+                    <div class="span6">
+                        <div class="Sign-Up">
+
+                            <form id="stuEdu" action="{{ path('user_signup') }}" method="post" {{ form_enctype(form) }}>
+                                <fieldset>
+                                    <legend></legend>
+                                    {% if loginNameRequired %}
+                                    <div class="controls">
+                                        <label>Login Name</label>
+                                        {{ form_widget(form.loginName, {'attr': {'class': 'span12'} }) }}
+
+                                        <span style="display: inline-block;margin-bottom: 13px;">
+                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                        </span>
+
+                                        <div id="loginName-error">
+                                            {{ app.session.flash('notice') | raw }}
+                                        </div>
+
+                                        {% if form_errors(form.loginName) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(form.loginName) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                    <div class="controls">
+                                        <label>E-mail</label>
+                                        {{ form_widget(form.email.Email, {'attr': {'class': 'span12'} }) }}
+
+                                        <span style="display: inline-block;margin-bottom: 13px;">
+                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                        </span>
+
+                                        <div id="mailcheck-message">
+                                            {{ app.session.flash('notice') | raw }}
+                                        </div>
+
+                                        {% if form_errors(form.email) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(form.email) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="controls">
+                                        <label>Confirm E-mail</label>
+                                        {{ form_widget(form.email.ReEmail, {'attr': {'class': 'span12'} }) }}
+
+                                        <span style="display: inline-block;margin-bottom: 13px;">
+                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                        </span>
+                                    </div>
+
+                                    <div class="controls row-fluid show-grid">
+                                        <div class="span6">
+                                            <label>Password</label>
+                                            {{ form_widget(form.userPassword.Password, {'attr': {'class': 'span12'} }) }}
+                                        </div>
+                                        <div class="span6">
+                                            <label>Confirm Password</label>
+                                            {{ form_widget(form.userPassword.RePassword, {'attr': {'class': 'span12'} }) }}
+
+                                            <span style="display: inline-block;margin-bottom: 13px;">
+                                                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                            </span>
+                                        </div>
+
+                                        {% if form_errors(form.userPassword) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(form.userPassword) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    {{ form_rest(form) }}
+                                    <button type="submit" class="btn btn-primary pull-right">Next</button>
+                                </fieldset>
+                            </form>
+                        </div><!--Sign-Up-->
+                    </div>
+
+                    <div class="span6">
+                        <div class="Social-sign-up">
+                            <ul class="Social-icons">
+                                <li>Sign Up with</li>
+                                <li>{% render "ObjectsAPIBundle:Facebook:facebookButton" with {'facebookUserHandleRoute' : 'facebook_logging','permissions': 'email,publish_stream,user_birthday,user_about_me,user_education_history,user_work_history,user_location,user_hometown','cssClass' : 'ico-facebook' , 'linkText' : ''} %}</li>
+                                <li><a class="ico-google" onclick="newWindow = window.open('{{ path('linkedInButton', {'callbackUrl': 'linkedIn_user_data','popup' : 'yes'}) }}', '{% trans %}LinkedIn Sign up{% endtrans %}', 'height=400, width=600');if(window.focus)newWindow.focus();return false;" target="_blank" title="{% trans %}LinkedIn Sign up{% endtrans %}" href="{{ path('linkedInButton', {'callbackUrl': 'linkedIn_user_data'}) }}"></a></li>
+                                <li><a class="ico-twitter" onclick="newWindow = window.open('{{ path('twitter_authentication', {'redirectRoute': 'twitter_enter', 'popup': 'yes'}) }}', '{% trans %}Twitter Sign up{% endtrans %}', 'height=200, width=200');if(window.focus)newWindow.focus();return false;" target="_blank" title="{% trans %}Twitter Sign up{% endtrans %}" href="{{ path('twitter_authentication', {'redirectRoute': 'twitter_enter'}) }}"></a></li>
+                            </ul>
+                            <strong>For employers <a href="{{ path('company_signup') }}"> Sign up here</a> </strong>
+                        </div>
+                    </div>
+
+                </div><!--Sign-Up-->
+
+            </div><!---Student --->
+        </div><!--container-->
 {% endblock %}
 
 {% block javascripts %}
@@ -101,10 +164,6 @@
     var mailcheckMessage = "{% trans %}Did you mean{% endtrans %}";
     var loginNameCheckUrl = "{{url('login_name_check',{'loginName' : ''})}}";
     var countryCitiesStatesUrl = '{{url('get_countey_cities_states',{'countryId' : ''})}}';
-    $(document).ready(function(){
-        var stuTitleBar = $('#main .wrapper').width();
-        $('#student-01 > .wrapper h1 div').width(stuTitleBar-202);
-    });
 </script>
 <script src="{{asset('bundles/objectsuser/js/xregexp-all.js')}}"></script>
 <script src="{{asset('bundles/objectsuser/js/mailcheck.js')}}"></script>

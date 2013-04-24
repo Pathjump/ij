@@ -3,160 +3,284 @@
 {% block title %}Signup Second Step{% endblock %}
 
 {% block stylesheets %}
+{{ parent() }}
 <link href="{{ asset('css/jquery-ui-1.8.24.custom.css') }}" rel="stylesheet" type="text/css"/>
-<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
-<link href="{{ asset('css/stuEdu.css') }}" rel="stylesheet" type="text/css"/>
-
 <style>
     #tooltip{color:#444;font-size:12px;text-shadow:1px 1px 0 #fff;border:1px solid #666;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;background-repeat:repeat-x;background-position:left top;background-color:#D7D7D7;-moz-box-shadow:0 0 4px #bbb;-webkit-box-shadow:0 0 4px #bbb;box-shadow:0 0 4px #bbb;line-height:1.2em;position:absolute;z-index:100000;display:none;padding:5px}
 </style>
 {% endblock %}
 
 {% block body %}
-<section id="student-01">
-    <div class="wrapper">
-        <h1>FOR STUDENTS<div></div></h1>
-
-        <div class="studentEduBgBlock">
-            <div id="loading">
-                <img src="{{ asset('img/followLoader.gif') }}" alt="loader">
-            </div>
-            <div class="yellowCont">
-                {% if app.session.hasFlash('notice') %}
-                <span class="alert fail">
-                {{ app.session.flash('notice') | raw }}
-                </span>
-                {% endif %}
-                {% if app.session.hasFlash('success') %}
-                <span class="alert success">
-                {{ app.session.flash('success') | raw }}
-                </span>
-                {% endif %}
-                {% if app.session.hasFlash('error') %}
-                <span class="alert error">
-                {{ app.session.flash('error') | raw }}
-                </span>
-                {% endif %}
-                {% if form_errors(form) %}
-                <span class="alert error">
-                {{ form_errors(form) }}
-                </span>
-                {% endif %}
-                <!--form Name-->
-                <h1>{%if formName%}{{formName}}{%endif%}:</h1>
-                <!--form Desc-->
-                <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
-
-                <form class="formTable" action="{{ path('user_signup_second_step') }}" method="post" {{ form_enctype(form) }}>
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                        <tr>
-                            <td width="160"><label>{% trans %}First Name{% endtrans %}:</label></td>
-                            <td>{{ form_widget(form.firstName) }}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="miniError">{{ form_errors(form.firstName) }}</span></td>
-                            <td width="75">&nbsp;</td>
-
-                            <td><label>{% trans %}Last Name{% endtrans %}:</label></td>
-                            <td>{{ form_widget(form.lastName) }}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="miniError">{{ form_errors(form.lastName) }}</span></td>
-                        </tr>
-
-                        <tr>
-                            <td width="160"><label>{% trans %}Gender{% endtrans %}:</label></td>
-                            <td>{{ form_widget(form.gender) }}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="miniError">{{ form_errors(form.gender) }}</span></td>
-                            <td width="75">&nbsp;</td>
-
-                            <td width="160"><label>{% trans %}Date Of Birth{% endtrans %}:</label></td>
-                            <td>{{ form_widget(form.dateOfBirth) }}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="miniError">{{ form_errors(form.dateOfBirth) }}</span></td>
-                        </tr>
-
-                        <tr>
-                            <td width="160"><label>{% trans %}Address{% endtrans %}:</label></td>
-                            <td>{{ form_widget(form.address) }}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="miniError">{{ form_errors(form.address) }}</span></td>
-                            <td width="75">&nbsp;</td>
-
-                            <td width="160"><label>{% trans %}City{% endtrans %}:</label></td>
-                            <td>{{ form_widget(form.city) }}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="miniError">{{ form_errors(form.city) }}</span></td>
-                        </tr>
-
-                        <tr>
-                            <td width="160"><label>{% trans %}State{% endtrans %}:</label></td>
-                            <td>{{ form_widget(form.state) }}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="miniError">{{ form_errors(form.state) }}</span></td>
-                            <td width="75">&nbsp;</td>
-
-                            <td width="160"><label>{% trans %}Country{% endtrans %}:</label></td>
-                            <td>{{ form_widget(form.country) }}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="miniError">{{ form_errors(form.country) }}</span></td>
-                        </tr>
-
-                        <tr>
-                            <td width="160"><label>{% trans %}ZipCode{% endtrans %}:</label></td>
-                            <td>{{ form_widget(form.zipcode) }}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="miniError">{{ form_errors(form.zipcode) }}</span></td>
-                            <td width="75">&nbsp;</td>
-
-                            <td width="160"><label>{% trans %}Your Website{% endtrans %}:</label></td>
-                            <td>{{ form_widget(form.url) }}<span class="miniError">{{ form_errors(form.url) }}</span></td>
-                        </tr>
-
-                        <tr>
-                            <td><label>{% trans %}About You{% endtrans %}:</label></td>
-                            <td>{{ form_widget(form.about) }}<span class="miniError">{{ form_errors(form.about) }}</span></td>
-                            <td width="75">&nbsp;</td>
-
-                            <td><label>{% trans %}InternJump Profile Picture{% endtrans %}:</label></td>
-                            <td class="userImg">
-                                {{ form_errors(form.file) }}
-                                <span class="file-wrapper">
-                                    {{ form_widget(form.file) }}
-                                    <span class="button">Browse</span>
-                                </span>
-                                    {% if user.image %}
-                                <img id="yourImage" src="{{user.getTimThumbUrl(65,60)}}" style="border: none;" width="65" height="60"/>
-                                {% else %}
-                                <img id="yourImage" src="#" style="border: none;" width="65" height="60"/>
-                                {% endif %}
-                            </td>
-
-                        </tr>
-
-                    </table>
-
-                    {{ form_rest(form) }}
-
-                    <button class="nxt" type="submit" title="{% trans %}Next{% endtrans %}">{% trans %}Next{% endtrans %}</button>
-                    <div class="clear"></div>
-                </form>
-            </div>
+        {% if app.session.hasFlash('notice') %}
+        <div class="alert">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('notice') | raw }}
         </div>
-    </div>
-</section>
+        {% endif %}
+
+        {% if app.session.hasFlash('success') %}
+        <div class="alert alert-success">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('success') | raw }}
+        </div>
+        {% endif %}
+
+        {% if app.session.hasFlash('error') %}
+        <div class="alert alert-error">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('error') | raw }}
+        </div>
+        {% endif %}
+
+        {% if form_errors(form) %}
+        <div class="alert alert-error">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ form_errors(form) }}
+        </div>
+        {% endif %}
+
+        <div class="container Main-content">
+            <div class="Student">
+                <h3>{% if formName %}{{ formName }}{% endif %}</h3>
+                <p>{% if formDesc %}{{ formDesc }}{% endif %}</p>
+                <div class="row-fluid show-grid">
+
+                    <div class="span5">
+                        <div class="Sign-Up text-center">
+                            <h4>Get your First digital RESUME only in 4 steps</h4>
+                            <img src="{{ asset('img/img4.png') }}" />
+                            <p class="simply">SIMPLY <a href=""> upload </a>your resume</p>
+
+                        </div><!--Sign-Up-->
+                    </div>
+
+                    <div class="span7">
+
+                        <form class="formTable" action="{{ path('user_signup_second_step') }}" method="post" {{ form_enctype(form) }}>
+                            <fieldset>
+                                <div class="controls  row-fluid show-grid">
+                                    <div class="span6">
+                                        <label>First Name</label>
+                                        {{ form_widget(form.firstName, {'attr': {'class': 'span12'} }) }}
+
+                                        <span style="display: inline-block;margin-bottom: 13px;">
+                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                        </span>
+
+                                        {% if form_errors(form.firstName) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(form.firstName) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="span6">
+                                        <label>Last Name</label>
+                                        {{ form_widget(form.lastName, {'attr': {'class': 'span12'} }) }}
+
+                                        <span style="display: inline-block;margin-bottom: 13px;">
+                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                        </span>
+
+                                        {% if form_errors(form.lastName) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(form.lastName) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="controls  row-fluid show-grid">
+                                    <div class="span6">
+                                        <label>Gender</label>
+                                        <div class="select-box">
+                                            {{ form_widget(form.gender) }}
+                                        </div>
+
+                                        {% if form_errors(form.gender) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(form.gender) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="span6">
+                                        <label>Date Of Birth</label>
+                                        {{ form_widget(form.dateOfBirth, {'attr': {'class': 'dateOfBirth span12'} }) }}
+
+                                        {% if form_errors(form.dateOfBirth) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(form.dateOfBirth) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="controls  row-fluid show-grid">
+                                    <div class="span6">
+                                        <label>Country</label>
+                                        <div class="select-box">
+                                            {{ form_widget(form.country) }}
+                                        </div>
+
+                                        <span style="display: inline-block;margin-bottom: 13px;">
+                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                        </span>
+
+                                        {% if form_errors(form.country) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(form.country) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="span6">
+                                        <label>City</label>
+                                        {{ form_widget(form.city, {'attr': {'class': 'autocomplete span12'} }) }}
+
+                                        <span style="display: inline-block;margin-bottom: 13px;">
+                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                        </span>
+
+                                        {% if form_errors(form.city) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(form.city) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="controls  row-fluid show-grid">
+                                    <div class="span6">
+                                        <label>State</label>
+                                        <div class="select-box state">
+                                            {{ form_widget(form.state, {'attr': {'class': 'state'} }) }}
+                                        </div>
+
+                                        {% if form_errors(form.state) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(form.state) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="span6">
+                                        <label>Zipcode</label>
+                                        <div class="select-box state">
+                                            {{ form_widget(form.zipcode, {'attr': {'class': 'span12'} }) }}
+                                        </div>
+
+                                        {% if form_errors(form.zipcode) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(form.zipcode) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="controls">
+                                    <label>Address</label>
+                                    {{ form_widget(form.address, {'attr': {'class': 'span12'} }) }}
+
+                                    <span style="display: inline-block;margin-bottom: 13px;">
+                                        <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                    </span>
+
+                                    {% if form_errors(form.address) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.address) }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="controls">
+                                    <label>About</label>
+                                    {{ form_widget(form.about, {'attr': {'class': 'span12'} }) }}
+
+                                    {% if form_errors(form.about) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.about) }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="controls  row-fluid show-grid">
+                                    <div class="span6">
+                                        <label>Web Site</label>
+                                        <div class="select-box state">
+                                            {{ form_widget(form.url, {'attr': {'class': 'span12'} }) }}
+                                        </div>
+
+                                        {% if form_errors(form.url) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(form.url) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="span6">
+                                        <label>Company Logo:</label>
+                                        {{ form_widget(form.file, {'attr': {'class': 'span12'} }) }}
+
+                                        {% if user.image %}
+                                        <img id="yourImage" src="{{ user.getTimThumbUrl(65,60) }}" width="65" height="60" />
+                                        {% else %}
+                                        <img id="yourImage" src="#" width="65" height="60"/>
+                                        {% endif %}
+
+                                        {% if form_errors(form.file) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(form.file) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+
+                                {{ form_rest(form) }}
+                                <button type="submit" class="btn btn-primary pull-right">Next</button>
+                            </fieldset>
+                        </form>
+                    </div><!--span7-->
+
+                </div><!--row-fluid-->
+
+            </div><!---Student --->
+        </div><!--container-->
 {% endblock %}
 
 {% block javascripts %}
-<script src="{{ asset('js/libs/chosen.jquery.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('js/libs/jquery-ui-1.8.24.custom.min.js') }}" type="text/javascript"></script>
-<script>
-    var userCountry = '{{ user.getCountry }}';
-    setInterval(function(){
-        //Loader Script
-        $('#loading').width($('#loading').parent().width());
-        $('#loading').height($('#loading').parent().height());
-    }, 500);
-    var countrySelectsUrl = '{{ path('get_countey_cities_states', {'countryId': ''}) }}/';
-    var countriesUrl = '{{ path('get_all_countries') }}';
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#yourImage').attr('src', e.target.result);
+    {{ parent() }}
+    <script src="{{ asset('js/tooltip/tooltip.js')}} "></script>
+    <script src="{{ asset('js/libs/jquery-ui-1.8.24.custom.min.js') }}" type="text/javascript"></script>
+    <script>
+        var userCountry = '{{ user.getCountry }}';
+        var countrySelectsUrl = '{{ path('get_countey_cities_states', {'countryId': ''}) }}/';
+        var countriesUrl = '{{ path('get_all_countries') }}';
+        var cityAutoCompleteUrl = "{{ path('city_auto_complete') }}";
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#yourImage').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
             }
-            reader.readAsDataURL(input.files[0]);
         }
-    }
-    var cityAutoCompleteUrl = "{{ path('city_auto_complete') }}";
-    $(document).ready(function() {
-        $('.dateOfBirth').datepicker({changeYear: true, changeMonth: true, yearRange: '1950:' + new Date().getFullYear(), dateFormat: 'yy-mm-dd'});
-        $('select.chzn-select').chosen();
-        var stuTitleBar = $('#main .wrapper').width();
-        $('#student-01 > .wrapper h1 div').width(stuTitleBar-202);
-    });
-</script>
-<script src="{{ asset('bundles/objectsuser/js/address_selects.js') }}"></script>
-<script src="{{asset('js/tooltip/tooltip.js')}}"></script>
+        $(document).ready(function() {
+            $('.dateOfBirth').datepicker({changeYear: true, changeMonth: true, yearRange: '1950:' + new Date().getFullYear(), dateFormat: 'yy-mm-dd'});
+        });
+    </script>
+    <script src="{{ asset('bundles/objectsuser/js/address_selects.js') }}"></script>
 {% endblock %}
