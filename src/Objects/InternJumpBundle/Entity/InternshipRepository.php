@@ -88,6 +88,22 @@ class InternshipRepository extends EntityRepository {
     }
 
     /**
+     * this function will get latest internships
+     * @author Ahmed
+     * @param int $maxResults
+     */
+    public function getLatestinternShips($maxResults) {
+        $query = $this->getEntityManager()
+                        ->createQuery('
+            SELECT j
+            FROM ObjectsInternJumpBundle:Internship j
+            WHERE j.active = true and j.activeTo >= :todayDate
+            ORDER BY j.createdAt DESC
+            ')->setMaxResults($maxResults)->setParameter('todayDate', new \DateTime());
+        return $query->getResult();
+    }
+
+    /**
      * this function will get all company jobs by company id
      * @author Ahmed
      * @param int $companyId
@@ -188,6 +204,22 @@ class InternshipRepository extends EntityRepository {
     }
 
     /**
+     * this function used to get latest hired users
+     * @author ahmed
+     * @param integer $maxResults
+     */
+    public function getLatestHiredUsers($maxResults){
+        $query = $this->getEntityManager()
+                        ->createQuery('
+            SELECT ui
+            FROM ObjectsInternJumpBundle:UserInternship ui
+            WHERE ui.status = :status
+            ORDER BY ui.createdAt desc
+            ')->setParameters(array('status' => 'accepted'));
+        return $query->getResult();
+    }
+
+    /**
      * this function will get all Latest jobs according to certain cv categories
      * @author Ola
      * @param type $categories
@@ -278,7 +310,7 @@ class InternshipRepository extends EntityRepository {
         }
 //print_r($query);exit;
         $query .= ' GROUP BY j.id  ORDER BY j.createdAt DESC';
-        
+
         $query = $this->getEntityManager()->createQuery($query);
         $query->setParameters($para);
 

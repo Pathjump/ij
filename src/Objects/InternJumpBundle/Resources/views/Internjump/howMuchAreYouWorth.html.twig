@@ -6,74 +6,116 @@
 {{parent()}} - Find your worth
 {%endblock%}
 
-
+{% block notifications %}
+<div class="page-title">
+    <div class="container">
+        <h1>find your worth</h1>
+    </div>
+</div>
+{%endblock%}
 
 {%block body%}
 
-<div id="main" role="main">
+{% if facebook is defined %}
+<div class="container Main-content">
 
-    <section id="comJobList">
-        <div class="wrapper">
+    <div class="step2 pagination-centered text-center">
+        <strong class="text-success">You are one step closer to securing that Killer Internship</strong>. As part of InternJump's privacy policy your Facebook data will never be shared with employers,our
+        Facebook application is simply for our user's convenience. Please fill in your general contact details before you create your InternJump Resume.
+        <div class="Facebook-login span8">
 
-            <aside class="resourcesWrapper">
-                <h1>Find your worth</h1>
-{% if facebook is defined %}    
-Before you can proceed,link your FB account  <br/>              
-{% render "ObjectsAPIBundle:Facebook:facebookButton" with {'facebookUserHandleRoute' : 'facebook_link','permissions': 'email,publish_stream','cssClass' : 'face' , 'linkText' : 'Connect with your Facebook account' | trans} %}
-{% elseif userTotalWorth is defined %}
-YOUR CURRENT WORTH IS: ${{userTotalWorth}}
-{% if ImproveResultsMessageArray %}
-<ul>
-    {% for message in ImproveResultsMessageArray %}
-        <li>
-        {{message}}
-                </li>
-    {% endfor %}
-</ul>
-{% endif %}
+            <strong>Please!</strong> Connect by <strong>Facebook</strong><br>
+            to Know your worth<br><br>
 
-<br/><br/><br/>
-{% if userFriendsWorth %}
-<h2>How much your friends are worth</h2>
-<ul>
-    {% for userFriendWorth in userFriendsWorth %}
-        <li>
-            <strong>{{userFriendWorth.name}}</strong>&nbsp;&nbsp;&nbsp;
-            <p>${{userFriendWorth.worth}}</p>
-        </li>
-    {% endfor %}
-</ul>
-{% endif %}
-
-<div id="chart" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
-{% endif %}
-            </aside>
+            {% render "ObjectsAPIBundle:Facebook:facebookButton" with {'facebookUserHandleRoute' : 'facebook_link','permissions': 'email,publish_stream','cssClass' : 'face' , 'linkText' : 'Connect with your Facebook account' | trans} %}
+        </div><!--facebook-login--->
 
 
-        </div>
-    </section>
-
+    </div><!--step2--->
 
 </div>
+{% else %}
+<div class="container Main-content">
+    <!-- loading -->
+    <div class="Facebook-login span8 step3 pagination-centered text-center worthLoading">
+        <p>  WAIT NOW TO NOW HOW YOU WORTH !!</p>
+        <img width="198" height="197" src="{{asset('img/loading.png')}}">
+    </div><!--step2--->
 
+    <!-- result -->
+    <div class="Worth worthResult" style="display: none;">
+        <div class="step4 span8 Your-worth">
+
+            <div class=" text-center span5">
+                <p>You're worth</p>
+                <span class="Worth-value">  ${{userTotalWorth}} USD</span>
+                <a class="btn btn-primary large" href="{{path('howMuchAreYouWorth')}}">Recalculate</a>
+            </div>
+            <img width="197" height="354" class=" span2 pull-right" src="{{asset('img/drowpng.png')}}">
+        </div><!--step4--->
+        <div class="clearfix"></div>
+
+            {% for message in ImproveResultsMessageArray %}
+                <p class=" pagination-centered">
+                    {{message}}
+                </p>
+            {% endfor %}
+
+
+
+        <div class="row">
+            {% if userFriendsWorth | length > 0%}
+            <div class="span4 friends-worth">
+                <h3>How much your friends are worth</h3>
+                {% for userFriendWorth in userFriendsWorth %}
+                <div class="media">
+                    <a class="pull-left" href="javascript:void(0)">
+                        <img src="{{userFriendWorth.image}}" style="width: 50px; height: 50px;" alt="64x64" class="media-object" data-src="holder.js/64x64">
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading">{{userFriendWorth.name}}</h4>
+                        $ {{userFriendWorth.worth}}
+                    </div>
+                </div><!--media--->
+                {% endfor %}
+            </div><!--friends-worth-->
+            {% endif %}
+
+            <div class="span5 graph-box text-center pull-right ">
+                <h3>Your projected worth over the next 5 years</h3>
+                <div id="chart" style="min-width: 494px; height: 293px;"></div>
+            </div><!--span5-->
+        </div><!--row-->
+        <div class="clearfix"></div>
+
+    </div>
+</div>
+{% endif %}
 
 {%endblock%}
 
 {%block javascripts%}
  {{parent()}}
 <script src="{{asset('js/Highcharts-3.0.0/highcharts.js')}}"></script>
+<script>
+        $(window).load(function(){
+            $('.worthLoading').fadeOut(500,function(){
+               $('.worthResult').fadeIn(500);
+            });
+        });
+</script>
 {% if userTotalWorth is defined %}
-<script>        
-$(function () {
+<script>
+    $(function() {
         $('#chart').highcharts({
             chart: {
                 type: 'line',
                 marginRight: 130,
                 marginBottom: 25
             },
-            credits: { enabled: false },
+            credits: {enabled: false},
             title: {
-                text: 'Your projected worth over the next 5 years',
+                text: '',
                 x: -20 //center
             },
             xAxis: {
@@ -84,14 +126,14 @@ $(function () {
                     text: 'Worth'
                 },
                 plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'
-                }]
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
             },
             tooltip: {
                 formatter: function() {
-                        return '<strong>'+this.x +'</strong><br/>$'+ this.y ;
+                    return '<strong>' + this.x + '</strong><br/>$' + this.y;
                 }
             },
             legend: {
@@ -103,11 +145,11 @@ $(function () {
                 borderWidth: 0
             },
             series: [{
-                name: 'worth',
-                data: [{% if fiveYearsWorthArray %}{% for year,worth in fiveYearsWorthArray %}{{worth}},{% endfor %}{% endif %}]
-            }]
+                    name: 'worth',
+                    data: [{% if fiveYearsWorthArray %}{% for year,worth in fiveYearsWorthArray %}{{worth}},{% endfor %}{% endif %}]
+                }]
         });
     });
-</script>  
+    </script>
 {% endif %}
 {%endblock%}
