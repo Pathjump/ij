@@ -165,14 +165,12 @@ class CompanyMessageController extends Controller {
             $entity = $em->getRepository('ObjectsInternJumpBundle:Message')->getMessage($id);
         } catch (\Exception $e) {
             $message = $this->container->getParameter('company_message_not_found_error_msg');
-            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
-                        'message' => $message,));
+            throw $this->createNotFoundException($message);
         }
         //check if the message is deleted
         if ($entity->getCompanyDeleted()) {
             $message = $this->container->getParameter('company_message_not_found_error_msg');
-            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
-                        'message' => $message,));
+            throw $this->createNotFoundException($message);
         }
         //check if the company can see the message
         if ($entity->getCompany()->getId() != $company->getId()) {

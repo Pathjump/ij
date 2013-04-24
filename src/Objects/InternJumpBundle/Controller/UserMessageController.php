@@ -176,14 +176,12 @@ class UserMessageController extends ObjectsController {
             $entity = $em->getRepository('ObjectsInternJumpBundle:Message')->getUserMessage($id);
         } catch (\Exception $e) {
             $message = $this->container->getParameter('user_message_not_found_error_msg');
-            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
-                        'message' => $message,));
+            throw $this->createNotFoundException($message);
         }
         //check if the message is deleted
         if ($entity->getUserDeleted()) {
             $message = $this->container->getParameter('user_message_not_found_error_msg');
-            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
-                        'message' => $message,));
+            throw $this->createNotFoundException($message);
         }
         //check if the user can see the message
         if ($entity->getUser()->getId() != $user->getId()) {
