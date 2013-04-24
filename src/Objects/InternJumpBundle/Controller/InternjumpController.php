@@ -808,6 +808,7 @@ class InternjumpController extends ObjectsController {
     public function homePageAction() {
         $em = $this->getDoctrine()->getEntityManager();
         $userRepo = $em->getRepository('ObjectsUserBundle:User');
+        $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
 
         //check for logedin user or company
         if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
@@ -822,9 +823,11 @@ class InternjumpController extends ObjectsController {
 
         //get worth users
         $worthUsers = $userRepo->getWorthUsers(3);
+        $featuredCompanies = $companyRepo->findBy(array('isHome' => 1));
 
         return $this->render('ObjectsInternJumpBundle:Internjump:homePage.html.twig', array(
-                    'worthUsers' => $worthUsers
+                    'worthUsers' => $worthUsers,
+                    'featuredCompanies' => $featuredCompanies
         ));
     }
 

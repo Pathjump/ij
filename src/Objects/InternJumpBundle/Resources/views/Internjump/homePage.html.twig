@@ -104,7 +104,7 @@
                     </form>
 
                 </div>
-                <img src="img/bg2.png" />
+                <img src="{{asset('img/bg2.png')}}" />
 
             </div>
         </div><!--row-fluid-->
@@ -118,40 +118,19 @@
 
             <div class="span7">
                 <h2>intrens, save time & increase your opportunity</h2>
+
                 <div class="Feaetured-Companies">
+                    
                     <h3>Feaetured <span>Companies</span></h3>
                     <div class="row-fluid">
                         <ul class="thumbnails companies-logo">
+                            {% for company in featuredCompanies %}
                             <li class="span3">
                                 <a class="thumbnail">
-                                    <img src="img/img1.jpg" />
+                                    <img src="{{company.getTimThumbUrl(130,59)}}" />
                                 </a>
                             </li>
-                            <li class="span3">
-                                <a class="thumbnail">
-                                    <img src="img/img1.jpg" />
-                                </a>
-                            </li>
-                            <li class="span3">
-                                <a class="thumbnail">
-                                    <img src="img/bg2.png" />
-                                </a>
-                            </li>
-                            <li class="span3">
-                                <a class="thumbnail">
-                                    <img src="img/img1.jpg" />
-                                </a>
-                            </li>
-                            <li class="span3">
-                                <a class="thumbnail">
-                                    <img src="img/img1.jpg" />
-                                </a>
-                            </li>
-                            <li class="span3">
-                                <a class="thumbnail">
-                                    <img src="img/img1.jpg" />
-                                </a>
-                            </li>
+                            {% endfor %}
                         </ul>
                     </div><!--row-fluid--->
 
@@ -163,7 +142,7 @@
                             <ul class="thumbnails">
                                 <li class="span3">
                                     <div class="thumbnail">
-                                        <img src="img/user.jpg" />
+                                        <img src="{{asset('img/user.jpg')}}" />
                                         <div class="caption">
                                             <div class="titl-blue">Rahimeh
                                                 Andalibian</div>
@@ -173,7 +152,7 @@
                                 </li>
                                 <li class="span3">
                                     <div class="thumbnail">
-                                        <img src="img/user.jpg" />
+                                        <img src="{{asset('img/user.jpg')}}" />
                                         <div class="caption">
                                             <div class="titl-blue">Rahimeh
                                                 Andalibian</div>
@@ -183,7 +162,7 @@
                                 </li>
                                 <li class="span3">
                                     <div class="thumbnail">
-                                        <img src="img/user.jpg" />
+                                        <img src="{{asset('img/user.jpg')}}" />
                                         <div class="caption">
                                             <div class="titl-blue">Rahimeh
                                                 Andalibian</div>
@@ -193,7 +172,7 @@
                                 </li>
                                 <li class="span3">
                                     <div class="thumbnail">
-                                        <img src="img/user.jpg" />
+                                        <img src="{{asset('img/user.jpg')}}" />
                                         <div class="caption">
                                             <div class="titl-blue">Rahimeh
                                                 Andalibian</div>
@@ -216,21 +195,21 @@
                 <div class="Latest-In">
                     <h3>lATEST <span>INTERNSHIPS</span></h3>
                     <div class="media">
-                        <a href="" class="pull-left"><img src="img/img1.jpg" /></a>
+                        <a href="" class="pull-left"><img src="{{asset('img/img1.jpg')}}" /></a>
                         <div class="media-body">
                             <div class="titl-blue"> Online Content
                                 Manager Internship</div>
                             ABC Global Systems/ Abc Media Network
                         </div>
                         <div class="clearfix"></div>
-                        <a href="" class="pull-left"><img src="img/img1.jpg" /></a>
+                        <a href="" class="pull-left"><img src="{{asset('img/img1.jpg')}}" /></a>
                         <div class="media-body">
                             <div class="titl-blue"> Online Content
                                 Manager Internship</div>
                             ABC Global Systems/ Abc Media Network
                         </div>
                         <div class="clearfix"></div>
-                        <a href="" class="pull-left"><img src="img/img1.jpg" /></a>
+                        <a href="" class="pull-left"><img src="{{asset('img/img1.jpg')}}" /></a>
                         <div class="media-body">
                             <div class="titl-blue"> Online Content
                                 Manager Internship</div>
@@ -241,7 +220,7 @@
                 </div><!--Latest-In-->
 
                 <div class="img-ads">
-                    <img src="img/img3.png" />
+                    <img src="{{asset('img/img3.png')}}" />
                 </div>
             </div><!--span4-->
 
