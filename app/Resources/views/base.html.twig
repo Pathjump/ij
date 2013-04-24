@@ -91,7 +91,34 @@
                                 </div><!--navbar-inner-->
                             </div><!--navbar-->
                             <div class="Subcatego">
-                                {% block subcatego %}{% endblock %}
+                                {% if is_granted('ROLE_COMPANY') %}
+                                    <div class="container">
+                                        <ul class="unstyled">
+                                            <li><a href="{{ path('internship',{'loginName' : app.user.loginName}) }}">Home</a></li>
+                                            <li><a href="{{ path('internship',{'loginName' : app.user.loginName}) }}">Add new task</a></li>
+                                            <li><a href="{{ path('internship_new') }}">Add new internship</a></li>
+                                            <li><a href="{{path('employers')}}">Industries</a></li>
+                                            <li><a href="{{path('resources')}}">Resources</a></li>
+                                        </ul>
+                                    </div>
+                                {% elseif is_granted('ROLE_USER') %}
+                                    <div class="container">
+                                        <ul class="unstyled">
+                                            <li><a href="{{path('student_task',{'loginName' : app.user.loginName})}}">Profile Page</a></li>
+                                            <li><a href="{{ path('user_search_page') }}">Internship Search</a></li>
+                                            <li><a href="{{ path('education_new') }}">Education</a></li>
+                                            <li><a href="{{ path('user_languages') }}">Language</a></li>
+                                            <li><a href="{{ path('employmenthistory_new') }}">Employment History</a></li>
+                                            <li><a href="{{ path('addEditUserSkills') }}" title="Your Skills">Skills</a></li>
+                                            <li><a href="{{ path('personal_questions') }}" title="Personal Questions">Personal Questions</a></li>
+                                            {% if not app.user.score %}
+                                                <li><a href="{{path('internjumb_quiz')}}">InternJump Personality Quiz</a></li>
+                                            {% endif %}
+                                            <li><a href="{{path('employers')}}">Industries</a></li>
+                                            <li><a href="{{path('resources')}}">Resources</a></li>
+                                        </ul>
+                                    </div>
+                                {% endif %}
                             </div>
 
                             {% block notifications %}
