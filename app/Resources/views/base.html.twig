@@ -137,13 +137,26 @@
                             {% endblock %}
 
                             {% if is_granted('ROLE_NOTACTIVE_COMPANY') %}
-                                <div class="alert alert-info">
-                                    <h3 class="">Welocme ^^, {{app.user.loginName}}</h3>
-                                </div>
+                                {% if not is_granted('ROLE_COMPANY') %}
+                                    <div class="alert alert-info">
+                                        <h3 class="">Please activate your account</h3>
+                                        <a href="{{path('company_reActivation')}}">Resend activation email</a>
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-info">
+                                        <h3 class="">Welocme ^^, {{app.user.loginName}}</h3>
+                                    </div>
+                                {% endif %}
                             {% elseif is_granted('ROLE_NOTACTIVE') %}
-                                <div class="alert alert-info">
-                                    <h3 class="">Welocme ^^, {{app.user.loginName}}</h3>
-                                </div>
+                                {% if not is_granted('ROLE_USER') %}
+                                    <div class="alert alert-info">
+                                        <h3 class="">Please activate your account</h3>
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-info">
+                                        <h3 class="">Welocme ^^, {{app.user.loginName}}</h3>
+                                    </div>
+                                {% endif %}
                             {% endif %}
 
                             {% if app.session.hasFlash('notice') %}

@@ -66,37 +66,45 @@
 
                 <div class="Home-Search-form">
                     <form>
-                        <select  Class="Choosen">
-                            <option>job type</option>
-                            <option>job type1</option>
-                            <option>job type2</option>
-                            <option>job type3</option>
+                        {% if allCompanies |length > 0 %}
+                        <select  Class="Choosen" id="companyFilter">
+                            <option value="">company</option>
+                            {% for company in allCompanies %}
+                            <option value="{{company.id}}">{{company}}</option>
+                            {% endfor %}
                         </select>
+                        {% endif %}
 
-                        <select  Class="Choosen">
-                            <option>city</option>
-                            <option>job type1</option>
-                            <option>job type2</option>
-                            <option>job type3</option>
+                        {% if allCities |length > 0 %}
+                        <select  Class="Choosen" id="cityFilter">
+                            <option value="">city</option>
+                            {% for city in allCities %}
+                            <option value="{{city.id}}">{{city}}</option>
+                            {% endfor %}
                         </select>
+                        {% endif %}
 
-                        <select  Class="Choosen">
-                            <option>state</option>
-                            <option>job type1</option>
-                            <option>job type2</option>
-                            <option>job type3</option>
+                        {% if allState |length > 0 %}
+                        <select  Class="Choosen" id="stateFilter">
+                            <option value="">state</option>
+                            {% for state in allState %}
+                            <option value="{{state.id}}">{{state}}</option>
+                            {% endfor %}
                         </select>
+                        {% endif %}
 
-                        <select  Class="Choosen">
-                            <option>INDUSTRY</option>
-                            <option>job type1</option>
-                            <option>job type2</option>
-                            <option>job type3</option>
+                        {% if allCategory |length > 0 %}
+                        <select  Class="Choosen" id="industryFilter">
+                            <option value="">INDUSTRY</option>
+                            {% for category in allCategory %}
+                            <option value="{{category.id}}">{{category}}</option>
+                            {% endfor %}
                         </select>
+                        {% endif %}
 
                         <div class="Btn-box">
 
-                            <input class="Start-btn" type="submit"  value="start  now"/>
+                            <input class="Start-btn" type="button" id="homeSearchJob" value="start  now"/>
                         </div>
 
                     </form>
@@ -189,3 +197,35 @@
 </div><!--intrens-->
 
 {%endblock%}
+
+{% block javascripts %}
+{{parent()}}
+<script>
+    var searchJobsUrl = "{{path('user_search_page')}}";
+    $(document).ready(function(){
+       $('#homeSearchJob').click(function(){
+          var company = $('#companyFilter').val();
+          var city = $('#cityFilter').val();
+          var state = $('#stateFilter').val();
+          var category = $('#industryFilter').val();
+
+          if(company || city || state || category)
+              searchJobsUrl += '?';
+
+          if(company)
+              searchJobsUrl += "&company="+company;
+
+          if(city)
+              searchJobsUrl += "&city="+city;
+
+          if(state)
+              searchJobsUrl += "&state="+state;
+
+          if(category)
+              searchJobsUrl += "&industry="+category;
+
+          window.location = searchJobsUrl;
+       });
+    });
+</script>
+{% endblock %}
