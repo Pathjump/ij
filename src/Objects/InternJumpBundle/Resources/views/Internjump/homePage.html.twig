@@ -37,12 +37,10 @@
                     </div>
                 </div><!--Worth-conten--->
 
-                {% if is_granted('ROLE_USER') %}
                 <div class="Find-Statment">
                     Find out how much you are WORTH?
                     <a href="{{path('howMuchAreYouWorth')}}">Start now</a>
                 </div><!--Find-Statment--->
-                {% endif %}
             </div><!--span5-->
             {% endif %}
         </div><!--row-fluid--->
@@ -120,70 +118,42 @@
                 <h2>intrens, save time & increase your opportunity</h2>
 
                 <div class="Feaetured-Companies">
-                    
+                    {% if featuredCompanies | length > 0 %}
                     <h3>Feaetured <span>Companies</span></h3>
                     <div class="row-fluid">
                         <ul class="thumbnails companies-logo">
                             {% for company in featuredCompanies %}
                             <li class="span3">
-                                <a class="thumbnail">
-                                    <img src="{{company.getTimThumbUrl(130,59)}}" />
+                                <a class="thumbnail" href="{{path('internship',{'loginName' : company.loginName})}}">
+                                    <img src="{{company.getTimThumbUrl(130,97)}}" />
                                 </a>
                             </li>
                             {% endfor %}
                         </ul>
                     </div><!--row-fluid--->
+                    {% endif %}
 
-
+                    {% if latestHiredUsers | length > 0 %}
                     <h3>Recently<span> Hired interns</span></h3>
 
                     <div class="R-Hired">
                         <div class="row-fluid">
                             <ul class="thumbnails">
+                                {% for userInternship in latestHiredUsers %}
                                 <li class="span3">
                                     <div class="thumbnail">
-                                        <img src="{{asset('img/user.jpg')}}" />
+                                        <img src="{{userInternship.user.getTimThumbUrl(97,94)}}" />
                                         <div class="caption">
-                                            <div class="titl-blue">Rahimeh
-                                                Andalibian</div>
-                                            New York University, 2014
+                                            <div class="titl-blue">{{userInternship.user}}</div>
+                                            {{userInternship.user.address}}
                                         </div><!--caption-->
                                     </div><!--thumbnail-->
                                 </li>
-                                <li class="span3">
-                                    <div class="thumbnail">
-                                        <img src="{{asset('img/user.jpg')}}" />
-                                        <div class="caption">
-                                            <div class="titl-blue">Rahimeh
-                                                Andalibian</div>
-                                            New York University, 2014
-                                        </div><!--caption-->
-                                    </div><!--thumbnail-->
-                                </li>
-                                <li class="span3">
-                                    <div class="thumbnail">
-                                        <img src="{{asset('img/user.jpg')}}" />
-                                        <div class="caption">
-                                            <div class="titl-blue">Rahimeh
-                                                Andalibian</div>
-                                            New York University, 2014
-                                        </div><!--caption-->
-                                    </div><!--thumbnail-->
-                                </li>
-                                <li class="span3">
-                                    <div class="thumbnail">
-                                        <img src="{{asset('img/user.jpg')}}" />
-                                        <div class="caption">
-                                            <div class="titl-blue">Rahimeh
-                                                Andalibian</div>
-                                            New York University, 2014
-                                        </div><!--caption-->
-                                    </div><!--thumbnail-->
-                                </li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
-
+                    {% endif %}
 
 
 
@@ -192,32 +162,22 @@
             </div><!--span4-->
 
             <div class="span5">
+                {% if latestInternShips | length > 0 %}
                 <div class="Latest-In">
                     <h3>lATEST <span>INTERNSHIPS</span></h3>
                     <div class="media">
-                        <a href="" class="pull-left"><img src="{{asset('img/img1.jpg')}}" /></a>
+                        {% for internship in latestInternShips %}
+                        <a href="{{path('internship_show',{'id' : internship.id})}}" class="pull-left"><img src="{{internship.company.getTimThumbUrl(130,97)}}" /></a>
                         <div class="media-body">
-                            <div class="titl-blue"> Online Content
-                                Manager Internship</div>
-                            ABC Global Systems/ Abc Media Network
+                            <div class="titl-blue"> {{internship.title}}</div>
+                            {{internship.company}}
                         </div>
                         <div class="clearfix"></div>
-                        <a href="" class="pull-left"><img src="{{asset('img/img1.jpg')}}" /></a>
-                        <div class="media-body">
-                            <div class="titl-blue"> Online Content
-                                Manager Internship</div>
-                            ABC Global Systems/ Abc Media Network
-                        </div>
-                        <div class="clearfix"></div>
-                        <a href="" class="pull-left"><img src="{{asset('img/img1.jpg')}}" /></a>
-                        <div class="media-body">
-                            <div class="titl-blue"> Online Content
-                                Manager Internship</div>
-                            ABC Global Systems/ Abc Media Network
-                        </div>
+                        {% endfor %}
                     </div><!--media-->
 
                 </div><!--Latest-In-->
+                {% endif %}
 
                 <div class="img-ads">
                     <img src="{{asset('img/img3.png')}}" />

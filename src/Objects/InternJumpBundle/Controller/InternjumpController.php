@@ -185,8 +185,14 @@ class InternjumpController extends ObjectsController {
     public function howMuchAreYouWorthAction() {
         //check if loggedin user
         if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
+            //get the session to set flag
+            $session = $this->getRequest()->getSession();
+            //clear the previous flashes
+            $session->clearFlashes();
+            //set the error flag
+            $session->setFlash('notice', 'you must login first To Know your worth .. !');
             //redirect to home page
-            return $this->redirect($this->generateUrl('site_homepage'));
+            return $this->redirect($this->generateUrl('login'));
         } else {
             $em = $this->getDoctrine()->getEntityManager();
             $ImproveResultsMessageArray = array();
@@ -384,6 +390,11 @@ class InternjumpController extends ObjectsController {
                             $friendResult = array();
                             $friendResult ['name'] = $friend['name'];
                             $friendResult ['worth'] = $friendWorth;
+                            //get user image
+                            $socialAccountsRepo = $em->getRepository('ObjectsUserBundle:SocialAccounts');
+                            $userSocial = $socialAccountsRepo->findOneBy(array('facebookId' => $friend['id']));
+                            if ($userSocial)
+                                $friendResult ['image'] = $userSocial->getUser()->getTimThumbUrl(64,64);
                             $userFriendsWorth [] = $friendResult;
                         }
                     }
@@ -809,25 +820,33 @@ class InternjumpController extends ObjectsController {
         $em = $this->getDoctrine()->getEntityManager();
         $userRepo = $em->getRepository('ObjectsUserBundle:User');
         $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
+        $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
 
         //check for logedin user or company
-        if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
-            //get logedin user objects
-            $user = $this->get('security.context')->getToken()->getUser();
-            return $this->redirect($this->generateUrl('student_task', array('loginName' => $user->getLoginName()), TRUE));
-        } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {
-            //get logedin company objects
-            $company = $this->get('security.context')->getToken()->getUser();
-            return $this->redirect($this->generateUrl('internship', array('loginName' => $company->getLoginName()), TRUE));
-        }
-
+//        if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+//            //get logedin user objects
+//            $user = $this->get('security.context')->getToken()->getUser();
+//            return $this->redirect($this->generateUrl('student_task', array('loginName' => $user->getLoginName()), TRUE));
+//        } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {
+//            //get logedin company objects
+//            $company = $this->get('security.context')->getToken()->getUser();
+//            return $this->redirect($this->generateUrl('internship', array('loginName' => $company->getLoginName()), TRUE));
+//        }
         //get worth users
         $worthUsers = $userRepo->getWorthUsers(3);
+        //get featured companies
         $featuredCompanies = $companyRepo->findBy(array('isHome' => 1));
+        //get latest internships
+        $latestInternShips = $internshipRepo->getLatestinternShips(3);
+        //get Recently Hired interns
+        $latestHiredUsers = $internshipRepo->getLatestHiredUsers(4);
+
 
         return $this->render('ObjectsInternJumpBundle:Internjump:homePage.html.twig', array(
                     'worthUsers' => $worthUsers,
-                    'featuredCompanies' => $featuredCompanies
+                    'featuredCompanies' => $featuredCompanies,
+                    'latestInternShips' => $latestInternShips,
+                    'latestHiredUsers' => $latestHiredUsers
         ));
     }
 
