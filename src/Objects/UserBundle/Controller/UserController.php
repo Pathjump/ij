@@ -2073,16 +2073,15 @@ class UserController extends ObjectsController {
                 ->add('gender', 'choice', array(
                     'choices' => array('1' => 'Male', '0' => 'Female'),
                     'multiple' => false,
-                    'attr' => array('class' => 'chzn-select', 'style' => 'width:200px;')
                 ))
                 ->add('about')
                 ->add('file', 'file', array('required' => false, 'label' => 'image', 'attr' => array('onchange' => 'readURL(this);')))
                 ->add('url', 'url', array('required' => false))
                 ->add('dateOfBirth', 'birthday', array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'required' => FALSE, 'attr' => array('class' => 'dateOfBirth')))
                 ->add('zipcode')
-                ->add('country', 'choice', array('choices' => $allCountriesArray, 'required' => false, 'attr' => array('class' => 'chzn-select', 'style' => 'width:200px;')))
-                ->add('city', NULL, array('attr' => array('style' => 'width:200px;')))
-                ->add('state', 'choice', array('required' => false, 'attr' => array('class' => 'chzn-select', 'style' => 'width:200px;')))
+                ->add('country', 'choice', array('choices' => $allCountriesArray, 'required' => false))
+                ->add('city')
+                ->add('state', 'choice', array('required' => false))
                 ->add('address');
         //create the form
         $form = $formBuilder->getForm();

@@ -48,14 +48,15 @@ function changeStateSelect(countryId) {
                         );
                 }
             });
-            
+
             if(typeof userState != 'undefined')
                 $('#form_state').val(userState);
         },
         complete: function() {
             //hide the loader
             $('#loading').hide();
-            $("select.chzn-select").trigger("liszt:updated");
+            $('.select-box select.state').selectbox('detach');
+            $('.select-box select.state').selectbox('attach');
         }
     });
 }
