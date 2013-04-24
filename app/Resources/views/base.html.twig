@@ -57,12 +57,12 @@
                                             </ul>
                             {% if is_granted('ROLE_NOTACTIVE_COMPANY') %}
                                 <ul class="log-links pull-right  unstyled">
-                                     <li><a href="{{ path('internship',{'loginName' : app.user.loginName}) }}">Hi, {{app.user.loginName}}</a></li>
+                                     <!--<li><a href="{{ path('internship',{'loginName' : app.user.loginName}) }}">Hi, {{app.user.loginName}}</a></li>-->
                                      <li><a href="{{ path('logout') }}">Sign out</a></li>
                                 </ul>
                             {% elseif is_granted('ROLE_NOTACTIVE') %}
                                 <ul class="log-links pull-right  unstyled">
-                                     <li><a href="{{ path('student_task',{'loginName' : app.user.loginName}) }}">Hi, {{app.user.loginName}}</a></li>
+                                     <!--<li><a href="{{ path('student_task',{'loginName' : app.user.loginName}) }}">Hi, {{app.user.loginName}}</a></li>-->
                                      <li><a href="{{ path('logout') }}">Sign out</a></li>
                                 </ul>
                             {% else %}
@@ -102,6 +102,15 @@
                                 {% endif %}
                             {% endblock %}
                             </div>
+                            {% if is_granted('ROLE_NOTACTIVE_COMPANY') %}
+                                <div class="alert alert-info">
+                                    <h3 class="">Welocme ^^, {{app.user.loginName}}</h3>
+                                </div>
+                            {% elseif is_granted('ROLE_NOTACTIVE') %}
+                                <div class="alert alert-info">
+                                    <h3 class="">Welocme ^^, {{app.user.loginName}}</h3>
+                                </div>
+                            {% endif %}
 
                             {% if app.session.hasFlash('notice') %}
                                 <div class="alert alert-info">
@@ -162,6 +171,7 @@
                                 <p>Copyright ©2012 {{internjumb_copyright}}, All rights reserved. </p>
                             </div><!--Copy-Right--->
 
+                            {% block javascripts %}
                             <script src="{{asset('js/libs/jquery-1.8.1.js')}}"></script>
                             <script src="{{asset('js/bootstrap.min.js')}}"></script>
                             <script src="{{asset('js/plugins.js')}}"></script>
@@ -220,5 +230,6 @@
                                         });
                                 }
                             </script>
+                            {% endblock %}
                         </body>
                     </html>
