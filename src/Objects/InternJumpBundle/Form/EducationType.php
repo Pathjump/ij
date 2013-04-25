@@ -15,17 +15,17 @@ class EducationType extends AbstractType {
         }
         $builder
                 ->add('schoolName')
-                ->add('underGraduate', 'choice', array('choices' => array('UnderGraduate', 'Graduate'), 'expanded' => true, 'required' => FALSE, 'label' => 'Degree Type :', 'attr' => array('class' => 'underGraduate')))
+                ->add('underGraduate', 'choice', array('choices' => array('UnderGraduate', 'Graduate'), 'expanded' => true, 'required' => FALSE))
                 ->add('major', NULL, array('required' => FALSE))
                 ->add('minor', NULL, array('required' => FALSE))
                 ->add('majorGPA', 'number', array('precision' => 2, 'required' => FALSE))
                 ->add('cumulativeGPA', 'number', array('precision' => 2, 'required' => FALSE))
-                ->add('startDate', 'choice', array('required' => FALSE, 'empty_data' => null, 'choices' => $choices, 'attr' => array('data-placeholder' => "Choose a year ...", 'class' => 'chzn-select', 'style' => 'width:200px;')))
-                ->add('endDate', 'choice', array('required' => FALSE, 'empty_data' => null, 'choices' => $choices, 'attr' => array('data-placeholder' => "Choose a year ...", 'class' => 'chzn-select', 'style' => 'width:200px;')))
+                ->add('startDate', 'choice', array('required' => FALSE, 'empty_data' => null, 'choices' => $choices, 'attr' => array('class' => 'selectbox')))
+                ->add('endDate', 'choice', array('required' => FALSE, 'empty_data' => null, 'choices' => $choices, 'attr' => array('class' => 'selectbox')))
                 ->add('extracurricularActivity', 'textarea', array('required' => FALSE))
                 ->add('relevantCourseworkTaken', 'textarea', array('required' => FALSE))
-                ->add('graduateDegree', NULL, array('required' => FALSE, 'attr' => array('class' => 'graduateDegree')))
-                ->add('underGraduateDegree', NULL, array('required' => FALSE, 'attr' => array('class' => 'underGraduateDegree')))
+                ->add('graduateDegree', NULL, array('required' => FALSE))
+                ->add('underGraduateDegree', NULL, array('required' => FALSE))
         ;
     }
 

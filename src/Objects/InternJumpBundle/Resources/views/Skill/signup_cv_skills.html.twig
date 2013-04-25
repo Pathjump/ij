@@ -2,102 +2,168 @@
 
 {% block title %}Resume Second Step{% endblock %}
 
+{% block pageTitle %}Resume Second Step{% endblock %}
+
 {% block stylesheets %}
-<link href="{{ asset('css/simpletabs.css') }}" rel="stylesheet" type="text/css"/>
+{{ parent() }}
 <link href="{{ asset('css/jquery-ui-1.8.24.custom.css') }}" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
 {% block body %}
-<section id="student-01">
-    <div class="wrapper">
-        <h1>FOR STUDENTS<div></div></h1>
 
-        <div class="simpleTabs">
-            <ul class="simpleTabsNavigation">
-                <li><a>Step 1</a></li>
-                <li><a class="current">Step 2</a></li>
-                <li><a>Step 3</a></li>
-                <li><a>Step 4</a></li>
-            </ul>
-
-            <div class="simpleTabsContent" style="display: block;">
-                {% if app.session.hasFlash('notice') %}
-                <span class="alert fail">
-                {{ app.session.flash('notice') | raw }}
-                </span>
-                {% endif %}
-                {% if app.session.hasFlash('success') %}
-                <span class="alert success">
-                {{ app.session.flash('success') | raw }}
-                </span>
-                {% endif %}
-                {% if app.session.hasFlash('error') %}
-                <span class="alert error">
-                {{ app.session.flash('error') | raw }}
-                </span>
-                {% endif %}
-                {% if form_errors(form) %}
-                <span class="alert error">
-                {{ form_errors(form) }}
-                </span>
-                {% endif %}
-                <!--form Name-->
-                <h1>{%if formName%}{{formName}}{%endif%}:</h1>
-                <!--form Desc-->
-                <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}
-                    Skills are very important to employers make sure to include interpersonal/communication skills in addition to technical skills (Software, languages). Employers frequently use skills to search for candidates so make sure the list is comprehensive. <strong>Add one skill per box, click on the + sign to add additional skills.</strong></p>
-                <form id="step02" action="{{ path('signup_cv_skills') }}" method="post" {{ form_enctype(form) }}>
-                    <div id="formsContainer">
-                        {% for skill in form.skills %}
-                            <div id="input1" style="margin-bottom:4px;" class="clonedInput">
-                            <label>Skill :</label>{{ form_widget(skill.title) }}<span class="miniError">{{ form_errors(skill.title) }}</span>
-                        </div>
-                        {% endfor %}
-                    </div>
-                    <div class="btns">
-                        <input title="Add another skill" type="button" id="btnAdd" value="+" />
-                        <input title="remove skill" type="button" id="btnDel" value="-" />
-                    </div>
-
-                    {{ form_rest(form) }}
-                    <button class="submit" type="submit" title="{% trans %}Next{% endtrans %}">{% trans %}Next{% endtrans %}</button>
-                    <a class="bak" href="{{ path('signup_cv') }}">Back</a>
-                    <div class="clear"></div>
-                </form>
-            </div>
+        {% if app.session.hasFlash('notice') %}
+        <div class="alert">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('notice') | raw }}
         </div>
+        {% endif %}
 
-    </div>
-</section>
+        {% if app.session.hasFlash('success') %}
+        <div class="alert alert-success">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('success') | raw }}
+        </div>
+        {% endif %}
+
+        {% if app.session.hasFlash('error') %}
+        <div class="alert alert-error">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('error') | raw }}
+        </div>
+        {% endif %}
+
+        {% if form_errors(form) %}
+        <div class="alert alert-error">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ form_errors(form) }}
+        </div>
+        {% endif %}
+
+        <div class="container Main-content">
+
+            <div class="Student">
+
+                <ul class="nav nav-tabs">
+                    <li><a href="{{ path('signup_education') }}">Education</a></li>
+                    <li><a href="{{ path('signup_language') }}">Languages</a></li>
+                    <li><a href="{{ path('signup_cv') }}">Objectives</a></li>
+                    <li class="active"><a href="{{ path('signup_cv_skills') }}">Skills</a></li>
+                    <li><a href="{{ path('signup_cv_experience') }}">Experience</a></li>
+                    <li class="pull-right span3"><h3>Resume Complitness</h3></li>
+                </ul>
+
+                <div class="row-fluid show-grid">
+
+                    <div class="span8">
+                        <form id="step02" class="company-form" action="{{ path('signup_cv_skills') }}" method="post">
+                            <legend><h2>{% if formName %}{{ formName }}{% endif %}</h2></legend>
+
+                            <fieldset>
+                                <p>{% if formDesc %}{{ formDesc }}{% endif %}</p>
+                                <div class="Add-links">
+                                    <a href="javascript:void(0)" title="Add" class="add-btn btnAdd"></a>
+                                </div><!--Add-links-->
+                            </fieldset>
+
+                            {% for skill in form.skills %}
+                            <fieldset>
+                                <hr class="divider"/>
+                                <div class="controls  row-fluid show-grid">
+                                    <div  class="span11 select-box">
+                                        <label>Language</label>
+                                        {{ form_widget(skill.title, {'attr': {'class': 'skillsTitles span11'} }) }}
+
+                                        <span style="display: inline-block;margin-bottom: 13px;">
+                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                        </span>
+
+                                        {% if form_errors(skill.title) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(skill.title) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+
+                                    {% if not loop.first %}
+                                    <div class="Add-links">
+                                        <a href="javascript:void(0)" title="Remove" onclick="deleteSubForm(this);" class="Remove-btn"></a>
+                                    </div><!--Add-links-->
+                                    {% endif %}
+                                </div>
+                            </fieldset>
+                            {% endfor %}
+
+                            <fieldset id="formActions">
+                                <hr class="divider"/>
+                                <div class="controls ">
+                                    {{ form_rest(form) }}
+                                    <button type="submit" class="btn btn-primary pull-right">Next</button>
+                                    <a href="{{ path('signup_cv') }}" class="pull-right back">Back</a>
+                                </div>
+                            </fieldset>
+                        </form>
+
+                    </div><!--span 9-->
+
+                    <div class="span4">
+                        {% render "ObjectsInternJumpBundle:Task:userMeter" %}
+                    </div>
+
+                </div><!--row-fluid show-grid-->
+
+            </div><!---Student --->
+        </div><!--container-->
 {% endblock %}
 
 {% block javascripts %}
+{{ parent() }}
 {% set formElementHTML %}
 {% spaceless %}
-<div style="margin-bottom:4px;" class="clonedInput">
-    <label>Skill :</label>{{ form_widget(form.skills.vars.prototype.title) }}
-</div>
+<fieldset>
+    <hr class="divider"/>
+    <div class="controls  row-fluid show-grid">
+        <div  class="span11 select-box">
+            <label>Language</label>
+            {{ form_widget(form.skills.vars.prototype.title, {'attr': {'class': 'skillsTitles span11'} }) }}
+
+            <span style="display: inline-block;margin-bottom: 13px;">
+                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+            </span>
+        </div>
+
+        <div class="Add-links">
+            <a href="javascript:void(0)" title="Remove" onclick="deleteSubForm(this);" class="Remove-btn"></a>
+        </div><!--Add-links-->
+    </div>
+</fieldset>
 {% endspaceless %}
 {% endset %}
 <script src="{{ asset('js/libs/jquery-ui-1.8.24.custom.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/libs/jquery.livequery.js') }}" type="text/javascript"></script>
 <script>
-    var formElementHTML = '{{ formElementHTML }}';
+    var formElementHTML = '{{ formElementHTML | escape('js') }}';
+    function deleteSubForm(currentElement) {
+        $(currentElement).parent().parent().parent().remove();
+    }
     $(document).ready(function() {
-        $(".skillsTitles" ).autocomplete({source: "{{ path('get_skills_by_title') }}"});
-        $('#btnAdd').click(function() {
+        $('.skillsTitles').livequery(function() {
+            $(this).autocomplete({source: '{{ path('get_skills_by_title') }}'});
+        });
+        $('.btnAdd').click(function() {
             var tempHtml = formElementHTML;
-            $('#formsContainer').append(tempHtml.replace(/\$\$name\$\$/g, $('#formsContainer').children().length));
-            $('#btnDel').removeAttr('disabled');
-            $(".skillsTitles" ).autocomplete({source: "{{ path('get_skills_by_title') }}"});
+            var subFormNumbers = [];
+            $('[name^="form[skills]"]').each(function(){
+                subFormNumber = parseInt($(this).attr('name').match(/\d+/)[0]);
+                if($.inArray(subFormNumber, subFormNumbers) == -1) {
+                    subFormNumbers.push(subFormNumber);
+                }
+            });
+            $('#formActions').before(tempHtml.replace(/\$\$name\$\$/g, (subFormNumbers.sort().pop() + 1)));
+            $('html, body').animate({
+                scrollTop: $('#formActions').prev().offset().top
+            }, 2000);
         });
-        $('#btnDel').click(function() {
-            if($('#formsContainer').children().length == 2) {
-                $('#btnDel').attr('disabled','disabled');
-            }
-            $('#formsContainer').children().last().remove();
-        });
-        var stuTitleBar = $('#main .wrapper').width();
-        $('#student-01 > .wrapper h1 div').width(stuTitleBar-202);
     });
 </script>
 {% endblock %}

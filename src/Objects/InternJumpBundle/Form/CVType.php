@@ -11,8 +11,8 @@ class CVType extends AbstractType {
         $builder
                 ->add('objective')
                 ->add('name')
-                ->add('isActive', NULL, array('required' => false, 'attr' => array('class' => 'onoffswitch-checkbox isActiveCv')))
-                ->add('categories', NULL, array('required' => false, 'attr' => array('class' => 'chzn-select', 'style' => 'width:637;')))
+                ->add('isActive', NULL, array('required' => false))
+                ->add('categories', NULL, array('required' => false))
         ;
     }
 
