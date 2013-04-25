@@ -32,9 +32,9 @@
             <div class="Student">
 
                 <ul class="nav nav-tabs">
-                    <li><a href="javascript:void(0)">Objectives</a></li>
-                    <li class="active"><a href="javascript:void(0)">Skills</a></li>
-                    <li><a href="javascript:void(0)">Experience</a></li>
+                    <li><a href="{{ path('cv_edit', {'id': entity.id}) }}">Objectives</a></li>
+                    <li class="active"><a href="{{ path('cv_skills', {'id': entity.id}) }}">Skills</a></li>
+                    <li><a href="{{ path('cv_employment_history', {'id': entity.id}) }}">Experience</a></li>
                     <li class="pull-right span3"><h3>Resume Complitness</h3></li>
                 </ul>
 

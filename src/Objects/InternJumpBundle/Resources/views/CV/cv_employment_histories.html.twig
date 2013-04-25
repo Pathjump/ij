@@ -2,64 +2,107 @@
 
 {% block title %}Resume Employment Histories{% endblock %}
 
+{% block pageTitle %}Resume Employment Histories{% endblock %}
+
 {% block body %}
-<section id="student-01">
-    <div class="wrapper">
 
-        <div class="editSkills">
-            <h1>{{ entity }}</h1>
-            <hr/>
-            <div class="blueCont">
-                <!--form Name-->
-                <h2>{%if formName%}{{formName}}{%endif%}:</h2>
-                <!--form Desc-->
-                <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
-                {% if userEmploymentHistories | length > 0 %}
-                <form method="POST" action="{{ path('cv_employment_history', {'id': entity.id}) }}">
-                    <div class="infoBlock">
-                        <table>
-                            <tr>
-                                <td><input{% if userEmploymentHistories | length == cvEmploymentHistories | length %} checked="checked"{% endif %} onchange="checkUnCheck(this);" id="all_cv_experience" type="checkbox"></td>
-                                <td colspan="2"><label for="all_cv_experience" style="display: block;">Check/UnCheck All</label></td>
-                            </tr>
-                            <tr>
-                                <td colspan="3"></td>
-                            </tr>
-                            {% for employmentHistory in userEmploymentHistories %}
-                            <tr>
-                                <td><input{% if employmentHistory in cvEmploymentHistories %} checked="checked"{% endif %} id="employmentHistory_{{ employmentHistory.id }}" class="cvemploymentHistoryInput" name="cv_employment_histories[]" type="checkbox" value="{{ employmentHistory.id }}"></td>
-                                <td onclick="$('#employmentHistory_{{ employmentHistory.id }}').click();">{{ employmentHistory }}</td>
-                                <td title="Edit your employment history"><a href="{{ path('employmenthistory_edit', {'id': employmentHistory.id}) }}">Edit</a></td>
-                            </tr>
-                            <tr>
-                                <td colspan="3"></td>
-                            </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
-                    <button class="submit" type="submit">{{ buttonText }}</button>
-                </form>
-                {% else %}
-                <p>You Do not have any employment history yet, Follow the next link to create a new one.</p>
-                {% endif %}
-                <a class="submit" title="Add new employment history" href="{{ path('employmenthistory_new') }}">Add new employment history</a>
-                <div class="clear"></div>
-            </div>
+
+        {% if app.session.hasFlash('notice') %}
+        <div class="alert">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('notice') | raw }}
         </div>
+        {% endif %}
 
-    </div>
-</section>
+        {% if app.session.hasFlash('success') %}
+        <div class="alert alert-success">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('success') | raw }}
+        </div>
+        {% endif %}
+
+        {% if app.session.hasFlash('error') %}
+        <div class="alert alert-error">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('error') | raw }}
+        </div>
+        {% endif %}
+
+        <div class="container Main-content">
+
+            <div class="Student">
+
+                <ul class="nav nav-tabs">
+                    <li><a href="{{ path('cv_edit', {'id': entity.id}) }}">Objectives</a></li>
+                    <li><a href="{{ path('cv_skills', {'id': entity.id}) }}">Skills</a></li>
+                    <li class="active"><a href="{{ path('cv_employment_history', {'id': entity.id}) }}">Experience</a></li>
+                    <li class="pull-right span3"><h3>Resume Complitness</h3></li>
+                </ul>
+
+                <div class="row-fluid show-grid">
+
+                    <div class="span8">
+                        <form class="company-form" action="{{ path('cv_employment_history', {'id': entity.id}) }}" method="post">
+                            <legend><h2>{% if formName %}{{ formName }}{% endif %}</h2></legend>
+
+                            <ul class="list2">
+                                <li>
+                                    <label class="checkbox">
+                                        <input{% if userEmploymentHistories | length == cvEmploymentHistories | length %} checked="checked"{% endif %} onchange="checkUnCheck(this);" id="all_cv_experience" type="checkbox"> Check / UnCheck All
+                                    </label>
+                                </li>
+                                {% for employmentHistory in userEmploymentHistories %}
+                                <li>
+                                    <label class="checkbox">
+                                        <input{% if employmentHistory in cvEmploymentHistories %} checked="checked"{% endif %} id="employmentHistory_{{ employmentHistory.id }}" class="cvemploymentHistoryInput" name="cv_employment_histories[]" type="checkbox" value="{{ employmentHistory.id }}"> {{ employmentHistory }}
+                                        <small class="muted pull-right"><a href="{{ path('employmenthistory_edit', {'id': employmentHistory.id}) }}">Edit</a></small>
+                                    </label>
+                                </li>
+                                {% endfor %}
+                            </ul>
+
+                            <fieldset>
+                                <hr class="divider"/>
+                                <div class="controls ">
+                                    <button type="submit" class="btn btn-primary pull-right">{{ buttonText }}</button>
+                                    <a title="Add new employment history" href="{{ path('employmenthistory_new') }}" class="pull-right back">Add new employment history</a>
+                                </div>
+                            </fieldset>
+                        </form>
+
+                    </div><!--span 9-->
+
+                    <div class="span4">
+                        {% render "ObjectsInternJumpBundle:Task:userMeter" %}
+                    </div>
+
+                </div><!--row-fluid show-grid-->
+
+            </div><!---Student --->
+        </div><!--container-->
+{% endblock %}
+
+
+{% block javascripts %}
+{{ parent() }}
 <script>
     function checkUnCheck(element) {
         if(element.checked){
-            $('.cvemploymentHistoryInput').each(function(){
-                $(this).attr('checked', 'checked')
+            $('.cvemploymentHistoryInput').each(function() {
+                if(!this.checked){
+                    $(this).click();
+                }
             });
-        } else {
-            $('.cvemploymentHistoryInput').each(function(){
-                $(this).removeAttr('checked')
-            });
+            return;
         }
+        $('.cvemploymentHistoryInput').each(function(){
+            if(this.checked){
+                $(this).click();
+            }
+        });
     }
+    $(document).ready(function() {
+        $('input[type="checkbox"]').ezMark();
+    });
 </script>
 {% endblock %}
