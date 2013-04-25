@@ -112,6 +112,10 @@ class TaskController extends ObjectsController {
         $appliedJobs = $em->getRepository('ObjectsInternJumpBundle:UserInternship')->getAppliedJobs($uid);
 
 
+        //get latest 3 notifications
+        $latestNotifications = $em->getRepository('ObjectsInternJumpBundle:UserNotification')->getLatestThree($uid);
+        //get latest 3 messages
+        $latestMessages = $em->getRepository('ObjectsInternJumpBundle:Message')->getLatestThree($uid);
 
         return $this->render('ObjectsInternJumpBundle:Task:studentTasks.html.twig', array(
                     'entities' => $tasks,
@@ -129,6 +133,8 @@ class TaskController extends ObjectsController {
                     'interviews' => $upComingInterviews,
                     'interviewsCount' => $upComingInterviewsCount,
                     'appliedJobs' => $appliedJobs,
+                    'latestNotifications' => $latestNotifications,
+                    'latestMessages' => $latestMessages
                 ));
     }
 
