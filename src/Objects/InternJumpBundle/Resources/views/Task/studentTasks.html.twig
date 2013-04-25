@@ -398,8 +398,10 @@
 {%if cvCategoris%} <!--check if found categories of cvs or not i.e: student has Cv(s) and active or not-->
 
 {% for job in latestJobs %}
+                                    <a href="" class="pull-left"><img src="{{job.company.getTimThumbUrl(130,60)}}"></a>
                                     <div class="media-body">
-                                       &Gt; {{ job.title }}
+                                         <div class="titl-blue">{{ job.title }}</div>
+                                            {{job.company.name}}
                                         <a class="more pull-right" title="Read Job Details" href="{{ path('internship_show', {'id': job.id}) }}">more</a>
                                      </div>
                                 <br>
