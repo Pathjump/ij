@@ -274,8 +274,15 @@
                                     </span>
                                 </div>
                                 <div class="span6">
-
-                                </div>
+                                        <label>State</label>
+                                        {{ form_widget(form.state,{'attr' : {'class' : 'span12'}}) }}
+                                        {% if form_errors(form.state) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(form.state) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
                             </div>
 
                             <div class="controls row-fluid show-grid">

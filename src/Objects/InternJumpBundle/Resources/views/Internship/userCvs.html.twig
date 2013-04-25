@@ -1,42 +1,28 @@
-<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
-
-<script src="{{ asset('js/libs/chosen.jquery.min.js') }}"></script>
-
-<script>
-  $(document).ready(function(){
-      $(".chzn-select").chosen();
-  });  
-</script>    
-
 {% if allUserCvs|length > 0%}
-<div class="ask4Interview selectCV">
-    <div class="wrapper">
-        <h1>Select your CV.</h1>
-        <form>
-            <label>Select</label><br>
+<form class="form-horizontal">
+    <div class="control-group">
+        <label class="control-label">Select your CV</label>
+        <div class="controls">
             <select class="chzn-select" id="userCvs" style="width: 250px;">
                 {% for cv in allUserCvs %}
                     <option value="{{cv.id}}">{{cv.name}}</option>
                 {% endfor %}
             </select>
-            <button id="userCvSubmit" type="button" class="submit">Confirm</button>
-            <button id="userCvCancle" type="button" class="back">Cancel</button>
-            <img src="{{asset('img/loadingfacebox.gif')}}" id="userAddJobImg" style="display: none;float: right;"/>
-            <div class="clearfix"></div>
-        </form>
-
-    </div>
-</div>
-
-    
-{% else %}
-    <div class="ask4Interview selectCV">
-        <div class="wrapper">
-            <h1>Select you CV.</h1>
-            <form>
-                <label>{{user_does_not_have_cv_message}}</label>
-            </form>
-
         </div>
     </div>
+    <div class="control-group">
+        <div class="controls">
+            <button type="button" class="btn" id="userCvSubmit">Confirm</button>
+            <button type="button" class="btn" id="userCvCancle">Cancel</button>
+            <img src="{{asset('img/loadingfacebox.gif')}}" id="userAddJobImg" style="display: none;float: right;"/>
+        </div>
+    </div>
+</form>
+
+{% else %}
+<form class="form-horizontal">
+    <div class="control-group">
+        <label class="control-label">{{user_does_not_have_cv_message}}</label>
+    </div>
+</form>
 {% endif %}

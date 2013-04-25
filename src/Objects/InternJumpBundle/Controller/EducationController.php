@@ -279,11 +279,13 @@ class EducationController extends ObjectsController {
             }
             $em->persist($entity);
             $em->flush();
-            return $this->redirect($this->generateUrl('student_task', array('loginName' => $user->getLoginName())));
+            return $this->redirect($this->generateUrl('education_edit', array('id' => $entity->getId())));
         }
         return $this->render('ObjectsInternJumpBundle:Education:new.html.twig', array(
                     'entity' => $entity,
-                    'form' => $form->createView()
+                    'form' => $form->createView(),
+                    'formName' => $this->container->getParameter('studentAddEducation_FormName'),
+                    'formDesc' => $this->container->getParameter('studentAddEducation_FormDesc'),
                 ));
     }
 
@@ -361,6 +363,8 @@ class EducationController extends ObjectsController {
                     'entity' => $entity,
                     'form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),
+                    'formName' => $this->container->getParameter('studentEditEducation_FormName'),
+                    'formDesc' => $this->container->getParameter('studentEditEducation_FormDesc'),
                 ));
     }
 

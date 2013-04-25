@@ -32,12 +32,11 @@ class CompanyRepository extends EntityRepository {
             $page--;
             $mainQuery = '
                 FROM ObjectsInternJumpBundle:Company c
-                JOIN c.professions p
                 WHERE c.name LIKE :queryString
                 AND c.locked = 0
                 AND c.enabled = 1';
             $parameters = array('queryString' => "%$queryString%");
-            $query = $this->getEntityManager()->createQuery("SELECT c, p $mainQuery ORDER BY c." . $orderBy . " $orderDirection")->setParameters($parameters);
+            $query = $this->getEntityManager()->createQuery("SELECT c $mainQuery ORDER BY c." . $orderBy . " $orderDirection")->setParameters($parameters);
             $countQuery = $this->getEntityManager()->createQuery("SELECT COUNT(c.id) $mainQuery")->setParameters($parameters);
             $query->setFirstResult($page * $maxResults);
             $query->setMaxResults($maxResults);
