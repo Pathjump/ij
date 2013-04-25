@@ -78,7 +78,7 @@
                                         {{ form_widget(employmentHistory.title, {'attr': {'class': 'span12'} }) }}
 
                                         <span style="display: inline-block;margin-bottom: 13px;">
-                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
                                         </span>
 
                                         {% if form_errors(employmentHistory.title) %}
@@ -108,7 +108,7 @@
                                         {{ form_widget(employmentHistory.startedFrom, {'attr': {'class': 'span12 employmentStartedFrom'} }) }}
 
                                         <span style="display: inline-block;margin-bottom: 13px;">
-                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
                                         </span>
 
                                         {% if form_errors(employmentHistory.startedFrom) %}
@@ -142,7 +142,7 @@
                                         {{ form_widget(employmentHistory.companyName, {'attr': {'class': 'span12'} }) }}
 
                                         <span style="display: inline-block;margin-bottom: 13px;">
-                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
                                         </span>
 
                                         {% if form_errors(employmentHistory.companyName) %}
@@ -233,7 +233,7 @@
             {{ form_widget(form.employmentHistories.vars.prototype.title, {'attr': {'class': 'span12'} }) }}
 
             <span style="display: inline-block;margin-bottom: 13px;">
-                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
             </span>
         </div>
 
@@ -249,7 +249,7 @@
             {{ form_widget(form.employmentHistories.vars.prototype.startedFrom, {'attr': {'class': 'span12 employmentStartedFrom'} }) }}
 
             <span style="display: inline-block;margin-bottom: 13px;">
-                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
             </span>
         </div>
 
@@ -265,7 +265,7 @@
             {{ form_widget(form.employmentHistories.vars.prototype.companyName, {'attr': {'class': 'span12'} }) }}
 
             <span style="display: inline-block;margin-bottom: 13px;">
-                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
             </span>
         </div>
 

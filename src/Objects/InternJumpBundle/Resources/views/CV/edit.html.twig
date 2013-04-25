@@ -65,7 +65,7 @@
                                     {{ form_widget(form.name, {'attr': {'class': 'span12'} }) }}
 
                                     <span style="display: inline-block;margin-bottom: 13px;">
-                                        <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                        <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
                                     </span>
 
                                     {% if form_errors(form.name) %}
@@ -80,7 +80,7 @@
                                     {{ form_widget(form.objective, {'attr': {'class': 'span12'} }) }}
 
                                     <span style="display: inline-block;margin-bottom: 13px;">
-                                        <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                        <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
                                     </span>
 
                                     {% if form_errors(form.objective) %}
