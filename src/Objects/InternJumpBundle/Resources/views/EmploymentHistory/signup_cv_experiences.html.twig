@@ -44,11 +44,11 @@
             <div class="Student">
 
                 <ul class="nav nav-tabs">
-                    <li><a href="#">Education</a></li>
-                    <li><a href="#">Languages</a></li>
-                    <li><a href="#">Objectives</a></li>
-                    <li><a href="#">Skills</a></li>
-                    <li class="active"><a href="#">Experience</a></li>
+                    <li><a href="{{ path('signup_education') }}">Education</a></li>
+                    <li><a href="{{ path('signup_language') }}">Languages</a></li>
+                    <li><a href="{{ path('signup_cv') }}">Objectives</a></li>
+                    <li><a href="{{ path('signup_cv_skills') }}">Skills</a></li>
+                    <li class="active"><a href="{{ path('signup_cv_experience') }}">Experience</a></li>
                     <li class="pull-right span3"><h3>Resume Complitness</h3></li>
                 </ul>
 
@@ -209,19 +209,7 @@
                     </div><!--span 9-->
 
                     <div class="span4">
-                        <div class=" alert alert-success">
-                            <div class="text-success"><strong class="orange">25%</strong>  of your Resume is completed Successfully.</div>
-                        </div><!--alert-->
-
-                        <div class="progress progress-info progress-striped">
-                            <div class="bar" style="width: 25%"></div>
-                        </div>
-
-                        <div class="muted">
-                            <span class="label label-important">Important</span>
-                            You should complete your resume so you could to increase your oppertiunities
-                        </div>
-
+                        {% render "ObjectsInternJumpBundle:Task:userMeter" %}
                     </div>
 
                 </div><!--row-fluid show-grid-->
