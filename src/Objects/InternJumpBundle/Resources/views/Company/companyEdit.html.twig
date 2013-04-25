@@ -3,6 +3,7 @@
 
 {% block stylesheets %}
 {{parent()}}
+<link href="{{ asset('css/jquery.alerts.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('css/jquery-ui-1.8.24.custom.css') }}" rel="stylesheet" type="text/css"/>
 <style>
@@ -350,6 +351,7 @@
         <script src="{{asset('bundles/objectsinternjump/js/companySignup.js')}}"></script>
         <script src="{{asset('bundles/objectsinternjump/js/cityAutoComplete.js')}}"></script>
         <script src="{{asset('js/tooltip/tooltip.js')}}"></script>
+        <script src="{{ asset('js/jquery.alerts.js') }}"></script>
         <script>
         $(document).ready(function() {
             $('#form_url').click(function() {

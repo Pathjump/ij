@@ -67,7 +67,7 @@ class InternshipController extends Controller {
             $companyJobs = $internshipRepo->getCompanyJobs($company->getId(), $page, $itemsPerPage, FALSE);
         }
 
-        //all questionsCount 
+        //all questionsCount
         //check if the owner company
         $companyHiredUsers = array();
         $hiredUsersJobsArray = array();
@@ -127,7 +127,7 @@ class InternshipController extends Controller {
                     'companyInterests' => $companyInterests,
                     'companyInterviews' => $companyInterviews,
                     'ownerCompanyFlag' => $ownerCompanyFlag
-                ));
+        ));
     }
 
     /**
@@ -148,7 +148,7 @@ class InternshipController extends Controller {
                         'message' => $message,));
         } else {
             //check if not the owner company
-            //so will check for job active or not 
+            //so will check for job active or not
             if (FALSE === $this->get('security.context')->isGranted('ROLE_COMPANY') || $this->get('security.context')->getToken()->getUser()->getId() != $entity->getCompany()->getId()) {
                 $todayDate = new \DateTime('today');
                 if (!$entity->getActive() || $entity->getActiveTo() < $todayDate || $entity->getActiveFrom() > $todayDate) {
@@ -212,11 +212,11 @@ class InternshipController extends Controller {
                     'jobCategories' => $jobCategories,
                     'job_added_before_message' => $this->container->getParameter('job_added_before_message_show_job_page'),
                     'job_apply_success_message' => $this->container->getParameter('job_apply_success_message_show_job_page')
-                ));
+        ));
     }
 
     /**
-     * this function will get all countries json 
+     * this function will get all countries json
      * @author Ahmed
      */
     public function getAllCountriesAction() {
@@ -286,7 +286,7 @@ class InternshipController extends Controller {
         try {
             $em->flush();
         } catch (\Exception $e) {
-            
+
         }
     }
 
@@ -327,7 +327,7 @@ class InternshipController extends Controller {
 
         //Get State Repo
         $stateRepo = $em->getRepository('ObjectsInternJumpBundle:State');
-        //Get The NewYork State which is decided to be set as a default state 
+        //Get The NewYork State which is decided to be set as a default state
         $defaultState = $stateRepo->findOneBy(array('slug' => 'new_york'));
         //Get the default state id to set it in the script chesen
         $defaultStateID = $defaultState->getId();
@@ -373,15 +373,15 @@ class InternshipController extends Controller {
         );
         //create a add new job form
         $form = $this->createFormBuilder($entity, array('validation_groups' => $formValidationGroups))
-                ->add('positionType', 'choice', array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'expanded' => true))
-                ->add('workLocation', 'choice', array('choices' => array('Office' => 'Office', 'Virtual' => 'Virtual', 'Doesn’t Matter' => 'Doesn’t Matter'), 'expanded' => true))
+                ->add('positionType', 'choice', array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level')))
+                ->add('workLocation', 'choice', array('choices' => array('Office' => 'Office', 'Virtual' => 'Virtual', 'Doesn’t Matter' => 'Doesn’t Matter')))
                 ->add('minimumGPA', 'choice', array('choices' => $minimumGPAArray))
                 ->add('numberOfOpenings', 'choice', array('choices' => $numberOfOpeningsArray))
                 ->add('sessionPeriod', 'choice', array('choices' => $sessionPeriodArray))
                 ->add('activeFrom', 'date', array('attr' => array('class' => 'activeFrom'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('activeTo', 'date', array('attr' => array('class' => 'activeTo'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('title')
-                ->add('skills', null, array('required' => FALSE,'attr' => array('class' => 'chzn-select','style' => 'width:310px;')))
+                ->add('skills', null, array('required' => FALSE))
 //                ->add('keywords', 'text', array('required' => FALSE))
                 ->add('compensation')
                 ->add('description', null, array('required' => FALSE))
@@ -391,7 +391,7 @@ class InternshipController extends Controller {
                     'choices' => $allCountriesArray,
                     'preferred_choices' => array($company->getCountry()),
                 ))
-                ->add('city', NULL, array('attr' => array('style' => 'width:310px;')))
+                ->add('city')
                 ->add('state', 'choice', array('empty_value' => '--- choose state ---', 'required' => false))
                 ->add('address', 'text')
                 ->add('zipcode')
@@ -410,7 +410,7 @@ class InternshipController extends Controller {
 
                 //check for keywords
                 $keywrodsRepo = $em->getRepository('ObjectsInternJumpBundle:Keywords');
-                
+
                 if ($request->get('keywords')) {
                     //expload the keywords
                     $keywordsArray = explode(',', $request->get('keywords'));
@@ -493,7 +493,7 @@ class InternshipController extends Controller {
                     'formName' => $this->container->getParameter('companyAddJob_FormName'),
                     'formDesc' => $this->container->getParameter('companyAddJob_FormDesc'),
                     'defaultStateName' => $defaultStateName,
-                ));
+        ));
     }
 
     /**
@@ -571,6 +571,13 @@ class InternshipController extends Controller {
             $index--;
         }
 
+        //check for langauge
+        //add one langauge entity to the internship
+        if (sizeof($entity->getLanguages()) < 1) {
+            $newInternshipLanguage = new \Objects\InternJumpBundle\Entity\InternshipLanguage();
+            $entity->addInternshipLanguage($newInternshipLanguage);
+        }
+        
         //create a add new job form
         $editForm = $this->createFormBuilder($entity, array('validation_groups' => $formValidationGroups))
                 ->add('positionType', 'choice', array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'expanded' => true))
@@ -582,7 +589,7 @@ class InternshipController extends Controller {
                 ->add('activeTo', 'date', array('attr' => array('class' => 'activeTo'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('title')
 //                ->add('keywords', null, array('required' => FALSE))
-                ->add('skills', null, array('required' => FALSE,'attr' => array('class' => 'chzn-select','style' => 'width:310px;')))
+                ->add('skills', null, array('required' => FALSE, 'attr' => array('class' => 'chzn-select', 'style' => 'width:310px;')))
                 ->add('compensation')
                 ->add('description', null, array('required' => FALSE))
                 ->add('requirements')
@@ -653,7 +660,7 @@ class InternshipController extends Controller {
                     'map_change_location_message' => $this->container->getParameter('map_change_location_message_new_job_page'),
                     'formName' => $this->container->getParameter('companyEditJob_FormName'),
                     'formDesc' => $this->container->getParameter('companyEditJob_FormDesc'),
-                ));
+        ));
     }
 
     /**
@@ -799,7 +806,7 @@ class InternshipController extends Controller {
         return $this->render('ObjectsInternJumpBundle:Internship:userCvs.html.twig', array(
                     'allUserCvs' => $allUserCvs,
                     'user_does_not_have_cv_message' => $this->container->getParameter('user_does_not_have_cv_message')
-                ));
+        ));
     }
 
 }

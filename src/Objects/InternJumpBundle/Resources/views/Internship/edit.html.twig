@@ -1,210 +1,16 @@
 {% extends '::base.html.twig' %}
 {% block title %}Edit job{% endblock %}
 
+{% block pageTitle %}employers Edit JOB{% endblock %}
+
 {% block stylesheets %}
 {{parent()}}
+<link href="{{ asset('css/jquery.alerts.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('css/jquery-ui-1.8.24.custom.css') }}" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
 {% block body %}
-
-<section id="addJob">
-    <div class="wrapper">
-        <div id="loading"><img src="{{asset('img/followLoader.gif')}}" width="35" height="35"></div>
-
-        <!--form Name-->
-        <h1>{%if formName%}{{formName}}{%endif%}:</h1>
-        <hr>
-        <div class="addJobWrapper">
-            <form action="{{ path('internship_edit', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
-                <!--form Desc-->
-                <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
-                {% if form_errors(edit_form) %}
-                <span class="alert">
-                {{ form_errors(edit_form) }}
-                    </span>
-                {% endif %}
-
-                    <aside>
-                        <label>Job title</label>
-                    {{ form_widget(edit_form.title) }}
-                        <span class="miniError">{{ form_errors(edit_form.title) }}</span>
-                        <br>
-                        
-                        <label>Session Period</label>
-                    {{ form_widget(edit_form.sessionPeriod,{'attr' : {'class' :  'chzn-select','style' : 'width:310px;'}}) }}
-                        <span class="miniError">{{ form_errors(edit_form.sessionPeriod) }}</span>
-                        <br>
-
-                        <label>Position type</label>
-                    {{ form_widget(edit_form.positionType) }}
-                        <span class="miniError">{{ form_errors(edit_form.positionType) }}</span>
-                        <br>
-                        
-                        <label>Minimum GPA</label>
-                    {{ form_widget(edit_form.minimumGPA,{'attr' : {'class' :  'chzn-select','style' : 'width:310px;'}}) }}
-                        <span class="miniError">{{ form_errors(edit_form.minimumGPA) }}</span>
-                        <br>
-
-                        <label>Number of openings</label>
-                    {{ form_widget(edit_form.numberOfOpenings,{'attr' : {'class' :  'chzn-select','style' : 'width:310px;'}}) }}
-                        <span class="miniError">{{ form_errors(edit_form.numberOfOpenings) }}</span>
-                        <br>
-
-
-                        <label>Category</label>
-                    {{ form_widget(edit_form.categories,{'attr' : {'class' :  'chzn-select','style' : 'width:310px;'}}) }}
-                        <span class="miniError">{{ form_errors(edit_form.categories) }}</span>
-                        <br>
-
-                        <label>Active From</label>
-                    {{ form_widget(edit_form.activeFrom) }}
-                        <span class="miniError">{{ form_errors(edit_form.activeFrom) }}</span>
-                        <br>
-
-
-                        <label>Active To</label>
-                    {{ form_widget(edit_form.activeTo) }}
-                        <span class="miniError">{{ form_errors(edit_form.activeTo) }}</span>
-                        <br>
-
-                        <label>Active ?</label>
-                        <div class="onoffswitch">
-                        {{ form_widget(edit_form.active,{'attr' : {'class' :  'onoffswitch-checkbox'}}) }}
-                                <label class="onoffswitch-label" for="form_active">
-                                    <div class="onoffswitch-inner">
-                                        <div class="onoffswitch-active">ON</div>
-                                        <div class="onoffswitch-inactive">OFF</div>
-                                    </div>
-                                    <div class="onoffswitch-switch"></div>
-                                </label>
-                            </div>
-                        </aside>
-
-                        <aside>
-                            <label>Address</label>
-                    {{ form_widget(edit_form.address) }}
-                            <span class="miniError">{{ form_errors(edit_form.address) }}</span>
-                            <br>
-                            
-                            <label>Keywords</label>
-                    <input type="text" name="keywords" id="keywords" value="{{keywordsString}}"/>
-                            <br>
-
-                            <label>Work Location</label>
-                    {{ form_widget(edit_form.workLocation) }}
-                        <span class="miniError">{{ form_errors(edit_form.workLocation) }}</span>
-                        <br>
-                        
-                        <label>Skills</label>
-                    {{ form_widget(edit_form.skills) }}
-                        <span class="miniError">{{ form_errors(edit_form.skills) }}</span>
-                        <br>
-                        
-                        <label>Compensation</label>
-                    {{ form_widget(edit_form.compensation) }}
-                        <span class="miniError">{{ form_errors(edit_form.compensation) }}</span>
-                        <br>
-                        
-                            <label>City</label>
-                    {{ form_widget(edit_form.city) }}
-                            <span class="miniError">{{ form_errors(edit_form.country) }}</span>
-                            <br>
-
-                            <label>State</label>
-                    {{ form_widget(edit_form.state,{'attr' : {'class' :  'chzn-select','style' : 'width:310px;'}}) }}
-                            <span class="miniError">{{ form_errors(edit_form.country) }}</span>
-                            <br>
-
-                            <label>ZIP Code</label>
-                    {{ form_widget(edit_form.zipcode) }}
-                            <!--
-                            <a href="javascript:void(0)" id="getMyPosition">get my position</a>
-                            <img src="{{asset('img/loadingfacebox.gif')}}" id="getMyPositionImg" style="display: none;"/>
-                            -->
-                            <span class="miniError">{{ form_errors(edit_form.zipcode) }}</span>
-                            <br>
-
-                            <label>Country</label>
-                    {{ form_widget(edit_form.country,{'attr' : {'class' :  'chzn-select','style' : 'width:310px;'}}) }}
-                            <span class="miniError">{{ form_errors(edit_form.country) }}</span>
-                            <br>
-
-                            <label>Requirments</label>
-                    {{ form_widget(edit_form.requirements) }}
-                            <span class="miniError">{{ form_errors(edit_form.requirements) }}</span>
-                            <br>
-                        </aside>
-
-                        <aside> 
-                            <label>Description</label>
-                    {{ form_widget(edit_form.description, {'attr': {'style': 'height:328px;width:906px; position: relative; z-index: 2' } }) }}
-                            <span class="miniError">{{ form_errors(edit_form.description) }}</span>
-                            <br>
-                        </aside>
-
-                        <div id="getMyPosition" class="position" href="javascript:void(0)"><span></span><a href="javascript:void(0)">Update map position</a></div>
-                        <img class="positionLoader" src="{{asset('img/loadingfacebox.gif')}}" id="getMyPositionImg" style="display: none;"/>
-
-                        <div class="onMap">
-                            <span class="ico"></span>
-                            <h2>Your Internship on map :</h2>
-                            <div class="map">
-                                <div id="map_canvas" style="height:328px;width:906px;"></div>
-                            </div>
-                        </div>
-                        
-                        <aside> 
-                            <label>Languages</label>
-                            <div class="btns">
-                                Click "<strong>+</strong>" to add another language / "<strong>-</strong>" to remove last added language&nbsp;&nbsp;&nbsp;
-                                <input type="button" id="btnAdd" value="+" />
-                                <input disabled="disabled" type="button" id="btnDel" value="-" />
-                            </div>
-
-                            <div class="langaugesContainer">
-        {% for oneLanguage in edit_form.languages %}
-                                    <div class="newLangauge">
-                            {% if not loop.first %}
-                                            <a class="subDelete" href="javascript:void(0);" onclick="deleteSubForm(this);">-</a>
-                            {% endif %}
-                                            <table>
-                                                <tr>
-                                                    <td>Language</td>
-                                                    <td>{{ form_widget(oneLanguage.language,{'attr' : {'class' :  'chzn-select','style' : 'width:310px;'}}) }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Spoken</td>
-                                                    <td>{{ form_widget(oneLanguage.spokenFluency) }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Written</td>
-                                                    <td>{{ form_widget(oneLanguage.writtenFluency) }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Read</td>
-                                                    <td>{{ form_widget(oneLanguage.readFluency) }}</td>
-                                                </tr>
-                                            </table>
-                                        </div>
-        {% endfor %}
-                                    </div>
-                                </aside>
-
-                {{ form_widget(edit_form.Latitude) }}
-                {{ form_widget(edit_form.Longitude) }}
-
-                {{ form_rest(edit_form) }}
-                        <div class="btns">
-                            <button id="submit" type="submit" name="create" class="submit" style="float: none; width: 200px; height: 50px; "><b>Edit</b></button>
-                        </div>
-
-                    </form>
-                </div>
-
-            </div>
-        </section>
 
 {% endblock %}
 
@@ -244,9 +50,9 @@
                     function deleteSubForm(currentElement) {
                         $(currentElement).parent().remove();
                     }
-                
+
                     ///////////////////////////////////////////
-                    
+
         var jobCity = '{{entity.city}}';
         var jobState = '{{entity.state}}';
         var latitude = '{{entity.Latitude}}';
@@ -279,9 +85,9 @@
                     $('.chzn-select').livequery(function() {
                         $(this).chosen();
                     });
-        
+
             ////////////////////////////////////////////
-            
+
             setInterval(function(){
                 //Loader Script
                 $('#loading').width($('#loading').parent().width());
@@ -297,14 +103,14 @@
                 allow_single_deselect:true
             });
            initialize();
-   
+
            //add ckeditor
                     var editor = CKEDITOR.editor.replace('form_description');
                     $('#submit').click(function(){
                              var content = editor.getData();
                              //set update job description textarea with the ckeditor value
                              $('textarea#form_description').val(content);
-             
+
                          });
         });
             </script>
