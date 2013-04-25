@@ -32,7 +32,6 @@ class CompanyRepository extends EntityRepository {
             $page--;
             $mainQuery = '
                 FROM ObjectsInternJumpBundle:Company c
-                JOIN c.professions p
                 WHERE c.name LIKE :queryString
                 AND c.locked = 0
                 AND c.enabled = 1';
