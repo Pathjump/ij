@@ -46,6 +46,7 @@
 
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#">Education</a></li>
+                    <li><a href="#">Languages</a></li>
                     <li><a href="#">Objectives</a></li>
                     <li><a href="#">Skills</a></li>
                     <li><a href="#">Experience</a></li>
@@ -57,19 +58,20 @@
                     <div class="span8">
                         <form class="company-form" action="{{ path('signup_education') }}" method="post">
                             <legend><h2>{% if formName %}{{ formName }}{% endif %}</h2></legend>
-
                             <fieldset>
                                 <p>{% if formDesc %}{{ formDesc }}{% endif %}</p>
-                                <button type="button" id="btnAdd" class="btn pull-right">Add</button>
+                                <div class="Add-links">
+                                    <a href="javascript:void(0)" title="Add" class="add-btn btnAdd"></a>
+                                </div><!--Add-links-->
                             </fieldset>
 
                             {% for education in form.educations %}
-                            <fieldset class="oneSection">
+                            <fieldset>
                                 <hr class="divider"/>
                                 {% if not loop.first %}
-                                <div class="controls row-fluid show-grid">
-                                    <button type="button" class="btn btn-danger pull-right" onclick="deleteSubForm(this);">Remove</button>
-                                </div>
+                                <div class="Add-links">
+                                    <a href="javascript:void(0)" title="Remove" onclick="deleteSubForm(this);" class="Remove-btn"></a>
+                                </div><!--Add-links-->
                                 {% endif %}
                                 <div class="controls  row-fluid show-grid">
                                     <div class="span6">
@@ -282,11 +284,11 @@
 {% block javascripts %}
 {% set formElementHTML %}
 {% spaceless %}
-<fieldset class="oneSection">
+<fieldset>
     <hr class="divider"/>
-    <div class="controls row-fluid show-grid">
-        <button type="button" class="btn btn-danger pull-right" onclick="deleteSubForm(this);">Remove</button>
-    </div>
+    <div class="Add-links">
+        <a href="javascript:void(0)" title="Remove" onclick="deleteSubForm(this);" class="Remove-btn"></a>
+    </div><!--Add-links-->
     <div class="controls  row-fluid show-grid">
         <div class="span6">
             <label>School</label>
@@ -404,6 +406,9 @@
         });
     }
     $(document).ready(function() {
+        $('.select-box select').livequery(function() {
+            $(this).selectbox();
+        });
         $('.underGraduate input').livequery(function() {
             $(this).change(toggleGraduateDegree);
         });
@@ -424,7 +429,7 @@
                 source: "{{ path('education_undergraduate_degrees', {'for': 'undergraduate'})}}"
             });
         });
-        $('#btnAdd').click(function() {
+        $('.btnAdd').click(function() {
             var tempHtml = formElementHTML;
             var subFormNumbers = [];
             $('[name^="form[educations]"]').each(function(){
