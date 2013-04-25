@@ -74,7 +74,7 @@
                                         {{ form_widget(skill.title, {'attr': {'class': 'skillsTitles span11'} }) }}
 
                                         <span style="display: inline-block;margin-bottom: 13px;">
-                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
                                         </span>
 
                                         {% if form_errors(skill.title) %}
@@ -128,7 +128,7 @@
             {{ form_widget(form.skills.vars.prototype.title, {'attr': {'class': 'skillsTitles span11'} }) }}
 
             <span style="display: inline-block;margin-bottom: 13px;">
-                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
             </span>
         </div>
 

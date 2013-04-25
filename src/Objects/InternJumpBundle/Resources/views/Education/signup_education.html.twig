@@ -81,7 +81,7 @@
                                         {{ form_widget(education.schoolName, {'attr': {'class': 'span12'} }) }}
 
                                         <span style="display: inline-block;margin-bottom: 13px;">
-                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
                                         </span>
 
                                         {% if form_errors(education.schoolName) %}
@@ -97,7 +97,7 @@
                                         {{ form_widget(education.underGraduate, {'attr': {'class': 'underGraduate radio inline'} }) }}
 
                                         <span style="display: inline-block;margin-bottom: 13px;">
-                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
                                         </span>
 
                                         {% if form_errors(education.underGraduate) %}
@@ -188,7 +188,7 @@
                                         {{ form_widget(education.startDate) }}
 
                                         <span style="display: inline-block;margin-bottom: 13px;">
-                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
                                         </span>
 
                                         {% if form_errors(education.startDate) %}
@@ -203,7 +203,7 @@
                                         {{ form_widget(education.endDate) }}
 
                                         <span style="display: inline-block;margin-bottom: 13px;">
-                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
                                         </span>
 
                                         {% if form_errors(education.endDate) %}
@@ -285,7 +285,7 @@
             {{ form_widget(form.educations.vars.prototype.schoolName, {'attr': {'class': 'span12'} }) }}
 
             <span style="display: inline-block;margin-bottom: 13px;">
-                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
             </span>
         </div>
 
@@ -294,7 +294,7 @@
             {{ form_widget(form.educations.vars.prototype.underGraduate, {'attr': {'class': 'underGraduate radio inline'} }) }}
 
             <span style="display: inline-block;margin-bottom: 13px;">
-                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
             </span>
         </div>
     </div>
@@ -336,7 +336,7 @@
             {{ form_widget(form.educations.vars.prototype.startDate) }}
 
             <span style="display: inline-block;margin-bottom: 13px;">
-                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
             </span>
         </div>
         <div class="span6 select-box">
@@ -344,7 +344,7 @@
             {{ form_widget(form.educations.vars.prototype.endDate) }}
 
             <span style="display: inline-block;margin-bottom: 13px;">
-                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
             </span>
         </div>
     </div>

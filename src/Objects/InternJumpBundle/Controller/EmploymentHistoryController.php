@@ -114,11 +114,13 @@ class EmploymentHistoryController extends ObjectsController {
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($entity);
             $em->flush();
-            return $this->redirect($this->generateUrl('student_task', array('loginName' => $user->getLoginName())));
+            return $this->redirect($this->generateUrl('employmenthistory_edit', array('id' => $entity->getId())));
         }
         return $this->render('ObjectsInternJumpBundle:EmploymentHistory:new.html.twig', array(
                     'entity' => $entity,
-                    'form' => $form->createView()
+                    'form' => $form->createView(),
+                    'formName' => $this->container->getParameter('studentAddEmpHistory_FormName'),
+                    'formDesc' => $this->container->getParameter('studentAddEmpHistory_FormDesc'),
                 ));
     }
 
@@ -190,6 +192,8 @@ class EmploymentHistoryController extends ObjectsController {
                     'entity' => $entity,
                     'form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),
+                    'formName' => $this->container->getParameter('studentEditEmpHistory_FormName'),
+                    'formDesc' => $this->container->getParameter('studentEditEmpHistory_FormDesc'),
                 ));
     }
 
