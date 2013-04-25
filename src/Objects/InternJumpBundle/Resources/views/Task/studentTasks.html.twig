@@ -14,7 +14,7 @@
 {% endblock %}
 
 
-
+{% block pageTitle %}{{app.user.loginName}}'s profile{% endblock %}
 
 {% block subcatego %}
 <div class="container">
@@ -34,7 +34,7 @@
 {% endblock %}
 
 {% block body %}
-        {% block pageTitle %}{{app.user.loginName}}'s profile{% endblock %}
+
 {% if is_granted('ROLE_USER') %}
         <div class="container Main-content">
 
