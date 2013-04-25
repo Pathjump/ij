@@ -2,93 +2,118 @@
 
 {% block title %}Resume First Step{% endblock %}
 
+{% block pageTitle %}Resume First Step{% endblock %}
+
 {% block stylesheets %}
-<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
-<link href="{{ asset('css/simpletabs.css') }}" rel="stylesheet" type="text/css"/>
+{{ parent() }}
 <style>
     #tooltip{color:#444;font-size:12px;text-shadow:1px 1px 0 #fff;border:1px solid #666;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;background-repeat:repeat-x;background-position:left top;background-color:#D7D7D7;-moz-box-shadow:0 0 4px #bbb;-webkit-box-shadow:0 0 4px #bbb;box-shadow:0 0 4px #bbb;line-height:1.2em;position:absolute;z-index:100000;display:none;padding:5px}
 </style>
 {% endblock %}
 
 {% block body %}
-<section id="student-01">
-    <div class="wrapper">
-        <h1>FOR STUDENTS<div></div></h1>
 
-        <div class="simpleTabs">
-            <ul class="simpleTabsNavigation">
-                <li><a class="current">Step 1</a></li>
-                <li><a>Step 2</a></li>
-                <li><a>Step 3</a></li>
-                <li><a>Step 4</a></li>
-            </ul>
-
-            <div class="simpleTabsContent" style="display: block;">
-                {% if app.session.hasFlash('notice') %}
-                <span class="alert fail">
-                {{ app.session.flash('notice') | raw }}
-                </span>
-                {% endif %}
-                {% if app.session.hasFlash('success') %}
-                <span class="alert success">
-                {{ app.session.flash('success') | raw }}
-                </span>
-                {% endif %}
-                {% if app.session.hasFlash('error') %}
-                <span class="alert error">
-                {{ app.session.flash('error') | raw }}
-                </span>
-                {% endif %}
-                {% if form_errors(form) %}
-                <span class="alert error">
-                {{ form_errors(form) }}
-                </span>
-                {% endif %}
-                <!--form Name-->
-                <h1>{%if formName%}{{formName}}{%endif%} <strong>{%if formName%}{{formName1}}{%endif%}</strong>:</h1>
-                <!--form Desc-->
-                <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
-
-                <form action="{{ path('signup_cv') }}" method="post" {{ form_enctype(form) }}>
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                        <tr>
-                            <td width="160" class="top"><label>Resume Title: <span style="margin-left: 10px;"><img class="tooltip" title="Use a creative title for your resume" src="{{asset('js/tooltip/tooltip.png')}}"></span></label></td>
-                            <td>{{ form_widget(form.name) }}{% if form_errors(form.name) %}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="triangle-border left">{{ form_errors(form.name) }}</span>{% endif %}<br/></td>
-                        </tr>
-                        <tr>
-                            <td width="160" class="top"><label>Objectives: <span style="margin-left: 10px;"><img class="tooltip" title="Consider two factors as you set the objectives for your internship: 1) What is your basic goal for taking on the internship? 2) •    Define what has to happen during the internship for you to know that you have fulfilled your basic goal?" src="{{asset('js/tooltip/tooltip.png')}}"></span></label></td>
-                            <td>{{ form_widget(form.objective) }}{% if form_errors(form.objective) %}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="triangle-border left">{{ form_errors(form.objective) }}</span>{% endif %}<br/>
-                            Examples of Objectives Include: <br>
-							<em>To Learn the primary skills of financial industry<br>
-							To clarify the primary responsibilities of a film producer<br>
-							To understand the education background of being a programmer at an internet start-up</em>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td width="160" class="top"><label>I Am Interested In Interning in…:</label></td>
-                            <td>{{ form_widget(form.categories) }}{% if form_errors(form.categories) %}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="triangle-border left">{{ form_errors(form.categories) }}</span>{% endif %}<br/></td>
-                        </tr>
-                    </table>
-
-                    {{ form_rest(form) }}
-
-                    <button style="float: right; margin-top: 20px;" class="submit" type="submit" title="{% trans %}Next{% endtrans %}">{% trans %}Next{% endtrans %}</button>
-                    <div class="clear"></div>
-                </form>
-            </div>
+        {% if app.session.hasFlash('notice') %}
+        <div class="alert">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('notice') | raw }}
         </div>
-    </div>
-</section>
+        {% endif %}
+
+        {% if app.session.hasFlash('success') %}
+        <div class="alert alert-success">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('success') | raw }}
+        </div>
+        {% endif %}
+
+        {% if app.session.hasFlash('error') %}
+        <div class="alert alert-error">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('error') | raw }}
+        </div>
+        {% endif %}
+
+        {% if form_errors(form) %}
+        <div class="alert alert-error">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ form_errors(form) }}
+        </div>
+        {% endif %}
+
+        <div class="container Main-content">
+
+            <div class="Student">
+
+                <ul class="nav nav-tabs">
+                    <li><a href="#">Education</a></li>
+                    <li><a href="#">Languages</a></li>
+                    <li class="active"><a href="#">Objectives</a></li>
+                    <li><a href="#">Skills</a></li>
+                    <li><a href="#">Experience</a></li>
+                    <li class="pull-right span3"><h3>Resume Complitness</h3></li>
+                </ul>
+
+                <div class="row-fluid show-grid">
+
+                    <div class="span8">
+                        <form class="company-form" action="{{ path('signup_cv') }}" method="post">
+                            <legend><h2>{% if formName %}{{ formName }}{% endif %}</h2></legend>
+                            <fieldset>
+                                <div class="controls">
+                                    <label>Resume Title</label>
+                                    {{ form_widget(form.name, {'attr': {'class': 'span12'} }) }}
+                                </div>
+                                <div class="controls">
+                                    <label>Objectives</label>
+                                    {{ form_widget(form.objective, {'attr': {'class': 'span12'} }) }}
+                                </div>
+                                <div class="controls">
+                                    <label>I Am Interested In Interning in</label>
+                                    {{ form_widget(form.categories) }}
+                                </div>
+                                <div class="controls">
+                                    <label>{{ form_label(form.isActive, 'Is Active') }}</label>
+                                    {{ form_widget(form.isActive) }}
+                                </div>
+                                <hr class="divider"/>
+                                <div class="controls ">
+                                    {{ form_rest(form) }}
+                                    <button type="submit" class="btn btn-primary pull-right">Next</button>
+                                </div>
+                            </fieldset>
+                        </form>
+
+                    </div><!--span 9-->
+
+                    <div class="span4">
+                        <div class=" alert alert-success">
+                            <div class="text-success"><strong class="orange">25%</strong>  of your Resume is completed Successfully.</div>
+                        </div><!--alert-->
+
+                        <div class="progress progress-info progress-striped">
+                            <div class="bar" style="width: 25%"></div>
+                        </div>
+
+                        <div class="muted">
+                            <span class="label label-important">Important</span>
+                            You should complete your resume so you could to increase your oppertiunities
+                        </div>
+
+                    </div>
+
+                </div><!--row-fluid show-grid-->
+
+            </div><!---Student --->
+        </div><!--container-->
 {% endblock %}
 
 {% block javascripts %}
-<script src="{{ asset('js/libs/chosen.jquery.min.js') }}" type="text/javascript"></script>
+{{ parent() }}
 <script src="{{asset('js/tooltip/tooltip.js')}}"></script>
 <script>
     $(document).ready(function() {
-        $('.chzn-select').chosen();
-        var stuTitleBar = $('#main .wrapper').width();
-        $('#student-01 > .wrapper h1 div').width(stuTitleBar-202);
+        $('input[type="checkbox"]').ezMark();
     });
 </script>
 {% endblock %}
