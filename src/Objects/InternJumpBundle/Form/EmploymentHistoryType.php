@@ -10,11 +10,11 @@ class EmploymentHistoryType extends AbstractType {
     public function buildForm(FormBuilder $builder, array $options) {
         $builder
                 ->add('title')
-                ->add('isCurrent', 'checkbox', array('required' => FALSE, 'label' => 'Current Position', 'attr' => array('class' => 'employmentIsCurrentJob')))
-                ->add('industry', 'entity', array('class' => 'ObjectsInternJumpBundle:CVCategory', 'required' => FALSE, 'attr' => array('class' => 'chzn-select')))
+                ->add('isCurrent', 'checkbox', array('required' => FALSE))
+                ->add('industry', 'entity', array('class' => 'ObjectsInternJumpBundle:CVCategory', 'required' => FALSE))
                 ->add('description', 'textarea', array('required' => FALSE))
-                ->add('startedFrom', 'date', array('attr' => array('class' => 'employmentStartedFrom'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
-                ->add('endedIn', 'date', array('required' => FALSE, 'attr' => array('class' => 'employmentEndedIn'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
+                ->add('startedFrom', 'date', array('widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
+                ->add('endedIn', 'date', array('required' => FALSE, 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('companyName')
                 ->add('companyUrl', 'url', array('required' => FALSE))
         ;
