@@ -9,7 +9,7 @@ class SkillType extends AbstractType {
 
     public function buildForm(FormBuilder $builder, array $options) {
         $builder
-                ->add('title', NULL, array('attr' => array('class' => 'skillsTitles')))
+                ->add('title')
         ;
     }
 
