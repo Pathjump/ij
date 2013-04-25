@@ -600,9 +600,9 @@ class CompanyController extends Controller {
                     'invalid_message' => "The passwords don't match",
                     'required' => false))
                 ->add('country', 'choice', array('choices' => $allCountriesArray,
-                    'preferred_choices' => array($company->getCountry()), 'attr' => array('class' => 'chzn-select', 'style' => 'width:312px;')))
-                ->add('city', NULL, array('attr' => array('style' => 'width:312px;')))
-                ->add('state', 'choice', array('required' => FALSE, 'attr' => array('class' => 'chzn-select', 'style' => 'width:312px;')))
+                    'preferred_choices' => array($company->getCountry()), 'attr' => array('class' => 'chzn-select')))
+                ->add('city')
+                ->add('state', 'choice', array('required' => FALSE, 'attr' => array('class' => 'chzn-select')))
                 ->add('address', 'text')
                 //->add('establishmentDate', 'date', array('attr' => array('class' => 'establishmentDate'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('email')
@@ -839,7 +839,7 @@ class CompanyController extends Controller {
         try {
             $em->flush();
         } catch (\Exception $e) {
-            
+
         }
     }
 
@@ -889,9 +889,9 @@ class CompanyController extends Controller {
                     'first_name' => 'Password',
                     'second_name' => 'RePassword',
                     'invalid_message' => "The passwords don't match"))
-                ->add('country', 'choice', array('preferred_choices' => array('US'), 'choices' => $allCountriesArray, 'attr' => array('class' => 'chzn-select', 'style' => 'width:312px;')))
-                ->add('city', NULL, array('attr' => array('style' => 'width:312px;')))
-                ->add('state', 'choice', array('required' => FALSE, 'attr' => array('class' => 'chzn-select', 'style' => 'width:312px;')))
+                ->add('country', 'choice', array('preferred_choices' => array('US'), 'choices' => $allCountriesArray, 'attr' => array('class' => 'chzn-select')))
+                ->add('city')
+                ->add('state', 'choice', array('required' => FALSE, 'attr' => array('class' => 'chzn-select')))
                 ->add('address', 'text')
                 //->add('establishmentDate', 'date', array('attr' => array('class' => 'establishmentDate'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('email', 'repeated', array(

@@ -1,50 +1,51 @@
-<div class="input select rating-a" id="meterPage" >
-    <h3>Profile Completeness:<a href="javascript:void(0)" class="detailsLink">show details</a></h3>
 
+<div class=" alert alert-success">
+    <div class="text-success"><strong class="orange">{{percent}}%</strong>  of your Resume is completed Successfully.</div>
+</div><!--alert-->
 
-                <div class="meterWrapper">
-                    <span class="progressBar" style="width:{{percent}}%;"> {{percent}}% Completed </span>
-                </div>
+<div class="progress progress-info progress-striped">
+    <div class="bar" style="width: {{percent}}%;"></div>
+</div>
 
-                <div class="moredetails">
-                <p class="crntPercent"><span> {{percent}} % </span><b>Your Profile is starting to look good!<br /> Complete your profile so you can get noticed by companies and receive more targeted internship matches. </b></p>
-                <ul class="tips">
+<div class="muted">
+    <span class="label label-important">Important</span>
+    You should complete your resume so you could to increase your oppertiunities<br>
                 {%if cvsFlag%}
-                    <li> <a href="{{path('cv_new')}}"><b><u>Create a new</u></b></a> Resume Or if you already have Resume, Activate it <span>20%</span> </li>
+                   <span class="label label-important">!</span> <a href="{{path('cv_new')}}"><b><u>Create a new</u></b></a> Resume Or if you already have Resume, Activate it <span>20%</span><br>
                 {%endif%}
 
                 {%if fNameFlag or lNameFlag or dobFlag or urlFlag or aboutFlag %}
-                    <li> Complete your <a href="{{path('user_edit')}}"><u><b>Profile</b></u></a> {#Data,({%if fNameFlag%}firstName{%endif%}{%if lNameFlag%}, lastName{%endif%}{%if aboutFlag%}, about{%endif%}{%if dobFlag%}, date of birth{%endif%}{%if urlFlag%}, url{%endif%})#} <span>20%</span></li>
+                   <span class="label label-important">!</span> Complete your <a href="{{path('user_edit')}}"><u><b>Profile</b></u></a> {#Data,({%if fNameFlag%}firstName{%endif%}{%if lNameFlag%}, lastName{%endif%}{%if aboutFlag%}, about{%endif%}{%if dobFlag%}, date of birth{%endif%}{%if urlFlag%}, url{%endif%})#} <span>20%</span><br>
                 {%endif%}
 
                 {%if eduFlag%}
-                    <li> <a href="{{path('education_new')}}"><b><u>Add Educations</u></b></a> to your Resume <span>10%</span></li>
+                    <span class="label label-important">!</span> <a href="{{path('education_new')}}"><b><u>Add Educations</u></b></a> to your Resume <span>10%</span><br>
                 {%endif%}
 
                 {%if expFlag%}
-                    <li> <a href="{{path('employmenthistory_new')}}"><b><u>Add Employment</u></b></a> History to your Resume <span>10%</span></li>
+                   <span class="label label-important">!</span> <a href="{{path('employmenthistory_new')}}"><b><u>Add Employment</u></b></a> History to your Resume <span>10%</span><br>
                 {%endif%}
 
                 {%if skilFlag%}
-                    <li> <a href={{path('addEditUserSkills')}}><u><b>Add Skills to your Resume </b></u></a><span>10%</span></li>
+                   <span class="label label-important">!</span> <a href={{path('addEditUserSkills')}}><u><b>Add Skills to your Resume </b></u></a><span>10%</span><br>
                 {%endif%}
 
                 {%if quizFlag%}
-                    <li> Complete your  <a href="{{path('internjumb_quiz')}}"><u><b>"InternJump Personality"</b></u></a> Quiz <span>10%</span></li>
+                   <span class="label label-important">!</span> Complete your  <a href="{{path('internjumb_quiz')}}"><u><b>"InternJump Personality"</b></u></a> Quiz <span>10%</span><br>
                 {%endif%}
 
                 {%if personalQuestionFlag%}
-                    <li> Complete your  <a href="{{path('personal_questions')}}"><u><b>"Personal Question"</b></u></a> Quiz <span>10%</span></li>
+                  <span class="label label-important">!</span> Complete your  <a href="{{path('personal_questions')}}"><u><b>"Personal Question"</b></u></a> Quiz <span>10%</span><br>
                 {%endif%}
-                    
+
                 {%if cvDescFlag%}
-                    <li> Describe yourself at  {%for cv in cvNamesArray%}<a href="{{path('cv_edit',{'id' : cv.id})}}"><b><u>{{cv.name}}</u> </b></a>{%endfor%} Resume(s) <span>10%</span></li>
+                    <span class="label label-important">!</span> Describe yourself at  {%for cv in cvNamesArray%}<a href="{{path('cv_edit',{'id' : cv.id})}}"><b><u>{{cv.name}}</u> </b></a>{%endfor%} Resume(s) <span>10%</span><br>
                 {%endif%}
-                    
+
                 {%if allSocial==""%}
                     {%if linked or facebook or twitter%}
-                        <li><a href="{{path('user_edit')}}"><u><b>Link your Profile</b></u></a> to your  
-                    
+                      <span class="label label-important">!</span>  <a href="{{path('user_edit')}}"><u><b>Link your Profile</b></u></a> to your
+
                     {%if linked%}
                             LinkedIn <span> 3%</span>
                     {%endif%}
@@ -54,14 +55,12 @@
                     {%if twitter%}
                             Twitter <span> 3%</span>
                     {%endif%}
-                        </li>
+
                     {%endif%}
+                            <br>
                 {%else%}
-                    <li><a href="{{path('user_edit')}}"><u><b>Link your Profile</b></u></a> to your social accounts <span> 9%</span></li>
+                   <span class="label label-important">!</span> <a href="{{path('user_edit')}}"><u><b>Link your Profile</b></u></a> to your social accounts <span> 9%</span><br>
                 {%endif%}
-                    
-                </ul>
-                </div>
 
 </div>
 

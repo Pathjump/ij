@@ -10,6 +10,31 @@ use Doctrine\ORM\EntityRepository;
  */
 class MessageRepository extends EntityRepository {
 
+        /**
+     * This Query to Get User's latest 3 Messages
+     * Used: in user portal page  [TaskController:studentAllTasksAction] AT studentTasks.html.twig
+     * @author Ola
+     */
+    public function getLatestThree($userId) {
+
+        $parmeters = array();
+
+        $parmeters ['id'] = $userId;
+
+        $query = "
+                SELECT m
+                FROM ObjectsInternJumpBundle:Message m
+                JOIN m.user u
+                WHERE u.id = :id
+                ORDER BY m.createdAt DESC
+                ";
+        $query = $this->getEntityManager()->createQuery($query);
+        $query->setParameters($parmeters);
+        $query->setMaxResults(3);
+
+        return $query->getResult();
+    }
+
     /**
      * this function is used to get the company messages
      * the main use in CompanyMessageController:getMessagesAction

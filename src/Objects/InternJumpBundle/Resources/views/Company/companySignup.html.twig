@@ -7,248 +7,341 @@
 <link href="{{ asset('css/jquery-ui-1.8.24.custom.css') }}" rel="stylesheet" type="text/css"/>
 
 <style>
-    #tooltip{color:#444;font-size:12px;text-shadow:1px 1px 0 #fff;border:1px solid #666;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;background-repeat:repeat-x;background-position:left top;background-color:#D7D7D7;-moz-box-shadow:0 0 4px #bbb;-webkit-box-shadow:0 0 4px #bbb;box-shadow:0 0 4px #bbb;line-height:1.2em;position:absolute;z-index:100000;display:none;padding:5px}
-</style>
+        #tooltip{color:#444;font-size:12px;text-shadow:1px 1px 0 #fff;border:1px solid #666;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;background-repeat:repeat-x;background-position:left top;background-color:#D7D7D7;-moz-box-shadow:0 0 4px #bbb;-webkit-box-shadow:0 0 4px #bbb;box-shadow:0 0 4px #bbb;line-height:1.2em;position:absolute;z-index:100000;display:none;padding:5px}
+    </style>
 {% endblock %}
 
+{% block pageTitle %}employers sign up{% endblock %}
+
 {% block body %}
-
-<section id="empSignup">
-    <div class="wrapper">
-
-
-        <h1>FOR EMPLOYERS<div style="width: 770px;"></div></h1>
-
-        <div class="comSignupWrapper">
-            <form action="{{ path('company_signup') }}" method="post" {{ form_enctype(form) }}>
-                <!--form Name-->
-                <h2>{%if formName%}{{formName}}{%endif%}:</h2>
-                <!--form Desc-->
-                <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
-                <br />
-                {% if form_errors(form) %}
-                <span class="alert">
-                    {{ form_errors(form) }}
-                </span>
-                {% endif %}
-
-                <label>Company Name:</label>
-                {{ form_widget(form.name) }}
-                {% if form_errors(form.name) %}
-                <span class="triangle-border left">{{ form_errors(form.name) }}</span>
-                {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
-                <br>
-
-                <label>Login Name:</label>
-                {{ form_widget(form.loginName) }}
-                {% if form_errors(form.loginName) %}
-                <span class="triangle-border left">{{ form_errors(form.loginName) }}</span>
-                {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
-                <br>
-
-                <label>Password:</label>
-                {{ form_widget(form.userPassword.Password) }}
-                {% if form_errors(form.userPassword) %}
-                <span class="triangle-border left">{{ form_errors(form.userPassword) }}</span>
-                {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
-                <br>
-
-                <label>Confirm Password:</label>
-                {{ form_widget(form.userPassword.RePassword) }}
-                <span style="color: red; font-weight: bold; margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
-                <br>
-
-                <label>Company Email:</label>
-                {{ form_widget(form.email.Email) }}
-                {% if form_errors(form.email) %}
-                <span class="triangle-border left">{{ form_errors(form.email) }}</span>
-                {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
-                <br>
-
-                <label>Confirm Company Email:</label>
-                {{ form_widget(form.email.ReEmail) }}
-                <span style="color: red; font-weight: bold; margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
-                <br>
-
-                <span class="sepa"></span>
-                <br>
-
-                <div class="prof">
-                    <label>Industry:</label>
-                {{ form_widget(form.professions,{'attr' : {'class' :  'chzn-select'}}) }}
-                {% if form_errors(form.professions) %}
-                <span class="triangle-border left">{{ form_errors(form.professions) }}</span>
-                {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
-                </div>
-
-                <br>
-
-                {#<label>Establishment Date:</label>
-                {{ form_widget(form.establishmentDate) }}
-                {% if form_errors(form.establishmentDate) %}
-                <span class="triangle-border left">{{ form_errors(form.establishmentDate) }}</span>
-                {% endif %}
-                <br>#}
-
-                <label>Company Logo:</label>
-                <span class="file-wrapper">
-                    {{ form_widget(form.file) }}
-                    <span class="button">Browse</span>
-                     <img id="yourImage" src="#" style="border: none;" width="65" height="60"/>
-                </span>
-                <br>
-
-                <span class="sepa"></span>
-                <br>
-
-
-                <label>Telephone:</label>
-                {{ form_widget(form.telephone) }}
-                {% if form_errors(form.telephone) %}
-                <span class="triangle-border left">{{ form_errors(form.telephone) }}</span>
-                {% endif %}
-                <br>
-
-                <label>Fax:</label>
-                {{ form_widget(form.fax) }}
-                {% if form_errors(form.fax) %}
-                <span class="triangle-border left">{{ form_errors(form.fax) }}</span>
-                {% endif %}
-                <br>
-
-                <label>Company Website:</label>
-                {{ form_widget(form.url) }}
-                {% if form_errors(form.url) %}
-                <span class="triangle-border left">{{ form_errors(form.url) }}</span>
-                {% endif %}
-                <br>
-
-                <label>Facebook Url:</label>
-                {{ form_widget(form.facebookUrl) }}
-                {% if form_errors(form.facebookUrl) %}
-                <span class="triangle-border left">{{ form_errors(form.facebookUrl) }}</span>
-                {% endif %}
-                <br>
-
-                <label>Twitter Url:</label>
-                {{ form_widget(form.twitterUrl) }}
-                {% if form_errors(form.twitterUrl) %}
-                <span class="triangle-border left">{{ form_errors(form.twitterUrl) }}</span>
-                {% endif %}
-                <br>
-
-                <label>Google+ Url:</label>
-                {{ form_widget(form.googlePlusUrl) }}
-                {% if form_errors(form.googlePlusUrl) %}
-                <span class="triangle-border left">{{ form_errors(form.googlePlusUrl) }}</span>
-                {% endif %}
-                <br>
-
-                <label>LinkedIn Url:</label>
-                {{ form_widget(form.linkedInUrl) }}
-                {% if form_errors(form.linkedInUrl) %}
-                <span class="triangle-border left">{{ form_errors(form.linkedInUrl) }}</span>
-                {% endif %}
-                <br>
-
-                <label>Youtube Url:</label>
-                {{ form_widget(form.youtubeUrl) }}
-                {% if form_errors(form.youtubeUrl) %}
-                <span class="triangle-border left">{{ form_errors(form.youtubeUrl) }}</span>
-                {% endif %}
-                <br>
-
-                <label>Company Address:</label>
-                {{ form_widget(form.address) }}
-                {% if form_errors(form.address) %}
-                <span class="triangle-border left">{{ form_errors(form.address) }}</span>
-                {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
-                <br>
-
-                <label>City:</label>
-                {{ form_widget(form.city) }}
-                {% if form_errors(form.city) %}
-                <span class="triangle-border left">{{ form_errors(form.city) }}</span>
-                {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
-                <br>
-
-                <label>State:</label>
-                {{ form_widget(form.state) }}
-                {% if form_errors(form.state) %}
-                <span class="triangle-border left">{{ form_errors(form.state) }}</span>
-                {% endif %}
-                <br>
-
-                <label>ZIP Code:</label>
-                {{ form_widget(form.zipcode) }}
-                {% if form_errors(form.zipcode) %}
-                <span class="triangle-border left">{{ form_errors(form.zipcode) }}</span>
-                {% endif %}
-                <span style="color: red; font-weight: bold; margin-left: 10px; margin-right: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span>
-                <a href="javascript:void(0)" id="getMyPosition">Update Position On Map</a>
-                <img src="{{asset('img/loadingfacebox.gif')}}" id="getMyPositionImg" style="display: none;"/>
-
-                <br>
-
-                                <label>Country:</label>
-                {{ form_widget(form.country) }}
-                {% if form_errors(form.country) %}
-                <span class="triangle-border left">{{ form_errors(form.country) }}</span>
-                {% endif %}
-                <br>
-
-                {{ form_widget(form.Latitude,{'attr' : {'value' : default_latitude}}) }}
-                {{ form_widget(form.Longitude,{'attr' : {'value' : default_longitude}}) }}
-
-                <div class="onMap">
-                    <span class="ico"></span>
-                    <h2>Your company on map :</h2>
-                    <div class="map" id="map_canvas" style="width: 906px;height: 328px;">
-                    </div>
-                </div>
-                <br>
-                {{ form_rest(form) }}
-                <button type="submit" >Submit</button>
-            </form>
-        </div>
-
+{% if form_errors(form) %}
+    <div class="alert alert-error">
+        <button data-dismiss="alert" class="close" type="button"> &times; </button>
+    {{ form_errors(form) }}
     </div>
-</section>
+{% endif %}
+
+    <div class="container Main-content">
+        <div class="row-fluid show-grid">
+
+                <div class="Sign-Up">
+
+                    <form action="{{ path('company_signup') }}" method="post" {{ form_enctype(form) }}>
+                        <fieldset>
+                            <legend><h3>{%if formName%}{{formName}}{%endif%}</h3></legend>
+                            <p>{%if formDesc%}{{formDesc}}{%endif%}</p>
+
+                            <div class="controls row-fluid show-grid">
+                                <div class="span6">
+                                    <label>Companey Name</label>
+                                    {{ form_widget(form.name,{'attr' : {'class' : 'span12'}}) }}
+                                    {% if form_errors(form.name) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.name) }}
+                                    </div>
+                                    {% endif %}
+                                    <span style="display: inline-block;margin-bottom: 13px;">
+                                        <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                    </span>
+                                </div>
+                                <div class="span6">
+                                    <label>Login Name</label>
+                                    {{ form_widget(form.loginName,{'attr' : {'class' : 'span12'}}) }}
+                                    {% if form_errors(form.loginName) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.loginName) }}
+                                    </div>
+                                    {% endif %}
+                                    <span style="display: inline-block;margin-bottom: 13px;">
+                                        <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="controls row-fluid show-grid">
+                                <div class="span6">
+                                    <label>Password</label>
+                                    {{ form_widget(form.userPassword.Password,{'attr' : {'class' : 'span12'}}) }}
+                                    {% if form_errors(form.userPassword) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.userPassword) }}
+                                    </div>
+                                    {% endif %}
+                                    <span style="display: inline-block;margin-bottom: 13px;">
+                                        <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                    </span>
+                                </div>
+                                <div class="span6">
+                                    <label>Password Confirm</label>
+                                    {{ form_widget(form.userPassword.RePassword,{'attr' : {'class' : 'span12'}}) }}
+                                    <span style="display: inline-block;margin-bottom: 13px;">
+                                        <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="controls row-fluid show-grid">
+                                <div class="span6">
+                                    <label>Companey Email</label>
+                                    {{ form_widget(form.email.Email,{'attr' : {'class' : 'span12'}}) }}
+                                    {% if form_errors(form.email) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.email) }}
+                                    </div>
+                                    {% endif %}
+                                    <span style="display: inline-block;margin-bottom: 13px;">
+                                        <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                    </span>
+                                </div>
+                                <div class="span6">
+                                    <label>Confirm Companey Email</label>
+                                    {{ form_widget(form.email.ReEmail,{'attr' : {'class' : 'span12'}}) }}
+                                    <span style="display: inline-block;margin-bottom: 13px;">
+                                        <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="controls row-fluid show-grid">
+                                <div class="span6">
+                                    <label>Industry</label>
+                                    {{ form_widget(form.professions,{'attr' : {'class' : 'chzn-select'}}) }}
+                                    {% if form_errors(form.professions) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.professions) }}
+                                    </div>
+                                    {% endif %}
+                                    <span style="display: inline-block;margin-bottom: 13px;">
+                                        <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                    </span>
+                                </div>
+                                <div class="span6">
+                                    <label>Company Logo</label>
+                                    {{ form_widget(form.file) }}
+                                    {% if form_errors(form.file) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.file) }}
+                                    </div>
+                                    {% endif %}
+                                    <img id="yourImage" src="#" style="border: none;" width="65" height="60"/>
+                                </div>
+                            </div>
+
+                            <div class="controls row-fluid show-grid">
+                                <div class="span6">
+                                    <label>Telephone</label>
+                                    {{ form_widget(form.telephone,{'attr' : {'class' : 'span12'}}) }}
+                                    {% if form_errors(form.telephone) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.telephone) }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="span6">
+                                    <label>Fax</label>
+                                    {{ form_widget(form.fax,{'attr' : {'class' : 'span12'}}) }}
+                                    {% if form_errors(form.fax) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.fax) }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
 
 
+
+                            <div class="controls row-fluid show-grid">
+                                <div class="span6">
+                                    <label>Company Website</label>
+                                    {{ form_widget(form.url,{'attr' : {'class' : 'span12'}}) }}
+                                    {% if form_errors(form.url) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.url) }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="span6">
+                                    <label>Facebook Url</label>
+                                    {{ form_widget(form.facebookUrl,{'attr' : {'class' : 'span12'}}) }}
+                                    {% if form_errors(form.facebookUrl) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.facebookUrl) }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="controls row-fluid show-grid">
+                                <div class="span6">
+                                    <label>Twitter Url</label>
+                                    {{ form_widget(form.twitterUrl,{'attr' : {'class' : 'span12'}}) }}
+                                    {% if form_errors(form.twitterUrl) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.twitterUrl) }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="span6">
+                                    <label>Google+ Url</label>
+                                    {{ form_widget(form.googlePlusUrl,{'attr' : {'class' : 'span12'}}) }}
+                                    {% if form_errors(form.googlePlusUrl) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.googlePlusUrl) }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+
+
+                            <div class="controls row-fluid show-grid">
+                                <div class="span6">
+                                    <label>LinkedIn Url</label>
+                                    {{ form_widget(form.linkedInUrl,{'attr' : {'class' : 'span12'}}) }}
+                                    {% if form_errors(form.linkedInUrl) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.linkedInUrl) }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="span6">
+                                    <label>Youtube Url</label>
+                                    {{ form_widget(form.youtubeUrl,{'attr' : {'class' : 'span12'}}) }}
+                                    {% if form_errors(form.youtubeUrl) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.youtubeUrl) }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="controls row-fluid show-grid">
+                                <div class="span6">
+                                    <label>Company Address</label>
+                                    {{ form_widget(form.address,{'attr' : {'class' : 'span12'}}) }}
+                                    {% if form_errors(form.address) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.address) }}
+                                    </div>
+                                    {% endif %}
+                                    <span style="display: inline-block;margin-bottom: 13px;">
+                                        <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                    </span>
+                                </div>
+                                <div class="span6">
+                                    <label>Country</label>
+                                    {{ form_widget(form.country,{'attr' : {'class' : 'span12'}}) }}
+                                    {% if form_errors(form.country) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.country) }}
+                                    </div>
+                                    {% endif %}
+                                    <span style="display: inline-block;margin-bottom: 13px;">
+                                        <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="controls row-fluid show-grid">
+                                <div class="span6">
+                                    <label>City</label>
+                                    {{ form_widget(form.city,{'attr' : {'class' : 'span12 autocomplete'}}) }}
+                                    {% if form_errors(form.city) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.city) }}
+                                    </div>
+                                    {% endif %}
+                                    <span style="display: inline-block;margin-bottom: 13px;">
+                                        <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                    </span>
+                                </div>
+                                <div class="span6">
+
+                                </div>
+                            </div>
+
+                            <div class="controls row-fluid show-grid">
+                                <div class="span6">
+                                    <label>ZIP Code</label>
+                                    {{ form_widget(form.zipcode,{'attr' : {'class' : 'span12'}}) }}
+                                    {% if form_errors(form.zipcode) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.zipcode) }}
+                                    </div>
+                                    {% endif %}
+                                    <span style="display: inline-block;margin-bottom: 13px;">
+                                        <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                    </span>
+                                    <a href="javascript:void(0)" id="getMyPosition">Update Position On Map</a>
+                                    <img src="{{asset('img/loadingfacebox.gif')}}" id="getMyPositionImg" style="display: none;"/>
+                                </div>
+                            </div>
+
+                            <div class="onMap">
+                                    <h2>Your company on map :</h2>
+                                    <div class="map" id="map_canvas" style="width: 100%;height: 328px;">
+                                    </div>
+                                </div>
+
+
+
+                            {{ form_widget(form.Latitude,{'attr' : {'value' : default_latitude}}) }}
+                            {{ form_widget(form.Longitude,{'attr' : {'value' : default_longitude}}) }}
+                            {{ form_rest(form) }}
+                            <button type="submit" class="btn btn-primary pull-right">Sign up</button>
+                        </fieldset>
+                    </form>
+                </div><!--Sign-Up-->
+
+        </div><!--Sign-Up-->
+    </div><!--container-->
 {% endblock %}
 
 
 {% block javascripts %}
 {{parent()}}
-<script>
+    <script>
 
-var countrySelectsUrl = '{{ path('get_countey_cities_states', {'countryId': ''}) }}/';
-var no_zipcode_message_new_job_page = '{{no_zipcode_message_new_job_page}}';
-var map_change_location_message = '{{map_change_location_message}}';
-var getPositionUrl = '{{url('get_position',{'zipcode' : ''})}}';
-var latitude = '{{default_latitude}}';
-var longitude = '{{default_longitude}}';
-var cityAutoCompleteUrl = "{{ path('city_auto_complete') }}";
-var defaultStateId= '{{stateId}}';
-var defaultStateName= '{{defaultStateName}}';
-    </script>
-    <script src="{{ asset('js/libs/jquery-ui-1.8.24.custom.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('js/libs/chosen.jquery.min.js') }}"></script>
-<script src="{{asset('bundles/objectsinternjump/js/companySignup.js')}}"></script>
-<script src="{{asset('bundles/objectsinternjump/js/cityAutoComplete.js')}}"></script>
-<script src="{{asset('js/tooltip/tooltip.js')}}"></script>
-<script>
-    $(document).ready(function(){
-        $('#form_url').click(function(){ $(this).attr('value','http://')} );
-    });
-</script>
+        var countrySelectsUrl = '{{ path('get_countey_cities_states', {'countryId': ''}) }}/';
+        var no_zipcode_message_new_job_page = '{{no_zipcode_message_new_job_page}}';
+        var map_change_location_message = '{{map_change_location_message}}';
+        var getPositionUrl = '{{url('get_position',{'zipcode' : ''})}}';
+        var latitude = '{{default_latitude}}';
+        var longitude = '{{default_longitude}}';
+        var cityAutoCompleteUrl = "{{ path('city_auto_complete') }}";
+        var defaultStateId = '{{stateId}}';
+        var defaultStateName = '{{defaultStateName}}';
+        </script>
+        <script src="http://maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
+        <script src="{{ asset('js/libs/jquery-ui-1.8.24.custom.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('js/libs/chosen.jquery.min.js') }}"></script>
+        <script src="{{asset('bundles/objectsinternjump/js/companySignup.js')}}"></script>
+        <script src="{{asset('bundles/objectsinternjump/js/cityAutoComplete.js')}}"></script>
+        <script src="{{asset('js/tooltip/tooltip.js')}}"></script>
+        <script>
+            $(document).ready(function() {
+                $('#form_url').click(function() {
+                    $(this).attr('value', 'http://')
+                });
+            });
+            </script>
 
 {% endblock %}

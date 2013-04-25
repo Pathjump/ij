@@ -394,7 +394,7 @@ class InternjumpController extends ObjectsController {
                             $socialAccountsRepo = $em->getRepository('ObjectsUserBundle:SocialAccounts');
                             $userSocial = $socialAccountsRepo->findOneBy(array('facebookId' => $friend['id']));
                             if ($userSocial)
-                                $friendResult ['image'] = $userSocial->getUser()->getTimThumbUrl(64,64);
+                                $friendResult ['image'] = $userSocial->getUser()->getTimThumbUrl(64, 64);
                             $userFriendsWorth [] = $friendResult;
                         }
                     }
@@ -820,6 +820,9 @@ class InternjumpController extends ObjectsController {
         $em = $this->getDoctrine()->getEntityManager();
         $userRepo = $em->getRepository('ObjectsUserBundle:User');
         $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
+        $cityRepo = $em->getRepository('ObjectsInternJumpBundle:City');
+        $stateRepo = $em->getRepository('ObjectsInternJumpBundle:State');
+        $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
         $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
 
         //check for logedin user or company
@@ -840,13 +843,24 @@ class InternjumpController extends ObjectsController {
         $latestInternShips = $internshipRepo->getLatestinternShips(3);
         //get Recently Hired interns
         $latestHiredUsers = $internshipRepo->getLatestHiredUsers(4);
-
+        //all companies
+        $allCompanies = $companyRepo->findAll();
+        //all cities
+        $allCities = $cityRepo->findAll();
+        //all state
+        $allState = $stateRepo->findAll();
+        //all category
+        $allCategory = $categoryRepo->findAll();
 
         return $this->render('ObjectsInternJumpBundle:Internjump:homePage.html.twig', array(
                     'worthUsers' => $worthUsers,
                     'featuredCompanies' => $featuredCompanies,
                     'latestInternShips' => $latestInternShips,
-                    'latestHiredUsers' => $latestHiredUsers
+                    'latestHiredUsers' => $latestHiredUsers,
+                    'allCompanies' => $allCompanies,
+                    'allCities' => $allCities,
+                    'allState' => $allState,
+                    'allCategory' => $allCategory
         ));
     }
 

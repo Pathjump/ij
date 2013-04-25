@@ -12,6 +12,33 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserNotificationRepository extends EntityRepository
 {
+
+    /**
+     * This Query to Get User's latest 3 notifications
+     * Used: in user portal page  [TaskController:studentAllTasksAction] AT studentTasks.html.twig
+     * @author Ola
+     */
+    public function getLatestThree($userId) {
+
+        $parmeters = array();
+
+        $parmeters ['id'] = $userId;
+
+        $query = "
+                SELECT n
+                FROM ObjectsInternJumpBundle:UserNotification n
+                JOIN n.user u
+                WHERE u.id = :id
+                ORDER BY n.createdAt DESC
+                ";
+        $query = $this->getEntityManager()->createQuery($query);
+        $query->setParameters($parmeters);
+        $query->setMaxResults(3);
+
+        return $query->getResult();
+    }
+
+
     /**
      * this function will get user notifications
      * @author Ahmed
@@ -31,31 +58,31 @@ class UserNotificationRepository extends EntityRepository
                 JOIN n.user u
                 WHERE u.id = :id
                 ";
-        
+
         $parmeters = array();
-        
+
         if($type){
             $query .= ' and n.type = :type';
             $parmeters ['type'] = $type;
         }
-        
+
         $query .= ' order by n.createdAt desc';
-        
+
         $parmeters ['id'] = $userId;
-        
+
         $query = $this->getEntityManager()->createQuery($query);
         $query->setParameters($parmeters);
-        
+
         if ($itemsPerPage) {
             $query->setFirstResult($page * $itemsPerPage);
             $query->setMaxResults($itemsPerPage);
         }
-        
+
         return $query->getResult();
     }
-    
+
     /**
-     * this function will count all user notifications 
+     * this function will count all user notifications
      * @author Ahmed
      * @param int $userId
      */
@@ -76,7 +103,7 @@ class UserNotificationRepository extends EntityRepository
             return $result;
         }
     }
-    
+
     /**
      * this function will count user notifications by group by notification type
      * @author Ahmed
