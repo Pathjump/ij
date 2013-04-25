@@ -3,189 +3,388 @@
 {% block title %}Signup Third Step{% endblock %}
 
 {% block stylesheets %}
+{{ parent() }}
 <link href="{{ asset('css/jquery-ui-1.8.24.custom.css') }}" rel="stylesheet" type="text/css"/>
-<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
-<link href="{{ asset('css/stuEdu.css') }}" rel="stylesheet" type="text/css"/>
 <style>
     #tooltip{color:#444;font-size:12px;text-shadow:1px 1px 0 #fff;border:1px solid #666;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;background-repeat:repeat-x;background-position:left top;background-color:#D7D7D7;-moz-box-shadow:0 0 4px #bbb;-webkit-box-shadow:0 0 4px #bbb;box-shadow:0 0 4px #bbb;line-height:1.2em;position:absolute;z-index:100000;display:none;padding:5px}
 </style>
 {% endblock %}
 
 {% block body %}
-<section id="student-01">
-    <div class="wrapper">
-        <h1>FOR STUDENTS<div></div></h1>
 
-        <div class="studentEduBgBlock">
-            <div class="yellowCont">
-                <!--form Name-->
-                <h1>{%if formName%}{{formName}}{%endif%}:</h1>
-                <!--form Desc-->
-                <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
+        {% if app.session.hasFlash('notice') %}
+        <div class="alert">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('notice') | raw }}
+        </div>
+        {% endif %}
 
-                <div class="btns">
-                    Click "<strong>+</strong>" to add another school / "<strong>-</strong>" to remove last added school&nbsp;&nbsp;&nbsp;
-                    <input type="button" id="btnAdd" value="+" />
-                    <input disabled="disabled" type="button" id="btnDel" value="-" />
-                </div>
-                {% if app.session.hasFlash('notice') %}
-                <span class="alert fail">
-                {{ app.session.flash('notice') | raw }}
-                </span>
-                {% endif %}
-                {% if app.session.hasFlash('success') %}
-                <span class="alert success">
-                {{ app.session.flash('success') | raw }}
-                </span>
-                {% endif %}
-                {% if app.session.hasFlash('error') %}
-                <span class="alert error">
-                {{ app.session.flash('error') | raw }}
-                </span>
-                {% endif %}
-                {% if form_errors(form) %}
-                <span class="alert error">
-                {{ form_errors(form) }}
-                </span>
-                {% endif %}
+        {% if app.session.hasFlash('success') %}
+        <div class="alert alert-success">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('success') | raw }}
+        </div>
+        {% endif %}
 
-                <form class="formTable" action="{{ path('signup_education') }}" method="post" {{ form_enctype(form) }}>
-                    <div id="formsContainer">
-                        {% for education in form.educations %}
-                        <div style="margin-bottom:4px;" class="clonedInput">
-                            {% if not loop.first %}
-                            <a class="subDelete" href="javascript:void(0);" onclick="deleteSubForm(this);">-</a>
-                            {% endif %}
-                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                <tr>
-                                    <td width="190"><label>College/University :</label></td>
-                                    <td>{{ form_widget(education.schoolName) }}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="miniError">{{ form_errors(education.schoolName) }}</span></td>
-                                    <td>&nbsp;</td>
-                                    <td>{{ form_label(education.underGraduate) }}</td>
-                                    <td>{{ form_widget(education.underGraduate) }}<span class="miniError">{{ form_errors(education.underGraduate) }}</span></td>
-                                </tr>
-                                <tr>
-                                    <td><label>Major :</label></td>
-                                    <td>{{ form_widget(education.major) }}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="miniError">{{ form_errors(education.major) }}</span></td>
-                                    <td>&nbsp;</td>
-                                    <td><label>Minor :</label></td>
-                                    <td>{{ form_widget(education.minor) }}<span class="miniError">{{ form_errors(education.minor) }}</span></td>
-                                </tr>
+        {% if app.session.hasFlash('error') %}
+        <div class="alert alert-error">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('error') | raw }}
+        </div>
+        {% endif %}
 
-                                <tr>
-                                    <td width="190"><label>CumulativeGPA :</label></td>
-                                    <td>{{ form_widget(education.cumulativeGPA) }}<span class="miniError">{{ form_errors(education.cumulativeGPA) }}</span></td>
-                                    <td>&nbsp;</td>
-                                    <td width="190"><label>MajorGPA :</label></td>
-                                    <td>{{ form_widget(education.majorGPA) }}<span class="miniError">{{ form_errors(education.majorGPA) }}</span></td>
-                                </tr>
+        {% if form_errors(form) %}
+        <div class="alert alert-error">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ form_errors(form) }}
+        </div>
+        {% endif %}
 
-                                <tr>
-                                    <td width="190" class="graduateDegreeRow"{% if not education.vars.value.underGraduate %} style="display: none;"{% endif %}><label>Graduate Degree :</label></td>
-                                    <td class="graduateDegreeRow"{% if not education.vars.value.underGraduate %} style="display: none;"{% endif %}>{{ form_widget(education.graduateDegree) }}<span class="miniError">{{ form_errors(education.graduateDegree) }}</span></td>
-                                    <td colspan="3">&nbsp;</td>
-                                    <td width="190" class="underGraduateDegreeRow"{% if education.vars.value.underGraduate is sameas(null) or education.vars.value.underGraduate %} style="display: none;"{% endif %}><label>UnderGraduate Degree :</label></td>
-                                    <td class="underGraduateDegreeRow"{% if education.vars.value.underGraduate is sameas(null) or education.vars.value.underGraduate %} style="display: none;"{% endif %}>{{ form_widget(education.underGraduateDegree) }}<span class="miniError">{{ form_errors(education.underGraduateDegree) }}</span></td>
-                                </tr>
+        <div class="container Main-content">
 
-                                <tr>
-                                    <td width="190"><label>Start Date :</label></td>
-                                    <td>{{ form_widget(education.startDate) }}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="miniError">{{ form_errors(education.startDate) }}</span></td>
-                                    <td>&nbsp;</td>
-                                    <td width="190"><label>End Date :</label></td>
-                                    <td>{{ form_widget(education.endDate) }}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="miniError">{{ form_errors(education.endDate) }}</span></td>
-                                </tr>
+            <div class="Student">
 
-                                <tr>
-                                    <td><label>Relevant Coursework Taken :</label></td>
-                                    <td>{{ form_widget(education.relevantCourseworkTaken) }}<span style="margin-left: 10px;"><img class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}"></span><span class="miniError">{{ form_errors(education.relevantCourseworkTaken) }}</span><small>Separate Multiple Course Names With Commas</small></td>
-                                    <td></td>
-                                    <td><label>Extracurricular Activity :</label></td>
-                                    <td>{{ form_widget(education.extracurricularActivity) }}<span class="miniError">{{ form_errors(education.extracurricularActivity) }}</span><small>Separate Multiple Extracurricular Activities With Commas</small></td>
-                                    <td></td>
-                                </tr>
-                            </table>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#">Education</a></li>
+                    <li><a href="#">Objectives</a></li>
+                    <li><a href="#">Skills</a></li>
+                    <li><a href="#">Experience</a></li>
+                    <li class="pull-right span3"><h3>Resume Complitness</h3></li>
+                </ul>
+
+                <div class="row-fluid show-grid">
+
+                    <div class="span8">
+                        <form class="company-form" action="{{ path('signup_education') }}" method="post">
+                            <legend><h2>{% if formName %}{{ formName }}{% endif %}</h2></legend>
+
+                            <fieldset>
+                                <p>{% if formDesc %}{{ formDesc }}{% endif %}</p>
+                                <button type="button" id="btnAdd" class="btn pull-right">Add</button>
+                            </fieldset>
+
+                            {% for education in form.educations %}
+                            <fieldset class="oneSection">
+                                <hr class="divider"/>
+                                {% if not loop.first %}
+                                <div class="controls row-fluid show-grid">
+                                    <button type="button" class="btn btn-danger pull-right" onclick="deleteSubForm(this);">Remove</button>
+                                </div>
+                                {% endif %}
+                                <div class="controls  row-fluid show-grid">
+                                    <div class="span6">
+                                        <label>School</label>
+                                        {{ form_widget(education.schoolName, {'attr': {'class': 'span12'} }) }}
+
+                                        <span style="display: inline-block;margin-bottom: 13px;">
+                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                        </span>
+
+                                        {% if form_errors(education.schoolName) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(education.schoolName) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="span6">
+                                        <label>Degree Type</label>
+                                        {{ form_widget(education.underGraduate, {'attr': {'class': 'underGraduate radio inline'} }) }}
+
+                                        <span style="display: inline-block;margin-bottom: 13px;">
+                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                        </span>
+
+                                        {% if form_errors(education.underGraduate) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(education.underGraduate) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="controls">
+                                    <label>Major</label>
+                                    {{ form_widget(education.major, {'attr': {'class': 'span12'} }) }}
+
+                                    {% if form_errors(education.major) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(education.major) }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="controls">
+                                    <label>Minor</label>
+                                    {{ form_widget(education.minor, {'attr': {'class': 'span12'} }) }}
+
+                                    {% if form_errors(education.minor) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(education.minor) }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="controls  row-fluid show-grid">
+                                    <div class="span6">
+                                        <label>Cumulative GPA</label>
+                                        {{ form_widget(education.cumulativeGPA, {'attr': {'class': 'span12'} }) }}
+
+                                        {% if form_errors(education.cumulativeGPA) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(education.cumulativeGPA) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="span6">
+                                        <label>Major GPA</label>
+                                        {{ form_widget(education.majorGPA, {'attr': {'class': 'span12'} }) }}
+
+                                        {% if form_errors(education.majorGPA) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(education.majorGPA) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="controls graduateDegreeRow"{% if not education.vars.value.underGraduate %} style="display: none;"{% endif %}>
+                                    <label>Graduate Degree</label>
+                                    {{ form_widget(education.graduateDegree, {'attr': {'class': 'graduateDegree span12'} }) }}
+
+                                    {% if form_errors(education.graduateDegree) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(education.graduateDegree) }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="controls underGraduateDegreeRow"{% if education.vars.value.underGraduate is sameas(null) or education.vars.value.underGraduate %} style="display: none;"{% endif %}>
+                                    <label>UnderGraduate Degree</label>
+                                    {{ form_widget(education.underGraduateDegree, {'attr': {'class': 'underGraduateDegree span12'} }) }}
+
+                                    {% if form_errors(education.underGraduateDegree) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(education.underGraduateDegree) }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="controls  row-fluid show-grid">
+                                    <div class="span6 select-box">
+                                        <label>Start Date</label>
+                                        {{ form_widget(education.startDate) }}
+
+                                        <span style="display: inline-block;margin-bottom: 13px;">
+                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                        </span>
+
+                                        {% if form_errors(education.startDate) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(education.startDate) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="span6 select-box">
+                                        <label>End Date</label>
+                                        {{ form_widget(education.endDate) }}
+
+                                        <span style="display: inline-block;margin-bottom: 13px;">
+                                            <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                        </span>
+
+                                        {% if form_errors(education.endDate) %}
+                                        <div class="alert alert-error">
+                                            <button type="button" class="close" data-dismiss="alert"> × </button>
+                                            {{ form_errors(education.endDate) }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="controls">
+                                    <label>Relevant Coursework Taken</label>
+                                    {{ form_widget(education.relevantCourseworkTaken, {'attr': {'class': 'span12'} }) }}
+
+                                    {% if form_errors(education.relevantCourseworkTaken) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(education.relevantCourseworkTaken) }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="well well-small muted">
+                                    <small>Separate Multiple Course Names With Commas</small>
+                                </div>
+
+                                <div class="controls">
+                                    <label>Extracurricular Activity</label>
+                                    {{ form_widget(education.extracurricularActivity, {'attr': {'class': 'span12'} }) }}
+
+                                    {% if form_errors(education.extracurricularActivity) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(education.extracurricularActivity) }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="well well-small muted">
+                                    <small>Separate Multiple Course Names With Commas</small>
+                                </div>
+                            </fieldset>
+                            {% endfor %}
+
+                            <fieldset id="formActions">
+                                <hr class="divider"/>
+                                <div class="controls ">
+                                    {{ form_rest(form) }}
+                                    <button type="submit" class="btn btn-primary pull-right">Next</button>
+                                    <a href="{{ path('signup_language') }}" class="pull-right back">Skip</a>
+                                </div>
+                            </fieldset>
+                        </form>
+
+                    </div><!--span 9-->
+
+                    <div class="span4">
+                        <div class=" alert alert-success">
+                            <div class="text-success"><strong class="orange">25%</strong>  of your Resume is completed Successfully.</div>
+                        </div><!--alert-->
+
+                        <div class="progress progress-info progress-striped">
+                            <div class="bar" style="width: 25%"></div>
                         </div>
-                        {% endfor %}
+
+                        <div class="muted">
+                            <span class="label label-important">Important</span>
+                            You should complete your resume so you could to increase your oppertiunities
+                        </div>
+
                     </div>
 
-                    {{ form_rest(form) }}
+                </div><!--row-fluid show-grid-->
 
-                    <button class="nxt" type="submit" title="{% trans %}Next{% endtrans %}">{% trans %}Next{% endtrans %}</button>
-                    <a class="bak" style="float: right;" href="{{ path('signup_language') }}">Skip</a>
-                    <div class="clear"></div>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
+            </div><!---Student --->
+        </div><!--container-->
 {% endblock %}
 
 {% block javascripts %}
 {% set formElementHTML %}
 {% spaceless %}
-<div style="margin-bottom:4px;" class="clonedInput">
-    <a class="subDelete" href="javascript:void(0);" onclick="deleteSubForm(this);">-</a>
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-            <td width="190"><label>College/University :</label></td>
-            <td>{{ form_widget(form.educations.vars.prototype.schoolName) }}</td>
-            <td>&nbsp;</td>
-            <td width="190">{{ form_label(form.educations.vars.prototype.underGraduate) }}</td>
-            <td>{{ form_widget(form.educations.vars.prototype.underGraduate) }}</td>
-        </tr>
+<fieldset class="oneSection">
+    <hr class="divider"/>
+    <div class="controls row-fluid show-grid">
+        <button type="button" class="btn btn-danger pull-right" onclick="deleteSubForm(this);">Remove</button>
+    </div>
+    <div class="controls  row-fluid show-grid">
+        <div class="span6">
+            <label>School</label>
+            {{ form_widget(form.educations.vars.prototype.schoolName, {'attr': {'class': 'span12'} }) }}
 
-        <tr>
-            <td width="190"><label>Major :</label></td>
-            <td>{{ form_widget(form.educations.vars.prototype.major) }}</td>
-            <td>&nbsp;</td>
-            <td width="190"><label>Minor :</label></td>
-            <td>{{ form_widget(form.educations.vars.prototype.minor) }}</td>
-        </tr>
+            <span style="display: inline-block;margin-bottom: 13px;">
+                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+            </span>
+        </div>
 
-        <tr>
-            <td width="190"><label>CumulativeGPA :</label></td>
-            <td>{{ form_widget(form.educations.vars.prototype.cumulativeGPA) }}</td>
-            <td>&nbsp;</td>
-            <td width="190"><label>MajorGPA :</label></td>
-            <td>{{ form_widget(form.educations.vars.prototype.majorGPA) }}</td>
-        </tr>
+        <div class="span6">
+            <label>Degree Type</label>
+            {{ form_widget(form.educations.vars.prototype.underGraduate, {'attr': {'class': 'underGraduate radio inline'} }) }}
 
-        <tr>
-            <td width="190" class="graduateDegreeRow" style="display: none;"><label>Graduate Degree :</label></td>
-            <td class="graduateDegreeRow" style="display: none;">{{ form_widget(form.educations.vars.prototype.graduateDegree) }}</td>
-            <td colspan="3">&nbsp;</td>
-            <td width="190" class="underGraduateDegreeRow" style="display: none;"><label>UnderGraduate Degree :</label></td>
-            <td class="underGraduateDegreeRow" style="display: none;">{{ form_widget(form.educations.vars.prototype.underGraduateDegree) }}</td>
-        </tr>
+            <span style="display: inline-block;margin-bottom: 13px;">
+                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+            </span>
+        </div>
+    </div>
 
-        <tr>
-            <td width="190"><label>Start Date :</label></td>
-            <td>{{ form_widget(form.educations.vars.prototype.startDate) }}</td>
-            <td>&nbsp;</td>
-            <td width="190"><label>End Date :</label></td>
-            <td>{{ form_widget(form.educations.vars.prototype.endDate) }}</td>
-        </tr>
+    <div class="controls">
+        <label>Major</label>
+        {{ form_widget(form.educations.vars.prototype.major, {'attr': {'class': 'span12'} }) }}
+    </div>
 
-        <tr>
-            <td width="190"><label>Relevant Coursework Taken :</label></td>
-            <td>{{ form_widget(form.educations.vars.prototype.relevantCourseworkTaken) }}</td>
-            <td>&nbsp;</td>
-            <td><label>Extra Curricular Activities :</label></td>
-            <td>{{ form_widget(form.educations.vars.prototype.extracurricularActivity) }}</td>
-        </tr>
-    </table>
-</div>
+    <div class="controls">
+        <label>Minor</label>
+        {{ form_widget(form.educations.vars.prototype.minor, {'attr': {'class': 'span12'} }) }}
+    </div>
+
+    <div class="controls  row-fluid show-grid">
+        <div class="span6">
+            <label>Cumulative GPA</label>
+            {{ form_widget(form.educations.vars.prototype.cumulativeGPA, {'attr': {'class': 'span12'} }) }}
+        </div>
+        <div class="span6">
+            <label>Major GPA</label>
+            {{ form_widget(form.educations.vars.prototype.majorGPA, {'attr': {'class': 'span12'} }) }}
+        </div>
+    </div>
+
+    <div class="controls graduateDegreeRow" style="display: none;">
+        <label>Graduate Degree</label>
+        {{ form_widget(form.educations.vars.prototype.graduateDegree, {'attr': {'class': 'graduateDegree span12'} }) }}
+    </div>
+
+    <div class="controls underGraduateDegreeRow" style="display: none;">
+        <label>UnderGraduate Degree</label>
+        {{ form_widget(form.educations.vars.prototype.underGraduateDegree, {'attr': {'class': 'underGraduateDegree span12'} }) }}
+    </div>
+
+    <div class="controls  row-fluid show-grid">
+        <div class="span6 select-box">
+            <label>Start Date</label>
+            {{ form_widget(form.educations.vars.prototype.startDate) }}
+
+            <span style="display: inline-block;margin-bottom: 13px;">
+                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+            </span>
+        </div>
+        <div class="span6 select-box">
+            <label>End Date</label>
+            {{ form_widget(form.educations.vars.prototype.endDate) }}
+
+            <span style="display: inline-block;margin-bottom: 13px;">
+                <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+            </span>
+        </div>
+    </div>
+
+    <div class="controls">
+        <label>Relevant Coursework Taken</label>
+        {{ form_widget(form.educations.vars.prototype.relevantCourseworkTaken, {'attr': {'class': 'span12'} }) }}
+    </div>
+
+    <div class="well well-small muted">
+        <small>Separate Multiple Course Names With Commas</small>
+    </div>
+
+    <div class="controls">
+        <label>Extracurricular Activity</label>
+        {{ form_widget(form.educations.vars.prototype.extracurricularActivity, {'attr': {'class': 'span12'} }) }}
+    </div>
+
+    <div class="well well-small muted">
+        <small>Separate Multiple Course Names With Commas</small>
+    </div>
+</fieldset>
 {% endspaceless %}
 {% endset %}
+{{ parent() }}
 <script src="{{ asset('js/libs/jquery-ui-1.8.24.custom.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('js/libs/chosen.jquery.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/libs/jquery.livequery.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/tooltip/tooltip.js') }}"></script>
 <script>
     var formElementHTML = '{{ formElementHTML | escape('js') }}';
     function deleteSubForm(currentElement) {
-        $(currentElement).parent().remove();
+        $(currentElement).parent().parent().remove();
     }
     function toggleGraduateDegree() {
         var currentCheck = $(this);
@@ -208,9 +407,9 @@
         $('.underGraduate input').livequery(function() {
             $(this).change(toggleGraduateDegree);
         });
-        $('.chzn-select').livequery(function() {
-            $(this).chosen();
-        });
+        //$('input[type="radio"]').livequery(function() {
+        //    $(this).ezMark();
+        //});
         $('.graduateDegree').livequery(function() {
             $(this).autocomplete({
                 autoFocus: true,
@@ -230,21 +429,15 @@
             var subFormNumbers = [];
             $('[name^="form[educations]"]').each(function(){
                 subFormNumber = parseInt($(this).attr('name').match(/\d+/)[0]);
-                if($.inArray(subFormNumber, subFormNumbers) == -1) {
+                if($.inArray(subFormNumber, subFormNumbers) === -1) {
                     subFormNumbers.push(subFormNumber);
                 }
             });
-            $('#formsContainer').append(tempHtml.replace(/\$\$name\$\$/g, (subFormNumbers.sort().pop() + 1)));
-            $('#btnDel').removeAttr('disabled');
+            $('#formActions').before(tempHtml.replace(/\$\$name\$\$/g, (subFormNumbers.sort().pop() + 1)));
+            $('html, body').animate({
+                scrollTop: $('#formActions').prev().offset().top
+            }, 2000);
         });
-        $('#btnDel').click(function() {
-            if($('#formsContainer').children().length == 2) {
-                $('#btnDel').attr('disabled','disabled');
-            }
-            $('#formsContainer').children().last().remove();
-        });
-        var stuTitleBar = $('#main .wrapper').width();
-        $('#student-01 > .wrapper h1 div').width(stuTitleBar-202);
     });
 </script>
 {% endblock %}
