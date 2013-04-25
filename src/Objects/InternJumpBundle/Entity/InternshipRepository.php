@@ -225,13 +225,13 @@ class InternshipRepository extends EntityRepository {
      * @param type $categories
      * @return array of jobs
      */
-    public function getLatestJobs($categories) {
+    public function getLatestJobs($categories, $limit) {
 
         $date = new \DateTime("today");
         $today = $date->format('Y-m-d');
         $query = $this->getEntityManager()
                 ->createQuery('
-            SELECT  DISTINCT j.id, j.title
+            SELECT  DISTINCT j
             FROM ObjectsInternJumpBundle:Internship j
             JOIN j.company c
             JOIN j.categories cat
@@ -242,6 +242,7 @@ class InternshipRepository extends EntityRepository {
             ORDER BY j.createdAt DESC
             ');
         $query->setParameters(array('today' => $today, 'categories' => $categories));
+        $query->setMaxResults($limit);
         return $query->getResult();
     }
 

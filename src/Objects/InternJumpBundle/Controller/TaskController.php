@@ -33,6 +33,8 @@ class TaskController extends ObjectsController {
 
         $em = $this->getDoctrine()->getEntityManager();
 
+        $cityRepo = $em->getRepository('ObjectsInternJumpBundle:City');
+        $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
 
         //$tasksPerPage = $this->container->getParameter('tasks_per_show_page'); //for pagenation
         //$entities = $em->getRepository('ObjectsInternJumpBundle:Task')->findAll();
@@ -62,9 +64,9 @@ class TaskController extends ObjectsController {
                 //echo "category num".$cat->getId()." found<br>";}
             }
         }
-
+        $limit = 4;
         if (sizeof($categ) > 0) { //found array of categories
-            $LatestJobs = $em->getRepository('ObjectsInternJumpBundle:Internship')->getLatestJobs($categ);
+            $LatestJobs = $em->getRepository('ObjectsInternJumpBundle:Internship')->getLatestJobs($categ, $limit);
             // echo "after exec found jobs array of size ".sizeof($LatestJobs);exit;
         } else { /* don't call the dql */
             $LatestJobs = "";
@@ -117,6 +119,13 @@ class TaskController extends ObjectsController {
         //get latest 3 messages
         $latestMessages = $em->getRepository('ObjectsInternJumpBundle:Message')->getLatestThree($uid);
 
+
+        //For search form
+        //all cities
+        $allCities = $cityRepo->findAll();
+        //all category
+        $allCategory = $categoryRepo->findAll();
+
         return $this->render('ObjectsInternJumpBundle:Task:studentTasks.html.twig', array(
                     'entities' => $tasks,
                     'user' => $user,
@@ -134,7 +143,9 @@ class TaskController extends ObjectsController {
                     'interviewsCount' => $upComingInterviewsCount,
                     'appliedJobs' => $appliedJobs,
                     'latestNotifications' => $latestNotifications,
-                    'latestMessages' => $latestMessages
+                    'latestMessages' => $latestMessages,
+                    'allCities' => $allCities,
+                    'allCategory' => $allCategory
                 ));
     }
 
