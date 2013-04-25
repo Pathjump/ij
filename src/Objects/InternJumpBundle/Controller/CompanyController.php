@@ -889,9 +889,9 @@ class CompanyController extends Controller {
                     'first_name' => 'Password',
                     'second_name' => 'RePassword',
                     'invalid_message' => "The passwords don't match"))
-                ->add('country', 'choice', array('preferred_choices' => array('US'), 'choices' => $allCountriesArray, 'attr' => array('class' => 'chzn-select')))
+                ->add('country', 'choice', array('preferred_choices' => array('US'), 'choices' => $allCountriesArray))
                 ->add('city')
-                ->add('state', 'choice', array('required' => FALSE, 'attr' => array('class' => 'chzn-select')))
+                ->add('state', 'choice', array('required' => FALSE))
                 ->add('address', 'text')
                 //->add('establishmentDate', 'date', array('attr' => array('class' => 'establishmentDate'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('email', 'repeated', array(

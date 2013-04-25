@@ -1,39 +1,69 @@
-$(document).ready(function(){
+$(document).ready(function() {
+    $('#homeSearchJob').click(function() {
+        var company = $('#companyFilter').val();
+        var city = $('#cityFilter').val();
+        var state = $('#stateFilter').val();
+        var category = $('#industryFilter').val();
+
+        if (company || city || state || category)
+            searchJobsUrl += '?';
+
+        if (company)
+            searchJobsUrl += "&company=" + company;
+
+        if (city)
+            searchJobsUrl += "&city=" + city;
+
+        if (state)
+            searchJobsUrl += "&state=" + state;
+
+        if (category)
+            searchJobsUrl += "&industry=" + category;
+
+        window.location = searchJobsUrl;
+    });
+
     //show map
     initialize();
-    
+
     //delete job
-    $('#deleteJob').click(function(){
+    $('#deleteJob').click(function() {
         thisLink = $(this);
         //confirm delete job
-        jConfirm('ok','cancle','Are you sure you want to delete this job', 'Delete job', function (r) {
+        jConfirm('ok', 'cancle', 'Are you sure you want to delete this job', 'Delete job', function(r) {
             if (r == true) {
                 window.location = thisLink.attr('deleteUrl');
-            }else{
+            } else {
                 return false;
             }
         });
     });
-    
-    $('#notActiveUserApply').click(function(){
-       jAlert("You need to register to apply.");
+
+    $('#notActiveUserApply').click(function() {
+        jAlert("You need to register to apply.");
     });
-    
-    $("#jobApply").fancybox({
-        'href'              : getUserCvsUrl,
-        'type'              : 'ajax',
-        afterClose          : function() {
-        }
+
+    $("a#jobApply").click(function() {
+        $.colorbox({
+            href: getUserCvsUrl
+        });
     });
-    
+
+//    $("#jobApply").fancybox({
+//        'href'              : getUserCvsUrl,
+//        'type'              : 'ajax',
+//        afterClose          : function() {
+//        }
+//    });
+//
+//    //close user cv popup
+    $('#userCvCancle').live('click', function() {
+        $.colorbox.close();
+    });
+
     //close user cv popup
-    $('#userCvCancle').live('click',function(){
-        $.fancybox.close(); 
-    });
-    
-    //close user cv popup
-    $('#userCvSubmit').live('click',function(){
-        //hide bottun 
+    $('#userCvSubmit').live('click', function() {
+        //hide bottun
         $('#userCvSubmit').hide();
         $('#userCvCancle').hide();
         //show loading image
@@ -41,17 +71,17 @@ $(document).ready(function(){
         //get cv id
         var cvId = $('#userCvs').val();
         $.ajax({
-            url: userJobApplyUrl+"/"+cvId,
+            url: userJobApplyUrl + "/" + cvId,
             success: function(msg) {
-                if(msg == 'done'){
-                    $('#jobApplySuccess').text(job_apply_success_message);
-                }
+
             },
             complete: function(msg) {
                 //remove job apply link
                 $('a#jobApply').remove();
                 //close popup
-                $.fancybox.close(); 
+                $.colorbox.close();
+                location.reload();
+
             }
         });
     });

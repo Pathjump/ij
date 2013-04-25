@@ -141,6 +141,10 @@ class InternshipController extends Controller {
         $userInternshipRepo = $em->getRepository('ObjectsInternJumpBundle:UserInternship');
         $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
         $interviewRepo = $em->getRepository('ObjectsInternJumpBundle:Interview');
+        $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
+        $cityRepo = $em->getRepository('ObjectsInternJumpBundle:City');
+        $stateRepo = $em->getRepository('ObjectsInternJumpBundle:State');
+        $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
 
         if (!$entity) {
             $message = $this->container->getParameter('internship_not_found_error_msg');
@@ -201,6 +205,37 @@ class InternshipController extends Controller {
         }
 
 
+        //all companies
+        $allCompanies = $companyRepo->findAll();
+        //all cities
+        $allCities = $cityRepo->findAll();
+        //all state
+        $allState = $stateRepo->findAll();
+        //all category
+        $allCategory = $categoryRepo->findAll();
+
+        //get latest jobs
+        $LatestJobs = array();
+        if (true === $this->get('security.context')->isGranted('ROLE_USER')) {
+            //get logedin user object
+            $user = $this->get('security.context')->getToken()->getUser();
+
+            $cvs = $em->getRepository('ObjectsInternJumpBundle:CV')->getAllCvs($user->getId());
+            //print_r($cvs);
+            if ($cvs) {//if student Has CVs
+                //echo "found cvs <br>";
+                foreach ($cvs as $cv) {
+                    foreach ($cv->getCategories() as $cat)
+                        $categ[] = $cat->getId();
+                }
+            }
+
+            if (sizeof($categ) > 0) { //found array of categories
+                $LatestJobs = $em->getRepository('ObjectsInternJumpBundle:Internship')->getLatestJobs($categ, 5);
+            }
+        }
+
+
         return $this->render('ObjectsInternJumpBundle:Internship:show.html.twig', array(
                     'entity' => $entity,
                     'company' => $company,
@@ -211,7 +246,12 @@ class InternshipController extends Controller {
                     'applyedUsers' => $applyedUsers,
                     'jobCategories' => $jobCategories,
                     'job_added_before_message' => $this->container->getParameter('job_added_before_message_show_job_page'),
-                    'job_apply_success_message' => $this->container->getParameter('job_apply_success_message_show_job_page')
+                    'job_apply_success_message' => $this->container->getParameter('job_apply_success_message_show_job_page'),
+                    'allCompanies' => $allCompanies,
+                    'allCities' => $allCities,
+                    'allState' => $allState,
+                    'allCategory' => $allCategory,
+                    'LatestJobs' => $LatestJobs
         ));
     }
 
@@ -577,11 +617,11 @@ class InternshipController extends Controller {
             $newInternshipLanguage = new \Objects\InternJumpBundle\Entity\InternshipLanguage();
             $entity->addInternshipLanguage($newInternshipLanguage);
         }
-        
+
         //create a add new job form
         $editForm = $this->createFormBuilder($entity, array('validation_groups' => $formValidationGroups))
-                ->add('positionType', 'choice', array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'expanded' => true))
-                ->add('workLocation', 'choice', array('choices' => array('Office' => 'Office', 'Virtual' => 'Virtual', 'Doesn’t Matter' => 'Doesn’t Matter'), 'expanded' => true))
+                ->add('positionType', 'choice', array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level')))
+                ->add('workLocation', 'choice', array('choices' => array('Office' => 'Office', 'Virtual' => 'Virtual', 'Doesn’t Matter' => 'Doesn’t Matter')))
                 ->add('minimumGPA', 'choice', array('choices' => $minimumGPAArray))
                 ->add('numberOfOpenings', 'choice', array('choices' => $numberOfOpeningsArray))
                 ->add('sessionPeriod', 'choice', array('choices' => $sessionPeriodArray))
@@ -654,7 +694,7 @@ class InternshipController extends Controller {
         return $this->render('ObjectsInternJumpBundle:Internship:edit.html.twig', array(
                     'entity' => $entity,
                     'company' => $company,
-                    'edit_form' => $editForm->createView(),
+                    'form' => $editForm->createView(),
                     'keywordsString' => $keywordsString,
                     'no_zipcode_message_new_job_page' => $this->container->getParameter('no_zipcode_message_new_job_page'),
                     'map_change_location_message' => $this->container->getParameter('map_change_location_message_new_job_page'),
@@ -782,6 +822,10 @@ class InternshipController extends Controller {
 
 
             $em->flush();
+
+            //get the session object
+            $session = $this->getRequest()->getSession();
+            $session->setFlash('success', $this->container->getParameter('job_apply_success_message_show_job_page'));
 
             return new Response('done');
         }
