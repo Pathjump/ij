@@ -4,6 +4,11 @@
 
 {% block pageTitle %}Company {{ company }}{% endblock %}
 
+{% block stylesheets %}
+{{ parent() }}
+<link href="{{ asset('css/colorBox/colorbox.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
 {% block body %}
 
         <div class="container Main-content">
@@ -20,7 +25,9 @@
                         <img src="{{ company.getTimThumbUrl(98, 102) }}" alt="{{ company }}" />
                     </div>
                         {{ company }} Profile
-                    <a class=" map"  href="#myModal" role="button" data-toggle="modal">Show Map</a>
+                    {% if company.Longitude and company.Latitude %}
+                    <a href="#companyMap" class="showCompanyMap map">Show Map</a>
+                    {% endif %}
                     <div class="form-search pull-right">
                         <div class="input-append" style="margin-top: 5px;">
                             <form action="{{ path('search_for_company') }}">
@@ -91,15 +98,38 @@
             </div><!--company-form-->
         </div>
 
-        <div  id="myModal" class="modal hide fade show-map" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-header">
-                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
-                <h3>Map</h3>
-            </div>
-            <div class="modal-body">
-                <p><img src="img/mab.jpg" /> </p>
+        {% if company.Longitude and company.Latitude %}
+        <div style="display: none;">
+            <div  id="companyMap">
+                <div class="modal-header">
+                    <h3>Map</h3>
+                </div>
+                <div class="modal-body">
+                    <p>
+                    <div id="map_canvas" style="width: 400px;height: 168px;"></div>
+                    </p>
+                </div>
             </div>
         </div>
+        {% endif %}
 {% endblock %}
 
 
+{% block javascripts %}
+    {{ parent() }}
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
+    <script src="{{ asset('js/jquery.colorbox-min.js') }}"></script>
+    <script src="{{ asset('bundles/objectsinternjump/js/internShipMap.js') }}"></script>
+    <script>
+        var latitude = '{{ company.Latitude }}';
+        var longitude = '{{ company.Longitude }}';
+        $(document).ready(function() {
+            $('.showCompanyMap').colorbox({
+                inline: true,
+                onLoad: function() {
+                    initialize();
+                }
+            });
+        });
+    </script>
+{% endblock %}
