@@ -1140,7 +1140,7 @@ class InternjumpUserController extends ObjectsController {
         }
 
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:companySeeUserData.html.twig', array(
-                    'userObject' => $userObject,
+                    'user' => $userObject,
                     'userCv' => $userCv,
                     'cvId' => $cvId,
                     'age' => $age,

@@ -16,37 +16,34 @@ $(document).ready(function(){
                     }
                 });
             }
-        }); 
+        });
     });
-    
+
     $('.validTo').datepicker({
-        changeYear: true, 
-        dateFormat: 'yy-mm-dd', 
+        changeYear: true,
+        dateFormat: 'yy-mm-dd',
         minDate: new Date()
     });
-    
+
     //ask for interview
-    $("#interviewAsk").fancybox({
-        'href'              : askForInterviewUrl,
-        'type'              : 'iframe',
-        'padding'           : 0,
-        'width'             : 850,
-        afterClose          : function() {
-        //            parent.location.reload(true);
-        }
-    });
-    
-    //ask for hire
-    $("#companyHireUser").fancybox({
-        'href'              : companyHireUserUrl,
-        'type'              : 'iframe',
-        'width'             : 600,
-        afterClose          : function() {
-        //            parent.location.reload(true);
-        }
-    });
-    
-    //company hire user 
+//    $("#interviewAsk").fancybox({
+//        'href'              : askForInterviewUrl,
+//        'type'              : 'iframe',
+//        'padding'           : 0,
+//        'width'             : 850,
+//        afterClose          : function() {
+//        //            parent.location.reload(true);
+//        }
+//    });
+//
+//    //ask for hire
+//    $("#companyHireUser").click(function(){
+//       $.colorbox({
+//           href:companyHireUserUrl
+//       });
+//    });
+
+    //company hire user
     //    $('#companyHireUser').click(function(){
     //        jConfirm('ok','cancle','Are you sure you want to hire this user without interview', 'Hire user confirm', function (r) {
     //            if (r == true) {
@@ -65,9 +62,9 @@ $(document).ready(function(){
     //            }else{
     //                return false;
     //            }
-    //        }); 
+    //        });
     //    });
-    
+
     //company add question to user
     $('#companyAddQuestionButton').click(function(){
         //question text
@@ -76,7 +73,7 @@ $(document).ready(function(){
             //hide the button
             $('#companyAddQuestionButton').hide();
             //show loading img
-            $('#companyAddQuestionImg').show();
+            $('.loading').show();
             $.ajax({
                 url: addUserQuestionUrl+"/"+encodeURIComponent(questionText),
                 success: function(msg) {

@@ -2399,3 +2399,12 @@ table .ez-checkbox, td.defaultP .ez-checked {
     position: absolute;
     top: 68px;
 }
+
+.companyUserInterest {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.editQuestionAnswer {
+    margin-bottom: 50px;
+}

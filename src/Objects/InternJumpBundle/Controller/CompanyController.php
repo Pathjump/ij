@@ -54,7 +54,7 @@ class CompanyController extends Controller {
             'company' => $company,
             'password' => $company->getUserPassword(),
             'Email' => $this->container->getParameter('contact_us_email'),
-                ));
+        ));
         //prepare the message object
         $message = \Swift_Message::newInstance()
                 ->setSubject($translator->trans('activate your account'))
@@ -109,7 +109,7 @@ class CompanyController extends Controller {
                     'lastPageNumber' => $lastPageNumber,
                     'paginationParameters' => $paginationParameters,
                     'entities' => $entities
-                ));
+        ));
     }
 
     /**
@@ -121,7 +121,7 @@ class CompanyController extends Controller {
         $entities = $this->getDoctrine()->getEntityManager()->getRepository('ObjectsInternJumpBundle:CVCategory')->findAll();
         return $this->render('ObjectsInternJumpBundle:Company:industries.html.twig', array(
                     'entities' => $entities
-                ));
+        ));
     }
 
     /**
@@ -169,7 +169,7 @@ class CompanyController extends Controller {
                     'lastPageNumber' => $lastPageNumber,
                     'paginationParameters' => $paginationParameters,
                     'entities' => $entities
-                ));
+        ));
     }
 
     /**
@@ -199,7 +199,7 @@ class CompanyController extends Controller {
                     'company' => $company,
                     'industry' => $industry,
                     'viewJobsLink' => $viewJobsLink
-                ));
+        ));
     }
 
     /**
@@ -367,7 +367,7 @@ class CompanyController extends Controller {
                     'allCompanyNotificationsCount' => $allCompanyNotificationsCount,
                     'companyNotificationsCountByType' => $companyNotificationsCountByType,
                     'newMessagesCount' => $newMessagesCount
-                ));
+        ));
     }
 
     /**
@@ -448,7 +448,7 @@ class CompanyController extends Controller {
         return $this->render('ObjectsInternJumpBundle:Company:change_password.html.twig', array(
                     'form' => $form->createView(),
                     'company' => $company
-                ));
+        ));
     }
 
     /**
@@ -461,8 +461,8 @@ class CompanyController extends Controller {
         $request = $this->getRequest();
         //prepare the form validation constrains
         $collectionConstraint = new Collection(array(
-                    'email' => new Email()
-                ));
+            'email' => new Email()
+        ));
         //create the form
         $form = $this->createFormBuilder(null, array(
                     'validation_constraint' => $collectionConstraint,
@@ -515,7 +515,7 @@ class CompanyController extends Controller {
                     'form' => $form->createView(),
                     'error' => $error,
                     'success' => $success
-                ));
+        ));
     }
 
     /**
@@ -737,7 +737,7 @@ class CompanyController extends Controller {
                     'map_change_location_message' => $this->container->getParameter('map_change_location_message_new_job_page'),
                     'default_latitude' => $this->container->getParameter('default_latitude_company_signup_page'),
                     'default_longitude' => $this->container->getParameter('default_longitude_company_signup_page')
-                ));
+        ));
     }
 
     /**
@@ -933,7 +933,7 @@ class CompanyController extends Controller {
                     'company' => $company,
                     'password' => $company->getUserPassword(),
                     'Email' => $this->container->getParameter('contact_us_email'),
-                        ));
+                ));
                 //get the role repo
                 $roleRepository = $em->getRepository('ObjectsUserBundle:Role');
                 //get a ROLE_NOTACTIVE_COMPANY
@@ -988,7 +988,7 @@ class CompanyController extends Controller {
                     'formDesc' => $this->container->getParameter('companySignUp_FormDesc'),
                     'stateId' => $defaultStateID,
                     'defaultStateName' => $defaultStateName,
-                ));
+        ));
     }
 
     /**
@@ -1018,7 +1018,7 @@ class CompanyController extends Controller {
         return $this->render('ObjectsInternJumpBundle:Company:interviewShow.html.twig', array(
                     'company' => $company,
                     'interview' => $interview
-                ));
+        ));
     }
 
     /**
@@ -1178,7 +1178,7 @@ class CompanyController extends Controller {
                     'lastPageNumber' => $lastPageNumber,
                     'companyNotifications' => $companyNotifications,
                     'unreadNotifications' => $unreadNotifications
-                ));
+        ));
     }
 
     /**
@@ -1237,7 +1237,7 @@ class CompanyController extends Controller {
                 ->add('country', 'choice', array(
                     'choices' => $allCountriesArray
                 ))
-                ->add('city', NULL, array('attr' => array('style' => 'width:250px;')))
+                ->add('city')
                 ->add('state', 'choice', array('empty_value' => '--- choose state ---', 'required' => false))
                 ->add('address')
                 ->add('details')
@@ -1257,13 +1257,37 @@ class CompanyController extends Controller {
                 $interviewObject = $InterviewRepo->findOneBy(array('company' => $company->getId(), 'user' => $userId, 'internship' => $form->getData()->getInternship()->getId()));
                 if ($interviewObject) {
                     if ($interviewObject->getAccepted() == 'accepted') {
-                        return new Response($this->container->getParameter('company_user_interview_accept_message_user_data_page'));
+//                        return new Response($this->container->getParameter('company_user_interview_accept_message_user_data_page'));
+                        return $this->render('ObjectsInternJumpBundle:Company:interviewRequest.html.twig', array(
+                                    'message' => $this->container->getParameter('company_user_interview_accept_message_user_data_page'),
+                                    'userId' => $userId,
+                                    'company' => $company,
+                                    'cvId' => $cvId,
+                                    'no_zipcode_message_new_job_page' => $this->container->getParameter('no_zipcode_message_new_job_page'),
+                                    'map_change_location_message' => $this->container->getParameter('map_change_location_message_new_job_page')
+                        ));
                     } elseif ($interviewObject->getAccepted() == 'rejected') {
-                        return new Response($this->container->getParameter('company_user_interview_reject_message_user_data_page'));
+//                        return new Response($this->container->getParameter('company_user_interview_reject_message_user_data_page'));
+                        return $this->render('ObjectsInternJumpBundle:Company:interviewRequest.html.twig', array(
+                                    'message' => $this->container->getParameter('company_user_interview_reject_message_user_data_page'),
+                                    'userId' => $userId,
+                                    'company' => $company,
+                                    'cvId' => $cvId,
+                                    'no_zipcode_message_new_job_page' => $this->container->getParameter('no_zipcode_message_new_job_page'),
+                                    'map_change_location_message' => $this->container->getParameter('map_change_location_message_new_job_page')
+                        ));
                     } elseif ($interviewObject->getAccepted() == 'pending') {
                         //check if invalid
                         if ($interviewObject->getInterviewDate() >= new \DateTime('today')) {
-                            return new Response($this->container->getParameter('company_user_interview_pending_message_user_data_page'));
+//                            return new Response($this->container->getParameter('company_user_interview_pending_message_user_data_page'));
+                            return $this->render('ObjectsInternJumpBundle:Company:interviewRequest.html.twig', array(
+                                        'message' => $this->container->getParameter('company_user_interview_pending_message_user_data_page'),
+                                        'userId' => $userId,
+                                        'company' => $company,
+                                        'cvId' => $cvId,
+                                        'no_zipcode_message_new_job_page' => $this->container->getParameter('no_zipcode_message_new_job_page'),
+                                        'map_change_location_message' => $this->container->getParameter('map_change_location_message_new_job_page')
+                            ));
                         } else {
                             $em->remove($interviewObject);
                         }
@@ -1285,12 +1309,15 @@ class CompanyController extends Controller {
                 //send user email
                 InternjumpController::userNotificationMail($this->container, $userObjct, $company, 'company_interview', $interview->getId());
 
-                return new Response($this->container->getParameter('create_interview_request_success_message_user_data_page'));
-//                return $this->redirect($this->generateUrl('company_see_user_data', array(
-//                                    'userLoginName' => $userObjct->getLoginName(),
-//                                    'cvId' => $cvId,
-//                                    'jobId' => $jobId
-//                                )));
+//                return new Response($this->container->getParameter('create_interview_request_success_message_user_data_page'));
+                return $this->render('ObjectsInternJumpBundle:Company:interviewRequest.html.twig', array(
+                            'message' => $this->container->getParameter('create_interview_request_success_message_user_data_page'),
+                            'userId' => $userId,
+                            'company' => $company,
+                            'cvId' => $cvId,
+                            'no_zipcode_message_new_job_page' => $this->container->getParameter('no_zipcode_message_new_job_page'),
+                            'map_change_location_message' => $this->container->getParameter('map_change_location_message_new_job_page')
+                ));
             }
         }
 
@@ -1301,7 +1328,7 @@ class CompanyController extends Controller {
                     'cvId' => $cvId,
                     'no_zipcode_message_new_job_page' => $this->container->getParameter('no_zipcode_message_new_job_page'),
                     'map_change_location_message' => $this->container->getParameter('map_change_location_message_new_job_page')
-                ));
+        ));
     }
 
     /**
@@ -1361,10 +1388,19 @@ class CompanyController extends Controller {
                 if ($userInternship) {
                     if ($userInternship->getStatus() == 'accepted') {
                         return new Response($this->container->getParameter('company_user_hire_accept_message_user_data_page'));
+                        return $this->render('ObjectsInternJumpBundle:Company:hireRequest.html.twig', array(
+                                    'message' => $this->container->getParameter('company_user_hire_accept_message_user_data_page')
+                        ));
                     } elseif ($userInternship->getStatus() == 'rejected') {
-                        return new Response($this->container->getParameter('company_user_hire_reject_message_user_data_page'));
+//                        return new Response($this->container->getParameter('company_user_hire_reject_message_user_data_page'));
+                        return $this->render('ObjectsInternJumpBundle:Company:hireRequest.html.twig', array(
+                                    'message' => $this->container->getParameter('company_user_hire_reject_message_user_data_page')
+                        ));
                     } elseif ($userInternship->getStatus() == 'pending') {
-                        return new Response($this->container->getParameter('company_user_hire_pending_message_user_data_page'));
+//                        return new Response($this->container->getParameter('company_user_hire_pending_message_user_data_page'));
+                        return $this->render('ObjectsInternJumpBundle:Company:hireRequest.html.twig', array(
+                                    'message' => $this->container->getParameter('company_user_hire_pending_message_user_data_page')
+                        ));
                     } elseif ($userInternship->getStatus() == 'apply') {
                         $userInternship->setStatus('pending');
                         $userInternship->setCreatedAt(new \DateTime());
@@ -1382,8 +1418,10 @@ class CompanyController extends Controller {
                         //send user email
                         InternjumpController::userNotificationMail($this->container, $userObject, $company, 'company_job_hire', $newUserInternship->getId());
 
-
-                        return new Response($this->container->getParameter('company_user_hire_pending_message_user_data_page'));
+                        return $this->render('ObjectsInternJumpBundle:Company:hireRequest.html.twig', array(
+                                    'message' => $this->container->getParameter('company_user_hire_pending_message_user_data_page')
+                        ));
+//                        return new Response($this->container->getParameter('company_user_hire_pending_message_user_data_page'));
                     }
                 }
 
@@ -1403,7 +1441,11 @@ class CompanyController extends Controller {
                 InternjumpController::userNotificationMail($this->container, $userObject, $company, 'company_job_hire', $newUserInternship->getId());
 
 
-                return new Response($this->container->getParameter('create_hire_request_success_message_user_data_page'));
+//                return new Response($this->container->getParameter('create_hire_request_success_message_user_data_page'));
+
+                return $this->render('ObjectsInternJumpBundle:Company:hireRequest.html.twig', array(
+                            'message' => $this->container->getParameter('create_hire_request_success_message_user_data_page')
+                ));
             }
         }
 
@@ -1411,7 +1453,7 @@ class CompanyController extends Controller {
                     'form' => $form->createView(),
                     'userId' => $userId,
                     'cvId' => $cvId
-                ));
+        ));
     }
 
     /**
@@ -1480,14 +1522,14 @@ class CompanyController extends Controller {
                                     'userLoginName' => $loginName,
                                     'cvId' => $cvId,
                                     'errorMessage' => $formError
-                                )));
+                )));
             }
         }
         return $this->render('ObjectsInternJumpBundle:Company:addUserInterest.html.twig', array(
                     'form' => $form->createView(),
                     'loginName' => $loginName,
                     'cvId' => $cvId
-                ));
+        ));
     }
 
     /**

@@ -13,7 +13,7 @@
                 <div class="row-fluid Resume-title show-grid">
                     <div class="span10">
                         <h2>{{user}}
-                            <div><small>{{user.getCountryName}}{% if user.state %}, {{user.state}}{% endif %}</small></div></h2>
+                            <div><small>{{user.getCountryName}}{% if user.state %}, {{user.state}}{% endif %}, {{user.city}}</small></div></h2>
                     </div>
                     <div class="span2 logo-box"><img src="{{user.getTimThumbUrl(90,85)}}"></div>
 
@@ -105,6 +105,70 @@
                 <a class="btn" href="javascript:mailpage()"><i class="icon-envelope"></i> Send</a>
                 <a class="btn" href="javascript:window.print()"><i class="icon-print"></i> Print</a>
             </div>
+
+            {% if userPersonalQuestionAnswers|length > 0 %}
+            <div class="Result-box">
+                <h4 class="title3">Personal Questions</h4><!---title3--->
+
+                <ul class="unstyled inner-list">
+                    {% for answer in userPersonalQuestionAnswers %}
+                        <li class="row-fluid show-grid">
+                            <div class="span8">
+                                <h4><a class="titl-blue" href="javascript:void(0)">{{answer.question.question}}</a></h4>
+                                <i><strong>{{answer.answer}}</strong></i>
+                                <p><br></p>
+                                <p></p>
+                            </div>
+                            <div class="span4">
+                                <div class="Area"><a href="{{ path('personal_questions') }}"><i class="icon-file"></i>Edit Answer</a></div>
+                            </div>
+                        </li>
+                     {% endfor %}
+                    </ul>
+                </div><!--Result-box-->
+            {% endif %}
+            {% if companiesQuestions|length >0 %}
+            <div class="Result-box">
+                <h4 class="title3">Company Questions</h4><!---title3--->
+
+                <ul class="unstyled inner-list">
+                    {% for question in companiesQuestions %}
+                        <li class="row-fluid show-grid">
+                            <div class="span8">
+                                <h4><a class="titl-blue" href="javascript:void(0)">{{question.question}}</a></h4>
+                                <i><strong id="questionAnswerSpan-{{question.id}}">{{question.answer}}</strong></i>
+                                <p><br></p>
+                                <p></p>
+                            </div>
+                            <div class="span4">
+                                <div class="Area">
+                                    {% if question.showOnCV %}
+                                    <a href="javascript:void(0)" class="questionStatus edit-btn" status="hide" id="{{question.id}}">hide from companies</a>
+                                    {% else %}
+                                    <a href="javascript:void(0)" class="questionStatus edit-btn" status="show" id="{{question.id}}">show to companies</a>
+                                    {% endif %}
+                                </div>
+                                <a href="javascript:void(0)" class="edit-btn addEditAnswerLink" id="{{question.id}}"><i class="icon-file"></i>Edit</a>
+                            </div>
+                                <div class="editQuestionAnswer">
+                                    <form action="" method="get" class="student-comment" id="addEditQuestionAnswerDiv-{{question.id}}" style="display: none;">
+                                        <div class="control-group">
+                                                <div class="controls">
+                                        <textarea name="" cols="" rows="" placeholder="Answer a question" class="addEditQuestionAnswer span12" id="addEditQuestionAnswer-{{question.id}}">{{question.answer}}</textarea>
+                                        </div>
+                                        </div>
+                                        <div class="control-group">
+                                                <div class="controls">
+                                            <button class="btn addEditQuestionAnswerButton pull-right" name="" type="button" value="" id="{{question.id}}">Answer a questions</button>
+                                             </div>
+                                        </div>
+                                    </form>
+                           </div>
+                        </li>
+                     {% endfor %}
+                    </ul>
+                </div><!--Result-box-->
+            {% endif %}
         </div><!--span 8-->
 
         <div class="span4">

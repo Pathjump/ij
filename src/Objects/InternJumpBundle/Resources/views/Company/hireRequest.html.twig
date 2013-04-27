@@ -1,34 +1,65 @@
-<link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css"/>
-<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
+{% extends '::base.html.twig' %}
+{% block title %}Hire Request{% endblock %}
 
-<div class="ask4Interview selectCV">
-    <div class="wrapper">
-        <h1>Ask for hire</h1>
-        {% if form_errors(form) %}
-        <span class="alert error">
-            {{ form_errors(form) }}
-            </span>
-        {% endif %}
-            <form action="{{ path('company_hire_user',{'userId' : userId,'cvId' : cvId}) }}" method="post" {{ form_enctype(form) }}>
-                <label>Select your job</label><br>
-            {{ form_errors(form.internship) }}<br>
-            {{ form_widget(form.internship,{'attr' : {'style' : 'width:300px;'}}) }}
+{% block stylesheets %}
+{{parent()}}
 
-            {{ form_rest(form) }}
-                <button id="userCvSubmit" type="submit" class="submit">Create</button>
+{% endblock %}
 
-                <div class="clearfix"></div>
+{% block pageTitle %}Hire Request{% endblock %}
+
+{% block body %}
+
+{% if message is defined %}
+<div class=" alert  alert-info">
+    <button type="button" class="close" data-dismiss="alert"> × </button>
+    {{message}}
+</div>
+{% else %}
+{% if form_errors(form) %}
+<div class=" alert  alert-error">
+    <button type="button" class="close" data-dismiss="alert"> × </button>
+    {{ form_errors(form) }}
+</div>
+{% endif %}
+
+<div class="container Main-content">
+    <div class="row-fluid show-grid">
+        <div class="Add-Job-description span12">
+
+            <form class="company-form" action="{{ path('company_hire_user',{'userId' : userId,'cvId' : cvId}) }}" method="post" {{ form_enctype(form) }}>
+                <legend><h2>ASK FOR HIRE</h2></legend>
+                <fieldset>
+                    <div class="controls  row-fluid show-grid">
+                        <div class=" span12 select-box">
+                            <label>Select Your Internship</label>
+                            {{ form_widget(form.internship) }}
+                            {% if form_errors(form.internship) %}
+                                <div class="alert alert-error">
+                                    <button type="button" class="close" data-dismiss="alert"> × </button>
+                                    {{ form_errors(form.internship) }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="controls  row-fluid show-grid">
+                        <div class="span6"></div>
+                        <div class="span6">
+                            {{ form_rest(form) }}
+                            <button class="btn btn-primary pull-right" type="submit">Submit</button>
+                        </div>
+                    </div>
+                </fieldset>
             </form>
-
-        </div>
+        </div><!--Add-Job-description-->
     </div>
+</div>
+
+{% endif %}
+{% endblock %}
 
 
-<script src="{{asset('js/jquery-1.8.1.js')}}"></script>
-<script>
-$(document).ready(function(){
-    $("select").chosen();    
-});
-</script>
-
-<script src="{{ asset('js/libs/chosen.jquery.min.js') }}"></script>
+{% block javascripts %}
+{{parent()}}
+{% endblock %}

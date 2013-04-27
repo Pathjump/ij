@@ -32,7 +32,7 @@ $(document).ready(function() {
         //confirm delete job
         jConfirm('ok', 'cancle', 'Are you sure you want to delete this job', 'Delete job', function(r) {
             if (r == true) {
-                window.location = thisLink.attr('deleteUrl');
+                window.location = thisLink.attr('data-delete-url');
             } else {
                 return false;
             }
