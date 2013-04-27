@@ -2,6 +2,7 @@
 
 namespace Objects\InternJumpBundle\Controller;
 
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Objects\APIBundle\Controller\TwitterController;
 use Objects\APIBundle\Controller\FacebookController;
@@ -55,6 +56,28 @@ class InternjumpUserController extends ObjectsController {
                     'formName' => $this->container->getParameter('studentSignUpLanguage_FormName'),
                     'formDesc' => $this->container->getParameter('studentSignUpLanguage_FormDesc'),
                 ));
+    }
+
+    public function deleteLanguageAction($id){
+        //check for logrdin company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            //redirect to login page if user not loggedin
+            return $this->redirect($this->generateUrl('login'));
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        //get loggedin user objects
+        $user = $this->get('security.context')->getToken()->getUser();
+        //check if this language exist
+        $language = $em->getRepository('ObjectsInternJumpBundle:UserLanguage')->find($id);
+        if (!$language) {
+            throw $this->createNotFoundException('Language Not Found');
+        }
+        if ($user->getId() !== $language->getUser()->getId()) {
+            throw new AccessDeniedHttpException('This Language is not yours');
+        }
+        $em->remove($language);
+        $em->flush();
+        return $this->redirect($this->generateUrl('student_task', array('loginName' => $user->getLoginName())));
     }
 
     /**
@@ -140,7 +163,7 @@ class InternjumpUserController extends ObjectsController {
                 $em->flush();
 
 
-                return $this->redirect($this->generateUrl('student_task', array('loginName' => $user->getLoginName())));
+                return $this->redirect($this->generateUrl('user_edit_language', array('id' => $newUserLanguage->getId())));
             }
         }
 
