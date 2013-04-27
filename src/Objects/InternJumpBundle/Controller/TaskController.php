@@ -289,36 +289,10 @@ class TaskController extends ObjectsController {
         //Get task notes
         $notes = $task->getNotes();
 
-        //Check for cv(s) for katest jobs
-        $cvs = $em->getRepository('ObjectsInternJumpBundle:CV')->getAllCvs($taskUser->getId());
-        //print_r($cvs);
-        if ($cvs) {//if student Has CVs
-            foreach ($cvs as $cv) {
-                //echo $cv->getName();
-                foreach ($cv->getCategories() as $cat)
-                //echo $cat->getName();
-                    $categ[] = $cat->getId();
-            }
-        } else {
-            $categ[] = "";
-        }
-
-        if (isset($categ)) { //found array of categories
-            $LatestJobs = $em->getRepository('ObjectsInternJumpBundle:Internship')->getLatestJobs($categ);
-        } else { /* don't call the dql */
-            $LatestJobs = "";
-        }
-
-        $userJob = $em->getRepository('ObjectsInternJumpBundle:UserInternship')->findOneBy(array('user' => $taskUser->getId(), 'status' => "accepted"));
-
         return $this->render('ObjectsInternJumpBundle:Task:studentShowTask.html.twig', array(
                     'entity' => $task,
                     'user' => $taskUser,
-                    'cvCategoris' => $categ,
-                    'latestJobs' => $LatestJobs,
                     'notes' => $notes,
-                    'flag' => $flag,
-                    'userjob' => $userJob,
                 ));
 
         //if not equal redirect to Home Page

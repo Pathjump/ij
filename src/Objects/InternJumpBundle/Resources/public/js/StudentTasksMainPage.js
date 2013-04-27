@@ -1,10 +1,10 @@
 $(document).ready(function(){
-    
-   //get progress bar value 
+
+   //get progress bar value
    var v=$(".current-rating").attr("value");
    //call progress bar script and show it
-   $("#progressbar").progressbar({ value: parseInt(v) });
-   
+  // $("#progressbar").progressbar({ value: parseInt(v) });
+
    //change cv sctive status
     $('.isActiveCv').click(function() {
         //cv id
@@ -30,6 +30,6 @@ $(document).ready(function(){
             }
         });
     });
-    
-    
+
+
 });

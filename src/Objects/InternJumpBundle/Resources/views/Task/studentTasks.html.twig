@@ -184,57 +184,12 @@
                                     </ul>
                                 </div>
 
-
-                                <div class="btn-group pull-right">
-                                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                        Per page
-                                        <span class="caret"></span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="">List</a></li>
-                                        <!-- dropdown menu links -->
-                                    </ul>
-                                </div>
-
-
-
-
-                                <div class="btn-group pull-right">
-                                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                        page
-                                        <span class="caret"></span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="">List</a></li>
-                                        <!-- dropdown menu links -->
-                                    </ul>
-                                </div>
-
-
-
-                                <div class="clearfix"></div>
-                                <br/>
-
-
-
                     {%if userjob%}
 
 
-
-                                <div class="btn-group pull-right perPage">
-                                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                        Filter
-                                        <span class="caret"></span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="">List</a></li>
-                                        <!-- dropdown menu links -->
-                                    </ul>
-                                </div>
-
-                                <div class="perPage">
+                                <div class="perPage select-box">
                                     <span>Filter :</span>
-                                    <select class="chzn-select" id="statusFilter">
+                                    <select class="" id="statusFilter">
                                         <option value=""></option>
                                         <option {%if status=="new"%}selected="selected"{%endif%}>new</option>
                                         <option {%if status=="inprogress"%}selected="selected"{%endif%}>inprogress</option>
@@ -242,11 +197,12 @@
                                         <option {%if status=="all"%}selected="selected"{%endif%}>all</option>
                                     </select>
                                 </div>
+ <div class="clearfix"></div>
+                                <br/>
 
-
-                                <div class="perPage" id="perpageFilter">
+                                <div class="perPage select-box" id="perpageFilter">
                                     <span>Per page :</span>
-                                    <select  class="chzn-select" id="perpageFilter" tabindex="2" name="tasks_per_show_page_{{ user.id }}" onchange="setCookie('tasks_per_show_page_{{ user.id }}', this.value, 86391359);
+                                    <select  class="" id="perpageFilter" tabindex="2" name="tasks_per_show_page_{{ user.id }}" onchange="setCookie('tasks_per_show_page_{{ user.id }}', this.value, 86391359);
                                             window.location.reload();">
                                         {% for perPageNumber in 10 .. 100 %}
                                             {% if perPageNumber is divisibleby(10) %}
@@ -256,9 +212,9 @@
                                              </select>
                                     </div>
 
-                                    <div class="perPage">
+                                    <div class="perPage select-box">
                                         <span>Page :</span>
-                                        <select class="chzn-select" id="pageFilter" tabindex="2">
+                                        <select class="" id="pageFilter" tabindex="2">
                                             <option value=""></option>
                                         {% for pageNumber in 1 .. lastPageNumber %}
                                             <option{% if page == pageNumber %} selected="selected"{% endif %} value="{{ pageNumber }}">{{ pageNumber }}</option>
@@ -452,10 +408,7 @@
     </div>
 
 
-<div class="Col-block Latest-Interrnships">
-                    <h2>Follow Us on Facebook</h2>
-<div class="fb-like-box" data-href="http://www.facebook.com/internjump?fref=ts" data-width="292" data-show-faces="false" data-stream="false" data-header="true"></div>
-</div>
+
 
                         </div><!--span4-->
 
@@ -480,13 +433,15 @@
 
 
 {% block javascripts %}
-                                                                                                                                <script src="{{ asset('js/libs/vtabs.js') }}" type="text/javascript"></script>
+
    {{parent()}}                                                                                                                 <script src="{{ asset('js/libs/chosen.jquery.min.js') }}" type="text/javascript"></script>
 
-   <script src="{{ asset('js/bootstrapSwitch.js') }}"></script>                                                                                                      <script type="text/javascript" src="{{asset('js/jquery.alerts.js')}}"></script>
-                                                                                                                                <script>
-                    $(document).ready(function() {
-                        $(".chzn-select").chosen();
+    <script src="{{ asset('js/bootstrapSwitch.js') }}"></script>                                                                                                      <script type="text/javascript" src="{{asset('js/jquery.alerts.js')}}"></script>
+    <script>
+    $(document).ready(function() {
+    $(".chzn-select").chosen();
+// Drob down menu styling
+
                     });
                     var changeCvStatusUrl = '{{ path('change_user_cv_status') }}';
                     var cvActionsUrl = '{{ path('user_cvs_actions') }}';
