@@ -13,7 +13,7 @@ ObjectsInternJumpBundle_internJumpUser:
 company_message:
     resource: "@ObjectsInternJumpBundle/Resources/config/routing/company_message.yml"
     prefix:   /company/messages
-    
+
 ObjectsInternJumpBundle_company:
     resource: "@ObjectsInternJumpBundle/Resources/config/routing/company.yml"
     prefix:   /company
@@ -114,11 +114,9 @@ show_resources:
     pattern:  /Resource/{id}
     defaults: { _controller: "ObjectsInternJumpBundle:Internjump:showOneResource" }
 
-
 campus_resps:
     pattern:  /CampusReps
     defaults: { _controller: "ObjectsInternJumpBundle:Internjump:campusReps" }
-
 
 mail_404:
     pattern:  /errorEmail
@@ -131,7 +129,15 @@ user_languages:
 user_edit_language:
     pattern:  /language/edit/{id}
     defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:userEditLanguage" }
-    
+    requirements:
+        id: \d+
+
+user_delete_language:
+    pattern:  /language/delete/{id}
+    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:deleteLanguage" }
+    requirements:
+        id: \d+
+
 howMuchAreYouWorth:
     pattern:  /findyourworth
-    defaults: { _controller: "ObjectsInternJumpBundle:Internjump:howMuchAreYouWorth" }    
+    defaults: { _controller: "ObjectsInternJumpBundle:Internjump:howMuchAreYouWorth" }
