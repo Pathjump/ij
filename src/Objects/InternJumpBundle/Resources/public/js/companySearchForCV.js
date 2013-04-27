@@ -1,18 +1,4 @@
 $(document).ready(function(){
-    setInterval(function(){
-        //Loader Script
-        $('#loading').width($('#loading').parent().width());
-        $('#loading').height($('#loading').parent().height());
-    }, 500);
-    //add scroll for the categories inputs
-    var oScroll1 = $('div#scrollbar1');
-    if(oScroll1.length > 0){
-        oScroll1.tinyscrollbar();
-    }
-    //initialize chosen
-    $('.chzn-select').chosen({
-        allow_single_deselect: true
-    });
     //check if we have any country selected
     if($('#form_country').val()) {
         //get the correct city and state select from the server
@@ -28,14 +14,14 @@ $(document).ready(function(){
             $('#form_city').empty();
             //empty the state select
             $('#form_state').empty();
-            $("select.chzn-select").trigger("liszt:updated");
+            refreshPage(1);
         }
     });
 });
 
 function changeCityAndStateSelects(countryId) {
     //display the loader
-    $('#loading').show();
+    $('.loading').show();
     $.ajax({
         url: countrySelectsUrl + countryId,
         success: function(msg) {
@@ -45,8 +31,8 @@ function changeCityAndStateSelects(countryId) {
             //empty the city select
             $('#form_city').empty();
             //append the new data
+            $('#form_city').append('<option value=""></option>');
             $.each(msg.cities, function(k, v) {
-                $('#form_city').append('<option value=""></option>');
                 if(selectedCity == v){
                     $('#form_city').append(
                         $('<option selected="selected"></option>').val(v).html(v)
@@ -62,8 +48,8 @@ function changeCityAndStateSelects(countryId) {
             //empty the state select
             $('#form_state').empty();
             //append the new data
+            $('#form_state').append('<option value=""></option>');
             $.each(msg.states, function(k, v) {
-                $('#form_state').append('<option value=""></option>');
                 if(selectedState == v){
                     $('#form_state').append(
                         $('<option selected="selected"></option>').val(v).html(v)
@@ -77,24 +63,24 @@ function changeCityAndStateSelects(countryId) {
         },
         complete: function() {
             //hide the loader
-            $('#loading').hide();
-            $("select.chzn-select").trigger("liszt:updated");
+            $('.loading').hide();
+            refreshPage(1);
         }
     });
 }
 
 function refreshPage(page) {
     //display the loader
-    $('#loading').show();
+    $('.loading').show();
     $.ajax({
         url: $('#cv-search-form').attr('action'),
         data: $('#cv-search-form').serialize() + '&page=' + page,
         success: function(data) {
-            $('#company-cv-search-results').html(data);
+            $('#tab1').html(data);
         },
         complete: function() {
             //hide the loader
-            $('#loading').hide();
+            $('.loading').hide();
         }
     });
 }

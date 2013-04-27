@@ -2,81 +2,96 @@
 
 {% block title %}{{ industry }} companies{% endblock %}
 
-{% block stylesheets %}
-<link href="{{ asset('css/tabber.css') }}" rel="stylesheet" type="text/css"/>
-{% endblock %}
+{% block pageTitle %}{{ industry }} companies{% endblock %}
 
 {% block body %}
-<section id="msgsBox" class="industListTable">
-    <div class="wrapper">
-        <div class="inboxBlock">
-            <div class="coListingTree clearfix">
-                <a href="{{ path('site_homepage') }}">Home</a> / <a href="{{ path('employers') }}">Employers</a> / <a href="{{ path('industry_companies', {'industrySlug': industry.slug}) }}">{{ industry }}</a>
-            <div class="coListingSrch">
-                <form action="{{ path('search_for_company') }}">
-                    <input name="searchString" placeholder="Search For Company" />
-                </form>
-            </div>
-            </div>
-            <h1 class="industiTitle">{{ industry | title }}</h1>
-            <div class="tabber simpleTabs">
-                <div class="tabbertab tabbertabdefault">
-                    <div id="outboxTab" class="simpleTabsContent">
 
-                        {% if entities | length > 0 %}
-                        <table class="msgsTable">
-                            <thead>
-                                <tr>
-                                    <th><a href="{% if paginationParameters.orderBy == 'name' and paginationParameters.orderDirection == 'asc' %}{{ path('industry_companies', {'industrySlug': industry.slug, 'orderBy': 'name', 'orderDirection': 'desc'}) }}{% else %}{{ path('industry_companies', {'industrySlug': industry.slug}) }}{% endif %}">Company Name</a></th>
-                                    <th><a href="{% if paginationParameters.orderBy == 'city' and paginationParameters.orderDirection == 'asc' %}{{ path('industry_companies', {'industrySlug': industry.slug, 'orderBy': 'city', 'orderDirection': 'desc'}) }}{% else %}{{ path('industry_companies', {'industrySlug': industry.slug, 'orderBy': 'city', 'orderDirection': 'asc'}) }}{% endif %}">City</a></th>
-                                    <th><a href="{% if paginationParameters.orderBy == 'state' and paginationParameters.orderDirection == 'asc' %}{{ path('industry_companies', {'industrySlug': industry.slug, 'orderBy': 'state', 'orderDirection': 'desc'}) }}{% else %}{{ path('industry_companies', {'industrySlug': industry.slug, 'orderBy': 'state', 'orderDirection': 'asc'}) }}{% endif %}">State</a></th>
-                                    <th><a href="{% if paginationParameters.orderBy == 'country' and paginationParameters.orderDirection == 'asc' %}{{ path('industry_companies', {'industrySlug': industry.slug, 'orderBy': 'country', 'orderDirection': 'desc'}) }}{% else %}{{ path('industry_companies', {'industrySlug': industry.slug, 'orderBy': 'country', 'orderDirection': 'asc'}) }}{% endif %}">Country</a></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {% for entity in entities %}
-                                <tr>
-                                    <td><a href="{{ path('company_public_profile', {'loginName': entity.loginName, 'industrySlug': industry.slug}) }}" title="{{ entity }}">{{ entity }}</a></td>
-                                    <td><a href="{{ path('company_public_profile', {'loginName': entity.loginName, 'industrySlug': industry.slug}) }}" title="{{ entity }}">{{ entity.city }}</a></td>
-                                    <td><a href="{{ path('company_public_profile', {'loginName': entity.loginName, 'industrySlug': industry.slug}) }}" title="{{ entity }}">{{ entity.state }}</a></td>
-                                    <td><a href="{{ path('company_public_profile', {'loginName': entity.loginName, 'industrySlug': industry.slug}) }}" title="{{ entity }}">{{ entity.getCountryName() }}</a></td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
+        <div class="container Main-content">
+            <ul class="breadcrumb">
+                <li><a href="{{ path('site_homepage') }}">Home</a> <span class="divider">/</span></li>
+                <li><a href="{{ path('employers') }}">Employers</a> <span class="divider">/</span></li>
+                <li class="active">{{ industry }}</li>
+            </ul>
 
-                        {% if lastPageNumber > 1 %}
-                        <ul class="pging">
-                            {% if page > 1 %}
-                            <li class="pgingBigger"><a href="{{ path('industry_companies', paginationParameters) }}">First</a></li>
-                            {% set paginationParameters = paginationParameters|merge({'page': page - 1}) %}
-                            <li><a href="{{ path('industry_companies', paginationParameters) }}">&lt;</a></li>
-                            {% endif %}
+            <div class="Search-interns">
 
-                            {% for numberOfPage in 1..lastPageNumber %}
-                            {% if numberOfPage > page - 4 and numberOfPage < page + 4 %}
-                            {% set paginationParameters = paginationParameters|merge({'page': numberOfPage}) %}
-                            <li{% if numberOfPage == page %} class="crnt"{% endif %}><a href="{{ path('industry_companies', paginationParameters) }}">{{ numberOfPage }}</a></li>
-                            {% endif %}
-                            {% endfor %}
+                <div class="row-fluid show-grid">
 
-                            {% if page < lastPageNumber %}
-                            {% set paginationParameters = paginationParameters|merge({'page': page + 1}) %}
-                            <li><a href="{{ path('industry_companies', paginationParameters) }}">&gt;</a></li>
-                            {% set paginationParameters = paginationParameters|merge({'page': lastPageNumber}) %}
-                            <li class="pgingBigger"><a href="{{ path('industry_companies', paginationParameters) }}">Last</a></li>
-                            {% endif %}
-                        </ul>
-                        {% endif %}
-                        {% else %}
-                        No Compnaies Found
-                        {% endif %}
+                    <div class="span12 interns-res">
 
-                    </div>
+                        <div class="tabbable"> <!-- Only required for left/right tabs -->
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab1">
+                                    <div class="Result-box">
+                                        <div class="title3">{{ count }} Results
+                                            <div class="Select-a btn-group pull-right">
+                                                <a href="#" data-toggle="dropdown" class="btn dropdown-toggle">
+                                                    Order By
+                                                    <span class="caret"></span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <!-- dropdown menu links -->
+                                                    <li><a href="{% if paginationParameters.orderBy == 'name' and paginationParameters.orderDirection == 'asc' %}{{ path('industry_companies', {'industrySlug': industry.slug, 'orderBy': 'name', 'orderDirection': 'desc'}) }}{% else %}{{ path('industry_companies', {'industrySlug': industry.slug}) }}{% endif %}">Company Name</a></li>
+                                                    <li><a href="{% if paginationParameters.orderBy == 'city' and paginationParameters.orderDirection == 'asc' %}{{ path('industry_companies', {'industrySlug': industry.slug, 'orderBy': 'city', 'orderDirection': 'desc'}) }}{% else %}{{ path('industry_companies', {'industrySlug': industry.slug, 'orderBy': 'city', 'orderDirection': 'asc'}) }}{% endif %}">City</a></li>
+                                                    <li><a href="{% if paginationParameters.orderBy == 'state' and paginationParameters.orderDirection == 'asc' %}{{ path('industry_companies', {'industrySlug': industry.slug, 'orderBy': 'state', 'orderDirection': 'desc'}) }}{% else %}{{ path('industry_companies', {'industrySlug': industry.slug, 'orderBy': 'state', 'orderDirection': 'asc'}) }}{% endif %}">State</a></li>
+                                                    <li><a href="{% if paginationParameters.orderBy == 'country' and paginationParameters.orderDirection == 'asc' %}{{ path('industry_companies', {'industrySlug': industry.slug, 'orderBy': 'country', 'orderDirection': 'desc'}) }}{% else %}{{ path('industry_companies', {'industrySlug': industry.slug, 'orderBy': 'country', 'orderDirection': 'asc'}) }}{% endif %}">Country</a></li>
+                                                </ul>
+                                            </div>
+                                        </div><!---title3--->
+
+                                        {% if entities | length > 0 %}
+                                        <ul class="unstyled inner-list">
+                                            {% for entity in entities %}
+                                            <li class="row-fluid show-grid">
+                                                <div class="span8">
+                                                    <h4><a class="titl-blue" href="{{ path('company_public_profile', {'loginName': entity.loginName, 'industrySlug': entity.professions.first().slug}) }}" title="{{ entity }}">{{ entity }}</a></h4>
+                                                </div>
+                                                <div class="span4">
+                                                    <div class="Area">{{ entity.city }}{% if entity.state %}, {{ entity.state }}{% endif %}, {{ entity.getCountryName() }}</div>
+                                                </div>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                        {% else %}
+                                        <div class="alert alert-info">
+                                            Nothing found
+                                        </div>
+                                        {% endif %}
+                                    </div><!--Result-box-->
+
+
+                                    {% if lastPageNumber > 1 %}
+                                    <div class="pagination pagination-centered">
+                                        <ul>
+                                            {% if page > 1 %}
+                                            <li><a href="{{ path('industry_companies', paginationParameters) }}">&laquo;</a></li>
+                                            {% set paginationParameters = paginationParameters|merge({'page': page - 1}) %}
+                                            <li><a href="{{ path('industry_companies', paginationParameters) }}">&lt;</a></li>
+                                            {% endif %}
+
+                                            {% for numberOfPage in 1..lastPageNumber %}
+                                            {% if numberOfPage > page - 4 and numberOfPage < page + 4 %}
+                                            {% set paginationParameters = paginationParameters|merge({'page': numberOfPage}) %}
+                                            <li{% if numberOfPage == page %} class="active"{% endif %}><a href="{{ path('industry_companies', paginationParameters) }}">{{ numberOfPage }}</a></li>
+                                            {% endif %}
+                                            {% endfor %}
+
+                                            {% if page < lastPageNumber %}
+                                            {% set paginationParameters = paginationParameters|merge({'page': page + 1}) %}
+                                            <li><a href="{{ path('industry_companies', paginationParameters) }}">&gt;</a></li>
+                                            {% set paginationParameters = paginationParameters|merge({'page': lastPageNumber}) %}
+                                            <li><a href="{{ path('industry_companies', paginationParameters) }}">&raquo;</a></li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                </div><!--tab1--->
+                            </div><!--tab-content--->
+                        </div><!--tabbable--->
+                    </div><!--span 8-->
                 </div>
 
-            </div>
-        </div>
-    </div>
-</section>
+            </div><!--Search-interns-->
+
+    </div><!--container-->
 {% endblock %}

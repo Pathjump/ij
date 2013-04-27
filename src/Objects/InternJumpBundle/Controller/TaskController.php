@@ -1054,7 +1054,7 @@ class TaskController extends ObjectsController {
      * @author Ola
      */
     public function userMeterAction() {
-        if (true === $this->get('security.context')->isGranted('ROLE_USER')) {
+//        if (true === $this->get('security.context')->isGranted('ROLE_USER')) {
 
             //total percent of CV Completion
             $percent = 1;
@@ -1232,7 +1232,7 @@ class TaskController extends ObjectsController {
                         'facebook' => $fbLinkFlag,
                         'twitter' => $twitterLinkFlag,
                     ));
-        }
+//        }
     }
 
 }

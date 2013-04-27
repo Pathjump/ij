@@ -1164,13 +1164,88 @@ class InternjumpUserController extends ObjectsController {
      */
     public function StudentInternshipsSearchAction() {
         //check for loggedin user
-        if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
-            //return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
-            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
-            return $this->redirect($this->generateUrl('login'));
-        }
+//        if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
+//            //return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+//            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+//            return $this->redirect($this->generateUrl('login'));
+//        }
+
 
         $em = $this->getDoctrine()->getEntityManager();
+
+        //Check to fill the form with parameters if been sent with the request
+        $check = false;
+
+        /*************************************************************/
+        /*         * ********Start Partial Search part*********** */
+        //get request
+        $request = $this->getRequest();
+        //Get request's parameters
+        $company = $request->get("company");
+        $city = $request->get("city");
+        $state = $request->get("state");
+        $category = $request->get("industry");
+
+
+        //Get city Repo
+        $cityRepo = $em->getRepository('ObjectsInternJumpBundle:City');
+
+        if ($company || $category || $city || $state) {
+            //set the check to be true
+            $check = true;
+
+            //now make sure which parameters been sent and which not
+            if (!$company) {
+                $company = "empty";
+            }
+            if (!$city) {
+                $city = "empty";
+            }
+            if (!$state) {
+                $state = "empty";
+            }
+            if (!$category) {
+                $category = "empty";
+            }
+
+            //get number of jobs per page
+            $jobsPerPage = $this->container->getParameter('jobs_per_search_results_page');
+
+            $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
+            //get jobs search results array
+            $userSearchResults = $internshipRepo->getJobsSearchResult("empty", "empty", $city, $state, $category, $company, "empty", "empty", 1, $jobsPerPage);
+
+            //Limit the details to only 200 character
+            foreach ($userSearchResults as &$job) {
+                $jobDesc = strip_tags($job->getDescription());
+                if (strlen($jobDesc) > 200) {
+                    $job->setDescription(substr($jobDesc, 0, 200) . '...');
+                } else {
+                    $job->setDescription($jobDesc);
+                }
+            }
+            /* pagenation part */
+            //get count of all search result jobs
+            $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult("empty", "empty", $city, $state, $category, $company, "empty", "empty", 1, null));
+
+            $lastPageNumber = (int) ($userSearchResultsCount / $jobsPerPage);
+            if (($userSearchResultsCount % $jobsPerPage) > 0) {
+                $lastPageNumber++;
+            }
+        }
+        else{
+            $userSearchResults= null;
+            $jobsPerPage = null;
+            $lastPageNumber = null;
+            $city = null;
+            $state = null;
+            $category = null;
+            $company = null;
+        }
+        /*         * ********End Partial Search part*********** */
+        /*         * ********************************************************** */
+
+        //Get country Repo
         $countryRepo = $em->getRepository('ObjectsInternJumpBundle:Country');
         //get countries array
         $allCountries = $countryRepo->getAllCountries();
@@ -1204,25 +1279,58 @@ class InternjumpUserController extends ObjectsController {
         $request = $this->getRequest();
 
 
+        $countryOptionsArr= array('choices' => $allCountriesArray, 'preferred_choices' => array('US'));
+            $cityOptionsArr= array();
+            $stateOptionsArr =  array('empty_value' => '--- choose State ---');
+            $categoryOptionsArr = array('empty_value' => '--- choose Industry ---','choices' => $allCategoriesArray);
+            $companyOptionsArr = array('empty_value' => '--- choose Company ---','choices' => $allCompanysArray);
+
+        //inspect if check been set to be true then set the defaults values of the form
+        if($check){
+            $countryOptionsArr = array('choices' => $allCountriesArray, 'empty_value' => '--- choose Country ---');
+            if ($city != "empty") {
+                //get the city name
+                $theCity = "";
+                if ($cityRepo->findOneBy(array('id' => $city))) {
+                    $theCity = $cityRepo->findOneBy(array('id' => $city));
+                    $cityOptionsArr = array('data' => $theCity);
+                }
+                else
+                    $cityOptionsArr = array();
+            }
+            if ($state != "empty") {
+                $stateOptionsArr = array('empty_value' => '--- choose State ---');
+            }
+            if ($category != "empty") {
+                $categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($category));
+            } if ($company != "empty") {
+                $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($company));
+            }
+        }
+
         //create a search form
         $formBuilder = $this->createFormBuilder()
-                ->add('country', 'choice', array('choices' => $allCountriesArray, 'preferred_choices' => array('US')
-                ))
+                ->add('country', 'choice', $countryOptionsArr)
                 //->add('city', 'choice', array('empty_value' => '--- choose city ---'))
-                ->add('city', 'text')
-                ->add('state', 'choice', array('empty_value' => '--- choose state ---'))
-                ->add('category', 'choice', array('empty_value' => '--- choose Industry ---',
-                    'choices' => $allCategoriesArray
-                ))
-                ->add('company', 'choice', array('empty_value' => '--- choose company ---',
-            'choices' => $allCompanysArray
-                ))
+                ->add('city', 'text', $cityOptionsArr)
+                ->add('state', 'choice', $stateOptionsArr)
+                ->add('category', 'choice', $categoryOptionsArr)
+                ->add('company', 'choice', $companyOptionsArr)
                 ->add('language', 'entity', $allLanguagesArray);
         //create the form
         $form = $formBuilder->getForm();
 
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:userSearchPage.html.twig', array(
-                    'form' => $form->createView()));
+                    'form' => $form->createView(),
+                    'jobs' => $userSearchResults,
+                    'page' => 1,
+                    'jobsPerPage' => $jobsPerPage,
+                    'lastPageNumber' => $lastPageNumber,
+                    'title' => "empty",
+                    'country' => "empty",
+                    'city' => $city,
+                    'state' => $state, 'category' => $category, 'company' => $company, 'lang' => "empty",
+            ));
     }
 
     /**

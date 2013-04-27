@@ -90,8 +90,9 @@
                                     </div>
 
                                     <div class="span6">
-                                        <label>{{ form_label(employmentHistory.isCurrent, 'Current Position') }}</label>
-                                        {{ form_widget(employmentHistory.isCurrent, {'attr': {'class': 'employmentIsCurrentJob'} }) }}
+                                        <label class="checkbox">Current Position
+                                            {{ form_widget(employmentHistory.isCurrent, {'attr': {'class': 'employmentIsCurrentJob'} }) }}
+                                        </label>
 
                                         {% if form_errors(employmentHistory.isCurrent) %}
                                         <div class="alert alert-error">
