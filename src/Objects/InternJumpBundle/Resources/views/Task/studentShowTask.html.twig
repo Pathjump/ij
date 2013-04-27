@@ -2,11 +2,9 @@
 
     {% block stylesheets %}
 {{parent()}}
-<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
-<link href="{{ asset('css/stuEdu.css') }}" rel="stylesheet" type="text/css"/>
-{#<link href="{{asset('css/jquery-ui.css')}}" rel="stylesheet" type="text/css"/>#}
-{% endblock %}
 
+{% endblock %}
+{% block pageTitle %}Show Task{% endblock %}
 {% block subcatego %}
     <div class="container">
         <ul class="unstyled">
@@ -26,214 +24,93 @@
 
 {%block body%}
 
-<section id="comJobList">
-                <!-- Test Meter Part -->
-{% render "ObjectsInternJumpBundle:Task:userMeter" %}
-
-    <div class="wrapper">
-
-        <aside class="others">
-                        {%if flag=="facebook"%}
-                    <div id="fb-root"></div>
-                    <script src="http://connect.facebook.net/en_US/all.js"></script>
-                    <p>
-                        <input type="button" onclick="sendRequestViaMultiFriendSelector(); return false;" value="Invite Friends" />
-                    </p>
-                    <script>
-                      FB.init({
-                        appId  : '282137608565990',
-                        oauth  : true,
-                        frictionlessRequests: true
-                      });
-
-                      function sendRequestViaMultiFriendSelector() {
-                        FB.ui({method: 'apprequests',
-                          title: 'Who would you like to invite?',
-                          message: 'My internjump Request',
-                          layout:  "iframe",
-                        }, requestCallback);
-                      }
-
-                      function requestCallback(response) {
-                        // Handle callback here
-                       console.log(response);
-                        //alert('done');
-                      }
-                        </script>
-
-                        <script>
-                          FB.getLoginStatus(function(response) {
-
-                          if (response.status === 'connected') {
-                            // the user is logged in and has authenticated your
-                            // app, and response.authResponse supplies
-                            // the user's ID, a valid access token, a signed
-                            // request, and the time the access token
-                            // and signed request each expire
-                            var uid = response.authResponse.userID;
-                            var accessToken = response.authResponse.accessToken;
-                            //alert('already auth');
-                          } else if (response.status === 'not_authorized') {
-                            // the user is logged in to Facebook,
-                            // but has not authenticated your app
-                            //alert('yes ,but not auth');
-                          } else {
-                            // the user isn't logged in to Facebook.
-                            //alert('not');
-                          }
-                         });
-
-                            </script>
-            {%else%}
-                <div class="fb-like-box" data-href="http://www.facebook.com/internjump?fref=ts" data-width="292" data-show-faces="false" data-stream="false" data-header="true"></div>
-                <div id="fb-root"></div>
-                    <script>(function(d, s, id) {
-                        var js, fjs = d.getElementsByTagName(s)[0];
-                        if (d.getElementById(id)) return;
-                            js = d.createElement(s); js.id = id;
-                            js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=282137608565990";
-                            fjs.parentNode.insertBefore(js, fjs);
-                        }(document, 'script', 'facebook-jssdk'));</script>
-            {%endif%}
+<div class="container Main-content">
 
 
-{% if latestJobs %}<!--check if found Jobs found or Not for the cv categories-->
-            <div class="lastUpdates">
+   			<div class="Tasks">
+            	<h2>{{ entity.title }}</h2>
 
-                <h1>Latest Jobs</h1>
-                 {%if cvCategoris%} <!--check if found categories of cvs or not i.e: student has Cv(s) and active or not-->
-                <ul>
-                    {% for job in latestJobs %}
-                        <li>
-                            <span>{{ job['title'] }}</span>
-                            <a title="Read Job Details" href="{{ path('internship_show', {'id': job['id']}) }}">Read</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <i>
-                    To See Latest Jobs<br />
-                    activate at least One of your CVs<br />
-                    Or Create new one
-                </i>
-                {% endif %}
-            </div>
-{% endif %}
+                <div class="Tasks-Content">
 
-
-        </aside>
-
-        <section class="comntSection" id="portalHome">
-            <aside class="copmanyInfo">
-                <img src="{{ user.getTimThumbUrl(111, 119) }}" width="111" height="119"/>
-                <div>
-                    <h1>{{ user }}</h1>
-                    <div class="infoBlock">
-                        <table width="200" cellpadding="3" border="0" class="Objectives-box">
-                            <tr>
-                                <th class="title-des" scope="row">Gender:</th>
-                                <td>{{ user.getGenderString() }}</td>
-                                <td class="title-des">Email:</td>
-                                <td>{{ user.email }}</td>
-                            </tr>
-                            <tr>
-                                <th class="title-des" scope="row">Country:</th>
-                                <td>{{ user.getCountryName() }}</td>
-                                <td class="title-des">City:</td>
-                                <td>{{ user.getCity() }}</td>
-                            </tr>
-                            <tr>
-                                <th class="title-des" scope="row">State:</th>
-                                <td>{{ user.getState() }}</td>
-                                <td class="title-des">Age:</td>
-                                <td>{{ user.getAge() }}</td>
-                            </tr>
-                            <tr>
-                                <th class="title-des" scope="row">About:</th>
-                                <td colspan="3">{{ user.about }}</td>
-                            </tr>
-                        </table>
+                    <div class="perPage select-box pull-right">
+                        <select class="status">
+                            <option value="new">new</option>
+                            <option value="inprogress">inprogress</option>
+                            <option value="done">done</option>
+                        </select>
                     </div>
-                </div>
+<a href="{{path('student_task', {'loginName': user.loginName})}}"><button class="button btn btn-info" >Back</button></a>
+                       <div class="clearfix"></div>
 
-                <aside id="tabs">
-                    <div class="tabsList">
-                        <ul>
-                            <li><a href="#tabs-1">Skills</a></li>
-                            <li><a href="#tabs-2">Education</a></li>
-                            <li><a href="#tabs-3">Experience</a></li>
-                        </ul>
-                    </div>
-                    <div id="tabs-1">
-                        {% for skill in user.skills %}
-                            <p>{{ skill }}</p>
-                        {% endfor %}
-                    </div>
-                    <div id="tabs-2">
-                        {% for education in user.educations %}
-                        <table border="0" class="Objectives-box" cellpadding="3">
-                            <tr>
-                                <th scope="row"  class="title-des">School Name:</th>
-                                <td>{{ education.schoolName }}</td>
-                                <td class="title-des">Field Of Study:</td>
-                                <td>{{ education.fieldOfStudy }}</td>
-                                <td class="title-des">Grade:</td>
-                                <td>{{ education.grade }}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row"  class="title-des">Degree:</th>
-                                <td>{{ education.degree }}</td>
-                                <td class="title-des">Start Year:</td>
-                                <td>{% if education.startDate %}{{ education.startDate | date('Y-m-d') }}{% endif %}</td>
-                                <td class="title-des">End Year:</td>
-                                <td>{% if education.endDate %}{{ education.endDate | date('Y-m-d') }}{% endif %}</td>
-                            </tr>
-                            <tr class="notes">
-                                <td class="title-des">Additional Notes</td>
-                                <td colspan="5">{{ education.additionalDetails }}</td>
-                            </tr>
-                        </table>
-                        {% endfor %}
-                    </div>
-                    <div id="tabs-3">
-                        {% for employmentHistory in user.employmentHistories %}
-                        <table border="0" class="Objectives-box" cellpadding="3">
-                            <tr>
-                                <th scope="row"  class="title-des">Title:</th>
-                                <td>{{ employmentHistory.title }}</td>
-                                <td class="title-des">Industry:</td>
-                                <td>{{ employmentHistory.industry }}</td>
-                                {#<td class="title-des">Job Position:</td>
-                                <td>{{ employmentHistory.jobPosition }}</td>#}
-                            </tr>
-                            <tr>
-                                <th scope="row"  class="title-des">Company Name:</th>
-                                <td>{% if employmentHistory.companyUrl %}<a target="_blank" rel="nofollow" href="{{ employmentHistory.companyUrl }}">{% endif %}{{ employmentHistory.companyName }}{% if employmentHistory.companyUrl %}</a>{% endif %}</td>
-                                <td class="title-des">Start Year:</td>
-                                <td>{% if employmentHistory.startedFrom %}{{ employmentHistory.startedFrom | date('Y-m-d') }}{% endif %}</td>
-                                <td class="title-des">End Year:</td>
-                                <td>{% if employmentHistory.endedIn %}{{ employmentHistory.endedIn | date('Y-m-d') }}{% endif %}</td>
-                            </tr>
-                            <tr class="notes">
-                                <td class="title-des">Description</td>
-                                <td colspan="5">{{ employmentHistory.description }}</td>
-                            </tr>
-                        </table>
-                        {% endfor %}
-                    </div>
-                    <div class="clear"></div>
-                </aside>
-                </aside>
+                           <table width="100%" border="0" class="table table-bordered one-task-table noteDiv">
+                              <tr>
+                                <th scope="row"> From</th>
+                                <td>{{entity.company.name}}
+
+                                <span class="label {% if entity.status == 'new' %}label-info{% elseif entity.status == 'inprogress' %}label-warning{% else %}label-success{% endif %} pull-right"> {{entity.status}}</span>
+                                </td>
+                              </tr>
+                              <tr>
+                                <th scope="row">to</th>
+                                <td>{{entity.user.loginName}}</td>
+                              </tr>
+                              <tr>
+                                <th scope="row">Start</th>
+                                <td>{{ entity.startedAt|date('Y-m-d H:i:s') }}</td>
+                              </tr>
+                              <tr>
+                                <th scope="row">End</th>
+                                <td>{{ entity.endedAt|date('Y-m-d H:i:s') }}</td>
+                              </tr>
+                              <tr>
+                                <th scope="row">Task</th>
+                                <td>
+                                <!--<a class="btn btn-small pull-right" href="#"><i class="icon-pencil"></i> Edit</a>-->
+
+                               {{ entity.description }}
+
+</td>
+                              </tr>
+                              {%if notes%}
+                                {%for note in notes%}
+
+                              <tr class="warning">
+
+                                <th  class="warning" scope="row">{% if note.type == 0%}{{entity.user.loginname}}{% elseif note.type == 1 %}{{entity.company.name}}{%endif%}: At {{note.createdAt|date('Y-m-d H:i a')}}</th>
+                                <td>
+
+                                  <div class="{{note.id}}note">{{note.note}}</div>
+                                   {%if (note.type ==0 and is_granted('ROLE_USER') ) or (note.type ==1 and is_granted('ROLE_COMPANY') ) %}
+                                    <a href=" javascript:void(0)" noteid="{{note.id}}" class="editNoteAjax ediTask btn btn-small pull-right"><i class="icon-pencil"></i>Edit</a>{%endif%}
+                                  <div class="edittaskNote" style=" display: none;">
+                                      <textarea style="width: 652px;" class="noteText" value="{{note.note}}" noteId="{{note.id}}">{{note.note}}</textarea>
+                                      <input type="button" value="Done" class="editNoteButton" >
+                                  </div>
+                                </td>
+
+                              </tr>
+
+                                {% endfor %}
+                              {% endif %}
+
+                            </table>
+
+<div class="addNote">
+{#<textarea name="" cols="" rows=""></textarea>#}
+<button class="button addNoteAjax btn btn-warning">Add Note</button>
+<div class="taskNote">
+    <textarea type="text" class="noteText1"></textarea>
+    <input type="button" value="Add" class="addNoteButton">
+</div>
+                </div><!--Tasks-Content--->
+                      </div><!--Tasks-->
+                      </div><!--containter-->
 
 
-                <section class="comntSection" id="crntHired">
-<aside class="copmanyInfo" id="msgsBox">
 
-                    <h1>Currently Hired In <i>{%if userjob%}{{userjob.internship.company}}{%endif%}</i></h1>
-                    <h2>You are now working at <a href="#">{%if userjob%}{{userjob.internship.company}}{%endif%}</a> as a <a href="#">{%if userjob%} {{userjob.internship.title}}{%endif%}</a></h2>
 
-<a href="{{path('student_task', {'loginName': user.loginName})}}"><button class="button" >Back</button></a>
 
+{#
 <section class="singleTask">
 <h1>{{ entity.title }}</h1>
 <div>
@@ -273,12 +150,12 @@
     </div>
 </div>
 
-{#<a class="ediTask" href="#">Edit Note</a>#}
+<! --<a class="ediTask" href="#">Edit Note</a> -->
 {%endfor%}
 {%endif%}
 </div>
 <div class="addNote">
-{#<textarea name="" cols="" rows=""></textarea>#}
+<!-- <textarea name="" cols="" rows=""></textarea> -->
 <button class="button addNoteAjax">Add Note</button>
 <div class="taskNote">
     <textarea type="text" class="noteText1"></textarea>
@@ -292,108 +169,16 @@
 
 </div>
 </section>
-
-
-            </aside>
-</section>
-            </section>
-            </div>
-            </section>
- {#
-<h1>Task</h1>
-
-<select class="status">
-  <option>new</option>
-  <option>inprogress</option>
-  <option>done</option>
-</select>
-
-<table class="record_properties">
-    <tbody>
-        <tr>
-            <th>Id</th>
-            <td>{{ entity.id }}</td>
-        </tr>
-        <tr>
-            <th>Title</th>
-            <td>{{ entity.title }}</td>
-        </tr>
-        <tr>
-            <th>Description</th>
-            <td>{{ entity.description }}</td>
-        </tr>
-        <tr>
-            <th>Status</th>
-            <td>{{ entity.status }}</td>
-        </tr>
-        <tr>
-            <th>Createdat</th>
-            <td>{{ entity.createdAt|date('Y-m-d H:i:s') }}</td>
-        </tr>
-        <tr>
-            <th>Startedat</th>
-            <td>{{ entity.startedAt|date('Y-m-d H:i:s') }}</td>
-        </tr>
-        <tr>
-            <th>Endedat</th>
-            <td>{{ entity.endedAt|date('Y-m-d H:i:s') }}</td>
-        </tr>
-    </tbody>
-</table>
-
-<ul class="record_actions">
-    <li>
-        <a href="{{ path('student_task', {'loginName' : user.loginName}) }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('student_task_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>
-
-    </li>
-</ul>
-
-
-{%if notes%}
-<hr>
-<div class="noteDivParent">
-<div class="noteDiv">
-<h3>Notes</h3>
-----------<br />
-    {%for note in notes%}
-    <b>{% if note.type == 0%}{{entity.user.loginname}}{% elseif note.type == 1 %}{{entity.company.name}}{%endif%}: </b><div class="{{note.id}}note">{{note.note}}</div> {%if (note.type ==0 and is_granted('ROLE_USER') ) or (note.type ==1 and is_granted('ROLE_COMPANY') ) %}<b> -- </b> <a href=" javascript:void(0)" noteid="{{note.id}}" class="editNoteAjax">Edit Note</a>{%endif%}
-        <div class="edittaskNote">
-            <input type="text" class="noteText" value="{{note.note}}" noteId="{{note.id}}">
-            <input type="button" value="Edit" class="editNoteButton">
-        </div>
-        <br />
-        <br />
-{%endfor%}
-{%endif%}
-</div>
-    <a href="javascript:void(0)" class="addNoteAjax">Add Note</a>
-<div class="taskNote">
-    <input type="text" class="noteText1">
-    <input type="button" value="Add" class="addNoteButton">
-</div>
-</div>
 #}
 {%endblock%}
 
 
 {%block javascripts%}
 {{parent()}}
-<script src="{{ asset('js/libs/vtabs.js') }}" type="text/javascript"></script>
-<script src="{{ asset('js/libs/chosen.jquery.min.js') }}" type="text/javascript"></script>
+
 <script>
     $(document).ready(function(){
-        $(".chzn-select").chosen();
-        $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
-        $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+     //   $(".chzn-select").chosen();
     });
 var taskId= '{{entity.id}}';
 var userId = '{{entity.user.id}}';
@@ -405,21 +190,4 @@ var taskStatus= '{{entity.status}}';
 </script>
 <script src="{{asset('bundles/objectsinternjump/js/note.js')}}"></script>
 
-<script>
-        $('.progressBar').hover(function() {
-        if($('.moredetails').is(':hidden')){
-        $('.moredetails').slideToggle(1000);
-        $('.detailsLink').text('hide details');
-        }
-    });
-            $('.detailsLink').click(function(){
-            $('.moredetails').slideToggle(1000,function(){
-                if($('.moredetails').is(':hidden')){
-                $('.detailsLink').text('show details');
-            }else{
-                $('.detailsLink').text('hide details');
-            }
-            });
-    });
-</script>
 {%endblock%}

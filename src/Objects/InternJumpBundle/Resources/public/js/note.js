@@ -1,20 +1,20 @@
 $(document).ready(function(){
-    
+
     $('.taskNote').hide();
     $('.edittaskNote').hide();
     $(".status").val(taskStatus);
-    
-   //get progress bar value 
+
+   //get progress bar value
    var v=$(".current-rating").attr("value");
    if(v)
    //call progress bar script and show it
    $("#progressbar").progressbar({ value: parseInt(v) });
-    
+
     //ajax action that adds note
     $('.addNoteAjax').click(function(){
         $('.taskNote').toggle(500);
     });
-    $('.addNoteButton').live("click", function(){ 
+    $('.addNoteButton').live("click", function(){
         if($('.noteText1').val()){
             $(".loading").show();
         $.ajax({
@@ -32,20 +32,20 @@ $(document).ready(function(){
         //alert($('.noteText').val());
         }
         else{
-            
+
         }
-       
-    }); 
-      
-    
+
+    });
+
+
    //ajax action that edits note
     $('.editNoteAjax').live("click",function(){
         $(this).next().toggle(500);
     });
-    
+
     $('.editNoteButton').live("click",function(){
-        
-        if($(this).prev().val()){  
+
+        if($(this).prev().val()){
                 $(".loading").show();
                 myclass='.'+$(this).prev().attr("noteId")+'note';
                 text= $(this).prev().val();
@@ -61,22 +61,24 @@ $(document).ready(function(){
                  //$('.noteDiv').append('note <b> -- </b> <a href=" javascript:void(0)" noteid="1" noteclass="editNoteAjax">Edit Note</a>');
                  $(this).parent().hide();
                  $(".loading").hide();
-                 
+
             }
         });
-        
+
         //alert($('.noteText').val());
         }
         else{
-            
+
         }
-        
+
     });
 
 
     //ChangeTask Status
     $('.status').change(function(){
+        
         status= $(".status option:selected").val();
+        alert(status);
         var lastStatus=$('#taskstatus').attr("class");
         //alert(status);
             $.ajax({
@@ -94,13 +96,13 @@ $(document).ready(function(){
                 if(status == 'inprogress'){
                     $('#taskstatus').removeClass(lastStatus).addClass('inprog');
                 }
-                
-                 
+
+
             }
         });
-          
+
     });
-    
+
     if($('.deletebutton')){
     $('.deletebutton').click(function(){
         jConfirm('ok','cancel','You are about to Delete this Task <br />Are you sure?', 'Confirm Delete', function(r){
@@ -115,5 +117,5 @@ $(document).ready(function(){
         })
       });
     }
-    
+
 });

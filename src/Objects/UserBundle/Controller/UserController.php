@@ -377,7 +377,7 @@ class UserController extends ObjectsController {
                 ->add('dateOfBirth', 'birthday', array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'required' => FALSE, 'attr' => array('class' => 'dateOfBirth')))
                 ->add('firstName')
                 ->add('lastName')
-                ->add('about', 'textarea')
+                ->add('about')
                 ->add('address')
                 ->add('zipcode')
                 ->add('url', 'url', array('required' => false))

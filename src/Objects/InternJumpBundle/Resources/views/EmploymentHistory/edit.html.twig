@@ -137,7 +137,7 @@
 
                                 <div class="span6">
                                     <label>Company Website</label>
-                                    {{ form_widget(form.companyUrl, {'attr': {'class': 'employmentIsCurrentJob'} }) }}
+                                    {{ form_widget(form.companyUrl, {'attr': {'class': 'span12'} }) }}
 
                                     {% if form_errors(form.companyUrl) %}
                                     <div class="alert alert-error">
@@ -209,7 +209,7 @@
     }
     function changeInputs() {
         var currentCheck = $(this);
-        currentCheck.parent().parent().parent().parent().find('.employmentEndedIn').each(function() {
+        currentCheck.parent().parent().parent().parent().parent().find('.employmentEndedIn').each(function() {
             if(currentCheck.is(':checked')) {
                 $(this).attr('disabled', 'disabled');
                 $(this).val('');
