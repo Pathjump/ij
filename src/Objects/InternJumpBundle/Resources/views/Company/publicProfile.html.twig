@@ -1,65 +1,105 @@
 {% extends '::base.html.twig' %}
-{% block title %}company {{ company }}{% endblock %}
+
+{% block title %}Company {{ company }}{% endblock %}
+
+{% block pageTitle %}Company {{ company }}{% endblock %}
 
 {% block body %}
-                <section id="comJobList">
-                    <div class="wrapper">
-                        <aside class="copmanyInfo" style="padding: 7px;">
-                            <div class="coListingTree clearfix">
-                                <a href="{{ path('site_homepage') }}">Home</a> / <a href="{{ path('employers') }}">Employers</a> / <a href="{{ path('industry_companies', {'industrySlug': industry.slug}) }}">{{ industry }}</a> / <a href="{{ path('industry_companies', {'industrySlug': industry.slug, 'loginName': company.loginName}) }}">{{ company }}</a>
-                            <div class="coListingSrch">
-                                <form action="{{ path('search_for_company') }}">
-                                    <input name="searchString" placeholder="Search For Company" />
-                                </form>
-                            </div>
-                            </div>
-                            <br>
-                            <h1>{{ company }}</h1>
-                            <div class="infoBlock oneCompany">
-                                <div class="logo">
-                                    <img src="{{ company.getTimThumbUrl(105, 120) }}" alt="{{ company }}" width="105" />
-                                    <div style="padding-top: 10px;">
-                                        {% if company.facebookUrl %}
-                                        <a href="{{ company.facebookUrl }}" target="_blank" rel="nofollow"><img src="{{ asset('img/facebook.png') }}" alt="facebook icon" width="24" height="24" /></a>
-                                        {% endif %}
-                                        {% if company.twitterUrl %}
-                                        <a href="{{ company.twitterUrl }}" target="_blank" rel="nofollow"><img src="{{ asset('img/twitter.png') }}" alt="twitter icon" width="24" height="24" /></a>
-                                        {% endif %}
-                                        {% if company.googlePlusUrl %}
-                                        <a href="{{ company.googlePlusUrl }}" target="_blank" rel="nofollow"><img src="{{ asset('img/google_plus.png') }}" alt="g+ icon" width="24" height="24" /></a>
-                                        {% endif %}
-                                        {% if company.linkedInUrl %}
-                                        <a href="{{ company.linkedInUrl }}" target="_blank" rel="nofollow"><img src="{{ asset('img/linkedin.png') }}" alt="linkedin icon" width="24" height="24" /></a>
-                                        {% endif %}
-                                        {% if company.youtubeUrl %}
-                                        <a href="{{ company.youtubeUrl }}" target="_blank" rel="nofollow"><img src="{{ asset('img/youtube.png') }}" alt="youtube icon" width="24" height="24" /></a>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="info">
-                                    <label>Name: </label><span>{{ company }}</span>
-                                    <br>
-                                    <label>Industry Name: </label><span>{{ industry }}</span>
-                                    <br>
-                                    <label>Address: </label><span>{{ company.address }}</span>
-                                    <br>
-                                    <span>{{ company.city }}, {{ company.state }} {{ company.zipcode }}</span>
-                                    <br>
-                                    <span>{{ company.getCountryName() }}</span>
-                                    <br>
-                                    <label>Website Link: </label><span><a href="{{ company.url }}" target="_blank">{{ company.url }}</a></span>
-                                    <br>
-                                </div>
 
-                                {% if viewJobsLink %}
-                                <div class="map" style="width: 475px;vertical-align: bottom;">
-                                    <a style="background: none;" href="{{ path('internship', {'loginName': company.loginName}) }}">View Job Listing</a>
-                                </div>
-                                {% endif %}
-                            </div>
-                        </aside>
+        <div class="container Main-content">
+            <ul class="breadcrumb">
+                <li><a href="{{ path('site_homepage') }}">Home</a> <span class="divider">/</span></li>
+                <li><a href="{{ path('employers') }}">Employers</a> <span class="divider">/</span></li>
+                <li><a href="{{ path('industry_companies', {'industrySlug': industry.slug}) }}">{{ industry }}</a> <span class="divider">/</span></li>
+                <li class="active">{{ company }}</li>
+            </ul>
+
+            <div class="company-form company-profile">
+                <h2>
+                    <div class="img-box">
+                        <img src="{{ company.getTimThumbUrl(98, 102) }}" alt="{{ company }}" />
                     </div>
-                </section>
+                        {{ company }} Profile
+                    <a class=" map"  href="#myModal" role="button" data-toggle="modal">Show Map</a>
+                    <div class="form-search pull-right">
+                        <div class="input-append" style="margin-top: 5px;">
+                            <form action="{{ path('search_for_company') }}">
+                                <input name="searchString" placeholder="Search For Company" type="text" class="search-query">
+                                <button type="submit" class="btn">Search</button>
+                            </form>
+                        </div>
+                    </div>
+                </h2>
+
+                <div class="C-profile">
+                    <ul class="Social-icons-f unstyled">
+                        {% if company.facebookUrl %}
+                        <li><a class="ico-facebook" href="{{ company.facebookUrl }}" target="_blank" rel="nofollow"></a></li>
+                        {% endif %}
+                        {% if company.twitterUrl %}
+                        <li><a class="ico-twitter" href="{{ company.twitterUrl }}" target="_blank" rel="nofollow"></a></li>
+                        {% endif %}
+                        {% if company.googlePlusUrl %}
+                        <li><a href="{{ company.googlePlusUrl }}" target="_blank" rel="nofollow"></a></li>
+                        {% endif %}
+                        {% if company.linkedInUrl %}
+                        <li><a class="ico-google" href="{{ company.linkedInUrl }}" target="_blank" rel="nofollow"></a></li>
+                        {% endif %}
+                        {% if company.youtubeUrl %}
+                        <li><a href="{{ company.youtubeUrl }}" target="_blank" rel="nofollow"></a></li>
+                        {% endif %}
+                    </ul>
+
+                    <table border="0" width="100%" class="table table-bordered">
+                        <tbody><tr>
+                                <th scope="row">Name </th>
+                                <td>{{ company }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Industry</th>
+                                <td>{{ industry }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Address</th>
+                                <td>{{ company.address }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Country</th>
+                                <td>{{ company.getCountryName() }}</td>
+                            </tr>
+                            {% if company.state %}
+                            <tr>
+                                <th scope="row">State</th>
+                                <td>{{ company.state }}</td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                                <th scope="row">Website</th>
+                                <td><a href="{{ company.url }}" target="_blank">{{ company.url }}</a></td>
+                            </tr>
+                            {% if viewJobsLink %}
+                            <tr>
+                                <th scope="row">Jobs</th>
+                                <td><a href="{{ path('internship', {'loginName': company.loginName}) }}" target="_blank">View Job Listing</a></td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+
+                </div><!--C-profile--->
+
+            </div><!--company-form-->
+        </div>
+
+        <div  id="myModal" class="modal hide fade show-map" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
+                <h3>Map</h3>
+            </div>
+            <div class="modal-body">
+                <p><img src="img/mab.jpg" /> </p>
+            </div>
+        </div>
 {% endblock %}
 
 
