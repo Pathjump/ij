@@ -70,8 +70,9 @@
                                 </div>
 
                                 <div class="span6">
-                                    <label>{{ form_label(form.isCurrent, 'Current Position') }}</label>
-                                    {{ form_widget(form.isCurrent, {'attr': {'class': 'employmentIsCurrentJob'} }) }}
+                                    <label class="checkbox">Current Position
+                                        {{ form_widget(form.isCurrent, {'attr': {'class': 'employmentIsCurrentJob'} }) }}
+                                    </label>
 
                                     {% if form_errors(form.isCurrent) %}
                                     <div class="alert alert-error">

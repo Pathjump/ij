@@ -100,8 +100,9 @@
                                     {% endif %}
                                 </div>
                                 <div class="controls">
-                                    <label>{{ form_label(form.isActive, 'Is Active') }}</label>
-                                    {{ form_widget(form.isActive) }}
+                                    <label class="checkbox">Is Active
+                                        {{ form_widget(form.isActive) }}
+                                    </label>
 
                                     {% if form_errors(form.isActive) %}
                                     <div class="alert alert-error">
