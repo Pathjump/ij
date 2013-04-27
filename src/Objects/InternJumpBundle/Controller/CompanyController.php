@@ -282,7 +282,7 @@ class CompanyController extends Controller {
         $languageWrittenLevel = $request->get('language-written-option');
         $languageSpokenLevel = $request->get('language-spoken-option');
         $selectedSkillsIds = $request->get('skills-ids', array());
-        $experienceYears = $request->get('experience-siyears', array());
+        $experienceYears = $request->get('experience-years', array());
         $selectedCategories = $request->get('selected-categories');
         if (!$cvSearchFormSubmited) {
             if (!$selectedCategories) {
@@ -311,7 +311,22 @@ class CompanyController extends Controller {
             $lastPageNumber++;
         }
         $userLanguage = new UserLanguage();
+        $paginationParameters = array(
+            'cv-search-form-submited' => $cvSearchFormSubmited,
+            'search-string' => $searchString,
+            'country-id' => $countryId,
+            'city' => $cityId,
+            'state' => $stateId,
+            'language-id' => $languageId,
+            'language-read-option' => $languageReadLevel,
+            'language-written-option' => $languageWrittenLevel,
+            'language-spoken-option' => $languageSpokenLevel,
+            'skills-ids' => $selectedSkillsIds,
+            'experience-years' => $experienceYears,
+            'selected-categories' => $selectedCategories
+        );
         $twigParameters = array(
+            'paginationParameters' => $paginationParameters,
             'page' => $page,
             'lastPageNumber' => $lastPageNumber,
             'itemsPerPage' => $itemsPerPage,

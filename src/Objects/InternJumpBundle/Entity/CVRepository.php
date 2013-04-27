@@ -75,7 +75,7 @@ class CVRepository extends EntityRepository {
                 $parameters['selectedSkillsIds'] = $selectedSkillsIds;
             }
             if (is_array($selectedCategories) && !empty($selectedCategories)) {
-                $mainQuery .= ' AND c.id IN(:selectedCategories) OR c.parentCategory IN(:selectedCategories)';
+                $mainQuery .= ' AND (c.id IN(:selectedCategories) OR c.parentCategory IN(:selectedCategories))';
                 $parameters['selectedCategories'] = $selectedCategories;
             }
             if (is_array($experienceYears) && !empty($experienceYears)) {
@@ -84,7 +84,7 @@ class CVRepository extends EntityRepository {
                     if ($key != 0) {
                         $mainQuery .= " OR ";
                     }
-                    $mainQuery .= "(DATE_DIFF(e.endedIn, e.startedFrom) BETWEEN :experienceYearStart$key AND :experienceYearEnd$key) OR (e.isCurrent = 1 AND (DATE_DIFF(CURRENT_DATE(), e.startedFrom) BETWEEN :experienceYearStart$key AND :experienceYearEnd$key))";
+                    $mainQuery .= "((DATE_DIFF(e.endedIn, e.startedFrom) BETWEEN :experienceYearStart$key AND :experienceYearEnd$key) OR (e.isCurrent = 1 AND (DATE_DIFF(CURRENT_DATE(), e.startedFrom) BETWEEN :experienceYearStart$key AND :experienceYearEnd$key)))";
                     $parameters["experienceYearStart$key"] = $experienceYear * 365;
                     $parameters["experienceYearEnd$key"] = ($experienceYear * 365) + 365;
                 }
