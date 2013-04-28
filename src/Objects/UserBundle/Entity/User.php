@@ -42,7 +42,7 @@ class User implements AdvancedUserInterface {
      * @ORM\Column(name="currentWorth", type="integer", nullable=true)
      */
     private $currentWorth = 1;
-    
+
     /**
      * the required languages for the internship
      * @var \Doctrine\Common\Collections\ArrayCollection $languages
@@ -232,7 +232,7 @@ class User implements AdvancedUserInterface {
 
     /**
      * @var date $dateOfBirth
-     * @Assert\Date(groups={"adminsignup", "adminedit"})
+     * @Assert\Date(groups={"signup_second", "adminsignup", "adminedit", "edit"})
      * @ORM\Column(name="dateOfBirth", type="date", nullable=true)
      */
     private $dateOfBirth;
@@ -241,20 +241,20 @@ class User implements AdvancedUserInterface {
      * @var string $url
      *
      * @ORM\Column(name="url", type="string", length=255, nullable=true)
-     * @Assert\Url(groups={"adminsignup", "adminedit"})
+     * @Assert\Url(groups={"signup_second", "adminsignup", "adminedit", "edit"})
      */
     private $url;
 
     /**
      * @var string $country
-     * @Assert\NotNull(groups={"signup_second", "adminsignup", "adminedit"})
+     * @Assert\NotNull(groups={"signup_second", "adminsignup", "adminedit", "edit"})
      * @ORM\Column(name="country", type="string", length=2, nullable=true)
      */
     private $country = 'US';
 
     /**
      * @var string $city
-     * @Assert\NotNull(groups={"signup_second", "adminsignup", "adminedit"})
+     * @Assert\NotNull(groups={"signup_second", "adminsignup", "adminedit", "edit"})
      * @ORM\Column(name="city", type="string", length=255, nullable=true)
      */
     private $city;
@@ -268,7 +268,7 @@ class User implements AdvancedUserInterface {
 
     /**
      * @var text $address
-     * @Assert\NotNull(groups={"signup_second", "adminsignup", "adminedit"})
+     * @Assert\NotNull(groups={"signup_second", "adminsignup", "adminedit", "edit"})
      * @ORM\Column(name="address", type="text", nullable=true)
      */
     private $address;
@@ -1525,7 +1525,7 @@ class User implements AdvancedUserInterface {
     /**
      * Get currentWorth
      *
-     * @return integer 
+     * @return integer
      */
     public function getCurrentWorth()
     {
