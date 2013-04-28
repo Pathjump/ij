@@ -134,7 +134,7 @@
                                 </div>
 
                                 <div class="controls  row-fluid show-grid">
-                                    <div class="span6">
+                                    <div class="span6 select-box">
                                         <label>Cumulative GPA</label>
                                         {{ form_widget(education.cumulativeGPA, {'attr': {'class': 'span12'} }) }}
 
@@ -145,7 +145,7 @@
                                         </div>
                                         {% endif %}
                                     </div>
-                                    <div class="span6">
+                                    <div class="span6 select-box">
                                         <label>Major GPA</label>
                                         {{ form_widget(education.majorGPA, {'attr': {'class': 'span12'} }) }}
 
@@ -310,11 +310,11 @@
     </div>
 
     <div class="controls  row-fluid show-grid">
-        <div class="span6">
+        <div class="span6 select-box">
             <label>Cumulative GPA</label>
             {{ form_widget(form.educations.vars.prototype.cumulativeGPA, {'attr': {'class': 'span12'} }) }}
         </div>
-        <div class="span6">
+        <div class="span6 select-box">
             <label>Major GPA</label>
             {{ form_widget(form.educations.vars.prototype.majorGPA, {'attr': {'class': 'span12'} }) }}
         </div>

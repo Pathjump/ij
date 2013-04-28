@@ -13,13 +13,19 @@ class EducationType extends AbstractType {
         foreach ($years as $year) {
             $choices[$year] = $year;
         }
+        $GPAArray = array();
+        $number = 0.1;
+        for ($index = 1; $index <= 40; $index++) {
+            $GPAArray ["$number"] = $number;
+            $number += 0.1;
+        }
         $builder
                 ->add('schoolName')
                 ->add('underGraduate', 'choice', array('choices' => array('UnderGraduate', 'Graduate'), 'expanded' => true, 'required' => FALSE))
                 ->add('major', NULL, array('required' => FALSE))
                 ->add('minor', NULL, array('required' => FALSE))
-                ->add('majorGPA', 'number', array('precision' => 2, 'required' => FALSE))
-                ->add('cumulativeGPA', 'number', array('precision' => 2, 'required' => FALSE))
+                ->add('majorGPA', 'choice', array('choices' => $GPAArray))
+                ->add('cumulativeGPA', 'choice', array('choices' => $GPAArray))
                 ->add('startDate', 'choice', array('required' => FALSE, 'empty_data' => null, 'choices' => $choices, 'attr' => array('class' => 'selectbox')))
                 ->add('endDate', 'choice', array('required' => FALSE, 'empty_data' => null, 'choices' => $choices, 'attr' => array('class' => 'selectbox')))
                 ->add('extracurricularActivity', 'textarea', array('required' => FALSE))
