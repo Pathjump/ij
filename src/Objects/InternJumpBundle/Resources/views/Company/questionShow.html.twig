@@ -15,14 +15,32 @@
             <a href="#companyMap" class="showCompanyMap map">Show Map</a>
         </h2>
         <div class="C-profile">
-            <table width="100%" border="0" class="table table-bordered">
-                <tbody><tr>
-                        <th scope="row">Name </th>
-                        <td>{{questionCompany}}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Industry</th>
-                        <td>
+            <ul class="Social-icons-f unstyled">
+                {% if questionCompany.facebookUrl %}
+                    <li><a class="ico-facebook" href="{{ questionCompany.facebookUrl }}" target="_blank" rel="nofollow"></a></li>
+                {% endif %}
+                {% if questionCompany.twitterUrl %}
+                        <li><a class="ico-twitter" href="{{ questionCompany.twitterUrl }}" target="_blank" rel="nofollow"></a></li>
+                {% endif %}
+                {% if questionCompany.googlePlusUrl %}
+                            <li><a href="{{ questionCompany.googlePlusUrl }}" target="_blank" rel="nofollow"></a></li>
+                {% endif %}
+                {% if questionCompany.linkedInUrl %}
+                                <li><a class="ico-google" href="{{ questionCompany.linkedInUrl }}" target="_blank" rel="nofollow"></a></li>
+                {% endif %}
+                {% if questionCompany.youtubeUrl %}
+                                    <li><a href="{{ questionCompany.youtubeUrl }}" target="_blank" rel="nofollow"></a></li>
+                {% endif %}
+                                    </ul>
+
+                                    <table width="100%" border="0" class="table table-bordered">
+                                        <tbody><tr>
+                                                <th scope="row">Name </th>
+                                                <td>{{questionCompany}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Industry</th>
+                                                <td>
                         {% for cat in questionCompany.professions %}
                                 {% if not loop.last %}
                                     {{cat}},
@@ -30,105 +48,119 @@
                                     {{cat}}
                                 {% endif %}
                         {% endfor %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Address</th>
-                            <td>{{questionCompany.address}}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Country</th>
-                            <td>{{questionCompany.getCountryName()}}</td>
-                        </tr>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Address</th>
+                                                    <td>{{questionCompany.address}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Country</th>
+                                                    <td>{{questionCompany.getCountryName()}}</td>
+                                                </tr>
                     {% if questionCompany.state %}
-                        <tr>
-                            <th scope="row">State</th>
-                            <td>{{questionCompany.state}}</td>
-                        </tr>
+                                                <tr>
+                                                    <th scope="row">State</th>
+                                                    <td>{{questionCompany.state}}</td>
+                                                </tr>
                     {% endif %}
-                        <tr>
-                            <th scope="row">City</th>
-                            <td>{{questionCompany.city}}</td>
-                        </tr>
+                                                <tr>
+                                                    <th scope="row">City</th>
+                                                    <td>{{questionCompany.city}}</td>
+                                                </tr>
                     {% if questionCompany.url %}
-                        <tr>
-                            <th scope="row">Website</th>
-                            <td><a href="{{questionCompany.url}}" target="_blank">{{questionCompany.url}} </a> </td>
-                        </tr>
+                                                <tr>
+                                                    <th scope="row">Website</th>
+                                                    <td><a href="{{questionCompany.url}}" target="_blank">{{questionCompany.url}} </a> </td>
+                                                </tr>
                     {% endif %}
 
-                    </tbody>
-                </table>
+                                            </tbody>
+                                        </table>
 
-            </div><!--C-profile--->
-        </div><!--company-form-->
+                                    </div><!--C-profile--->
+                                </div><!--company-form-->
 
-        <div class="prettyprint">
-            <p><abbr class="initialism" title="HyperText Markup Language">HTML</abbr> is the best thing since sliced bread.</p>
-        </div>
+                                <div class="company-form company-profile">
+                                    <form class="bs-docs-example">
+                                        <fieldset>
+                                            <legend>{{question.question}}</legend>
+                                            {% if question.answer %}
+                                            <p>{{question.answer}}</p>
+                                            {% elseif is_granted('ROLE_USER') %}
+                                                <div class="control-group">
+                                                    <div class="controls">
+                                                        <textarea class="questionAnswer" placeholder="Type your answer…" style="width: 98%;"></textarea>
+                                                        <button class="btn questionAnswerButton pull-right" type="button" id="accepted" style="margin-bottom: 5px;">Submit</button>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                            </fieldset>
+                                        </form>
+                                    </div>
 
-        <div style="display: none;">
-            <div  id="companyMap">
-                <div class="modal-header">
-                    <h3>Map</h3>
-                </div>
-                <div class="modal-body">
-                    <p>
-                    <div id="map_canvas" style="width: 400px;height: 168px;"></div>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
+                                    <div style="display: none;">
+                                        <div  id="companyMap">
+                                            <div class="modal-header">
+                                                <h3>Map</h3>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>
+                                                <div id="map_canvas" style="width: 400px;height: 168px;"></div>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
 {% endblock %}
 
 
 {% block javascripts %}
 {{parent()}}
-    <script src="http://maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
-    <script src="{{ asset('js/jquery.colorbox-min.js') }}"></script>
-    <script src="{{asset('bundles/objectsinternjump/js/internShipMap.js')}}"></script>
-    <script>
-        var latitude = '{{questionCompany.Latitude}}';
-        var longitude = '{{questionCompany.Longitude}}';
-        $(document).ready(function() {
+                                <script src="http://maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
+                                <script src="{{ asset('js/jquery.colorbox-min.js') }}"></script>
+                                <script src="{{asset('bundles/objectsinternjump/js/internShipMap.js')}}"></script>
+                                <script>
+                                    var latitude = '{{questionCompany.Latitude}}';
+                                    var longitude = '{{questionCompany.Longitude}}';
+                                    $(document).ready(function() {
 
-            $('.showCompanyMap').colorbox({
-                inline: true,
-                onLoad: function() {
-                    initialize();
-                }
-            });
-            //interest accept/reject
-            $('.questionAnswerButton').click(function() {
-                var thisInput = $(this);
-                //get the answer text
-                var answerText = $.trim($('.questionAnswer').val());
-                if (answerText) {
-                    //hide the button
-                    thisInput.hide();
-                    //show loading div
-                    $('.loading').show();
-                    $.ajax({
-                        url: '{{path('user_answer_company_question',{'questionId' : question.id,'answerText' : ''})}}' + '/' + encodeURIComponent(answerText),
-                        success: function(msg) {
-                            if (msg == 'done') {
-                                //hide the textarea
-                                $('.questionAnswer').hide();
-                                //change the question answer
-                                $('#questionAnswer').text(answerText);
-                            }
-                        },
-                        complete: function(msg) {
-                            location.reload();
-                        }
-                    });
+                                        $('.showCompanyMap').colorbox({
+                                            inline: true,
+                                            onLoad: function() {
+                                                initialize();
+                                            }
+                                        });
+                                        //interest accept/reject
+                                        $('.questionAnswerButton').click(function() {
+                                            var thisInput = $(this);
+                                            //get the answer text
+                                            var answerText = $.trim($('.questionAnswer').val());
+                                            if (answerText) {
+                                                //hide the button
+                                                thisInput.hide();
+                                                //show loading div
+                                                $('.loading').show();
+                                                $.ajax({
+                                                    url: '{{path('user_answer_company_question',{'questionId' : question.id,'answerText' : ''})}}' + '/' + encodeURIComponent(answerText),
+                                                    success: function(msg) {
+                                                        if (msg == 'done') {
+                                                            //hide the textarea
+                                                            $('.questionAnswer').hide();
+                                                            //change the question answer
+                                                            $('#questionAnswer').text(answerText);
+                                                        }
+                                                    },
+                                                    complete: function(msg) {
+                                                        location.reload();
+                                                    }
+                                                });
 
-                }
-            });
+                                            }
+                                        });
 
-        });
+                                    });
 
-        </script>
+                                    </script>
 {% endblock %}
