@@ -846,7 +846,7 @@ class InternjumpController extends ObjectsController {
         //all companies
         $allCompanies = $companyRepo->findAll();
         //all cities
-        $allCities = $cityRepo->findAll();
+        $allCities = $cityRepo->findBy(array('country' => 'US'));
         //all state
         $allState = $stateRepo->findAll();
         //all category

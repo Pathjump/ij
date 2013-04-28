@@ -1,71 +1,54 @@
 {% extends '::base.html.twig' %}
 {% block title %}personal Questions{% endblock %}
 
+{% block pageTitle %}Personal Questions{% endblock %}
+
 {% block body %}
+{% if questions|length > 0%}
+<div class="container Main-content">
+    <div class="row-fluid show-grid">
 
-<section id="resumePages">
-    <div class="wrapper" id="resume-employers">
+        <div class="span12">
+            <div class="company-form Resume">
+<div class="Result-box">
+<h4 class="title3">Personal Questions</h4><!---title3--->
 
-        <aside class="resume-box">
-
-            {% if questions|length > 0%}
-            <div class="Company-Questions">
-
-                <h3>Personal Questions</h3>
-
-                <div class="resume-contents resume-comment">
-                    {% for question in questions %}
-
-
-
-                        <div class="block3 answered">{{question.question}}</div>
-                        <div class="block4">
-                            <a href="javascript:void(0)" class="edit-btn addEditAnswerLink" id="{{question.id}}">Edit Answer</a>
-                            <span id="questionAnswerSpan-{{question.id}}">
-                        {{question.userAnswer}}
-                                </span>
-                            </div>
-
-                            <form action="" method="get" class="student-comment" id="addEditQuestionAnswerDiv-{{question.id}}" style="display: none;">
-
-                                <textarea name="" cols="" rows="" placeholder="Answer a question" class="addEditQuestionAnswer" id="addEditQuestionAnswer-{{question.id}}">{{question.userAnswer}}</textarea>
-                                <div class="low-btns">
-                                    <button class="button addEditQuestionAnswerButton" name="" type="button" value="" id="{{question.id}}">
-                                        Answer</button>
-                                        <div class="clear"></div>
-                                </div>
-                            </form>
-
-
-                        
-
-                    {% endfor %}
-
-
-
-
-
+<ul class="unstyled inner-list">
+    {% for question in questions %}
+        <li class="row-fluid show-grid">
+            <div class="span8">
+                <h4><a class="titl-blue" href="javascript:void(0)">{{question.question}}</a></h4>
+                <i><strong id="questionAnswerSpan-{{question.id}}">{{question.userAnswer}}</strong></i>
+                <p><br></p>
+                <p></p>
+            </div>
+            <div class="span4">
+                <div class="Area"><a href="javascript:void(0)" class="edit-btn addEditAnswerLink" id="{{question.id}}"><i class="icon-file"></i>Edit Answer</a></div>
+            </div>
+                <div class="editQuestionAnswer">
+                    <form action="" method="get" id="addEditQuestionAnswerDiv-{{question.id}}" style="display: none;">
+                        <div class="control-group">
+                                <div class="controls">
+                        <textarea name="" cols="" rows="" placeholder="Answer a question" class="addEditQuestionAnswer span12" id="addEditQuestionAnswer-{{question.id}}">{{question.userAnswer}}</textarea>
                         </div>
-                        <!--resume-contents-->
-
-                    </div>
-            {% else %}
-            <div class="Company-Questions">
-
-                <h3>Questions is not created yet</h3>
-            </div>    
-            {% endif %}
-                    <!--Company-Questions-->
-                </aside>
-                <aside class="others">
-                    <div class="fb-like-box" data-href="http://www.facebook.com/internjump?fref=ts" data-width="292" data-show-faces="false" data-stream="false" data-header="true"></div>
-
-                    <!--CVs-box-->
-                </aside>
-
-            </div><!--end of wrapper -->
-        </section>
-
+                        </div>
+                        <div class="control-group">
+                                <div class="controls">
+                            <button class="btn addEditQuestionAnswerButton pull-right" name="" type="button" value="" id="{{question.id}}">Answer</button>
+                             </div>
+                        </div>
+                    </form>
+               </div>
+        </li>
+     {% endfor %}
+    </ul>
+</div><!--Result-box-->
+</div></div></div></div>
+{% else %}
+<div class="alert alert-info">
+    Questions is not created yet
+</div>
+{% endif %}
 {% endblock %}
 
 
@@ -73,8 +56,7 @@
 {{parent()}}
         <script>
         $(document).ready(function(){
-            $('#logedInStudent,#personalQuestion').addClass('crnt');
-                    
+
             //show edit/add question answer form
 $('a.addEditAnswerLink').click(function(){
 var thisLink = $(this);
@@ -102,10 +84,10 @@ $('#addEditQuestionAnswerDiv-'+questionId).slideToggle(500);
                     window.location.reload();
                 }
             });
-        
+
         }
     });
-    
+
         });
             </script>
 {% endblock %}

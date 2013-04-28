@@ -13,9 +13,11 @@
     <div class="Box-a Notifications">
         <h3 class="title3">Page {{page}} of {{lastPageNumber}}</h3>
         <br>
+        {% if unreadNotifications|length > 0 and type == 'all' %}
         <a class="btn btn-warning markAllUnreadNotification" href="javascript:void(0)" title="Mark all as read"><i class="icon-eye-open icon-white"></i></a>
+        {% endif %}
         <!--<a class="btn btn-danger" href="">Delete</a>-->
-        <div class="pull-right">
+        <div class="pull-right select-box">
             <span>Per page </span>
                 <select name="user_notifications_per_page_{{ user.id }}" onchange="setCookie('user_notifications_per_page_{{ user.id }}', this.value, 86391359);document.location.reload(true);">
                 {% for perPageNumber in 10 .. 100 %}
@@ -25,7 +27,7 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="pull-right">
+        <div class="pull-right select-box">
             <label>Page</label>
             <select onchange="window.location = '{{ path('User_notification', {'type': type,'page' : ''}) }}/' + this.value;">
                 {% for pageNumber in 1 .. lastPageNumber %}
@@ -33,7 +35,7 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="pull-right">
+        <div class="pull-right select-box">
             <label>Filter By</label>
             <select  onchange="window.location = '{{ path('User_notification', {'type': ''}) }}/' + this.value;">
                 <option {% if type == 'all' %}selected="selected"{% endif %} value="all">Show all</option>

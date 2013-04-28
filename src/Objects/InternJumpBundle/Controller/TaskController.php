@@ -122,7 +122,7 @@ class TaskController extends ObjectsController {
 
         //For search form
         //all cities
-        $allCities = $cityRepo->findAll();
+        $allCities = $cityRepo->findBy(array('country' => 'US'));
         //all category
         $allCategory = $categoryRepo->findAll();
 

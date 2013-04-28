@@ -418,6 +418,7 @@
                         });
                         $('.langaugesContainer').append(tempHtml.replace(/\$\$name\$\$/g, (subFormNumbers.sort().pop() + 1)));
                         $('#btnDel').removeClass('not-active');
+                        $(".select-box select").selectbox();
                     });
                     $('#btnDel').click(function() {
                         if($('.langaugesContainer').children().length == 2) {

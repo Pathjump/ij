@@ -8,111 +8,48 @@
 {% endblock %}
 
 {% block body %}
-
 <div class="container Main-content">
-    <div class="company-form company-profile">
-        <h2><div class="img-box"><img src="{{questionCompany.getTimThumbUrl(98,102)}}"></div>{{questionCompany}} Profile
-            <a href="#companyMap" class="showCompanyMap map">Show Map</a>
-        </h2>
-        <div class="C-profile">
-            <ul class="Social-icons-f unstyled">
-                {% if questionCompany.facebookUrl %}
-                    <li><a class="ico-facebook" href="{{ questionCompany.facebookUrl }}" target="_blank" rel="nofollow"></a></li>
-                {% endif %}
-                {% if questionCompany.twitterUrl %}
-                        <li><a class="ico-twitter" href="{{ questionCompany.twitterUrl }}" target="_blank" rel="nofollow"></a></li>
-                {% endif %}
-                {% if questionCompany.googlePlusUrl %}
-                            <li><a href="{{ questionCompany.googlePlusUrl }}" target="_blank" rel="nofollow"></a></li>
-                {% endif %}
-                {% if questionCompany.linkedInUrl %}
-                                <li><a class="ico-google" href="{{ questionCompany.linkedInUrl }}" target="_blank" rel="nofollow"></a></li>
-                {% endif %}
-                {% if questionCompany.youtubeUrl %}
-                                    <li><a href="{{ questionCompany.youtubeUrl }}" target="_blank" rel="nofollow"></a></li>
-                {% endif %}
-                                    </ul>
+    <div class="company-form">
+        <h2>Hire Request Details</h2>
+        <div class="Notifications">
 
-                                    <table width="100%" border="0" class="table table-bordered">
-                                        <tbody><tr>
-                                                <th scope="row">Name </th>
-                                                <td>{{questionCompany}}</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">Industry</th>
-                                                <td>
-                        {% for cat in questionCompany.professions %}
-                                {% if not loop.last %}
-                                    {{cat}},
-                                {% else %}
-                                    {{cat}}
-                                {% endif %}
-                        {% endfor %}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">Address</th>
-                                                    <td>{{questionCompany.address}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">Country</th>
-                                                    <td>{{questionCompany.getCountryName()}}</td>
-                                                </tr>
-                    {% if questionCompany.state %}
-                                                <tr>
-                                                    <th scope="row">State</th>
-                                                    <td>{{questionCompany.state}}</td>
-                                                </tr>
-                    {% endif %}
-                                                <tr>
-                                                    <th scope="row">City</th>
-                                                    <td>{{questionCompany.city}}</td>
-                                                </tr>
-                    {% if questionCompany.url %}
-                                                <tr>
-                                                    <th scope="row">Website</th>
-                                                    <td><a href="{{questionCompany.url}}" target="_blank">{{questionCompany.url}} </a> </td>
-                                                </tr>
-                    {% endif %}
-
-                                            </tbody>
-                                        </table>
-
-                                    </div><!--C-profile--->
-                                </div><!--company-form-->
-
-                                <div class="company-form company-profile">
-                                    <form class="bs-docs-example">
-                                        <fieldset>
-                                            <legend>{{question.question}}</legend>
-                                            {% if question.answer %}
-                                            <p>{{question.answer}}</p>
-                                            {% elseif is_granted('ROLE_USER') %}
-                                                <div class="control-group">
-                                                    <div class="controls">
-                                                        <textarea class="questionAnswer" placeholder="Type your answer…" style="width: 98%;"></textarea>
-                                                        <button class="btn questionAnswerButton pull-right" type="button" id="accepted" style="margin-bottom: 5px;">Submit</button>
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-                                            </fieldset>
-                                        </form>
-                                    </div>
-
-                                    <div style="display: none;">
-                                        <div  id="companyMap">
-                                            <div class="modal-header">
-                                                <h3>Map</h3>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>
-                                                <div id="map_canvas" style="width: 400px;height: 168px;"></div>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
+            <table width="100%" border="0" class="table table-bordered">
+                <tbody><tr>
+                        <th scope="row"> From</th>
+                        <td><a href="{{ path('internship',{'loginName' : questionCompany.loginName}) }}">{{questionCompany}}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"> Question</th>
+                        <td>{{question.question}}</a>
+                        </td>
+                    </tr>
+                    {% if question.answer %}
+                    <tr>
+                        <th scope="row"> Answer</th>
+                        <td>{{question.answer}}
+                        </td>
+                    </tr>
+                    {% elseif is_granted('ROLE_USER') %}
+                    <tr>
+                        <th scope="row"> Answer</th>
+                        <td>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <textarea class="questionAnswer" placeholder="Type your answer…" style="width: 98%;"></textarea>
+                                    <button class="btn questionAnswerButton pull-right" type="button" id="accepted" style="margin-bottom: 5px;">Submit</button>
                                 </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
 
+                </tbody>
+            </table>
+        </div><!--Notifications--->
+    </div><!--company-form-->
+
+</div>
 {% endblock %}
 
 

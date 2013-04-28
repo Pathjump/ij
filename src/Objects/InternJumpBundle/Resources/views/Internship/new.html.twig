@@ -199,7 +199,7 @@
                         {% for oneLanguage in form.languages %}
                             <div class="newLangauge">
                                 {% if not loop.first %}
-                                            <a class="Remove-btn not-active" href="javascript:void(0);" onclick="deleteSubForm(this);">-</a>
+                                            <a class="Remove-btn" href="javascript:void(0);" onclick="deleteSubForm(this);">-</a>
                                 {% endif %}
                                 <div class="span2 select-box">
                                     <label>Language</label>
@@ -369,7 +369,7 @@
 {% set formElementHTML %}
 {% spaceless %}
 <div class="newLangauge">
-    <a class="Remove-btn not-active" href="javascript:void(0);" onclick="deleteSubForm(this);">-</a>
+    <a class="Remove-btn" href="javascript:void(0);" onclick="deleteSubForm(this);">-</a>
     <div class="span2 select-box">
         <label>Language</label>
         {{ form_widget(form.languages.vars.prototype.language) }}
