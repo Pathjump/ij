@@ -12,11 +12,11 @@ $(document).ready(function(){
                 success: function(data) {
                     // alert(data);
                     response($.map(data, function(item) {
-                      
+
                         return {
                             label:  item,
-                            value:  item 
-                           
+                            value:  item
+
                         }
                     }))
                 }
@@ -27,19 +27,19 @@ $(document).ready(function(){
             addSkill(result);
         },
         close: function (event, ui){
-            $("#skillsSearch").val("");
+//            $("#skillsSearch").val("");
         }
     });
-    
+
     //add new skill
     $('#addSkill').click(function(){
-        var skillName = $.trim($('#skillsSearch').val().toLowerCase()); 
+        var skillName = $.trim($('#skillsSearch').val().toLowerCase());
         if(skillName){
-            addSkill(skillName); 
+            addSkill(skillName);
             $('#skillsSearch').val('');
         }
     });
-    
+
     //delete skill
     $('a#deleteSkill').live('click',function(){
         thisLink = $(this);
@@ -54,7 +54,7 @@ $(document).ready(function(){
                 url: userRemoveSkillurl+"/"+thisLink.attr('skillId'),
                 success: function(msg) {
                     if(msg == 'done'){
-                        thisLink.parent().remove(); 
+                        thisLink.parent().remove();
                         var skillName = thisLink.parent().find('#skillName').text();
                         //remove this skill from array
                         removeSkill(skillName);
@@ -72,13 +72,13 @@ $(document).ready(function(){
             removeSkill(skillName);
         }
     });
-    
+
     //submit the user skills
     $('#submitSkills').click(function(){
         //disable the button
         $(this).attr('disabled','disabled');
         //show loadin img
-        $('#addSkillsImg').show();
+        $('.loading').show();
         $.ajax({
             url: saveUserSkillsUrl+"/"+skillArray,
             success: function(msg) {

@@ -55,10 +55,10 @@ class InternjumpUserController extends ObjectsController {
                     'form' => $form->createView(),
                     'formName' => $this->container->getParameter('studentSignUpLanguage_FormName'),
                     'formDesc' => $this->container->getParameter('studentSignUpLanguage_FormDesc'),
-                ));
+        ));
     }
 
-    public function deleteLanguageAction($id){
+    public function deleteLanguageAction($id) {
         //check for logrdin company
         if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
             //redirect to login page if user not loggedin
@@ -126,7 +126,7 @@ class InternjumpUserController extends ObjectsController {
                         'id' => $id,
                         'formName' => $this->container->getParameter('studentEditLanguage_FormName'),
                         'formDesc' => $this->container->getParameter('studentEditLanguage_FormDesc'),
-                    ));
+            ));
         } else {
             return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
                         'message' => "You can't edit this language."));
@@ -172,7 +172,7 @@ class InternjumpUserController extends ObjectsController {
                     'form' => $form->createView(),
                     'formName' => $this->container->getParameter('studentAddLanguage_FormName'),
                     'formDesc' => $this->container->getParameter('studentAddLanguage_FormDesc'),
-                ));
+        ));
     }
 
     /**
@@ -305,7 +305,7 @@ class InternjumpUserController extends ObjectsController {
 
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:uploadCv.html.twig', array(
                     'form' => $form->createView()
-                ));
+        ));
     }
 
     /**
@@ -376,7 +376,7 @@ class InternjumpUserController extends ObjectsController {
 
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:personalQuestions.html.twig', array(
                     'questions' => $questions
-                ));
+        ));
     }
 
     /**
@@ -439,7 +439,7 @@ class InternjumpUserController extends ObjectsController {
 
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:QuizResult.html.twig', array(
                     'resultObject' => $resultObject
-                ));
+        ));
     }
 
     /**
@@ -455,17 +455,30 @@ class InternjumpUserController extends ObjectsController {
         }
         $em = $this->getDoctrine()->getEntityManager();
         $quizRepo = $em->getRepository('ObjectsInternJumpBundle:Quiz');
+        $quizResultRepo = $em->getRepository('ObjectsInternJumpBundle:QuizResult');
 
         //get logedin user objects
         $user = $this->get('security.context')->getToken()->getUser();
 
         $quiz = $quizRepo->findAll();
 
-
+        //check if user pass the quiz before
+        $resultObject = null;
+        if ($user->getScore()) {
+            //find all quiz results
+            $quizResults = $quizResultRepo->findAll();
+            foreach ($quizResults as $result) {
+                if ($result->getScore() >= $user->getScore()) {
+                    $resultObject = $result;
+                    break;
+                }
+                $resultObject = $result;
+            }
+        }
 
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:internjumbQuizPage.html.twig', array(
-                    'quiz' => $quiz, 'user' => $user
-                ));
+                    'quiz' => $quiz, 'user' => $user, 'resultObject' => $resultObject
+        ));
     }
 
     /**
@@ -497,7 +510,7 @@ class InternjumpUserController extends ObjectsController {
                     'user' => $user,
                     'userNotificationsCountByType' => $userNotificationsCountByType,
                     'newMessagesCount' => $newMessagesCount
-                ));
+        ));
     }
 
     /**
@@ -605,7 +618,7 @@ class InternjumpUserController extends ObjectsController {
                     'user' => $user,
                     'userInternship' => $userInternship,
                     'company' => $company
-                ));
+        ));
     }
 
     /**
@@ -696,7 +709,7 @@ class InternjumpUserController extends ObjectsController {
                     'interview' => $interview,
                     'validToFalg' => $validToFalg,
                     'company' => $company
-                ));
+        ));
     }
 
     /**
@@ -793,7 +806,7 @@ class InternjumpUserController extends ObjectsController {
                     'validToFalg' => $validToFalg,
                     'cv' => $cv,
                     'company' => $company
-                ));
+        ));
     }
 
     /**
@@ -906,7 +919,7 @@ class InternjumpUserController extends ObjectsController {
                     'lastPageNumber' => $lastPageNumber,
                     'userNotifications' => $userNotifications,
                     'unreadNotifications' => $unreadNotifications
-                ));
+        ));
     }
 
     /**
@@ -1073,7 +1086,7 @@ class InternjumpUserController extends ObjectsController {
                     'age' => $age,
                     'companiesQuestions' => $companiesQuestions,
                     'userPersonalQuestionAnswers' => $userPersonalQuestionAnswers
-                ));
+        ));
     }
 
     /**
@@ -1178,7 +1191,7 @@ class InternjumpUserController extends ObjectsController {
                     'company_user_interview_pending_message' => $this->container->getParameter('company_user_interview_pending_message_user_data_page'),
                     'company_user_interview_accept_message' => $this->container->getParameter('company_user_interview_accept_message_user_data_page'),
                     'company_user_interview_reject_message' => $this->container->getParameter('company_user_interview_reject_message_user_data_page')
-                ));
+        ));
     }
 
     /**
@@ -1199,7 +1212,7 @@ class InternjumpUserController extends ObjectsController {
         //Check to fill the form with parameters if been sent with the request
         $check = false;
 
-        /*************************************************************/
+        /*         * ********************************************************** */
         /*         * ********Start Partial Search part*********** */
         //get request
         $request = $this->getRequest();
@@ -1255,9 +1268,8 @@ class InternjumpUserController extends ObjectsController {
             if (($userSearchResultsCount % $jobsPerPage) > 0) {
                 $lastPageNumber++;
             }
-        }
-        else{
-            $userSearchResults= null;
+        } else {
+            $userSearchResults = null;
             $jobsPerPage = null;
             $lastPageNumber = null;
             $city = null;
@@ -1296,20 +1308,19 @@ class InternjumpUserController extends ObjectsController {
         }
 
         //All Languages
-        $allLanguagesArray = array('class' => 'ObjectsInternJumpBundle:Language', 'property' => 'name', 'empty_value' => '--- choose Language ---');//, 'expanded' => true, 'multiple' => true, 'required' => false);
-
+        $allLanguagesArray = array('class' => 'ObjectsInternJumpBundle:Language', 'property' => 'name', 'empty_value' => '--- choose Language ---'); //, 'expanded' => true, 'multiple' => true, 'required' => false);
         //get the request object
         $request = $this->getRequest();
 
 
-        $countryOptionsArr= array('choices' => $allCountriesArray, 'preferred_choices' => array('US'));
-            $cityOptionsArr= array();
-            $stateOptionsArr =  array('empty_value' => '--- choose State ---');
-            $categoryOptionsArr = array('empty_value' => '--- choose Industry ---','choices' => $allCategoriesArray);
-            $companyOptionsArr = array('empty_value' => '--- choose Company ---','choices' => $allCompanysArray);
+        $countryOptionsArr = array('choices' => $allCountriesArray, 'preferred_choices' => array('US'));
+        $cityOptionsArr = array();
+        $stateOptionsArr = array('empty_value' => '--- choose State ---');
+        $categoryOptionsArr = array('empty_value' => '--- choose Industry ---', 'choices' => $allCategoriesArray);
+        $companyOptionsArr = array('empty_value' => '--- choose Company ---', 'choices' => $allCompanysArray);
 
         //inspect if check been set to be true then set the defaults values of the form
-        if($check){
+        if ($check) {
             $countryOptionsArr = array('choices' => $allCountriesArray, 'empty_value' => '--- choose Country ---');
             if ($city != "empty") {
                 //get the city name
@@ -1353,7 +1364,7 @@ class InternjumpUserController extends ObjectsController {
                     'country' => "empty",
                     'city' => $city,
                     'state' => $state, 'category' => $category, 'company' => $company, 'lang' => "empty",
-            ));
+        ));
     }
 
     /**
@@ -1368,7 +1379,7 @@ class InternjumpUserController extends ObjectsController {
 //            return new Response("Faild");
 //        }
 
-        /****to get array of keywords from search text ****/
+        /*         * **to get array of keywords from search text *** */
         $keywordsArray = explode(" ", $title);
 
 //        print_r($keywordsArray);exit;
@@ -1391,7 +1402,7 @@ class InternjumpUserController extends ObjectsController {
         }
         /* pagenation part */
         //get count of all search result jobs
-        $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company,$lang, $keywordsArray, 1, null));
+        $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray, 1, null));
 
         $lastPageNumber = (int) ($userSearchResultsCount / $jobsPerPage);
         if (($userSearchResultsCount % $jobsPerPage) > 0) {
@@ -1409,7 +1420,7 @@ class InternjumpUserController extends ObjectsController {
                     'country' => $country,
                     'city' => $city,
                     'state' => $state, 'category' => $category, 'company' => $company, 'lang' => $lang,
-                ));
+        ));
     }
 
     /**

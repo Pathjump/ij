@@ -102,7 +102,7 @@ class InternshipController extends Controller {
             $companyInterests = $interestRepo->findBy(array('company' => $company->getId()), array('createdAt' => 'desc'));
 
             //get company interviews
-            $companyInterviews = $InterviewRepo->findBy(array('company' => $company->getId()), array('interviewDate' => 'asc'));
+            $companyInterviews = $InterviewRepo->getCompanyInterviews($company->getId());
         } else {
             $allcompanyJobsCount = $internshipRepo->countCompanyJobs($company->getId(), FALSE);
         }
@@ -208,7 +208,7 @@ class InternshipController extends Controller {
         //all companies
         $allCompanies = $companyRepo->findAll();
         //all cities
-        $allCities = $cityRepo->findAll();
+        $allCities = $cityRepo->findBy(array('country' => 'US'));
         //all state
         $allState = $stateRepo->findAll();
         //all category

@@ -12,6 +12,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class InterviewRepository extends EntityRepository
 {
+
+    public function getCompanyInterviews($id){
+        $query = $this->getEntityManager()->createQuery("
+                    select i FROM ObjectsInternJumpBundle:Interview i
+                    where i.company = :id and i.interviewDate >= :todayDate
+                    order by i.interviewDate asc
+                ")->setParameters(array('id' => $id,'todayDate' => new \DateTime()));
+        return $query->getResult();
+    }
+
     /**
      * This is to get user's [upcoming] interviews
      * Use: in TaskCotroller:studentAllTasksAction AT studentTasks.html.twig [i.e: user portal page in the side bar]

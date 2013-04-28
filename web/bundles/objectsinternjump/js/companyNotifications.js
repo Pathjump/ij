@@ -4,16 +4,16 @@ $(document).ready(function(){
         $('#loading').width($('#loading').parent().width());
         $('#loading').height($('#loading').parent().height());
     }, 500);
-    
+
     //notification action on click
     $('.singleRow').click(function(){
         thisDiv = $(this);
         var notificationId = thisDiv.attr('notificationId');
         var notificationPage = thisDiv.attr('notificationPage');
         //check if this notification new
-        if(thisDiv.hasClass('active')){
+        if(thisDiv.hasClass('focus')){
             //show the loading image
-            $('#loading').show();
+            $('.loading').show();
             $.ajax({
                 url: notficationMarkUrl+'/'+notificationId,
                 success: function(msg) {
@@ -22,16 +22,14 @@ $(document).ready(function(){
                     //go to notification page
                     window.location = notificationPage;
                 }
-            });            
+            });
         }else{
             //go to notification page
             window.location = notificationPage;
         }
     });
-                        
-    $(".chzn-select").chosen();
-        
-    
+
+
     //mark all notifications as read
     $('.markAllUnreadNotification').click(function(){
         thisLink = $(this);
