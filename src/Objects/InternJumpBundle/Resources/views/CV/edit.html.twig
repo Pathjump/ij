@@ -6,7 +6,8 @@
 
 {% block stylesheets %}
 {{ parent() }}
-<link href="{{ asset('css/jquery.alerts.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('css/jquery.alerts.css') }}" rel="stylesheet" type="text/css" />
 <style>
     #tooltip{color:#444;font-size:12px;text-shadow:1px 1px 0 #fff;border:1px solid #666;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;background-repeat:repeat-x;background-position:left top;background-color:#D7D7D7;-moz-box-shadow:0 0 4px #bbb;-webkit-box-shadow:0 0 4px #bbb;box-shadow:0 0 4px #bbb;line-height:1.2em;position:absolute;z-index:100000;display:none;padding:5px}
 </style>
@@ -92,7 +93,7 @@
                                 </div>
                                 <div class="controls">
                                     <label>I Am Interested In Interning in</label>
-                                    {{ form_widget(form.categories) }}
+                                    {{ form_widget(form.categories, {'attr': {'class': 'chzn-select', 'data-placeholder': 'Select Categories ...'} }) }}
 
                                     {% if form_errors(form.categories) %}
                                     <div class="alert alert-error">
@@ -140,6 +141,7 @@
 
 {% block javascripts %}
 {{ parent() }}
+<script src="{{ asset('js/libs/chosen.jquery.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/tooltip/tooltip.js') }}"></script>
 <script src="{{ asset('js/jquery.alerts.js') }}" type="text/javascript"></script>
 <script>
@@ -157,6 +159,7 @@
         );
     }
     $(document).ready(function() {
+        $('.chzn-select').chosen();
         $('input[type="checkbox"]').ezMark();
     });
 </script>

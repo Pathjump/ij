@@ -1,86 +1,60 @@
 {% extends '::base.html.twig' %}
 
-
-
 {% block title %}
-{{parent()}} - Resources
-{%endblock%}
+{{ parent() }} - Resources
+{% endblock %}
 
-{%block stylesheets%}
-{{parent()}}
-{%endblock%}
+{% block pageTitle %}{{ parent() }} - Resources{% endblock %}
 
-{%block body%}
+{% block body %}
+        <div class="container Main-content">
+            <div class="resources">
 
-{%if allPosts%}
-<div id="main" role="main">
+                {% for post in allPosts %}
+                <div class="media">
+                    <a href="{{ path('show_resources',{'id' : post.id}) }}" class="pull-left">
+                        <img src="{{ post.getTimThumbUrl(175,130) }}" class="media-object" alt="{{ post.postTitle }}" />
+                    </a>
 
-<section id="comJobList">
-<div class="wrapper">
+                    <div class="media-body">
+                        <h4 class="media-heading"><a href="{{ path('show_resources',{'id' : post.id}) }}">{{ post.postTitle }}</a>
+                            <div>
+                                {% for cat in post.getCategories() %}
+                                <i><strong>{{ cat.catName }}</strong></i>
+                                {% if not loop.last %}
+                                ,
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </h4>
+                        <br/>
+                        {{ post.postBody|striptags }}
+                    </div>
+                </div>
+                {% endfor %}
 
-<aside class="resourcesWrapper">
-<h1>Resources</h1>
+                {% if lastPageNumber > 1 %}
+                <div class="pagination pagination-centered">
+                    <ul>
+                        {% if page > 1 %}
+                        <li><a href="{{ path('resources') }}">First</a></li>
+                        <li><a href="{{ path('resources', {'page': page - 1}) }}">&lt;</a></li>
+                        {% endif %}
 
-<ul class="rescList">
-    {%for post in allPosts%}
-<li>
-<img src="{{post.getTimThumbUrl(127,139)}}" width="127" height="139">
-<h1>{{post.postTitle}}
-<span>Posted in: {%for cat in post.getCategories()%}{{cat.catName}}{%endfor%}   Date: {{post.createdAt|date('d-m-Y  h:i:s')}}</span>
-</h1>
-<p>{{post.postBody|striptags}}</p>
-<a class="submit" style="text-align: center" href="{{path('show_resources',{'id' : post.id})}}">Read More</a>
-<div class="clear"></div>
-</li>
-    {%endfor%}
+                        {% for numberOfPage in 1..lastPageNumber %}
+                        {% if numberOfPage > page - 4 and numberOfPage < page + 4 %}
+                        <li{% if numberOfPage == page %} class="active"{% endif %}><a href="{{ path('resources', {'page': numberOfPage}) }}">{{ numberOfPage }}</a></li>
+                        {% endif %}
+                        {% endfor %}
 
-</ul>
-
-</aside>
-
-
-</div>
-</section>
-
-
-</div>
-
-<!-- xxx END Body Section xxx -->
-{%endif%}
-
-
-    <ul class="pging">
-                                {% if lastPageNumber > 1 %}
-                    {% if page > 1 %}
-                                                <li><a href="{{ url('resources') }}">&laquo;&laquo;</a></li>
-                                                <li><a href="{{ url('resources',{'page': page - 1}) }}">&laquo;</a></li>
-                    {% endif %}
-
-                                
-
-        {% for numberOfPage in 1..lastPageNumber %}
-        {% if numberOfPage > page - 3 and numberOfPage < page + 3 %}
-                                {% if page == numberOfPage %}<li class="crnt"><a href="javascript:void(0)">{{ numberOfPage }}</a></li>{% else %}<li><a href="{{ url('resources',{ 'page': numberOfPage}) }}" >{{ numberOfPage }}</a></li>{%endif%}
-        {% endif %}
-        {% endfor %}
-
-                               
-
-                    {% if page < lastPageNumber %}
-                                                <li><a href="{{ url('resources',{'page': page + 1}) }}" >&raquo;</a></li>
-                                                <li><a href="{{ url('resources',{'page': lastPageNumber}) }}" >&raquo;&raquo;</a></li>                    
-{% endif %}
+                        {% if page < lastPageNumber %}
+                        <li><a href="{{ path('resources', {'page': page + 1}) }}">&gt;</a></li>
+                        <li><a href="{{ path('resources', {'page': lastPageNumber}) }}">Last</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
                 {% endif %}
-                                            </ul>
+            </div><!--resources-->
 
-{%endblock%}
-
-{%block javascripts%}
-{{parent()}}
-<script>
-$(document).ready(function(){
-$('#resourceLink').addClass('crnt');
-});
-</script>
-{%endblock%}
-
+        </div><!--container-->
+{% endblock %}

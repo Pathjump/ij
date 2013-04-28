@@ -1,75 +1,141 @@
 {% extends '::base.html.twig' %}
 
+{% block title %}{{ title }}{% endblock %}
 
+{% block pageTitle %}{{ title }}{% endblock %}
 
-{% block title %}
-{{parent()}} - {{title}}
-{%endblock%}
+{% block stylesheets %}
+{{ parent() }}
+<style>
+    #tooltip{color:#444;font-size:12px;text-shadow:1px 1px 0 #fff;border:1px solid #666;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;background-repeat:repeat-x;background-position:left top;background-color:#D7D7D7;-moz-box-shadow:0 0 4px #bbb;-webkit-box-shadow:0 0 4px #bbb;box-shadow:0 0 4px #bbb;line-height:1.2em;position:absolute;z-index:100000;display:none;padding:5px}
+</style>
+{% endblock %}
 
-{%block body%}
+{% block body %}
 
-
-
-
-<section id="comJobList">
-
-    <div class="wrapper">
-
-
-        <aside class="quizeWrapper aboutus" >
-            {{content|raw}}
-                <div class="clearfix"></div>
-            </aside>
-
-
+        {% if app.session.hasFlash('notice') %}
+        <div class="alert">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('notice') | raw }}
         </div>
-    </section>
+        {% endif %}
 
-<section id="comJobList">
-<div class="wrapper">
+        {% if app.session.hasFlash('success') %}
+        <div class="alert alert-success">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('success') | raw }}
+        </div>
+        {% endif %}
 
+        {% if app.session.hasFlash('error') %}
+        <div class="alert alert-error">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ app.session.flash('error') | raw }}
+        </div>
+        {% endif %}
 
+        {% if form_errors(form) %}
+        <div class="alert alert-error">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ form_errors(form) }}
+        </div>
+        {% endif %}
 
-<section class="comntSection" id="contactForm">
-<aside class="addEdiTask">
+        {% if flag == 1 %}
+        <div class="alert alert-success">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            Your message has been sent Succefully
+        </div>
+        {% endif %}
 
-<div class="contactWrapper">
-{%if flag==1%}
-        Your message has been sent Succefully
-{%else%}
-<fieldset>
-<legend>Tell us about yourself</legend>
-{{form_errors(form)}}
-<form action="{{path('campus_resps')}}" method="POST" {{ form_enctype(form) }}>
+        <div class="container Main-content">
+            <div class="row-fluid show-grid">
 
-        <label>Name :</label>
-            {{form_widget(form.Name)}}
-            {{form_errors(form.Name)}}
-        <br>
-        <label>Email :</label>
-            {{form_widget(form.Email)}}
-            {{form_errors(form.Email)}}
-        <br>
-        <label>Phone :</label>
-            {{form_widget(form.Phone)}}
-            {{form_errors(form.Phone)}}
-        <br>
-        <label>Your Message :</label>
-            {{ form_widget(form.Message, {'attr': {'class': 'task'} }) }}
-            {{form_errors(form.Message)}}
+                <div class="Sign-Up">
 
-        {{form_rest(form)}}
-        <input type="submit" value="Send" class="submit">
-</form>
-</fieldset>
-{%endif%}
-</div>
+                    <form action="{{ path('campus_resps') }}" method="post">
+                        <fieldset>
+                            <p>
+                                {{ content|raw }}
+                            </p>
+                            
+                            <div class="controls  row-fluid show-grid">
+                                <div class="span6">
+                                    <label>Your Name</label>
+                                    {{ form_widget(form.Name, {'attr': {'class': 'span12'} }) }}
 
-</aside>
-</section>
-<div class="clear"></div>
-</div>
-</section>
+                                    <span style="display: inline-block;margin-bottom: 13px;">
+                                        <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
+                                    </span>
 
-{%endblock%}
+                                    {% if form_errors(form.Name) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.Name) }}
+                                    </div>
+                                    {% endif %}
+                                </div>
 
+                                <div class="span6">
+                                    <label>Your Email</label>
+                                    {{ form_widget(form.Email, {'attr': {'class': 'span12'} }) }}
+
+                                    <span style="display: inline-block;margin-bottom: 13px;">
+                                        <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
+                                    </span>
+
+                                    {% if form_errors(form.Email) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.Email) }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="controls select-box">
+                                <label>Phone</label>
+                                {{ form_widget(form.Phone, {'attr': {'class': 'span12'} }) }}
+
+                                <span style="display: inline-block;margin-bottom: 13px;">
+                                    <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
+                                </span>
+
+                                {% if form_errors(form.Phone) %}
+                                <div class="alert alert-error">
+                                    <button type="button" class="close" data-dismiss="alert"> × </button>
+                                    {{ form_errors(form.Phone) }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="controls">
+                                <label>Message</label>
+                                {{ form_widget(form.Message, {'attr': {'class': 'span12'} }) }}
+
+                                <span style="display: inline-block;margin-bottom: 13px;">
+                                    <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{ asset('js/tooltip/required.png') }}" />
+                                </span>
+
+                                {% if form_errors(form.Message) %}
+                                <div class="alert alert-error">
+                                    <button type="button" class="close" data-dismiss="alert"> × </button>
+                                    {{ form_errors(form.Message) }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            {{ form_rest(form) }}
+                            <button type="submit" class="btn btn-primary pull-right">Send</button>
+                        </fieldset>
+                    </form>
+                </div><!--Sign-Up-->
+
+            </div><!--Sign-Up-->
+        </div><!--container-->
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('js/tooltip/tooltip.js') }}"></script>
+{% endblock %}

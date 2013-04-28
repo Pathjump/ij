@@ -4,6 +4,11 @@
 
 {% block pageTitle %}Search for a Resume{% endblock %}
 
+{% block stylesheets %}
+{{ parent() }}
+<link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
 {% block body %}
         <div class="container Main-content">
 
@@ -32,7 +37,7 @@
                                     <input class="input-block-level" name="search-string" type="text"{% if searchString %} value="{{ searchString }}"{% endif %} placeholder="Search with professions and skills" />
                                     <div class="input-block-level">
                                         <label>Skills</label>
-                                        <select onchange="refreshPage(1);" name="skills-ids[]" multiple="" data-placeholder="Choose Skills" class="chzn-select" style="width: 225px">
+                                        <select onchange="refreshPage(1);" name="skills-ids[]" multiple="" data-placeholder="Choose Skills" class="chzn-select">
                                             <option value=""></option>
                                             {% for skill in skills %}
                                                 <option value="{{ skill.id }}"{% if skill.id in selectedSkillsIds %} selected="selected"{% endif %}>{{ skill }}</option>
@@ -42,7 +47,7 @@
 
                                     <div class="input-block-level">
                                         <label>Country</label>
-                                        <select name="country-id" id="form_country" data-placeholder="Choose a country..." class="chzn-select" style="width: 225px">
+                                        <select name="country-id" id="form_country" data-placeholder="Choose a country..." class="chzn-select-deselect">
                                             <option value=""></option>
                                             {% for country in countries %}
                                                 <option value="{{ country.id }}"{% if country.id == countryId %} selected="selected"{% endif %}>{{ country }}</option>
@@ -52,7 +57,7 @@
 
                                     <div class="input-block-level">
                                         <label>City</label>
-                                        <select onchange="refreshPage(1);" name="city" id="form_city" data-placeholder="Choose a city..." class="chzn-select" style="width: 225px">
+                                        <select onchange="refreshPage(1);" name="city" id="form_city" data-placeholder="Choose a city..." class="chzn-select-deselect">
                                             <option value=""></option>
                                             {% if cityId %}
                                             <option selected="selected" value="{{ cityId }}"></option>
@@ -62,7 +67,7 @@
 
                                     <div class="input-block-level">
                                         <label>State</label>
-                                        <select onchange="refreshPage(1);" name="state" id="form_state" data-placeholder="Choose a state..." class="chzn-select" style="width: 225px">
+                                        <select onchange="refreshPage(1);" name="state" id="form_state" data-placeholder="Choose a state..." class="chzn-select-deselect">
                                             <option value=""></option>
                                             {% if stateId %}
                                             <option selected="selected" value="{{ stateId }}"></option>
@@ -72,7 +77,7 @@
 
                                     <div class="input-block-level">
                                         <label>Language</label>
-                                        <select onchange="refreshPage(1);" name="language-id" id="form_language" data-placeholder="Choose a language..." class="chzn-select" style="width: 225px">
+                                        <select onchange="refreshPage(1);" name="language-id" id="form_language" data-placeholder="Choose a language..." class="chzn-select-deselect">
                                             <option value=""></option>
                                             {% for language in languages %}
                                                 <option value="{{ language.id }}"{% if language.id == languageId %} selected="selected"{% endif %}>{{ language }}</option>
@@ -82,7 +87,7 @@
 
                                     <div class="input-block-level">
                                         <label>Language Read Level</label>
-                                        <select onchange="refreshPage(1);" name="language-read-option" data-placeholder="Choose Read Level..." class="chzn-select" style="width: 225px">
+                                        <select onchange="refreshPage(1);" name="language-read-option" data-placeholder="Choose Read Level..." class="chzn-select-deselect">
                                             <option value=""></option>
                                             {% for option in languagesOptions %}
                                                 <option value="{{ option }}"{% if option == languageReadLevel %} selected="selected"{% endif %}>{{ option }}</option>
@@ -92,7 +97,7 @@
 
                                     <div class="input-block-level">
                                         <label>Language Spoken Level</label>
-                                        <select onchange="refreshPage(1);" name="language-spoken-option" data-placeholder="Choose Read Level..." class="chzn-select" style="width: 225px">
+                                        <select onchange="refreshPage(1);" name="language-spoken-option" data-placeholder="Choose Spoken Level..." class="chzn-select-deselect">
                                             <option value=""></option>
                                             {% for option in languagesOptions %}
                                                 <option value="{{ option }}"{% if option == languageSpokenLevel %} selected="selected"{% endif %}>{{ option }}</option>
@@ -102,7 +107,7 @@
 
                                     <div class="input-block-level">
                                         <label>Language Written Level</label>
-                                        <select onchange="refreshPage(1);" name="language-written-option" data-placeholder="Choose Read Level..." class="chzn-select" style="width: 225px">
+                                        <select onchange="refreshPage(1);" name="language-written-option" data-placeholder="Choose Written Level..." class="chzn-select-deselect">
                                             <option value=""></option>
                                             {% for option in languagesOptions %}
                                                 <option value="{{ option }}"{% if option == languageWrittenLevel %} selected="selected"{% endif %}>{{ option }}</option>
@@ -160,9 +165,12 @@
 
 {% block javascripts %}
 {{ parent() }}
+<script src="{{ asset('js/libs/chosen.jquery.min.js') }}" type="text/javascript"></script>
 <script>
     $(document).ready(function() {
         $('input[type="checkbox"]').ezMark();
+        $('.chzn-select').chosen();
+        $('.chzn-select-deselect').chosen({allow_single_deselect: true});
     });
     var countrySelectsUrl = '{{ path('get_countey_cities_states', {'countryId': ''}) }}/';
 </script>

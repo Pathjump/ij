@@ -1,55 +1,37 @@
 {% extends '::base.html.twig' %}
 
 {% block title %}
-{{parent()}} - {{post.postTitle}}
-{%endblock%}
+{{ parent() }} - {{ post.postTitle }}
+{% endblock %}
 
-{%block stylesheets%}
-{{parent()}}
-{%endblock%}
+{% block pageTitle %}{{ parent() }} - {{ post.postTitle }}{% endblock %}
 
-{%block body%}
+{% block body %}
+        <div class="container Main-content">
+            <div class="resources">
 
-{%if post%}
-<div id="main" role="main">
+                <div class="media">
+                    <a href="{{ path('show_resources',{'id' : post.id}) }}" class="pull-left">
+                        <img src="{{ post.getTimThumbUrl(175,130) }}" class="media-object" alt="{{ post.postTitle }}" />
+                    </a>
 
-<section id="comJobList">
-<div class="wrapper">
+                    <div class="media-body">
+                        <h4 class="media-heading"><a href="{{ path('show_resources',{'id' : post.id}) }}">{{ post.postTitle }}</a>
+                            <div>
+                                {% for cat in post.getCategories() %}
+                                <i><strong>{{ cat.catName }}</strong></i>
+                                {% if not loop.last %}
+                                ,
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </h4>
+                        <br/>
+                        {{ post.postBody|raw }}
+                    </div>
+                </div>
 
-<aside class="resourcesWrapper">
-<h1>{{post.postTitle}}</h1>
+            </div><!--resources-->
 
-<ul class="rescList">
-<li>
-<header class="clearfix">
-<img src="{{post.getTimThumbUrl(127,139)}}" width="127" height="139">
-<h1 style="margin: 10px 0 0; ">{{post.postTitle}}
-    <span style="margin: 10px 0 0; "><b>Posted in:</b>{%for cat in post.getCategories()%}{{cat.catName}}{%endfor%} </span> <span style="margin: 10px 0 0; "> <b> Date:</b> {{post.createdAt|date('d-m-Y')}}</span>
-</h1>
-</header>
-<p>{{post.postBody|raw}}</p>
-<div class="clear"></div>
-</li>
-
-</ul>
-
-</aside>
-
-
-</div>
-</section>
-
-
-</div>
-
-<!-- xxx END Body Section xxx -->
-{%endif%}
-
-
-{%endblock%}
-
-{%block javascripts%}
-{{parent()}}
-
-{%endblock%}
-
+        </div><!--container-->
+{% endblock %}

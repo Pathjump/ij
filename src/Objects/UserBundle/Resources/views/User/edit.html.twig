@@ -14,6 +14,13 @@
 
 {% block body %}
 
+        {% if message %}
+        <div class="alert alert-success">
+            <button data-dismiss="alert" class="close" type="button"> &times; </button>
+            {{ message | raw }}
+        </div>
+        {% endif %}
+
         {% if app.session.hasFlash('notice') %}
         <div class="alert">
             <button data-dismiss="alert" class="close" type="button"> &times; </button>
@@ -311,7 +318,6 @@
                                         {% endif %}
                                     </div>
                                 </div>
-
 
                                 {{ form_rest(form) }}
                                 <button type="submit" class="btn btn-primary pull-right">Edit</button>
