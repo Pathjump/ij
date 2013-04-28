@@ -4,18 +4,18 @@
 {% block pageTitle %}notifications{% endblock %}
 
 {% block body %}
-
+{% if companyNotifications|length > 0 %}
 <div class="container Main-content">
 
     <div class="Box-a Notifications">
         <h3 class="title3">Page {{page}} of {{lastPageNumber}}</h3>
-        <br>
+
         {% if unreadNotifications|length > 0 and type == 'all' %}
         <a class="btn btn-warning markAllUnreadNotification" href="javascript:void(0)" title="Mark all as read"><i class="icon-eye-open icon-white"></i></a>
         {% endif %}
         <!--<a class="btn btn-danger" href="">Delete</a>-->
-        <div class="pull-right select-box">
-            <span>Per page </span>
+        <div class="pull-right select-box" style="width: 200px;">
+            <label>Per page </label>
                 <select name="company_notifications_per_page_{{ company.id }}" onchange="setCookie('company_notifications_per_page_{{ company.id }}', this.value, 86391359);document.location.reload(true);">
                     {% for perPageNumber in 10 .. 100 %}
                         {% if perPageNumber is divisibleby(10) %}
@@ -24,7 +24,7 @@
                     {% endfor %}
                 </select>
         </div>
-        <div class="pull-right select-box">
+        <div class="pull-right select-box" style="width: 200px;">
             <label>Page</label>
             <select onchange="window.location = '{{ path('company_notification', {'type': type,'page' : ''}) }}/' + this.value;">
                 {% for pageNumber in 1 .. lastPageNumber %}
@@ -32,7 +32,7 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="pull-right select-box">
+        <div class="pull-right select-box" style="width: 200px;">
             <label>Filter By</label>
             <select onchange="window.location = '{{ path('company_notification', {'type': ''}) }}/' + this.value;">
                 <option {% if type == 'all' %}selected="selected"{% endif %} value="all">Show all</option>
@@ -173,7 +173,11 @@
 
     </div>
 </div>
-
+{% else %}
+<div class="alert alert-info">
+You have no notifications
+</div>
+{% endif %}
 {% endblock %}
 
 
