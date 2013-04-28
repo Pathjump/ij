@@ -17,7 +17,7 @@
                     </a>
 
                     <div class="media-body">
-                        <h4 class="media-heading">{{ post.postTitle }}
+                        <h4 class="media-heading"><a href="{{ path('show_resources',{'id' : post.id}) }}">{{ post.postTitle }}</a>
                             <div>
                                 {% for cat in post.getCategories() %}
                                 <i><strong>{{ cat.catName }}</strong></i>
