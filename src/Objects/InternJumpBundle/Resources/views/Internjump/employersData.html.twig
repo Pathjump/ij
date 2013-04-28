@@ -2,16 +2,16 @@
 
 {% block title %}Employers data{% endblock %}
 
+{% block pageTitle %}Employers Data{% endblock %}
+
 {%block body%}
-<div id="main" role="main">
-
-    <section id="employersData">
-        {{employersData|raw}}
-        <!--employers-data-Que-->
-    </section>
-
-
-</div>
+<div class="container Main-content">
+    <div class="row-fluid show-grid">
+        <div class="Sign-Up">
+                    {{employersData|raw}}
+            </div>
+        </div>
+    </div>
 
 {%endblock%}
 
@@ -20,7 +20,7 @@
 <script>
 $(document).ready(function(){
     $('#employerLink').addClass('crnt');
-    
+
     $('#companySignUpLink').click(function(){
         window.location = '{{path('company_signup')}}';
     });

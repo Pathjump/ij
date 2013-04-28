@@ -1,64 +1,71 @@
 {% extends '::base.html.twig' %}
 {% block title %}{{company}} interview{% endblock %}
 
+{% block pageTitle %}Interview Details{% endblock %}
+
 {% block body %}
-
-<div id="main" role="main">
-
-    <section id="comJobList">
-        <div class="wrapper">
-            <section class="comntSection fullWidth" id="interviewDetails">
-
-                <aside class="addEdiTask">
-                    <h1>Interview Details</h1>
-
-                    <div class="onMap">
-                        <span class="ico"></span>
-                        <h2>Interview location :</h2>
-                        <div class="map" id="map_canvas">
-                        </div>
-                    </div>
-
-                    <div class="intDetails">
-                        <span><strong>Date : </strong> {{interview.interviewDate|date('j F Y h:i:s A')}}</span>
-                        <span><strong>Country : </strong> {{interview.getCountryName}}</span>
-                        <span><strong>City : </strong> {{interview.city}}</span>
-                        {% if interview.state %}
-                        <span><strong>State : </strong> {{interview.state}}</span>
-                        {% endif %}
-                        <span><strong>Address : </strong> {{interview.address}} </span>
-                        {% if interview.details %}
-                        <span><strong>Interview Details : </strong> {{interview.details}} </span>
-                        {% endif %}
-                        {% if interview.accepted != 'pending' %}
-                        <span><strong>Interview status : </strong> {{interview.accepted}} </span>
-                        {% endif %}
-                        
-                        <span>
-                            <a href="{{path('internship_show',{'id' : interview.internship.id})}}" target="_blank">click here to see job details</a>
-                        </span>
-                    </div>
-                    <div class="clear"></div>
-
-                </aside>
+<div class="container Main-content">
 
 
 
-            </section>
-            <div class="clear"></div>
-        </div>
-    </section>
 
+    <div class="company-form">
+        <h2>Interest Details</h2>
+        <div class="Notifications">
+
+            <table width="100%" border="0" class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th scope="row">Details</th>
+                        <td><a href="{{path('internship_show',{'id' : interview.internship.id})}}" target="_blank">click here to see internship details</a></td>
+                    </tr>
+                    {% if interview.details %}
+                    <tr>
+                        <th scope="row">Details</th>
+                        <td>{{interview.details}}</td>
+                    </tr>
+                    {% endif %}
+
+                    <tr>
+                        <th scope="row">Date</th>
+                        <td>{{interview.interviewDate|date('j F Y h:i A')}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Country</th>
+                        <td>{{interview.getCountryName}}</td>
+                    </tr>
+                    {% if interview.state %}}
+                    <tr>
+                        <th scope="row">State</th>
+                        <td>{{interview.state}}</td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <th scope="row">City</th>
+                        <td>{{interview.city}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Address</th>
+                        <td>{{interview.address}}</td>
+                    </tr>
+                    {% if interview.accepted != 'pending' %}
+                    <tr>
+                        <th scope="row">Interview status</th>
+                        <td>{{interview.accepted}}</td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <th scope="row">Location</th>
+                        <td>
+                            <div class="map" id="map_canvas" style="width: 100%;height: 300px;"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div><!--Notifications--->
+    </div><!--company-form-->
 
 </div>
-
-{#
-{{interview.user}} - {{interview.interviewDate|date('Y-m-d')}} -
-
-{{interview.accepted}}
-#}
-
-
 {% endblock %}
 
 {% block javascripts %}
@@ -66,10 +73,11 @@
 <script>
   var latitude = '{{interview.Latitude}}';
    var longitude = '{{interview.Longitude}}';
-   
+
 $(document).ready(function(){
     initialize();
     });
     </script>
     <script src="{{asset('bundles/objectsinternjump/js/internShipMap.js')}}"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
 {% endblock %}

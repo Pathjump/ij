@@ -509,10 +509,17 @@ class InternjumpController extends ObjectsController {
     public function privacyAction() {
         $pageText = file_get_contents(__DIR__ . "/../../../../web/sitePages/PrivacyPolicy.txt");
 
+        $em = $this->getDoctrine()->getEntityManager();
+        //get Founder repo
+        $founderRepo = $em->getRepository('ObjectsInternJumpBundle:Founder');
+        //get all founders
+        $founders = $founderRepo->findAll();
+
         return $this->render('ObjectsInternJumpBundle:Internjump:text.html.twig', array(
                     'title' => 'Privacy',
                     'flag' => '',
-                    'content' => $pageText
+                    'content' => $pageText,
+                    'founders' => $founders
         ));
     }
 
@@ -524,10 +531,17 @@ class InternjumpController extends ObjectsController {
     public function termsOfUseAction() {
         $pageText = file_get_contents(__DIR__ . "/../../../../web/sitePages/TermsOfService.txt");
 
+        $em = $this->getDoctrine()->getEntityManager();
+        //get Founder repo
+        $founderRepo = $em->getRepository('ObjectsInternJumpBundle:Founder');
+        //get all founders
+        $founders = $founderRepo->findAll();
+        
         return $this->render('ObjectsInternJumpBundle:Internjump:text.html.twig', array(
                     'title' => 'TermsOfUse',
                     'flag' => '',
-                    'content' => $pageText
+                    'content' => $pageText,
+                    'founders' => $founders
         ));
     }
 
