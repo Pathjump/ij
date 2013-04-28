@@ -235,8 +235,6 @@ class TaskController extends ObjectsController {
             $lastPageNumber++;
         }
 
-        //get all users hired by this company to show in side bar accordion
-        $companyUsers = $em->getRepository('ObjectsInternJumpBundle:Internship')->getAllCompanyUsers($cid);
 
         return $this->render('ObjectsInternJumpBundle:Task:companyUserTasks.html.twig', array(
                     'entities' => $entities,
@@ -244,7 +242,6 @@ class TaskController extends ObjectsController {
                     'page' => $page,
                     'tasksPerPage' => $itemsPerPage,
                     'lastPageNumber' => $lastPageNumber,
-                    'companyUsers' => $companyUsers,
                     'company' => $company,
                     'numOfTasks' => $numberOfUserTasks,
                     'status' => $status,
