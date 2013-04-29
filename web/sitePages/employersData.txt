@@ -4,11 +4,8 @@
                 <h1>Seamlessly Connect With Top Interns</h1>
 
                 <p>Finding and managing internship programs can be expensive and time consuming. InternJump makes finding interns easy and provides tools to manage interns on the job. InternJump allows companies of all sizes to find and manage qualified interns.</p>
-
-                <br/><br/><br/>
-
-                <a href="javascript:void(0)" class="start-btn" id="companySignUpLink">Get Started</a> <span>or</span>
-                <a href="javascript:void(0)" id="companyLogin">Login</a>
+                <a href="javascript:void(0)" class="btn btn-info" id="companySignUpLink">Get Started</a> <span>or</span>
+                <a href="javascript:void(0)" id="companyLogin" class="btn btn-primary">Login</a>
             </div>
             <!--employers-data-text-->
 
@@ -17,7 +14,7 @@
         <!--end of wrapper -->
 
         <div class="Ques-container">
-            <div class="Ques-box"> 
+            <div class="Ques-box">
                 <h2>What exactly does InternJump.com offer me as an employer?</h2>
                 <ul>
                     <li>A sophisticated algorithm to screen potential interns and present you with your top matches based on specific skills/requirements you select.</li>
@@ -28,9 +25,9 @@
 
                     <li>you receive so you don't need to spend valuable time sifting through hundreds of resumes.</li>
 
-                    <li>Access to some of the top young students who are eager to intern with your firm, in either paid or unpaid internship positions.</li> 
+                    <li>Access to some of the top young students who are eager to intern with your firm, in either paid or unpaid internship positions.</li>
 
-                    <li>Foster new connections, so when/if you are looking to hire you have people to choose from who have already demonstrated their productivity a interns.</li> 
+                    <li>Foster new connections, so when/if you are looking to hire you have people to choose from who have already demonstrated their productivity a interns.</li>
 
                     <li>A No Cost Solution to traditional job boards where you are flooded with resumes!</li>
 
