@@ -2,32 +2,32 @@
 
 {% block title %}Students data{% endblock %}
 
+{% block pageTitle %}Students Data{% endblock %}
+
 {%block body%}
-<div id="main" role="main">
-
-    <section id="employersData">
-        {{studentsData|raw}}
-        <!--employers-data-Que-->
-    </section>
-
-
-</div>
+<div class="container Main-content">
+    <div class="row-fluid show-grid">
+        <div class="Sign-Up S-page">
+                    {{studentsData|raw}}
+            </div>
+        </div>
+    </div>
 
 {%endblock%}
 
 {% block javascripts %}
 {{parent()}}
-<script>
-$(document).ready(function(){
-    $('#studentLink').addClass('crnt');
-    
-    $('#companySignUpLink').click(function(){
-        window.location = '{{path('user_signup')}}';
-    });
-    $('#companyLogin').click(function(){
-        window.location = '{{path('login')}}';
-    });
-});
-</script>
+        <script>
+            $(document).ready(function() {
+                $('#studentLink').addClass('crnt');
+
+                $('#companySignUpLink').click(function() {
+                    window.location = '{{path('user_signup')}}';
+                });
+                $('#companyLogin').click(function() {
+                    window.location = '{{path('login')}}';
+                });
+            });
+            </script>
 {% endblock %}
 
