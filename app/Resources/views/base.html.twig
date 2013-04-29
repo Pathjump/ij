@@ -97,6 +97,7 @@
                                             <li><a href="{{ path('internship',{'loginName' : app.user.loginName}) }}">Home</a></li>
                                             <li><a href="{{ path('internship_new') }}">Add new internship</a></li>
                                             <li><a href="{{path('employers')}}">Industries</a></li>
+                                            <li><a href="{{ path('company_task') }}">Manage Interns</a></li>
                                         </ul>
                                     </div>
                                 {% elseif is_granted('ROLE_USER') %}

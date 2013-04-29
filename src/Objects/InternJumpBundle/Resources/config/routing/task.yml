@@ -1,6 +1,6 @@
 company_task:
-    pattern:  /company/{page}
-    defaults: { _controller: "ObjectsInternJumpBundle:Task:companyAllTasks", page: 1 }
+    pattern:  /company/{page}/{status}/{tasksPerPage}
+    defaults: { _controller: "ObjectsInternJumpBundle:Task:companyAllTasks", page: 1, status: all ,tasksPerPage: ~}
 
 company_user_task:
     pattern:  /companyuser/{userName}/{status}/{page}/{itemsPerPage}

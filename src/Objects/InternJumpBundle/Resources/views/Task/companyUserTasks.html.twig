@@ -13,9 +13,9 @@
 
 
         <div class="company-form Manage-Interns">
-        	<h2>Interns
+        	<h2>Intern
 
-                    <div class="Select-a btn-group pull-right">
+                    {#<div class="Select-a btn-group pull-right">
                         <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                         Designers
                         <span class="caret"></span>
@@ -26,7 +26,7 @@
                           <li><a href="">list2</a></li>
                           <li><a href="">list3</a></li>
                         </ul>
-                    </div><!--btn-group-->
+                    </div><!--btn-group-->#}
 
             </h2>
 
@@ -53,7 +53,7 @@
             <hr/>
 
             <div class="Interns-links">
-            	<a href="{{ path('task_new') }}"  class="btn btn-info add-task-btn">Add Task</a>
+            	<a href="{{ path('task_new') }}"  class="btn btn-success add-task-btn">Add Task</a>
                 <a href="{{path('company_new_message', {'usename': user.loginName})}}" class="btn btn-info">Send message</a>
 
             </div>
@@ -121,7 +121,7 @@
                     -->
                       {% if entities %}
   {% for entity in entities %}
-  <tr  class="read info">
+  <tr  class="read ">
       <td width="600"><a href="{{ path('company_task_show', { 'id': entity.id }) }}">{{ entity.title }}</a></td>
       <td><a href="{{ path('company_task_show', { 'id': entity.id }) }}">{{entity.startedAt|date('Y-m-d H:i:s')}}</a></td>
       <td><a href="{{ path('company_task_show', { 'id': entity.id }) }}">{{ entity.endedAt|date('Y-m-d H:i:s') }}</a></td>

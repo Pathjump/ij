@@ -146,6 +146,7 @@ class InternshipController extends Controller {
         $stateRepo = $em->getRepository('ObjectsInternJumpBundle:State');
         $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
 
+        $categ = array();
         if (!$entity) {
             $message = $this->container->getParameter('internship_not_found_error_msg');
             return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(

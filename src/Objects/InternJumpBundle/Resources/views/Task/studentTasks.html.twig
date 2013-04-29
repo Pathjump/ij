@@ -9,8 +9,6 @@
 <link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{asset('css/jquery.alerts.css')}}" type="text/css" rel="stylesheet" />
 <link href="{{asset('css/bootstrapSwitch.css')}}" type="text/css" rel="stylesheet" />
-
-
 {% endblock %}
 
 
@@ -164,6 +162,8 @@
                             </div><!--row-fluid show-grid-->
                         </div><!--Last-M-N--->
 {% endif %}
+
+                         {%if userjob%}
                         <div class="Tasks">
                             <h2>Your tasks</h2>
                             <div class="tasks-block">
@@ -184,7 +184,7 @@
                                     </ul>
                                 </div>
 
-                    {%if userjob%}
+
 
 
                                 <div class="perPage select-box">
@@ -269,11 +269,11 @@
                                                         </div>
                                 {% endif %}
 
-                {%endif%}
+
                                                     </div><!--tasks-block--->
                                                 </div><!--Tasks-->
 
-
+ {%endif%}
 
      <div class="Tasks"><!-- Resumes block -->
                             <h2>Your Resumes</h2>
@@ -307,7 +307,7 @@
                 <button class="button del_btn btn btn-danger" value="Delete">Delete</button>
                 <button class="button pub_btn btn btn-success" value="Publish">Publish</button>
                 <button class="button unpub_btn btn btn-warning" value="UnPublish">Unpublish</button>
-                <a class="button addcvbutton btn btn-link" href="{{path('cv_new')}}" value="AddCV"> &Gt;Add Resume</a>
+                <a class="button addcvbutton btn btn-link pull-right" href="{{path('cv_new')}}" value="AddCV"> <i class="icon-plus"></i>Add Resume</a>
                 <div class="clear"></div>
 
 
@@ -353,18 +353,19 @@
 {% if latestJobs %}
                         <div class="Col-block Latest-Interrnships">
                             <h2>Latest Interrnships</h2>
-                            <div class="media">
+
 {%if cvCategoris%} <!--check if found categories of cvs or not i.e: student has Cv(s) and active or not-->
 
 {% for job in latestJobs %}
+<div class="media">
                                     <a href="" class="pull-left"><img src="{{job.company.getTimThumbUrl(130,60)}}"></a>
                                     <div class="media-body">
                                          <div class="titl-blue">{{ job.title }}</div>
                                             {{job.company.name}}
                                         <a class="more pull-right" title="Read Job Details" href="{{ path('internship_show', {'id': job.id}) }}">more</a>
                                      </div>
-                                <br>
 
+ </div>
 {% endfor %}
 
 {% else %}
@@ -374,7 +375,7 @@
                                     Or Create a new one!
                                </div>
 {% endif %}
-                           </div>
+
                             </div>
 {% endif %}
 
