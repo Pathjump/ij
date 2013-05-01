@@ -13,6 +13,167 @@ use Objects\InternJumpBundle\Form\UserLanguageType;
 class InternjumpUserController extends ObjectsController {
 
     /**
+     * @author Mahmoud
+     * @param string $searchString
+     * @param integer $start
+     * @param integer $limit
+     * @param type $jobLocation
+     * @return false | array
+     */
+    private function searchForIndeedJobs($searchString = null, $start = 0, $limit = 10, $jobLocation = null) {
+        $userAgent = 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:16.0) Gecko/20100101 Firefox/16.0';
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        }
+        $userIp = '41.178.223.' . rand(3, 200);
+        if (isset($_SERVER['REMOTE_ADDR'])) {
+            $userIp = $_SERVER['REMOTE_ADDR'];
+        }
+        $apiSearchString = 'http://api.indeed.com/ads/apisearch?publisher=5399161479070076&v=2&format=json&latlong=1&useragent=' . urlencode($userAgent) . '&userip=' . urlencode($userIp) . '&start=' . $start . '&limit=' . $limit . '&q=' . urlencode($searchString);
+        if ($jobLocation) {
+            $apiSearchString .= '&l=' . urlencode($jobLocation);
+        }
+        $result = file_get_contents($apiSearchString);
+        if ($result === false) {
+            return false;
+        }
+        $jobsArray = json_decode($result, true);
+        $data = array();
+        $data['count'] = 0;
+        $data['results'] = array();
+        if (isset($jobsArray['totalResults'])) {
+            $data['count'] = $jobsArray['totalResults'];
+        }
+        $searchResults = array();
+        if (isset($jobsArray['results'])) {
+            $results = $jobsArray['results'];
+            foreach ($results as $result) {
+                $searchResult = array();
+                $searchResult['jobtitle'] = '';
+                $searchResult['company'] = '';
+                $searchResult['snippet'] = '';
+                $searchResult['city'] = '';
+                $searchResult['state'] = '';
+                $searchResult['country'] = '';
+                $searchResult['longitude'] = '';
+                $searchResult['latitude'] = '';
+                $searchResult['date'] = null;
+                $searchResult['formattedRelativeTime'] = '';
+                $searchResult['expired'] = false;
+                $searchResult['jobkey'] = '';
+                if (isset($result['jobtitle'])) {
+                    $searchResult['jobtitle'] = $result['jobtitle'];
+                }
+                if (isset($result['company'])) {
+                    $searchResult['company'] = $result['company'];
+                }
+                if (isset($result['snippet'])) {
+                    $searchResult['snippet'] = $result['snippet'];
+                }
+                if (isset($result['city'])) {
+                    $searchResult['city'] = $result['city'];
+                }
+                if (isset($result['state'])) {
+                    $searchResult['state'] = $result['state'];
+                }
+                if (isset($result['country'])) {
+                    $searchResult['country'] = $result['country'];
+                }
+                if (isset($result['longitude'])) {
+                    $searchResult['longitude'] = $result['longitude'];
+                }
+                if (isset($result['latitude'])) {
+                    $searchResult['latitude'] = $result['latitude'];
+                }
+                if (isset($result['date'])) {
+                    $searchResult['date'] = new \DateTime($result['date']);
+                }
+                if (isset($result['formattedRelativeTime'])) {
+                    $searchResult['formattedRelativeTime'] = $result['formattedRelativeTime'];
+                }
+                if (isset($result['expired'])) {
+                    $searchResult['expired'] = (boolean) $result['expired'];
+                }
+                if (isset($result['jobkey'])) {
+                    $searchResult['jobkey'] = $result['jobkey'];
+                }
+                $searchResults[] = $searchResult;
+            }
+        }
+        $data['results'] = $searchResults;
+        return $data;
+    }
+
+    /**
+     * @author Mahmoud
+     * @param type $jobkey
+     * @return boolean
+     */
+    private function getIndeedJob($jobkey) {
+        $apiSearchString = 'http://api.indeed.com/ads/apigetjobs?publisher=5399161479070076&v=2&format=json&jobkeys=' . $jobkey;
+        $result = file_get_contents($apiSearchString);
+        if ($result === false) {
+            return false;
+        }
+        $jobsArray = json_decode($result, true);
+        $searchResult = array();
+        $searchResult['jobtitle'] = '';
+        $searchResult['company'] = '';
+        $searchResult['snippet'] = '';
+        $searchResult['city'] = '';
+        $searchResult['state'] = '';
+        $searchResult['country'] = '';
+        $searchResult['longitude'] = '';
+        $searchResult['latitude'] = '';
+        $searchResult['date'] = null;
+        $searchResult['formattedRelativeTime'] = '';
+        $searchResult['expired'] = false;
+        $searchResult['jobkey'] = '';
+        if (isset($jobsArray['results'])) {
+            $results = $jobsArray['results'];
+            foreach ($results as $result) {
+                if (isset($result['jobtitle'])) {
+                    $searchResult['jobtitle'] = $result['jobtitle'];
+                }
+                if (isset($result['company'])) {
+                    $searchResult['company'] = $result['company'];
+                }
+                if (isset($result['snippet'])) {
+                    $searchResult['snippet'] = $result['snippet'];
+                }
+                if (isset($result['city'])) {
+                    $searchResult['city'] = $result['city'];
+                }
+                if (isset($result['state'])) {
+                    $searchResult['state'] = $result['state'];
+                }
+                if (isset($result['country'])) {
+                    $searchResult['country'] = $result['country'];
+                }
+                if (isset($result['longitude'])) {
+                    $searchResult['longitude'] = $result['longitude'];
+                }
+                if (isset($result['latitude'])) {
+                    $searchResult['latitude'] = $result['latitude'];
+                }
+                if (isset($result['date'])) {
+                    $searchResult['date'] = new \DateTime($result['date']);
+                }
+                if (isset($result['formattedRelativeTime'])) {
+                    $searchResult['formattedRelativeTime'] = $result['formattedRelativeTime'];
+                }
+                if (isset($result['expired'])) {
+                    $searchResult['expired'] = (boolean) $result['expired'];
+                }
+                if (isset($result['jobkey'])) {
+                    $searchResult['jobkey'] = $result['jobkey'];
+                }
+            }
+        }
+        return $searchResult;
+    }
+
+    /**
      * signup fourth step
      * @author Mahmoud
      */
