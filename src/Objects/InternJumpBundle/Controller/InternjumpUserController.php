@@ -60,6 +60,7 @@ class InternjumpUserController extends ObjectsController {
                 $searchResult['date'] = null;
                 $searchResult['formattedRelativeTime'] = '';
                 $searchResult['expired'] = false;
+                $searchResult['url'] = '';
                 $searchResult['jobkey'] = '';
                 if (isset($result['jobtitle'])) {
                     $searchResult['jobtitle'] = $result['jobtitle'];
@@ -93,6 +94,9 @@ class InternjumpUserController extends ObjectsController {
                 }
                 if (isset($result['expired'])) {
                     $searchResult['expired'] = (boolean) $result['expired'];
+                }
+                if (isset($result['url'])) {
+                    $searchResult['url'] = $result['url'];
                 }
                 if (isset($result['jobkey'])) {
                     $searchResult['jobkey'] = $result['jobkey'];
@@ -128,6 +132,7 @@ class InternjumpUserController extends ObjectsController {
         $searchResult['date'] = null;
         $searchResult['formattedRelativeTime'] = '';
         $searchResult['expired'] = false;
+        $searchResult['url'] = '';
         $searchResult['jobkey'] = '';
         if (isset($jobsArray['results'])) {
             $results = $jobsArray['results'];
@@ -164,6 +169,9 @@ class InternjumpUserController extends ObjectsController {
                 }
                 if (isset($result['expired'])) {
                     $searchResult['expired'] = (boolean) $result['expired'];
+                }
+                if (isset($result['url'])) {
+                    $searchResult['url'] = $result['url'];
                 }
                 if (isset($result['jobkey'])) {
                     $searchResult['jobkey'] = $result['jobkey'];
