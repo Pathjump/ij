@@ -882,6 +882,7 @@ class InternjumpController extends ObjectsController {
         //variables for auth
         $redirectFlag = "";
         $Url = "";
+        $flag="";
 
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -891,7 +892,7 @@ class InternjumpController extends ObjectsController {
 
 
 
-            $flag = "facebook";
+
             //Yes, inside facebook
             $facebook = new \Facebook(array(
                 'appId' => '140790826106156',
@@ -900,7 +901,8 @@ class InternjumpController extends ObjectsController {
             // Get User ID
             $user = $facebook->getUser();
 
-
+            if($this->getRequest()->get('open')=="yes")
+            {
             if ($user) {
 
                 if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE') || TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {//->getEmail() != $user->
@@ -938,26 +940,17 @@ class InternjumpController extends ObjectsController {
                 $loginUrl = $facebook->getLoginUrl($params);
                 return $this->redirect($loginUrl);
             }
+            }
 
 
 
-
-
-
-
-
-
-
-
-        /* NOT LOGGED in */
         return $this->render('ObjectsInternJumpBundle:Internjump:fb_homePage.html.twig', array(
-                    'flag' => $flag,
+                   'flag' => $flag,
                     'reFlag' => $redirectFlag,
                     'url' => $Url,
                     'homeCompanies' => $homeCompanies,
                     'home_page_video_id' => $this->container->getParameter('home_page_video_id')
         ));
-//        return $this->redirect($this->generateUrl('login', array(), 'true'));
     }
 
 
