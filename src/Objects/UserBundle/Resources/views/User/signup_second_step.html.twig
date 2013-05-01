@@ -47,16 +47,9 @@
                 <p>{% if formDesc %}{{ formDesc }}{% endif %}</p>
                 <div class="row-fluid show-grid">
 
-                    <div class="span5">
-                        <div class="Sign-Up text-center">
-                            <h4>Get your First digital RESUME only in 4 steps</h4>
-                            <img src="{{ asset('img/img4.png') }}" />
-                            <p class="simply">SIMPLY <a href=""> upload </a>your resume</p>
 
-                        </div><!--Sign-Up-->
-                    </div>
 
-                    <div class="span7">
+                    <div class="span12">
 
                         <form class="formTable" action="{{ path('user_signup_second_step') }}" method="post" {{ form_enctype(form) }}>
                             <fieldset>
