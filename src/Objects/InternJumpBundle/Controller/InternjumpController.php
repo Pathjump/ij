@@ -929,7 +929,7 @@ class InternjumpController extends ObjectsController {
 
                 if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE') || TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {//->getEmail() != $user->
                     $this->executeLogoutAction();
-                    return $this->redirect($this->generateUrl('site_fb_homepage'));
+                    return $this->redirect($this->generateUrl('site_fb_homepage',array('open'=>'yes')));
                 };
 
 

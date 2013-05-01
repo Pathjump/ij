@@ -48,53 +48,6 @@ class UserController extends ObjectsController {
         //get the session object
         $session = $request->getSession();
 
-        /*         * **Beg Facebook app check**** */
-
-        //Check if inside facebook or Not
-        $url = $this->getRequest()->get('access_method');
-        if (isset($url)) {
-            $url = $this->getRequest()->get('access_method');
-        }
-
-        if ($url == 'facebook') {
-            //Yes, inside facebook
-            $facebook = new \Facebook(array(
-                        'appId' => '282137608565990',
-                        'secret' => 'c0e978a64bc520a8b677dfa9e57f4746',
-                    ));
-            // Get User ID
-            $user = $facebook->getUser();
-            if ($user) {
-                if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE') || TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {//->getEmail() != $user->
-                    $this->executeLogoutAction();
-                    return $this->redirect($this->generateUrl('site_homepage'));
-                };
-                try {
-                    // Proceed knowing you have a logged in user who's authenticated.
-                    $graph_url = 'https://graph.facebook.com/me?access_token=' . $facebook->getAccessToken();
-                    $faceUser = json_decode(file_get_contents($graph_url));
-                    $session->set('facebook_user', $faceUser);
-                    $session->set('facebook_short_live_access_token', $facebook->getAccessToken());
-                    $session->set('currentURL', 'http://apps.facebook.com/internjump/');
-                    return $this->redirect($this->generateUrl('facebook_logging', array(), True));
-                } catch (FacebookApiException $e) {
-                    error_log($e);
-                    $user = null;
-                }
-            } else {
-                //not logged in FB user, then GO to fb login;
-                $params = array(
-                    //'scope' => 'read_stream, friends_likes',
-                    'redirect_uri' => 'http://apps.facebook.com/internjump/' // 'http://internjump.com/app_dev.php/'
-                );
-
-                $loginUrl = $facebook->getLoginUrl($params);
-                return $this->redirect($loginUrl);
-            }
-        }
-
-        /*         * **End Facebook app check**** */
-
         //initialize an emtpy message string
         $message = '';
         //check if we have a logged in user
@@ -794,9 +747,9 @@ class UserController extends ObjectsController {
         //check that a logged in user can not access this action
         if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
             //go to the home page
-            if (!$this->getRequest()->get('access_method')) {
+            //if (!$this->getRequest()->get('access_method')) {
                 return $this->redirect('/');
-            }
+            //}
         }
         $request = $this->getRequest();
         $session = $request->getSession();
