@@ -91,16 +91,8 @@
                                 </div><!--navbar-inner-->
                             </div><!--navbar-->
                             <div class="Subcatego">
-                                {% if is_granted('ROLE_COMPANY') %}
-                                    <div class="container">
-                                        <ul class="unstyled">
-                                            <li><a href="{{ path('internship',{'loginName' : app.user.loginName}) }}">Home</a></li>
-                                            <li><a href="{{ path('internship_new') }}">Add new internship</a></li>
-                                            <li><a href="{{path('employers')}}">Industries</a></li>
-                                            <li><a href="{{ path('company_task') }}">Manage Interns</a></li>
-                                        </ul>
-                                    </div>
-                                {% elseif is_granted('ROLE_USER') %}
+
+                                {% if is_granted('ROLE_USER') %}
                                     <div class="container">
                                         <ul class="unstyled">
                                             <li><a href="{{path('student_task',{'loginName' : app.user.loginName})}}">Profile Page</a></li>
@@ -118,6 +110,46 @@
                                     </div>
                                 {% endif %}
                             </div>
+
+
+                            {% if is_granted('ROLE_USER') %}
+                            <!---------------Invite Friends Part--------------->
+                                   <div class="welcomInvite">
+
+                                    <span class="name"><a href="{{path('student_task',{'loginName' : app.user.loginName})}}">{{app.user}}</a></span>
+
+                                    <div id="fb-root"></div>
+                                    <script src="http://connect.facebook.net/en_US/all.js"></script>
+                                    <button onclick="sendRequestViaMultiFriendSelector(); return false;"><span>Invite Friends</span></button>
+                                    <script>
+                                      FB.init({
+                                        appId  : '282137608565990',
+                                        oauth  : true,
+                                        frictionlessRequests: true
+                                      });
+
+                                      function sendRequestViaMultiFriendSelector() {
+                                        FB.ui({method: 'apprequests',
+                                          title: 'Who would you like to invite?',
+                                          message: 'Checkout Internjump Application',
+                                          layout:  "iframe",
+                                        }, requestCallback);
+                                      }
+
+                                      function requestCallback(response) {
+                                        // Handle callback here
+                                       console.log(response);
+                                        //alert('done');
+                                      }
+                                        </script>
+{%block facemsg%}
+                                        <p class="facemsg">{{facebook_mesasage}}</p>
+{%endblock%}
+
+                                        <div class="clear"></div>
+                                    </div>
+                             <!-------------End Invite Friends Part--------------->
+                        {% endif %}
 
                             {% block notifications %}
                             <div class="page-title">

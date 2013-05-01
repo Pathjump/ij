@@ -536,7 +536,7 @@ class InternjumpController extends ObjectsController {
         $founderRepo = $em->getRepository('ObjectsInternJumpBundle:Founder');
         //get all founders
         $founders = $founderRepo->findAll();
-        
+
         return $this->render('ObjectsInternJumpBundle:Internjump:text.html.twig', array(
                     'title' => 'TermsOfUse',
                     'flag' => '',
@@ -839,16 +839,6 @@ class InternjumpController extends ObjectsController {
         $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
         $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
 
-        //check for logedin user or company
-//        if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
-//            //get logedin user objects
-//            $user = $this->get('security.context')->getToken()->getUser();
-//            return $this->redirect($this->generateUrl('student_task', array('loginName' => $user->getLoginName()), TRUE));
-//        } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {
-//            //get logedin company objects
-//            $company = $this->get('security.context')->getToken()->getUser();
-//            return $this->redirect($this->generateUrl('internship', array('loginName' => $company->getLoginName()), TRUE));
-//        }
         //get worth users
         $worthUsers = $userRepo->getWorthUsers(3);
         //get featured companies
@@ -877,6 +867,122 @@ class InternjumpController extends ObjectsController {
                     'allCategory' => $allCategory
         ));
     }
+
+
+    /**
+     * @author Ola
+     * Facebook Homepage/Landing action
+     */
+     public function fb_homePageAction() {
+        //get the request object
+        $request = $this->getRequest();
+        //get the session object
+        $session = $request->getSession();
+
+        //variables for auth
+        $redirectFlag = "";
+        $Url = "";
+        $flag="";
+
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
+        $userRepo = $em->getRepository('ObjectsUserBundle:User');
+        $cityRepo = $em->getRepository('ObjectsInternJumpBundle:City');
+        $stateRepo = $em->getRepository('ObjectsInternJumpBundle:State');
+        $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
+        $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
+
+        //get worth users
+        $worthUsers = $userRepo->getWorthUsers(3);
+        //get featured companies
+        $featuredCompanies = $companyRepo->findBy(array('isHome' => 1));
+        //get latest internships
+        $latestInternShips = $internshipRepo->getLatestinternShips(3);
+        //get Recently Hired interns
+        $latestHiredUsers = $internshipRepo->getLatestHiredUsers(4);
+        //all companies
+        $allCompanies = $companyRepo->findAll();
+        //all cities
+        $allCities = $cityRepo->findBy(array('country' => 'US'));
+        //all state
+        $allState = $stateRepo->findAll();
+        //all category
+        $allCategory = $categoryRepo->findAll();
+        //get home page companies logo
+        $homeCompanies = $companyRepo->findBy(array('isHome' => TRUE));
+
+
+
+
+            //Yes, inside facebook
+            $facebook = new \Facebook(array(
+                'appId' => '140790826106156',
+                'secret' => '560ae9b6b521ba64b82d84082e365320',
+            ));
+            // Get User ID
+            $user = $facebook->getUser();
+
+            if($this->getRequest()->get('open')=="yes")
+            {
+            if ($user) {
+
+                if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE') || TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {//->getEmail() != $user->
+                    $this->executeLogoutAction();
+                    return $this->redirect($this->generateUrl('site_fb_homepage'));
+                };
+
+
+                try {
+                    // Proceed knowing you have a logged in user who's authenticated.
+                    $graph_url = 'https://graph.facebook.com/me?access_token=' . $facebook->getAccessToken();
+                    $faceUser = json_decode(file_get_contents($graph_url));
+                    $session->set('facebook_user', $faceUser);
+                    $session->set('facebook_short_live_access_token', $facebook->getAccessToken());
+                    $session->set('currentURL', 'http://apps.facebook.com/internjumpnew/');
+                    return $this->redirect($this->generateUrl('facebook_logging', array(), True));
+
+
+//                    /****************************/
+//                    //Get the user then Login now
+//                    /****************************/
+//                    $user1 = $em->getRepository('ObjectsUserBundle:User')->findOneBy(array('email' => $user_profile['email']));
+//
+                } catch (FacebookApiException $e) {
+                    error_log($e);
+                    $user = null;
+                }
+            } else {
+                //not logged in FB user, then GO to fb login;
+                $params = array(
+                    //'scope' => 'read_stream, friends_likes',
+                    'redirect_uri' => 'http://apps.facebook.com/internjumpnew/' // 'http://internjump.com/app_dev.php/'
+                );
+
+                $loginUrl = $facebook->getLoginUrl($params);
+                return $this->redirect($loginUrl);
+            }
+            }
+
+
+
+        return $this->render('ObjectsInternJumpBundle:Internjump:fb_homePage.html.twig', array(
+                   'flag' => $flag,
+                    'reFlag' => $redirectFlag,
+                    'url' => $Url,
+                    'homeCompanies' => $homeCompanies,
+                    'home_page_video_id' => $this->container->getParameter('home_page_video_id'),
+                    'worthUsers' => $worthUsers,
+                    'featuredCompanies' => $featuredCompanies,
+                    'latestInternShips' => $latestInternShips,
+                    'latestHiredUsers' => $latestHiredUsers,
+                    'allCompanies' => $allCompanies,
+                    'allCities' => $allCities,
+                    'allState' => $allState,
+                    'allCategory' => $allCategory
+        ));
+    }
+
 
     /**
      * @author Ola

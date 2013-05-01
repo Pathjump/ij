@@ -153,22 +153,28 @@ class TaskController extends ObjectsController {
      * Lists Company's all Task entities.
      *
      */
-    public function companyAllTasksAction($page) {
+    public function companyAllTasksAction( $tasksPerPage, $status,$page) {
 
         if (false === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
             return $this->redirect($this->generateUrl('site_homepage'));
         }
 
-        $status = "";
 
         $em = $this->getDoctrine()->getEntityManager();
-        $tasksPerPage = $this->container->getParameter('tasks_per_show_page'); //for pagenation
-        //$entities = $em->getRepository('ObjectsInternJumpBundle:Task')->findAll();
+
+
         //Get current Company user
         $company = $this->get('security.context')->getToken()->getUser();
         $cid = $company->getId();
 
-        $entities = $em->getRepository('ObjectsInternJumpBundle:Task')->getCompanyAllTasks($cid, $page, $tasksPerPage);
+                //check if we do not have the items per page number
+        if (!$tasksPerPage) {
+            //get the items per page from cookie or the default value
+            $tasksPerPage = $this->getRequest()->cookies->get('tasks_per_show_page_' . $cid, 3);
+        }
+
+        $entities = $em->getRepository('ObjectsInternJumpBundle:Task')->getCompanyAllTasks($cid, $page, $tasksPerPage,$status);
+
         $companyUsers = $em->getRepository('ObjectsInternJumpBundle:Internship')->getAllCompanyUsers($cid);
 
         //for pagenation
@@ -178,7 +184,6 @@ class TaskController extends ObjectsController {
         if (($tasksCount % $tasksPerPage) > 0) {
             $lastPageNumber++;
         }
-
         //print_r($companyUsers);
         //Check if inside facebook or Not
         $url = $this->getRequest()->get('access_method');
@@ -191,6 +196,7 @@ class TaskController extends ObjectsController {
                     'page' => $page,
                     'tasksPerPage' => $tasksPerPage,
                     'lastPageNumber' => $lastPageNumber,
+                    'status' => $status,
                 ));
     }
 
@@ -235,8 +241,6 @@ class TaskController extends ObjectsController {
             $lastPageNumber++;
         }
 
-        //get all users hired by this company to show in side bar accordion
-        $companyUsers = $em->getRepository('ObjectsInternJumpBundle:Internship')->getAllCompanyUsers($cid);
 
         return $this->render('ObjectsInternJumpBundle:Task:companyUserTasks.html.twig', array(
                     'entities' => $entities,
@@ -244,7 +248,6 @@ class TaskController extends ObjectsController {
                     'page' => $page,
                     'tasksPerPage' => $itemsPerPage,
                     'lastPageNumber' => $lastPageNumber,
-                    'companyUsers' => $companyUsers,
                     'company' => $company,
                     'numOfTasks' => $numberOfUserTasks,
                     'status' => $status,
@@ -257,9 +260,7 @@ class TaskController extends ObjectsController {
      *
      */
     public function studentShowAction($id) {
-        //****Check if inside facebook or Not****//
-        $url = $this->getRequest()->get('access_method');
-        $flag = $this->checkWhere($url);
+
 
         if (false === $this->get('security.context')->isGranted('ROLE_USER')) {
             return $this->redirect($this->generateUrl('site_homepage'));
@@ -296,11 +297,9 @@ class TaskController extends ObjectsController {
                 ));
 
         //if not equal redirect to Home Page
-        if ($flag == "facebook") {
-            return $this->redirect($this->generateUrl('site_homepage', array('access_method' => "facebook")));
-        } else {
+
             return $this->redirect($this->generateUrl('site_homepage'));
-        }
+
     }
 
     /**
@@ -308,9 +307,7 @@ class TaskController extends ObjectsController {
      *
      */
     public function companyShowAction($id) {
-        //Check if inside facebook or Not
-        $url = $this->getRequest()->get('access_method');
-        $flag = $this->checkWhere($url);
+
 
         if (false === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
             return $this->redirect($this->generateUrl('site_homepage'));
@@ -356,7 +353,6 @@ class TaskController extends ObjectsController {
                     'entity' => $task,
                     'notes' => $notes,
                     'delete_form' => $deleteForm->createView(),
-                    'flag' => $flag,
                     'companyUsers' => $companyUsers,
                     'user' => $taskUser,
                     'hireDate' => $hireDate,
@@ -369,9 +365,7 @@ class TaskController extends ObjectsController {
      *
      */
     public function newAction() {
-        //Check if inside facebook or Not
-        $url = $this->getRequest()->get('access_method');
-        $flag = $this->checkWhere($url);
+
 
         if (false === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
             return $this->redirect($this->generateUrl('site_homepage'));
@@ -464,19 +458,14 @@ class TaskController extends ObjectsController {
                 //send email to user
                 InternjumpController::userNotificationMail($this->container, $user, $company, 'company_assign_task', $task->getId());
 
-                if ($flag == "facebook") {
-                    return $this->redirect($this->generateUrl('company_task_show', array('id' => $task->getId(), 'access_method' => "facebook")));
-                } else {
-
                     return $this->redirect($this->generateUrl('company_task_show', array('id' => $task->getId())));
-                }
+
             }
         }
 
         return $this->render('ObjectsInternJumpBundle:Task:new.html.twig', array(
                     'entity' => $task,
                     'form' => $form->createView(),
-                    'flag' => $flag,
                     'companyHiredUsers' => $companyHiredUsers,
                     'hiredUsersJobsArray' => $hiredUsersJobsArray,
                     'formName' => $this->container->getParameter('companyAddTask_FormName'),
