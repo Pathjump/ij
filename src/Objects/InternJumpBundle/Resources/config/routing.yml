@@ -46,6 +46,10 @@ site_homepage:
     pattern:  /
     defaults: { _controller: ObjectsInternJumpBundle:Internjump:homePage }
 
+site_fb_homepage:
+    pattern:  /fbhome
+    defaults: { _controller: ObjectsInternJumpBundle:Internjump:fb_homePage }
+
 signup_education:
     pattern:  /user/signup/third/step
     defaults: { _controller: "ObjectsInternJumpBundle:Education:signupEducation" }
