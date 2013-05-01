@@ -39,7 +39,7 @@ ObjectsInternJumpBundle_employmenthistory:
     prefix:   /employmenthistory
 
 ObjectsInternJumpBundle_test:
-    pattern:  /test/
+    pattern:  /test
     defaults: { _controller: ObjectsInternJumpBundle:Default:test }
 
 site_homepage:
@@ -47,7 +47,7 @@ site_homepage:
     defaults: { _controller: ObjectsInternJumpBundle:Internjump:homePage }
 
 site_fb_homepage:
-    pattern:  /fbhome/
+    pattern:  /fbhome
     defaults: { _controller: ObjectsInternJumpBundle:Internjump:fb_homePage }
 
 signup_education:
