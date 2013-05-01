@@ -894,8 +894,8 @@ class InternjumpController extends ObjectsController {
             $flag = "facebook";
             //Yes, inside facebook
             $facebook = new \Facebook(array(
-                'appId' => '282137608565990',
-                'secret' => 'c0e978a64bc520a8b677dfa9e57f4746',
+                'appId' => '140790826106156',
+                'secret' => '560ae9b6b521ba64b82d84082e365320',
             ));
             // Get User ID
             $user = $facebook->getUser();
