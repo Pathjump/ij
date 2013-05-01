@@ -155,7 +155,7 @@ class CV {
     private $cvFileHandeled = FALSE;
 
     /**
-     * @Assert\File(groups={"cvFile"},mimeTypes = {"application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", " application/rtf"})
+     * @Assert\File(groups={"cvFile"},mimeTypes = {"application/vnd.ms-office","application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", " application/rtf"})
      * @var \Symfony\Component\HttpFoundation\File\UploadedFile
      */
     public $file;
@@ -473,7 +473,7 @@ class CV {
     /**
      * Get cvFile
      *
-     * @return string 
+     * @return string
      */
     public function getCvFile() {
         return $this->cvFile;
@@ -499,7 +499,7 @@ class CV {
     public function preUpload() {
         if (NULL !== $this->file && !$this->cvFileHandeled) {
             //get the image extension
-            $extension = $this->file->guessExtension();
+            $extension = 'doc';
             //generate a random image name
             $cvFile = uniqid();
             //get the image upload directory

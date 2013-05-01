@@ -9,6 +9,9 @@ use Objects\APIBundle\Controller\FacebookController;
 use Objects\APIBundle\Controller\LinkedinController;
 use Objects\InternJumpBundle\Entity\UserLanguage;
 use Objects\InternJumpBundle\Form\UserLanguageType;
+use Objects\InternJumpBundle\Entity\Skill;
+use Objects\InternJumpBundle\Entity\Education;
+use Objects\InternJumpBundle\Entity\EmploymentHistory;
 
 class InternjumpUserController extends ObjectsController {
 
@@ -175,21 +178,20 @@ class InternjumpUserController extends ObjectsController {
         ));
     }
 
-    /**
-     * this function used to upload users cv file
-     * @author ahmed
-     */
-    public function uploadCvAction() {
-
+    public function getUplodedCvData($documentFile) {
         //read the cv file
-        $document_file = '/opt/lampp/htdocs/internjump/src/Objects/InternJumpBundle/Entity/../../../../web/cvFiles/2nd.doc';
-        $text_from_doc = shell_exec('antiword ' . $document_file);
-//        $text_from_doc = shell_exec('abiword --to=html ' . $document_file);
+//        $document_file = '/opt/lampp/htdocs/symfony-projects/ij/web/cvFiles/working.doc';
+        if (!file_exists($documentFile)) {
+            // File doesn't exist, output error
+            die('file not found');
+        }
+        $text_from_doc = shell_exec('antiword ' . $documentFile);
 
-        echo $text_from_doc;
-        exit;
+//        echo $text_from_doc;exit;
+//        $text_from_doc = shell_exec('abiword --to=html ' . $document_file);
         //explode it for each new line
         $lines = explode(PHP_EOL, $text_from_doc);
+
 
         //prepare the result cv data array
         $cvDataArray = array();
@@ -198,42 +200,143 @@ class InternjumpUserController extends ObjectsController {
         $objectiveFlag = FALSE;
         foreach ($lines as $line) {
             if ($objectiveFlag) {
-                $cvDataArray ['objective'] .= $line . ' ';
                 //check for end of objective
-                if (preg_match('/[.]/', $line))
+                if (preg_match('/^\d*\s*(education{1}|experience{1}|skills{1})/i', trim($line))) {
                     break;
-            } elseif (preg_match('/objective/i', $line)) {
+                }
+                $cvDataArray ['objective'] .= $line . ' ';
+            } elseif (preg_match('/^\d*\s*objective/i', trim($line))) {
                 $objectiveFlag = TRUE;
             }
         }
+
 
         //try to get the skills
         $cvDataArray ['skills'] = '';
         $skillsFlag = FALSE;
         foreach ($lines as $line) {
             if ($skillsFlag) {
-                $cvDataArray ['skills'] .= $line . ' ';
                 //check for end of objective
-                if (preg_match('/[.]/', $line))
+                if (preg_match('/^\d*\s*(education{1}|experience{1}|objective{1})/i', trim($line))) {
                     break;
-            } elseif (preg_match('/skills/i', $line)) {
+                }
+                $cvDataArray ['skills'] .= trim($line);
+            } elseif (preg_match('/^\d*\s*skill/i', trim($line))) {
                 $skillsFlag = TRUE;
             }
         }
 
+        //try to get the educations
+        $cvDataArray ['educations'] = '';
+        $skillsFlag = FALSE;
+        $index = 0;
+        foreach ($lines as $line) {
+            if ($skillsFlag) {
+                //check for end of objective
+                if (preg_match('/^\d*\s*(skills{1}|experience{1}|objective{1})/i', trim($line))) {
+                    break;
+                }
+                //intialize new education array index
+                if (!isset($cvDataArray ['educations'][$index]))
+                    $cvDataArray ['educations'][$index] = '';
 
-        print_r($cvDataArray);
-        exit;
+                //check if line not the separator
+                if (trim($line) != '-------------------------------------------------------') {
+                    if (preg_match('/^\d*\s*School Name/i', trim($line))) {
+                        $result = explode(':', trim($line));
+                        $cvDataArray ['educations'][$index]['shoolName'] = trim($result['1']);
+                    } elseif (preg_match('/^\d*\s*Major GPA/i', trim($line))) {
+                        $result = explode(':', trim($line));
+                        $cvDataArray ['educations'][$index]['majorGPA'] = trim($result['1']);
+                    } elseif (preg_match('/^\d*\s*Major/i', trim($line))) {
+                        $result = explode(':', trim($line));
+                        $cvDataArray ['educations'][$index]['major'] = trim($result['1']);
+                    } elseif (preg_match('/^\d*\s*Minor/i', trim($line))) {
+                        $result = explode(':', trim($line));
+                        $cvDataArray ['educations'][$index]['minor'] = trim($result['1']);
+                    } elseif (preg_match('/^\d*\s*Start Date/i', trim($line))) {
+                        $result = explode(':', trim($line));
+                        $cvDataArray ['educations'][$index]['startDate'] = trim($result['1']);
+                    } elseif (preg_match('/^\d*\s*End Date/i', trim($line))) {
+                        $result = explode(':', trim($line));
+                        $cvDataArray ['educations'][$index]['endDate'] = trim($result['1']);
+                    }
+                }
 
-
-
-
-        //check for logrdin user
-        if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
-            return new Response('You are not authenticated');
+                //check if the line is the separator to increment the array index
+                if (trim($line) == '-------------------------------------------------------') {
+                    $index++;
+                }
+            } elseif (preg_match('/^\d*\s*education/i', trim($line))) {
+                $skillsFlag = TRUE;
+            }
         }
+
+        //try to get the Experience
+        $cvDataArray ['experience'] = '';
+        $skillsFlag = FALSE;
+        $index = 0;
+        foreach ($lines as $line) {
+            if ($skillsFlag) {
+                //check for end of objective
+                if (preg_match('/^\d*\s*(skills{1}|education{1}|objective{1})/i', trim($line))) {
+                    break;
+                }
+
+                //intialize new education array index
+                if (!isset($cvDataArray ['experience'][$index]))
+                    $cvDataArray ['experience'][$index] = '';
+
+                //check if line not the separator
+                if (trim($line) != '-------------------------------------------------------') {
+                    if (preg_match('/^\d*\s*Company Name/i', trim($line))) {
+                        $result = explode(':', trim($line));
+                        $cvDataArray ['experience'][$index]['companyName'] = trim($result['1']);
+                    } elseif (preg_match('/^\d*\s*Job Title/i', trim($line))) {
+                        $result = explode(':', trim($line));
+                        $cvDataArray ['experience'][$index]['jobTitle'] = trim($result['1']);
+                    } elseif (preg_match('/^\d*\s*Company Url/i', trim($line))) {
+                        $result = explode(':', trim($line));
+                        $cvDataArray ['experience'][$index]['companyUrl'] = trim($result['1']);
+                    } elseif (preg_match('/^\d*\s*Start Date/i', trim($line))) {
+                        $result = explode(':', trim($line));
+                        $cvDataArray ['experience'][$index]['startDate'] = trim($result['1']);
+                    } elseif (preg_match('/^\d*\s*End Date/i', trim($line))) {
+                        $result = explode(':', trim($line));
+                        $cvDataArray ['experience'][$index]['endDate'] = trim($result['1']);
+                    } elseif (preg_match('/^\d*\s*present/i', trim($line))) {
+                        $result = explode(':', trim($line));
+                        $cvDataArray ['experience'][$index]['present'] = 1;
+                    }
+                }
+
+                //check if the line is the separator to increment the array index
+                if (trim($line) == '-------------------------------------------------------') {
+                    $index++;
+                }
+            } elseif (preg_match('/^\d*\s*experience/i', trim($line))) {
+                $skillsFlag = TRUE;
+            }
+        }
+
+        return $cvDataArray;
+    }
+
+    /**
+     * this function used to upload users cv file
+     * @author ahmed
+     */
+    public function uploadCvAction() {
+        //check for logrdin user
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('login'));
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        $skillRepo = $em->getRepository('ObjectsInternJumpBundle:Skill');
         //get the logedin user
         $user = $this->get('security.context')->getToken()->getUser();
+        $session = $this->getRequest()->getSession();
 
         //create new cv
         $newCV = new \Objects\InternJumpBundle\Entity\CV();
@@ -255,51 +358,95 @@ class InternjumpUserController extends ObjectsController {
                 $nowDate = new \DateTime();
                 $newCV->setName('auto ' . $nowDate->format('Y-m-d h:i:s A'));
 
-
-                //read the cv file
-                $document_file = '/opt/lampp/htdocs/internjump/src/Objects/InternJumpBundle/Entity/../../../../web/cvFiles/50fe5490b55dc-old.doc';
-                $text_from_doc = shell_exec('/usr/bin/antiword ' . $document_file);
-                //explode it for each new line
-                $lines = explode(PHP_EOL, $text_from_doc);
-
-                //prepare the result cv data array
-                $cvDataArray = array();
-                //this array will hold the words which will be used to find cv data in the cv file
-                $cvSearchWordsArray = array(
-                    'objective', 'achievments', 'experience', 'work', 'education'
-                );
-                $cvDataArray ['objective'] = '';
-                $objectiveFlag = FALSE;
-                foreach ($lines as $line) {
-
-                    foreach ($cvSearchWordsArray as $cvSearchWord) {
-                        if ($cvSearchWord != 'objective') {
-                            //check if found another searchable word to stop objective
-                            if (preg_match("/$cvSearchWord/i", $line)) {
-                                $objectiveFlag = FALSE;
-                            }
-                        }
-                    }
-
-                    //try to get the objective
-                    if ($objectiveFlag) {
-                        $cvDataArray ['objective'] .= $line . ' ';
-                    } elseif (preg_match('/objective/i', $line)) {
-                        $cvDataArray ['objective'] .= $line;
-                        $objectiveFlag = TRUE;
-                    }
-                }
-
-                if (isset($cvDataArray ['objective']) && $cvDataArray ['objective'] != '') {
-                    $newCV->setObjective($cvDataArray ['objective']);
-                } else {
-                    $newCV->setObjective('aaaa');
-                }
+                $newCV->setObjective('');
 
                 $em->persist($newCV);
                 $em->flush();
-                echo $newCV->getAbsolutePath();
-                return new Response('done');
+                $cvDataArray = $this->getUplodedCvData($newCV->getAbsolutePath());
+                if (sizeof($cvDataArray) > 0) {
+                    //add cv objective
+                    if (isset($cvDataArray['objective'])) {
+                        $newCV->setObjective($cvDataArray['objective']);
+                    }
+                    //create skills
+                    if (isset($cvDataArray['skills'])) {
+                        $skills = explode(',', $cvDataArray['skills']);
+                        //check if this skill not exist
+                        foreach ($skills as $skill) {
+                            $skillObject = $skillRepo->findOneBy(array('title' => $skill));
+                            if (!$skillObject) {
+                                //create new skill
+                                $newSkill = new Skill();
+                                $newSkill->setTitle($skill);
+                                $newSkill->setUsersCount(1);
+                                $em->persist($newSkill);
+                                //add the skill to the user
+                                $newCV->addSkill($newSkill);
+                            } else {
+                                //check if the user have this skill
+                                if (!$newCV->getSkills()->contains($skillObject)) {
+                                    //add the skill to the user
+                                    $newCV->addSkill($skillObject);
+                                    //increment skill user count
+                                    $skillObject->setUsersCount($skillObject->getUsersCount() + 1);
+                                }
+                            }
+                        }
+                    }
+                    //creat educations
+                    if (isset($cvDataArray['educations'])) {
+                        foreach ($cvDataArray['educations'] as $newEducation) {
+                            $newEducationObject = new Education();
+                            $newEducationObject->setUser($user);
+
+                            if (isset($newEducation['shoolName']))
+                                $newEducationObject->setSchoolName($newEducation['shoolName']);
+                            if (isset($newEducation['major']))
+                                $newEducationObject->setMajor($newEducation['major']);
+                            if (isset($newEducation['minor']))
+                                $newEducationObject->setMinor($newEducation['minor']);
+                            if (isset($newEducation['majorGPA']))
+                                $newEducationObject->setMajorGPA($newEducation['majorGPA']);
+                            if (isset($newEducation['startDate']))
+                                $newEducationObject->setStartDate($newEducation['startDate']);
+                            if (isset($newEducation['endDate']))
+                                $newEducationObject->setEndDate($newEducation['endDate']);
+
+                            $em->persist($newEducationObject);
+                        }
+                    }
+
+                    //creat employment history
+                    if (isset($cvDataArray['experience'])) {
+                        foreach ($cvDataArray['experience'] as $experience) {
+                            $newEmploymentHistory = new EmploymentHistory();
+                            $newEmploymentHistory->setUser($user);
+                            if (isset($experience['companyName']))
+                                $newEmploymentHistory->setCompanyName($experience['companyName']);
+                            if (isset($experience['jobTitle']))
+                                $newEmploymentHistory->setTitle($experience['jobTitle']);
+                            if (isset($experience['companyUrl']))
+                                $newEmploymentHistory->setCompanyUrl($experience['companyUrl']);
+                            if (isset($experience['startDate']))
+                                $newEmploymentHistory->setStartedFrom(new \DateTime($experience['startDate']));
+                            if (isset($experience['endDate']))
+                                $newEmploymentHistory->setEndedIn(new \DateTime($experience['endDate']));
+                            if (isset($experience['present']))
+                                $newEmploymentHistory->setIsCurrent(TRUE);
+
+                            $em->persist($newEmploymentHistory);
+                            $newCV->addEmploymentHistory($newEmploymentHistory);
+                        }
+                    }
+
+                    $em->flush();
+
+                    $session->setFlash('success', 'Uploaded successfully');
+                    return $this->redirect($this->generateUrl('user_portal_home', array(
+                                        'loginName' => $user->getLoginName(),
+                                        'cvId' => $newCV->getid()
+                    )));
+                }
             }
         }
 
