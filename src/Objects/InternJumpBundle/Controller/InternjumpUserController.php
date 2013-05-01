@@ -29,7 +29,7 @@ class InternjumpUserController extends ObjectsController {
         if (isset($_SERVER['REMOTE_ADDR'])) {
             $userIp = $_SERVER['REMOTE_ADDR'];
         }
-        $apiSearchString = 'http://api.indeed.com/ads/apisearch?publisher=5399161479070076&v=2&format=json&latlong=1&useragent=' . urlencode($userAgent) . '&userip=' . urlencode($userIp) . '&start=' . $start . '&limit=' . $limit . '&q=' . urlencode($searchString);
+        $apiSearchString = 'http://api.indeed.com/ads/apisearch?publisher=5399161479070076&jt=internship&v=2&format=json&latlong=1&useragent=' . urlencode($userAgent) . '&userip=' . urlencode($userIp) . '&start=' . $start . '&limit=' . $limit . '&q=' . urlencode($searchString);
         if ($jobLocation) {
             $apiSearchString .= '&l=' . urlencode($jobLocation);
         }
