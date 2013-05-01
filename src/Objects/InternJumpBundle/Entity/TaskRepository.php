@@ -28,14 +28,14 @@ class TaskRepository extends EntityRepository
         }
         $page--;
 
-        
+
        if($status=="inprogress" || $status=="new" || $status=="done" )
         {
            $str= "AND t.status=:status";
            $para['status'] = $status;
         }
         else{ $str=""; }
-        
+
        $query = $em->createQuery("
                 SELECT t.id, t.title, t.status, t.startedAt, t.endedAt, t.description, t.createdAt
                 FROM ObjectsInternJumpBundle:Task t
@@ -62,7 +62,7 @@ class TaskRepository extends EntityRepository
      * @param int $companyId
      * @return array of tasks
      */
-    public function getCompanyAllTasks($companyId,$page,$tasksPerPage)
+    public function getCompanyAllTasks($companyId,$page,$tasksPerPage,$status)
     {
         $em = $this->getEntityManager();
         $para = array();
@@ -71,11 +71,18 @@ class TaskRepository extends EntityRepository
         }
         $page--;
 
+        if($status=="inprogress" || $status=="new" || $status=="done" )
+        {
+           $str= "AND t.status=:status";
+           $para['status'] = $status;
+        }
+        else{ $str=""; }
+
         $query = $em->createQuery("
                 SELECT t.id, t.title, t.status, t.startedAt, t.endedAt, t.description
                 FROM ObjectsInternJumpBundle:Task t
                 JOIN t.company c
-                WHERE c.id = :id
+                WHERE c.id = :id ".$str."
                 ");
 
         $para['id'] = $companyId;
@@ -181,7 +188,7 @@ class TaskRepository extends EntityRepository
         else
             return $result;
     }
-    
+
     /**
      * this function will count all Tasks (for user or company) according to certain status [this is used in filter]
      * @author Ola
@@ -197,7 +204,7 @@ class TaskRepository extends EntityRepository
            $str1= "AND t.status='$status'";
            //$para['status'] = $status;
         }
-        
+
         if($flag == "user")
         { $str="JOIN t.user u WHERE u.id = :id"; }
         elseif ($flag == "company")

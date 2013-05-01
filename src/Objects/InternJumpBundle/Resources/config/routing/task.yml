@@ -1,6 +1,6 @@
 company_task:
-    pattern:  /company/{page}
-    defaults: { _controller: "ObjectsInternJumpBundle:Task:companyAllTasks", page: 1 }
+    pattern:  /company/{page}/{status}/{tasksPerPage}
+    defaults: { _controller: "ObjectsInternJumpBundle:Task:companyAllTasks", page: 1, status: all ,tasksPerPage: ~}
 
 company_user_task:
     pattern:  /companyuser/{userName}/{status}/{page}/{itemsPerPage}
@@ -26,7 +26,7 @@ task_create:
 student_task_edit:
     pattern:  /{id}/useredit
     defaults: { _controller: "ObjectsInternJumpBundle:Task:studentEdit" }
-    
+
 company_task_edit:
     pattern:  /{id}/companyedit
     defaults: { _controller: "ObjectsInternJumpBundle:Task:companyEdit" }
@@ -36,18 +36,18 @@ task_delete:
     defaults: { _controller: "ObjectsInternJumpBundle:Task:delete" }
     requirements: { _method: post }
 
-get_job_users:   
+get_job_users:
     pattern:  /getjobusers/{id}
     defaults: { _controller: "ObjectsInternJumpBundle:Task:getJobUsers" }
-    
+
 add_note:
     pattern:  /addnote/{text}/{taskId}
     defaults: { _controller: "ObjectsInternJumpBundle:Task:addNote" }
-    
+
 edit_note:
     pattern:  /editnote/{text}/{taskId}/{noteId}
     defaults: { _controller: "ObjectsInternJumpBundle:Task:editNote", text: null, taskId: null, noteId: null }
-    
+
 change_status:
     pattern:  /changestatus/{taskId}/{status}
     defaults: { _controller: "ObjectsInternJumpBundle:Task:changeTaskStatus", taskId: null, status: null }

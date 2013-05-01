@@ -3,6 +3,8 @@
 Internship Search
 {% endblock %}
 
+{% block pageTitle %}Student Search Page{% endblock %}
+
 {% block stylesheets %}
 {{parent()}}
 <link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
@@ -10,68 +12,73 @@ Internship Search
 {% endblock %}
 
 {% block body %}
+<div class="container Main-content">
 
-<section id="srchPage">
-    <div class="wrapper">
+      <div class="Search-student">
+            	<form>
+                	<fieldset>
+                    	<div class="controls">
+
+                                <label>Location</label>
+
+                               <div class="row-fluid show-grid">
+                                       <div class="span4">
+                                            {{form_widget(form.country, { 'attr': {'class': 'chzn-select', 'id' : 'country_search'} })}}
+                                       </div>{#{{form_widget(form.city, { 'attr': {'class': 'chzn-select','style':'width:160px;', 'id' : 'city_search'} })}}#}
+                                       <div class="span4 ">
+                                            {{form_widget(form.state, { 'attr': {'class': 'chzn-select', 'id' : 'state_search'} })}}
+                                       </div>
+                                       <div class="span4 ">
+                                            {{form_widget(form.city, { 'attr': { 'id' : 'city_search', 'placeholder': 'Type city'} })}}
+                                       </div>
+
+                                </div>
+
+
+                   	 	</div>
 
 
 
-        <div class="srchFilter">
-            <aside>
-                <label>Location</label>
-{#<select class="chzn-select" style="width: 160px">
-<option>Choose a location</option>
-<option>Country / State</option>
-<option>Country / State</option>
-<option>Country / State</option>
-</select>#}
-{{form_widget(form.country, { 'attr': {'class': 'chzn-select','style':'width:160px;', 'id' : 'country_search'} })}}
-{#{{form_widget(form.city, { 'attr': {'class': 'chzn-select','style':'width:160px;', 'id' : 'city_search'} })}}#}
-{{form_widget(form.state, { 'attr': {'class': 'chzn-select','style':'width:160px;', 'id' : 'state_search'} })}}
-{{form_widget(form.city, { 'attr': {'style':'width:160px;', 'id' : 'city_search', 'placeholder': 'Type city'} })}}
-            </aside>
-            <br />
-            <span class="or">Or</span><br />
-            <aside>
-                <label>Industry</label>
-{{form_widget(form.category, { 'attr': {'class': 'chzn-select','style':'width:160px;', 'id' : 'category_search'} })}}
-            </aside>
-            <span class="or">Or</span>
-            <aside>
-                <label>Companies</label>
-{{form_widget(form.company, { 'attr': {'class': 'chzn-select','style':'width:160px;', 'id' : 'company_search'} })}}
-                <span class="or">Or</span>
-                <label>Language</label>
-{{form_widget(form.language, { 'attr': {'class': 'chzn-select','style':'width:160px;', 'id' : 'language_search'} })}}
-            </aside>
-        </div>
-        <!--Search-Internships-->
-                <!--search-container-->
-        <div class="Search-Internships">
-            <form id="search_form" action="" method="POST">
-                <input id="search_text" name="" type="text" placeholder="Keywords">
-                <input id="search_button" name="" type="button" value="Search"><span></span>
+                        <div class="controls  row-fluid show-grid">
+                            <div class="span4">
+                                <label>Industry</label>
+                                {{form_widget(form.category, { 'attr': {'class': 'chzn-select','id' : 'category_search'} })}}
+                            </div>
+                            <div class="span4">
+                                <label>Companies</label>
+                                {{form_widget(form.company, { 'attr': {'class': 'chzn-select', 'id' : 'company_search'} })}}
+                            </div>
+                            <div class="span4 ">
+                                <label>Language</label>
+                                {{form_widget(form.language, { 'attr': {'class': 'chzn-select', 'id' : 'language_search'} })}}
+                            </div>
+                   	 	</div>
+
+                    </fieldset>
+                </form>
+            </div><!--Add-Task-->
+
+            <div class="Search-Internships Search-box text-center">
+            <form id="search_form" action="" method="POST" class="form-search">
+                <div class="input-append">
+                    <input id="search_text" name="" type="text" placeholder="Keywords" class="span6 search-query">
+                    <input id="search_button" name="" type="button" value="Search" class="btn btn-info">
+                </div>
             </form>
 
-        </div>
-
-    </div>
-    <!--end of wrapper -->
-</section>
+            </div>
 
 
+            <div class="Search-interns">
 
-<section id="comJobList">
-    <div class="wrapper">
 
-        <aside class="jobWrapper">
-            <h1 class="search_title" style="display: none;">Search Results:</h1>
-            <div class="clear"></div>
+
+
 
             <ul class="searchResult">
 
-
-<ul class="pging">
+<div class="pagination pagination-centered">
+<ul >
                                 {% if lastPageNumber > 1 %}
                     {% if page > 1 %}
                        <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang }) }}">&laquo;&laquo;</a></li>
@@ -82,7 +89,7 @@ Internship Search
 
         {% for numberOfPage in 1..lastPageNumber %}
         {% if numberOfPage > page - 3 and numberOfPage < page + 3 %}
-                                {% if page == numberOfPage %}<li class="crnt"><a href="javascript:void(0)">{{ numberOfPage }}</a></li>{% else %}<li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang ,'page': numberOfPage}) }}" >{{ numberOfPage }}</a></li>{%endif%}
+                                {% if page == numberOfPage %}<li class="active"><a href="javascript:void(0)">{{ numberOfPage }}</a></li>{% else %}<li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang ,'page': numberOfPage}) }}" >{{ numberOfPage }}</a></li>{%endif%}
         {% endif %}
         {% endfor %}
 
@@ -93,30 +100,55 @@ Internship Search
 {% endif %}
                 {% endif %}
                                             </ul>
+        </div>
 
 {%if jobs%}
-{%for job in jobs%}
-<li>
-    <div class="title">
-        <h2><a href="{{path('internship_show', {'id': job.id})}}">{{job.title}}</a>
-        </h2>
-        <h3>({{job.company.name}})</h3>
-        <h4>{{ job.city }}  |  {%if job.state %}{{ job.state }}  |{% endif %}  {{job.getCountryName()}}</h4>
-        <span class="share">
+        <div class="row-fluid show-grid">
 
-        </span>
-    </div>
+            <div class=" interns-res">
 
-    <div class="details">
-        <h2>{{job.title}}</h2>
-        <span class="date"><strong>Post Date:</strong> {{job.createdAt|date('d-m-Y')}}</span>
-        <span class="valid"><strong>To :</strong>{{job.activeTo|date('j F, Y')}} </span>
-        <span class="valid"><strong>Active From :</strong>{{job.activeFrom|date('j F, Y')}}</span>
+            	    <div class="tabbable"> <!-- Only required for left/right tabs -->
 
-        <p>{{job.description|raw}}</p>
-    </div>
-</li>
-{%endfor%}
+
+                            	<div class="Result-box">
+                                	<div class="title3"> Search Results:
+
+                                  </div><!---title3--->
+
+                                   <ul class="unstyled inner-list">
+                                       {%for job in jobs%}
+                                   		<li class="row-fluid show-grid">
+                                            <div class="span8">
+                                            	<h4><a class="titl-blue" href="{{path('internship_show', {'id': job.id})}}">{{job.title}}</a></h4>
+                                                <i><strong><a href="javascript:void(0)">{{job.company.name}}</a></strong></i>
+                                                <p>{{job.description|raw}}</p>
+                                                <p></p>
+                                            </div>
+                                            <div class="span4">
+                                            	<div class="Area">{{ job.city }}  ,  {%if job.state %}{{ job.state }}  ,{% endif %}  {{job.getCountryName()}}</div>
+                                                <div class="date muted">{{job.createdAt|date('d-m-Y')}}</div>
+                                                <a href="javascript:void(0)"><i class="icon-calendar"></i> Active from:{{job.activeFrom|date('j F, Y')}}</a><br/>
+                                                <a href="javascript:void(0)"><i class="icon-calendar"></i> Active to:{{job.activeTo|date('j F, Y')}}</a><br/>
+                                                <!-- <a href="javascript:void(0)"><i class="icon-pencil"></i> Position type</a> -->
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+
+
+
+                                   </ul>
+
+
+                                </div><!--Result-box-->
+
+
+
+
+
+
+                    </div><!--tabbable--->
+            </div><!--span 8-->
+            </div>
 {%else%}
 No Results found
 {%endif%}
@@ -132,7 +164,7 @@ No Results found
 
         {% for numberOfPage in 1..lastPageNumber %}
         {% if numberOfPage > page - 3 and numberOfPage < page + 3 %}
-                                {% if page == numberOfPage %}<li class="crnt"><a href="javascript:void(0)">{{ numberOfPage }}</a></li>{% else %}<li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'page': numberOfPage}) }}" >{{ numberOfPage }}</a></li>{%endif%}
+                                {% if page == numberOfPage %}<li class="active"><a href="javascript:void(0)">{{ numberOfPage }}</a></li>{% else %}<li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'page': numberOfPage}) }}" >{{ numberOfPage }}</a></li>{%endif%}
         {% endif %}
         {% endfor %}
 
@@ -151,15 +183,13 @@ No Results found
 
         </aside>
 
-
-    </div>
-</section>
-
+</div><!--Search-student-->
 
 
 
 
 {% endblock %}
+
 
 {% block javascripts %}
 {{parent()}}
@@ -178,7 +208,7 @@ No Results found
     var searchJobsUrl= '{{url('user_search_ajax', {'title' : '','country' : '','city' : '','state' : '','category' : '','company' :  '','lang' :  '','page' :  1})}}';
     var autoCompleteUrl='{{url('auto_complete_url')}}';
     var cityAutoCompleteUrl= '{{url('city_auto_complete_url')}}';
-    var text="empty"
+    var text="empty";
     var country='empty';
     var city='empty';
     var state="empty";
