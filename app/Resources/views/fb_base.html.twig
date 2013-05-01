@@ -111,8 +111,11 @@
                                 {% endif %}
                             </div>
 
+
+                            {% if is_granted('ROLE_USER') %}
                             <!---------------Invite Friends Part--------------->
                                    <div class="welcomInvite">
+
                                     <span class="name"><a href="{{path('student_task',{'loginName' : app.user.loginName})}}">{{app.user}}</a></span>
 
                                     <div id="fb-root"></div>
@@ -146,7 +149,7 @@
                                         <div class="clear"></div>
                                     </div>
                              <!-------------End Invite Friends Part--------------->
-
+                        {% endif %}
 
                             {% block notifications %}
                             <div class="page-title">

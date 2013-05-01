@@ -887,6 +887,28 @@ class InternjumpController extends ObjectsController {
 
         $em = $this->getDoctrine()->getEntityManager();
         $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
+        $userRepo = $em->getRepository('ObjectsUserBundle:User');
+        $cityRepo = $em->getRepository('ObjectsInternJumpBundle:City');
+        $stateRepo = $em->getRepository('ObjectsInternJumpBundle:State');
+        $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
+        $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
+
+        //get worth users
+        $worthUsers = $userRepo->getWorthUsers(3);
+        //get featured companies
+        $featuredCompanies = $companyRepo->findBy(array('isHome' => 1));
+        //get latest internships
+        $latestInternShips = $internshipRepo->getLatestinternShips(3);
+        //get Recently Hired interns
+        $latestHiredUsers = $internshipRepo->getLatestHiredUsers(4);
+        //all companies
+        $allCompanies = $companyRepo->findAll();
+        //all cities
+        $allCities = $cityRepo->findBy(array('country' => 'US'));
+        //all state
+        $allState = $stateRepo->findAll();
+        //all category
+        $allCategory = $categoryRepo->findAll();
         //get home page companies logo
         $homeCompanies = $companyRepo->findBy(array('isHome' => TRUE));
 
@@ -949,7 +971,15 @@ class InternjumpController extends ObjectsController {
                     'reFlag' => $redirectFlag,
                     'url' => $Url,
                     'homeCompanies' => $homeCompanies,
-                    'home_page_video_id' => $this->container->getParameter('home_page_video_id')
+                    'home_page_video_id' => $this->container->getParameter('home_page_video_id'),
+                    'worthUsers' => $worthUsers,
+                    'featuredCompanies' => $featuredCompanies,
+                    'latestInternShips' => $latestInternShips,
+                    'latestHiredUsers' => $latestHiredUsers,
+                    'allCompanies' => $allCompanies,
+                    'allCities' => $allCities,
+                    'allState' => $allState,
+                    'allCategory' => $allCategory
         ));
     }
 
