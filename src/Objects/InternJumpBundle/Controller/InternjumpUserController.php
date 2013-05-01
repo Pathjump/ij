@@ -551,11 +551,18 @@ class InternjumpUserController extends ObjectsController {
                                 $em->persist($newSkill);
                                 //add the skill to the user
                                 $newCV->addSkill($newSkill);
+
+                                $user->addSkill($newSkill);
                             } else {
                                 //check if the user have this skill
                                 if (!$newCV->getSkills()->contains($skillObject)) {
                                     //add the skill to the user
                                     $newCV->addSkill($skillObject);
+                                }
+                                //check if the user have this skill
+                                if (!$user->getSkills()->contains($skillObject)) {
+                                    //add the skill to the user
+                                    $user->addSkill($skillObject);
                                     //increment skill user count
                                     $skillObject->setUsersCount($skillObject->getUsersCount() + 1);
                                 }
@@ -568,9 +575,9 @@ class InternjumpUserController extends ObjectsController {
                             $newEducationObject = new Education();
                             $newEducationObject->setUser($user);
 
-                            if (isset($newEducation['shoolName'])){
+                            if (isset($newEducation['shoolName'])) {
                                 $newEducationObject->setSchoolName($newEducation['shoolName']);
-                            }else{
+                            } else {
                                 $newEducationObject->setSchoolName('');
                             }
                             if (isset($newEducation['major']))
@@ -593,21 +600,21 @@ class InternjumpUserController extends ObjectsController {
                         foreach ($cvDataArray['experience'] as $experience) {
                             $newEmploymentHistory = new EmploymentHistory();
                             $newEmploymentHistory->setUser($user);
-                            if (isset($experience['companyName'])){
+                            if (isset($experience['companyName'])) {
                                 $newEmploymentHistory->setCompanyName($experience['companyName']);
-                            }else{
+                            } else {
                                 $newEmploymentHistory->setCompanyName('');
                             }
-                            if (isset($experience['jobTitle'])){
+                            if (isset($experience['jobTitle'])) {
                                 $newEmploymentHistory->setTitle($experience['jobTitle']);
-                            }else{
+                            } else {
                                 $newEmploymentHistory->setTitle('');
                             }
                             if (isset($experience['companyUrl']))
                                 $newEmploymentHistory->setCompanyUrl($experience['companyUrl']);
-                            if (isset($experience['startDate'])){
+                            if (isset($experience['startDate'])) {
                                 $newEmploymentHistory->setStartedFrom(new \DateTime($experience['startDate']));
-                            }else{
+                            } else {
                                 $newEmploymentHistory->setStartedFrom(new \DateTime());
                             }
                             if (isset($experience['endDate']))
