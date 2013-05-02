@@ -34,9 +34,17 @@ ObjectsInternJumpBundle_education:
     resource: "@ObjectsInternJumpBundle/Resources/config/routing/education.yml"
     prefix:   /education
 
+ObjectsInternJumpBundle_facebook_education:
+    resource: "@ObjectsInternJumpBundle/Resources/config/routing/fb_education.yml"
+    prefix:   /fb/education
+
 ObjectsInternJumpBundle_cv:
     resource: "@ObjectsInternJumpBundle/Resources/config/routing/cv.yml"
     prefix:   /cv
+
+ObjectsInternJumpBundle_facebook_cv:
+    resource: "@ObjectsInternJumpBundle/Resources/config/routing/fb_cv.yml"
+    prefix:   /fb/cv
 
 ObjectsInternJumpBundle_employmenthistory:
     resource: "@ObjectsInternJumpBundle/Resources/config/routing/employmenthistory.yml"

@@ -265,13 +265,13 @@ class FacebookUserMessageController extends Controller {
             $entity = $em->getRepository('ObjectsInternJumpBundle:Message')->getUserMessage($id);
         } catch (\Exception $e) {
             $message = $this->container->getParameter('user_message_not_found_error_msg');
-            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+            return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
                         'message' => $message,));
         }
         //check if the message is deleted
         if ($entity->getUserDeleted()) {
             $message = $this->container->getParameter('user_message_not_found_error_msg');
-            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+            return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
                         'message' => $message,));
         }
         //check if the user can delete the message
@@ -343,7 +343,7 @@ class FacebookUserMessageController extends Controller {
             $company = $em->getRepository('ObjectsInternJumpBundle:Company')->findOneByLoginName($userName);
             if (!$company) {
                 $message = $this->container->getParameter('company_not_found_error_msg');
-                return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
                         'message' => $message,));
             }
             //check if the user can send this company messages
