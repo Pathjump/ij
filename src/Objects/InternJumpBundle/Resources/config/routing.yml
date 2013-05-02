@@ -22,6 +22,10 @@ employers:
     pattern:  /company
     defaults: { _controller: "ObjectsInternJumpBundle:Company:employers" }
 
+fb_employers:
+    pattern:  /fb/company
+    defaults: { _controller: "ObjectsInternJumpBundle:Company:facebookEmployers" }
+
 user_message:
     resource: "@ObjectsInternJumpBundle/Resources/config/routing/user_message.yml"
     prefix:   /user/messages

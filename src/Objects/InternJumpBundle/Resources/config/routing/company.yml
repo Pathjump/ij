@@ -47,7 +47,7 @@ fb_question_show:
     defaults: { _controller: "ObjectsInternJumpBundle:Company:fb_questionShow" }
     requirements:
         questionId:  \d+
-        
+
 interview_show:
     pattern:  /interview/{interviewId}/show
     defaults: { _controller: "ObjectsInternJumpBundle:Company:interviewShow" }
@@ -88,15 +88,31 @@ search_for_company:
     requirements:
         page: \d+
 
+fb_search_for_company:
+    pattern: /fb/search/{page}/{orderBy}/{orderDirection}
+    defaults: { _controller: ObjectsInternJumpBundle:Company:facebookSearchForCompany, page: 1, orderBy: ~, orderDirection: ~ }
+    requirements:
+        page: \d+
+
 industry_companies:
     pattern:  /{industrySlug}/{page}/{orderBy}/{orderDirection}
     defaults: { _controller: "ObjectsInternJumpBundle:Company:industryCompanies", page: 1, orderBy: ~, orderDirection: ~ }
     requirements:
         page: \d+
 
+fb_industry_companies:
+    pattern:  /fb/{industrySlug}/{page}/{orderBy}/{orderDirection}
+    defaults: { _controller: "ObjectsInternJumpBundle:Company:facebookIndustryCompanies", page: 1, orderBy: ~, orderDirection: ~ }
+    requirements:
+        page: \d+
+
 company_public_profile:
     pattern:  /{industrySlug}/{loginName}
     defaults: { _controller: "ObjectsInternJumpBundle:Company:companyPublicProfile" }
+
+fb_company_public_profile:
+    pattern:  /fb/{industrySlug}/{loginName}
+    defaults: { _controller: "ObjectsInternJumpBundle:Company:facebookCompanyPublicProfile" }
 
 company_reActivation:
     pattern:  /activation/code/resend
