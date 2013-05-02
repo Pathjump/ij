@@ -747,9 +747,9 @@ class UserController extends ObjectsController {
         //check that a logged in user can not access this action
         if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
             //go to the home page
-            //if (!$this->getRequest()->get('access_method')) {
-                return $this->redirect('/');
-            //}
+            if (!$this->getRequest()->get('access_method')) {
+                return $this->redirect($this->generateUrl('site_fb_homepage',array(),TRUE));
+            }
         }
         $request = $this->getRequest();
         $session = $request->getSession();
@@ -766,6 +766,10 @@ class UserController extends ObjectsController {
         $facebookError = $session->get('facebook_error', FALSE);
 
         if ($facebookError || !$faceUser || !$shortLive_access_token) {
+             if (!$this->getRequest()->get('access_method')) {
+                return $this->redirect($this->generateUrl('site_fb_homepage',array(),TRUE));
+            }
+            else
             return $this->redirect('/');
         }
 
@@ -792,6 +796,10 @@ class UserController extends ObjectsController {
                 // give it to the security context
                 $this->get('security.context')->setToken($token);
                 //redirect the user
+                if (!$this->getRequest()->get('access_method')) {
+                    return $this->redirect($this->generateUrl('site_fb_homepage',array(),TRUE));
+                }
+                else
                 return $this->redirectUserAction();
             } catch (\Exception $e) {
                 //can not reload the user object log out the user
@@ -992,6 +1000,9 @@ class UserController extends ObjectsController {
                     return $this->redirect($this->generateUrl('login'));
                 }
                 //go to the home page
+                 if (!$this->getRequest()->get('access_method')) {
+                    return $this->redirect($this->generateUrl('fb_user_signup_second_step'));
+                }
                 return $this->redirect($this->generateUrl('user_signup_second_step'));
 
                 //TODO use

@@ -941,7 +941,7 @@ class InternjumpController extends ObjectsController {
                     $session->set('facebook_user', $faceUser);
                     $session->set('facebook_short_live_access_token', $facebook->getAccessToken());
                     $session->set('currentURL', 'http://apps.facebook.com/internjumpnew');
-                    return $this->redirect($this->generateUrl('facebook_logging', array(), True));
+                    return $this->redirect($this->generateUrl('facebook_logging', array('access_method' => 'face'), True));
 
 
 //                    /****************************/
