@@ -766,7 +766,7 @@ class UserController extends ObjectsController {
         $facebookError = $session->get('facebook_error', FALSE);
 
         if ($facebookError || !$faceUser || !$shortLive_access_token) {
-             if (!$this->getRequest()->get('access_method')) {
+             if ($this->getRequest()->get('access_method')== "face") {
                 return $this->redirect($this->generateUrl('site_fb_homepage',array(),TRUE));
             }
             else
@@ -796,7 +796,7 @@ class UserController extends ObjectsController {
                 // give it to the security context
                 $this->get('security.context')->setToken($token);
                 //redirect the user
-                if (!$this->getRequest()->get('access_method')) {
+                if ($this->getRequest()->get('access_method') == "face") {
                     return $this->redirect($this->generateUrl('site_fb_homepage',array(),TRUE));
                 }
                 else
