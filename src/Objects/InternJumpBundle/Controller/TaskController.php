@@ -150,6 +150,145 @@ class TaskController extends ObjectsController {
     }
 
     /**
+     * For Facebook Version
+     * Lists Student's all Task entities.
+     *
+     */
+    public function fb_studentAllTasksAction($loginName, $itemsPerPage, $status, $page) {
+
+        //array that holds cvs categories to get latest jobs of the same categories
+        $categ = array();
+        //Number of cvs for status part in portal page
+        $numOfCVs = 0;
+
+        //Check if inside facebook or Not
+        $url = $this->getRequest()->get('access_method');
+        $flag = $this->checkWhere($url);
+
+        if (false === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) { //if (false === $this->get('security.context')->isGranted('ROLE_USER')) {
+            return $this->redirect($this->generateUrl('site_homepage'));
+        }
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $cityRepo = $em->getRepository('ObjectsInternJumpBundle:City');
+        $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
+
+        //$tasksPerPage = $this->container->getParameter('tasks_per_show_page'); //for pagenation
+        //$entities = $em->getRepository('ObjectsInternJumpBundle:Task')->findAll();
+        //Get current user
+        $user = $this->get('security.context')->getToken()->getUser();
+        $uid = $user->getId();
+
+        //check if we do not have the items per page number
+        if (!$itemsPerPage) {
+            //get the items per page from cookie or the default value
+            $itemsPerPage = $this->getRequest()->cookies->get('tasks_per_show_page_' . $uid, 3);
+        }
+
+
+        $tasks = $em->getRepository('ObjectsInternJumpBundle:Task')->getStudentAllTasks($uid, $page, $itemsPerPage, $status);
+
+        $cvs = $em->getRepository('ObjectsInternJumpBundle:CV')->getAllCvs($uid);
+        //print_r($cvs);
+        if ($cvs) {//if student Has CVs
+            //echo "found cvs <br>";
+            foreach ($cvs as $cv) {
+                //echo $cv->getName();
+                $numOfCVs+=1;
+                foreach ($cv->getCategories() as $cat)
+                //echo $cat->getName();
+                    $categ[] = $cat->getId();
+                //echo "category num".$cat->getId()." found<br>";}
+            }
+        }
+        $limit = 4;
+        if (sizeof($categ) > 0) { //found array of categories
+            $LatestJobs = $em->getRepository('ObjectsInternJumpBundle:Internship')->getLatestJobs($categ, $limit);
+            // echo "after exec found jobs array of size ".sizeof($LatestJobs);exit;
+        } else { /* don't call the dql */
+            $LatestJobs = "";
+        }
+
+
+
+        //for pagenation
+        $tasksCount = $em->getRepository('ObjectsInternJumpBundle:Task')->countTasks($uid, "user", $status);
+
+        $lastPageNumber = (int) ($tasksCount / $itemsPerPage);
+        if (($tasksCount % $itemsPerPage) > 0) {
+            $lastPageNumber++;
+        }
+
+
+        $userJob = $em->getRepository('ObjectsInternJumpBundle:UserInternship')->findOneBy(array('user' => $uid, 'status' => "accepted"));
+
+        //get User score
+        $score = $user->getScore();
+        //get quizResult Repo
+        $quizResultRepo = $em->getRepository('ObjectsInternJumpBundle:QuizResult');
+
+        //find all quiz results
+        $quizResults = $quizResultRepo->findAll();
+        $resultObject = null;
+        if ($score) {
+            foreach ($quizResults as $result) {
+                if ($result->getScore() >= $score) {
+                    $resultObject = $result;
+                    break;
+                }
+                $resultObject = $result;
+            }
+        }
+
+        //get interviews Repo
+        $interviewRepo = $em->getRepository('ObjectsInternJumpBundle:Interview');
+        //get upcoming Interviews
+        $upComingInterviews = $interviewRepo->getUpComingInterviews($uid);
+//        print_r($upComingInterviews);exit;
+        $upComingInterviewsCount = sizeof($upComingInterviews);
+
+        //get jobs that user applied
+        $appliedJobs = $em->getRepository('ObjectsInternJumpBundle:UserInternship')->getAppliedJobs($uid);
+
+
+        //get latest 3 notifications
+        $latestNotifications = $em->getRepository('ObjectsInternJumpBundle:UserNotification')->getLatestThree($uid);
+        //get latest 3 messages
+        $latestMessages = $em->getRepository('ObjectsInternJumpBundle:Message')->getLatestThree($uid);
+
+
+        //For search form
+        //all cities
+        $allCities = $cityRepo->findBy(array('country' => 'US'));
+        //all category
+        $allCategory = $categoryRepo->findAll();
+
+        return $this->render('ObjectsInternJumpBundle:Task:fb_studentTasks.html.twig', array(
+                    'entities' => $tasks,
+                    'user' => $user,
+                    'userjob' => $userJob,
+                    'status' => $status,
+                    'flag' => $flag,
+                    'cvCategoris' => $categ,
+                    'latestJobs' => $LatestJobs,
+                    'page' => $page,
+                    'tasksPerPage' => $itemsPerPage,
+                    'lastPageNumber' => $lastPageNumber,
+                    'quizResult' => $resultObject,
+                    'cvCount' => $numOfCVs,
+                    'interviews' => $upComingInterviews,
+                    'interviewsCount' => $upComingInterviewsCount,
+                    'appliedJobs' => $appliedJobs,
+                    'latestNotifications' => $latestNotifications,
+                    'latestMessages' => $latestMessages,
+                    'allCities' => $allCities,
+                    'allCategory' => $allCategory
+                ));
+    }
+
+
+    /**
      * Lists Company's all Task entities.
      *
      */
@@ -299,6 +438,53 @@ class TaskController extends ObjectsController {
         //if not equal redirect to Home Page
 
             return $this->redirect($this->generateUrl('site_homepage'));
+
+    }
+
+    /**
+     * Finds and displays a Student Task Facebook Version
+     *
+     */
+    public function fb_studentShowAction($id) {
+
+
+        if (false === $this->get('security.context')->isGranted('ROLE_USER')) {
+            return $this->redirect($this->generateUrl('site_fb_homepage'));
+        }
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $task = $em->getRepository('ObjectsInternJumpBundle:Task')->find($id);
+
+        //If no Task Found
+        if (!$task) {
+            $message = $this->container->getParameter('task_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
+                        'message' => $message,));
+        }
+
+        //If Task Found then check if the Current User is the Task Owner
+        //Get current user
+        $loggedinUser = $this->get('security.context')->getToken()->getUser();
+        //Get Task Owner
+        $taskUser = $task->getUser();
+        //check if the same user
+        if ($taskUser->getId() != $loggedinUser->getId()) {
+            //if not equal redirect to Home Page
+            return $this->redirect($this->generateUrl('site_homepage'));
+        }
+
+        //Get task notes
+        $notes = $task->getNotes();
+
+        return $this->render('ObjectsInternJumpBundle:Task:fb_studentShowTask.html.twig', array(
+                    'entity' => $task,
+                    'user' => $taskUser,
+                    'notes' => $notes,
+                ));
+
+        //if not equal redirect to Home Page
+
+            return $this->redirect($this->generateUrl('site_fb_homepage'));
 
     }
 
