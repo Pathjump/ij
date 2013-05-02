@@ -26,6 +26,10 @@ user_message:
     resource: "@ObjectsInternJumpBundle/Resources/config/routing/user_message.yml"
     prefix:   /user/messages
 
+fb_user_message:
+    resource: "@ObjectsInternJumpBundle/Resources/config/routing/fb_user_message.yml"
+    prefix:   /fb/user/messages
+
 ObjectsInternJumpBundle_education:
     resource: "@ObjectsInternJumpBundle/Resources/config/routing/education.yml"
     prefix:   /education
