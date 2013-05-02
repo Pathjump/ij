@@ -217,6 +217,97 @@ class SkillController extends ObjectsController {
     }
 
     /**
+     * the cv create second step
+     * @author Mahmoud
+     */
+    public function facebookSignupCVSkillsAction() {
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('site_fb_homepage'));
+        }
+        //get the request object
+        $request = $this->getRequest();
+        //get the user object
+        $user = $this->get('security.context')->getToken()->getUser();
+        //the current user skills ids
+        $currentSkillsIds = array();
+        foreach ($user->getSkills() as $userSkill) {
+            //add the skill to the user skills ids array
+            $currentSkillsIds[$userSkill->getId()] = TRUE;
+        }
+        if (count($user->getSkills()) == 0) {
+            //add one skill entity to the user
+            $user->addSkill(new Skill());
+        }
+        //create an education form
+        $formBuilder = $this->createFormBuilder($user, array('validation_groups' => array('skill')))
+                ->add('skills', 'collection', array('type' => new SkillType(), 'allow_add' => true, 'allow_delete' => true));
+        //create the form
+        $form = $formBuilder->getForm();
+        //check if this is the user posted his data
+        if ($request->getMethod() == 'POST') {
+            //fill the form data from the request
+            $form->bindRequest($request);
+            //check if the form values are correct
+            if ($form->isValid()) {
+                //get the entity manager
+                $em = $this->getDoctrine()->getEntityManager();
+                $skillRepo = $em->getRepository('ObjectsInternJumpBundle:Skill');
+                //the new skills array
+                $newTitles = array();
+                $skillsIds = array();
+                $skills = new ArrayCollection();
+                foreach ($user->getSkills() as $userSkill) {
+                    if ($userSkill->getId()) {
+                        $em->detach($userSkill);
+                    }
+                    //check if we have this skill in our database
+                    $skill = $skillRepo->findOneByTitle($userSkill->getTitle());
+                    if ($skill) {
+                        if (!isset($skillsIds[$skill->getId()])) {
+                            //add the database object
+                            $skills->add($skill);
+                            $skillsIds[$skill->getId()] = true;
+                            //check if we increased this skill before
+                            if (!isset($currentSkillsIds[$skill->getId()])) {
+                                //increase the users count for this skill
+                                $skillRepo->increaseSkillUsersCount($skill->getId());
+                            }
+                        }
+                    } else {
+                        //check if we added this skill before
+                        if (!isset($newTitles[$userSkill->getTitle()])) {
+                            //add the new skill
+                            $newTitles[$userSkill->getTitle()] = true;
+                            $newSkill = new Skill();
+                            $newSkill->setTitle($userSkill->getTitle());
+                            $em->persist($newSkill);
+                            $skills->add($newSkill);
+                        }
+                    }
+                }
+                $user->setSkills($skills);
+                //set the skills to the cv
+                $cv = $user->getCvs()->first();
+                //set the cv skills
+                $cv->setSkills($skills);
+                //set the cv skills points
+                $cv->setSkillsPoints(count($skills) * $this->container->getParameter('skill_point'));
+                //update the total points
+                $cv->setTotalPoints();
+                //save the user data
+                $em->flush();
+                return $this->redirect($this->generateUrl('fb_signup_cv_experience'));
+            }
+        }
+        return $this->render('ObjectsInternJumpBundle:Skill:facebook_signup_cv_skills.html.twig', array(
+                    'form' => $form->createView(),
+                    'formName' => $this->container->getParameter('studentSignUpCvSkills_FormName'),
+                    'formDesc' => $this->container->getParameter('studentSignUpCvSkills_FormDesc'),
+        ));
+    }
+
+    /**
      * the action is used by the skill auto complete script
      * @author Mahmoud
      */

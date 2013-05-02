@@ -230,6 +230,52 @@ class InternjumpUserController extends ObjectsController {
         ));
     }
 
+    /**
+     * signup fourth step
+     * @author Mahmoud
+     */
+    public function facebookSignupLanguageAction() {
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('site_fb_homepage'));
+        }
+        //get the request object
+        $request = $this->getRequest();
+        //get the user object
+        $user = $this->get('security.context')->getToken()->getUser();
+        if (count($user->getLanguages()) == 0) {
+            //add one education entity to the user
+            $user->addUserLanguage(new UserLanguage());
+        }
+        //create an education form
+        $formBuilder = $this->createFormBuilder($user, array(
+                    'validation_groups' => 'language'
+                ))
+                ->add('languages', 'collection', array('type' => new UserLanguageType(), 'allow_add' => true, 'allow_delete' => true, 'by_reference' => false));
+        //create the form
+        $form = $formBuilder->getForm();
+        //check if this is the user posted his data
+        if ($request->getMethod() == 'POST') {
+            //fill the form data from the request
+            $form->bindRequest($request);
+            //check if the form values are correct
+            if ($form->isValid()) {
+                $user = $form->getData();
+                foreach ($user->getLanguages() as $language) {
+                    $language->setUser($user);
+                }
+                //save the user data
+                $this->getDoctrine()->getEntityManager()->flush();
+                return $this->redirect($this->generateUrl('fb_signup_cv'));
+            }
+        }
+        return $this->render('ObjectsInternJumpBundle:InternjumpUser:facebook_signup_language.html.twig', array(
+                    'form' => $form->createView(),
+                    'formName' => $this->container->getParameter('studentSignUpLanguage_FormName'),
+                    'formDesc' => $this->container->getParameter('studentSignUpLanguage_FormDesc'),
+        ));
+    }
+
     public function deleteLanguageAction($id) {
         //check for logrdin company
         if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {

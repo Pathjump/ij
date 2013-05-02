@@ -70,17 +70,33 @@ signup_education:
     pattern:  /user/signup/third/step
     defaults: { _controller: "ObjectsInternJumpBundle:Education:signupEducation" }
 
+fb_signup_education:
+    pattern:  /fb/user/signup/third/step
+    defaults: { _controller: "ObjectsInternJumpBundle:FacebookEducation:signupEducation" }
+
 signup_language:
     pattern:  /user/signup/fourth/step
     defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:signupLanguage" }
+
+fb_signup_language:
+    pattern:  /fb/user/signup/fourth/step
+    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:facebookSignupLanguage" }
 
 signup_cv_skills:
     pattern:  /cv/second/step
     defaults: { _controller: "ObjectsInternJumpBundle:Skill:signupCVSkills" }
 
+fb_signup_cv_skills:
+    pattern:  /fb/cv/second/step
+    defaults: { _controller: "ObjectsInternJumpBundle:Skill:facebookSignupCVSkills" }
+
 signup_cv_experience:
     pattern:  /cv/third/step
     defaults: { _controller: "ObjectsInternJumpBundle:EmploymentHistory:signupCVExperience" }
+
+fb_signup_cv_experience:
+    pattern:  /fb/cv/third/step
+    defaults: { _controller: "ObjectsInternJumpBundle:FacebookEmploymentHistory:signupCVExperience" }
 
 company_search_for_cv:
     pattern:  /search-for-cv
