@@ -1103,8 +1103,8 @@ class InternjumpUserController extends Controller {
         $container = $this->container;
         if ($userSocialAccounts) {
             $status = 'I passed internJump personality quiz and my result is ' . $resultObject->getMessage();
-            $picture = $this->generateNormalUrl('site_homepage', array(), TRUE) . $resultObject->getTimThumbUrl(95, 95);
-            $link = $this->generateNormalUrl('site_fb_homepage', array(), TRUE);
+            $picture = $this->generateUrl('site_homepage', array(), TRUE) . $resultObject->getTimThumbUrl(95, 95);
+            $link = $this->generateUrl('site_fb_homepage', array(), TRUE);
 
             // check if have facebook
             if ($userSocialAccounts->isFacebookLinked()) {
@@ -1310,7 +1310,7 @@ class InternjumpUserController extends Controller {
                 $container = $this->container;
                 if ($userSocialAccounts) {
                     $status = 'I accept internjump hire request';
-                    $link = $this->generateNormalUrl('site_fb_homepage', array(), TRUE);
+                    $link = $this->generateUrl('site_fb_homepage', array(), TRUE);
 
                     // check if have facebook
                     if ($userSocialAccounts->isFacebookLinked()) {

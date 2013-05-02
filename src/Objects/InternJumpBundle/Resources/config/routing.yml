@@ -186,6 +186,10 @@ howMuchAreYouWorth:
     pattern:  /findyourworth
     defaults: { _controller: "ObjectsInternJumpBundle:Internjump:howMuchAreYouWorth" }
 
+fb_howMuchAreYouWorth:
+    pattern:  /fb_findyourworth
+    defaults: { _controller: "ObjectsInternJumpBundle:Internjump:fb_howMuchAreYouWorth" }
+
 fb_user_languages:
     pattern:  /fb_language/new
     defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:fb_userLanguages" }
