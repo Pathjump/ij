@@ -2593,6 +2593,7 @@ class InternjumpUserController extends Controller {
 
          /*****************[ End API Search Results ]***********************/
         /**************************************************/
+         $apiJobsArr =array();
          if(sizeof($userSearchResults) < 5 ){
          $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null);
            // print_r($apiJobsArr);

@@ -23,7 +23,7 @@
                                             </ul>
         </div>
 
-{%if jobs%}
+
           <div class="row-fluid show-grid">
 
             <div class=" interns-res">
@@ -54,40 +54,8 @@
                                             </div>
                                         </li>
                                         {% endfor %}
-
-
-
-                                   </ul>
-
-
-                                </div><!--Result-box-->
-
-
-
-
-
-
-                    </div><!--tabbable--->
-            </div><!--span 8-->
-            </div>
-            {% if jobs|length < 5 %}
-                {% if apiJobs %}
- <div class="row-fluid show-grid">
-
-            <div class=" interns-res">
-
-            	    <div class="tabbable"> <!-- Only required for left/right tabs -->
-
-
-                            	<div class="Result-box">
-                                	<div class="title3"> Search Results:
-
-                                  </div><!---title3--->
-
-                                   <ul class="unstyled inner-list">
-                                       {% for j in apiJobs['results']%}
-
-
+                                        <!--++++++++++++++++++++++++ API jobs +++++++++++++++++++++++++++ -->
+                                         {% for j in apiJobs['results']%}
                                            <li class="row-fluid show-grid">
                                             <div class="span8">
                                             	<h4><a class="titl-blue" href="{{j['url']}}">{{j['jobtitle']}}</a></h4>
@@ -103,60 +71,7 @@
                                             </div>
                                         </li>
                                         {% endfor %}
-
-
-
-                                   </ul>
-
-
-                                </div><!--Result-box-->
-
-
-
-
-
-
-                    </div><!--tabbable--->
-            </div><!--span 8-->
-            </div>
-            {% endif %}
-            {% endif %}
-
-{%else%}
-<!--++++++++++++++++++++++++ API jobs +++++++++++++++++++++++++++ -->
-{% if apiJobs %}
- <div class="row-fluid show-grid">
-
-            <div class=" interns-res">
-
-            	    <div class="tabbable"> <!-- Only required for left/right tabs -->
-
-
-                            	<div class="Result-box">
-                                	<div class="title3"> Search Results:
-
-                                  </div><!---title3--->
-
-                                   <ul class="unstyled inner-list">
-                                       {% for j in apiJobs['results']%}
-
-
-                                           <li class="row-fluid show-grid">
-                                            <div class="span8">
-                                            	<h4><a class="titl-blue" href="{{j['url']}}">{{j['jobtitle']}}</a></h4>
-                                                <i><strong><a href="javascript:void(0)">{{j['company']}}</a></strong></i>
-                                                <p>{{j['snippet']}}</p>
-                                                <p></p>
-                                            </div>
-                                            <div class="span4">
-                                            	<div class="Area">{{j['city']}}  ,  {{j['state']}},  {{j['country']}}</div>
-                                                <div class="date muted">{{j['date']|date('d-m-Y')}}</div>
-                                                <a href="javascript:void(0)"><i class="icon-calendar"></i> Active form: {{j['formattedRelativeTime']}}</a><br/>
-                                                <!-- <a href="javascript:void(0)"><i class="icon-pencil"></i> Position type</a> -->
-                                            </div>
-                                        </li>
-                                        {% endfor %}
-
+                                        <!-- +++++++++++++++++++++++ End API jobs ++++++++++++++++++++++++ -->
 
 
                                    </ul>
@@ -173,10 +88,9 @@
             </div><!--span 8-->
             </div>
 
-{% endif %}
 
-<!-- +++++++++++++++++++++++ End API jobs ++++++++++++++++++++++++ -->
-{%endif%}
+
+
 
 
 <div class="pagination pagination-centered">
