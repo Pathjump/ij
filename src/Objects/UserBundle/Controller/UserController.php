@@ -748,7 +748,7 @@ class UserController extends ObjectsController {
         if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
             //go to the home page
             if (!$this->getRequest()->get('access_method')) {
-                return $this->redirect($this->generateUrl('site_fb_homepage',array(),TRUE));
+                return $this->redirect($this->generateUrl('site_homepage',array(),TRUE));
             }
         }
         $request = $this->getRequest();
@@ -797,7 +797,7 @@ class UserController extends ObjectsController {
                 $this->get('security.context')->setToken($token);
                 //redirect the user
                 if ($this->getRequest()->get('access_method') == "face") {
-                    return $this->redirect($this->generateUrl('site_fb_homepage',array(),TRUE));
+                    return $this->redirect($this->generateUrl('fb_student_task',array(),TRUE));
                 }
                 else
                 return $this->redirectUserAction();
