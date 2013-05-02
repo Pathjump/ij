@@ -912,19 +912,20 @@ class InternjumpController extends ObjectsController {
         //get home page companies logo
         $homeCompanies = $companyRepo->findBy(array('isHome' => TRUE));
 
-
+        $appId = $this->container->getParameter('fb_app_id');
+        $appSecrete = $this->container->getParameter('fb_app_secret');
 
 
             //Yes, inside facebook
             $facebook = new \Facebook(array(
-                'appId' => '140790826106156',
-                'secret' => '560ae9b6b521ba64b82d84082e365320',
+                'appId' => $appId,
+                'secret' => $appSecrete,
             ));
             // Get User ID
             $user = $facebook->getUser();
 
-            if($this->getRequest()->get('open')=="yes")
-            {
+            //if($this->getRequest()->get('open')=="yes")
+            //{
             if ($user) {
 
                 if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE') || TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {//->getEmail() != $user->
@@ -940,7 +941,7 @@ class InternjumpController extends ObjectsController {
                     $session->set('facebook_user', $faceUser);
                     $session->set('facebook_short_live_access_token', $facebook->getAccessToken());
                     $session->set('currentURL', 'http://apps.facebook.com/internjumpnew');
-                    return $this->redirect($this->generateUrl('facebook_logging', array(), True));
+                    return $this->redirect($this->generateUrl('facebook_logging', array('access_method' => 'face'), True));
 
 
 //                    /****************************/
@@ -962,7 +963,7 @@ class InternjumpController extends ObjectsController {
                 $loginUrl = $facebook->getLoginUrl($params);
                 return $this->redirect($loginUrl);
             }
-            }
+           // }
 
 
 

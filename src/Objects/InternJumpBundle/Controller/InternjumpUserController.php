@@ -230,6 +230,52 @@ class InternjumpUserController extends ObjectsController {
         ));
     }
 
+    /**
+     * signup fourth step
+     * @author Mahmoud
+     */
+    public function facebookSignupLanguageAction() {
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('site_fb_homepage'));
+        }
+        //get the request object
+        $request = $this->getRequest();
+        //get the user object
+        $user = $this->get('security.context')->getToken()->getUser();
+        if (count($user->getLanguages()) == 0) {
+            //add one education entity to the user
+            $user->addUserLanguage(new UserLanguage());
+        }
+        //create an education form
+        $formBuilder = $this->createFormBuilder($user, array(
+                    'validation_groups' => 'language'
+                ))
+                ->add('languages', 'collection', array('type' => new UserLanguageType(), 'allow_add' => true, 'allow_delete' => true, 'by_reference' => false));
+        //create the form
+        $form = $formBuilder->getForm();
+        //check if this is the user posted his data
+        if ($request->getMethod() == 'POST') {
+            //fill the form data from the request
+            $form->bindRequest($request);
+            //check if the form values are correct
+            if ($form->isValid()) {
+                $user = $form->getData();
+                foreach ($user->getLanguages() as $language) {
+                    $language->setUser($user);
+                }
+                //save the user data
+                $this->getDoctrine()->getEntityManager()->flush();
+                return $this->redirect($this->generateUrl('fb_signup_cv'));
+            }
+        }
+        return $this->render('ObjectsInternJumpBundle:InternjumpUser:facebook_signup_language.html.twig', array(
+                    'form' => $form->createView(),
+                    'formName' => $this->container->getParameter('studentSignUpLanguage_FormName'),
+                    'formDesc' => $this->container->getParameter('studentSignUpLanguage_FormDesc'),
+        ));
+    }
+
     public function deleteLanguageAction($id) {
         //check for logrdin company
         if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
@@ -2321,6 +2367,181 @@ class InternjumpUserController extends ObjectsController {
                     'state' => $state, 'category' => $category, 'company' => $company, 'lang' => "empty",
         ));
     }
+
+
+     /**
+     * This function for displaying user search page and fill drop down lists with data
+     * @author  Ola
+     */
+    public function fb_StudentInternshipsSearchAction() {
+        //check for loggedin user
+//        if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
+//            //return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+//            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+//            return $this->redirect($this->generateUrl('login'));
+//        }
+
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        //Check to fill the form with parameters if been sent with the request
+        $check = false;
+
+        /*         * ********************************************************** */
+        /*         * ********Start Partial Search part*********** */
+        //get request
+        $request = $this->getRequest();
+        //Get request's parameters
+        $company = $request->get("company");
+        $city = $request->get("city");
+        $state = $request->get("state");
+        $category = $request->get("industry");
+
+
+        //Get city Repo
+        $cityRepo = $em->getRepository('ObjectsInternJumpBundle:City');
+
+        if ($company || $category || $city || $state) {
+            //set the check to be true
+            $check = true;
+
+            //now make sure which parameters been sent and which not
+            if (!$company) {
+                $company = "empty";
+            }
+            if (!$city) {
+                $city = "empty";
+            }
+            if (!$state) {
+                $state = "empty";
+            }
+            if (!$category) {
+                $category = "empty";
+            }
+
+            //get number of jobs per page
+            $jobsPerPage = $this->container->getParameter('jobs_per_search_results_page');
+
+            $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
+            //get jobs search results array
+            $userSearchResults = $internshipRepo->getJobsSearchResult("empty", "empty", $city, $state, $category, $company, "empty", "empty", 1, $jobsPerPage);
+
+            //Limit the details to only 200 character
+            foreach ($userSearchResults as &$job) {
+                $jobDesc = strip_tags($job->getDescription());
+                if (strlen($jobDesc) > 200) {
+                    $job->setDescription(substr($jobDesc, 0, 200) . '...');
+                } else {
+                    $job->setDescription($jobDesc);
+                }
+            }
+            /* pagenation part */
+            //get count of all search result jobs
+            $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult("empty", "empty", $city, $state, $category, $company, "empty", "empty", 1, null));
+
+            $lastPageNumber = (int) ($userSearchResultsCount / $jobsPerPage);
+            if (($userSearchResultsCount % $jobsPerPage) > 0) {
+                $lastPageNumber++;
+            }
+        } else {
+            $userSearchResults = null;
+            $jobsPerPage = null;
+            $lastPageNumber = null;
+            $city = null;
+            $state = null;
+            $category = null;
+            $company = null;
+        }
+        /*         * ********End Partial Search part*********** */
+        /*         * ********************************************************** */
+
+        //Get country Repo
+        $countryRepo = $em->getRepository('ObjectsInternJumpBundle:Country');
+        //get countries array
+        $allCountries = $countryRepo->getAllCountries();
+        $allCountriesArray = array();
+        foreach ($allCountries as $value) {
+            $allCountriesArray [$value['id']] = $value['name'];
+        }
+
+        //All categories
+        $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
+        //get countries array
+        $allCategories = $categoryRepo->getAllCategories();
+        $allCategoriesArray = array();
+        foreach ($allCategories as $value) {
+            $allCategoriesArray [$value['id']] = $value['name'];
+        }
+
+        //All companys
+        $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
+        //get countries array
+        $allCompanys = $companyRepo->getAllCompanys();
+        $allCompanysArray = array();
+        foreach ($allCompanys as $value) {
+            $allCompanysArray [$value['id']] = $value['name'];
+        }
+
+        //All Languages
+        $allLanguagesArray = array('class' => 'ObjectsInternJumpBundle:Language', 'property' => 'name', 'empty_value' => '--- choose Language ---'); //, 'expanded' => true, 'multiple' => true, 'required' => false);
+        //get the request object
+        $request = $this->getRequest();
+
+
+        $countryOptionsArr = array('choices' => $allCountriesArray, 'preferred_choices' => array('US'));
+        $cityOptionsArr = array();
+        $stateOptionsArr = array('empty_value' => '--- choose State ---');
+        $categoryOptionsArr = array('empty_value' => '--- choose Industry ---', 'choices' => $allCategoriesArray);
+        $companyOptionsArr = array('empty_value' => '--- choose Company ---', 'choices' => $allCompanysArray);
+
+        //inspect if check been set to be true then set the defaults values of the form
+        if ($check) {
+            $countryOptionsArr = array('choices' => $allCountriesArray, 'empty_value' => '--- choose Country ---');
+            if ($city != "empty") {
+                //get the city name
+                $theCity = "";
+                if ($cityRepo->findOneBy(array('id' => $city))) {
+                    $theCity = $cityRepo->findOneBy(array('id' => $city));
+                    $cityOptionsArr = array('data' => $theCity);
+                }
+                else
+                    $cityOptionsArr = array();
+            }
+            if ($state != "empty") {
+                $stateOptionsArr = array('empty_value' => '--- choose State ---');
+            }
+            if ($category != "empty") {
+                $categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($category));
+            } if ($company != "empty") {
+                $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($company));
+            }
+        }
+
+        //create a search form
+        $formBuilder = $this->createFormBuilder()
+                ->add('country', 'choice', $countryOptionsArr)
+                //->add('city', 'choice', array('empty_value' => '--- choose city ---'))
+                ->add('city', 'text', $cityOptionsArr)
+                ->add('state', 'choice', $stateOptionsArr)
+                ->add('category', 'choice', $categoryOptionsArr)
+                ->add('company', 'choice', $companyOptionsArr)
+                ->add('language', 'entity', $allLanguagesArray);
+        //create the form
+        $form = $formBuilder->getForm();
+
+        return $this->render('ObjectsInternJumpBundle:InternjumpUser:fb_userSearchPage.html.twig', array(
+                    'form' => $form->createView(),
+                    'jobs' => $userSearchResults,
+                    'page' => 1,
+                    'jobsPerPage' => $jobsPerPage,
+                    'lastPageNumber' => $lastPageNumber,
+                    'title' => "empty",
+                    'country' => "empty",
+                    'city' => $city,
+                    'state' => $state, 'category' => $category, 'company' => $company, 'lang' => "empty",
+        ));
+    }
+
 
     /**
      * This function for search ajax action

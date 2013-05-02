@@ -10,6 +10,10 @@ student_task_show:
     pattern:  /{id}/usershow
     defaults: { _controller: "ObjectsInternJumpBundle:Task:studentShow" }
 
+fb_student_task_show:
+    pattern:  /{id}/usershow
+    defaults: { _controller: "ObjectsInternJumpBundle:Task:fb_studentShow" }
+
 company_task_show:
     pattern:  /{id}/companyshow
     defaults: { _controller: "ObjectsInternJumpBundle:Task:companyShow" }

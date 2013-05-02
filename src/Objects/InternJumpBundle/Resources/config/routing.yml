@@ -26,17 +26,33 @@ user_message:
     resource: "@ObjectsInternJumpBundle/Resources/config/routing/user_message.yml"
     prefix:   /user/messages
 
+fb_user_message:
+    resource: "@ObjectsInternJumpBundle/Resources/config/routing/fb_user_message.yml"
+    prefix:   /fb/user/messages
+
 ObjectsInternJumpBundle_education:
     resource: "@ObjectsInternJumpBundle/Resources/config/routing/education.yml"
     prefix:   /education
+
+ObjectsInternJumpBundle_facebook_education:
+    resource: "@ObjectsInternJumpBundle/Resources/config/routing/fb_education.yml"
+    prefix:   /fb/education
 
 ObjectsInternJumpBundle_cv:
     resource: "@ObjectsInternJumpBundle/Resources/config/routing/cv.yml"
     prefix:   /cv
 
+ObjectsInternJumpBundle_facebook_cv:
+    resource: "@ObjectsInternJumpBundle/Resources/config/routing/fb_cv.yml"
+    prefix:   /fb/cv
+
 ObjectsInternJumpBundle_employmenthistory:
     resource: "@ObjectsInternJumpBundle/Resources/config/routing/employmenthistory.yml"
     prefix:   /employmenthistory
+
+ObjectsInternJumpBundle_facebook_employmenthistory:
+    resource: "@ObjectsInternJumpBundle/Resources/config/routing/fb_employmenthistory.yml"
+    prefix:   /fb/employmenthistory
 
 ObjectsInternJumpBundle_test:
     pattern:  /test
@@ -54,17 +70,33 @@ signup_education:
     pattern:  /user/signup/third/step
     defaults: { _controller: "ObjectsInternJumpBundle:Education:signupEducation" }
 
+fb_signup_education:
+    pattern:  /fb/user/signup/third/step
+    defaults: { _controller: "ObjectsInternJumpBundle:FacebookEducation:signupEducation" }
+
 signup_language:
     pattern:  /user/signup/fourth/step
     defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:signupLanguage" }
+
+fb_signup_language:
+    pattern:  /fb/user/signup/fourth/step
+    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:facebookSignupLanguage" }
 
 signup_cv_skills:
     pattern:  /cv/second/step
     defaults: { _controller: "ObjectsInternJumpBundle:Skill:signupCVSkills" }
 
+fb_signup_cv_skills:
+    pattern:  /fb/cv/second/step
+    defaults: { _controller: "ObjectsInternJumpBundle:Skill:facebookSignupCVSkills" }
+
 signup_cv_experience:
     pattern:  /cv/third/step
     defaults: { _controller: "ObjectsInternJumpBundle:EmploymentHistory:signupCVExperience" }
+
+fb_signup_cv_experience:
+    pattern:  /fb/cv/third/step
+    defaults: { _controller: "ObjectsInternJumpBundle:FacebookEmploymentHistory:signupCVExperience" }
 
 company_search_for_cv:
     pattern:  /search-for-cv
@@ -77,6 +109,10 @@ ObjectsInternJumpBundle_task:
 student_task:
     pattern:  /userPortal/{loginName}/{status}/{page}/{itemsPerPage}
     defaults: { _controller: "ObjectsInternJumpBundle:Task:studentAllTasks", itemsPerPage: ~, status: all, page: 1 }
+
+fb_student_task:
+    pattern:  /userPortal/{loginName}/{status}/{page}/{itemsPerPage}
+    defaults: { _controller: "ObjectsInternJumpBundle:Task:fb_studentAllTasks", itemsPerPage: ~, status: all, page: 1 }
 
 employers_data:
     pattern:  /employers_data

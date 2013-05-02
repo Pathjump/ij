@@ -1,4 +1,4 @@
-{% extends '::base.html.twig' %}
+{% extends '::fb_base.html.twig' %}
 
 {% block title %}Signup Third Step{% endblock %}
 
@@ -47,18 +47,18 @@
             <div class="Student">
 
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="{{ path('signup_education') }}">Education</a></li>
-                    <li><a href="{{ path('signup_language') }}">Languages</a></li>
-                    <li><a href="{{ path('signup_cv') }}">Objectives</a></li>
-                    <li><a href="{{ path('signup_cv_skills') }}">Skills</a></li>
-                    <li><a href="{{ path('signup_cv_experience') }}">Experience</a></li>
+                    <li class="active"><a href="{{ path('fb_signup_education') }}">Education</a></li>
+                    <li><a href="{{ path('fb_signup_language') }}">Languages</a></li>
+                    <li><a href="{{ path('fb_signup_cv') }}">Objectives</a></li>
+                    <li><a href="{{ path('fb_signup_cv_skills') }}">Skills</a></li>
+                    <li><a href="{{ path('fb_signup_cv_experience') }}">Experience</a></li>
                     <li class="pull-right span3"><h3>Resume Complitness</h3></li>
                 </ul>
 
                 <div class="row-fluid show-grid">
 
                     <div class="span8">
-                        <form class="company-form" action="{{ path('signup_education') }}" method="post">
+                        <form class="company-form" action="{{ path('fb_signup_education') }}" method="post">
                             <legend><h2>{% if formName %}{{ formName }}{% endif %}</h2></legend>
                             <fieldset>
                                 <p>{% if formDesc %}{{ formDesc }}{% endif %}</p>
@@ -254,7 +254,7 @@
                                 <div class="controls ">
                                     {{ form_rest(form) }}
                                     <button type="submit" class="btn btn-primary pull-right">Next</button>
-                                    <a href="{{ path('signup_language') }}" class="pull-right back">Skip</a>
+                                    <a href="{{ path('fb_signup_language') }}" class="pull-right back">Skip</a>
                                 </div>
                             </fieldset>
                         </form>
@@ -265,7 +265,7 @@
                         <div class="Sign-Up text-center">
                             <h4>Get your First digital RESUME only in 4 steps</h4>
                             <img src="{{ asset('img/img4.png') }}" />
-                            <p class="simply">SIMPLY <a href="{{ path('upload_cv') }}"> upload </a>your resume</p>
+                            <p class="simply">SIMPLY <a href="{{ path('fb_upload_cv') }}"> upload </a>your resume</p>
 
                         </div><!--Sign-Up-->
                         {% render "ObjectsInternJumpBundle:Task:userMeter" %}
