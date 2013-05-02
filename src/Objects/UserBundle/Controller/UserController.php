@@ -19,7 +19,7 @@ use Objects\InternJumpBundle\Entity\City;
 
 require_once __DIR__ . '/../../../../vendor/FacebookSDK/src/facebook.php';
 
-class UserController extends ObjectsController {
+class UserController extends Controller {
 
     /**
      * For Facebook App
