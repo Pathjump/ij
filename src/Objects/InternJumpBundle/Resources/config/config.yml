@@ -28,7 +28,7 @@ parameters:
   default_longitude_company_signup_page: '-73.830143700000'
   company_signup_welcome_message: 'Thank you for registering your company with InternJump. Your account is inactive, please check  your mail for activation code.'
   tasks_per_show_page: 10
-  jobs_per_search_results_page: 10
+  jobs_per_search_results_page: 5
   face_page_url: 'http://www.facebook.com/internjump'
   twitter_page_url: 'http://twitter.com/InternJump'
   google_page_url: 'https://plus.google.com/110727481723924712014/'

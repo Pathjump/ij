@@ -24,8 +24,9 @@ class InternjumpUserController extends Controller {
      * @param type $jobLocation
      * @return false | array
      */
-    private function searchForIndeedJobs($searchString = null, $start = 0, $limit = 10, $jobLocation = null) {
+    private function searchForIndeedJobs($searchString = null, $start = 1, $limit = 10, $jobLocation = null) {
         $userAgent = 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:16.0) Gecko/20100101 Firefox/16.0';
+        $start--;
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             $userAgent = $_SERVER['HTTP_USER_AGENT'];
         }
@@ -2282,6 +2283,9 @@ class InternjumpUserController extends Controller {
         /*         * ********End Partial Search part*********** */
         /*         * ********************************************************** */
 
+
+
+
         //Get country Repo
         $countryRepo = $em->getRepository('ObjectsInternJumpBundle:Country');
         //get countries array
@@ -2586,10 +2590,27 @@ class InternjumpUserController extends Controller {
             $lastPageNumber++;
         }
 
+
+         /*****************[ End API Search Results ]***********************/
+        /**************************************************/
+         if(sizeof($userSearchResults) < 5 ){
+         $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null);
+           // print_r($apiJobsArr);
+
+         $lastPageNumber = (int) ($apiJobsArr['count'] / $jobsPerPage);
+            if (($apiJobsArr['count'] % $jobsPerPage) > 0) {
+                $lastPageNumber++;
+            }
+         }
+
+        /***************** [ End API Search Results ]*******************/
+        /**************************************************/
+
 //        print_r($userSearchResults);
         //return new Response("Done");
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:userSearchResultPage.html.twig', array(
                     'jobs' => $userSearchResults,
+                    'apiJobs' => $apiJobsArr,
                     'page' => $page,
                     'jobsPerPage' => $jobsPerPage,
                     'lastPageNumber' => $lastPageNumber,
