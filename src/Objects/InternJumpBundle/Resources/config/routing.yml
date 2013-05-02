@@ -50,6 +50,10 @@ ObjectsInternJumpBundle_employmenthistory:
     resource: "@ObjectsInternJumpBundle/Resources/config/routing/employmenthistory.yml"
     prefix:   /employmenthistory
 
+ObjectsInternJumpBundle_facebook_employmenthistory:
+    resource: "@ObjectsInternJumpBundle/Resources/config/routing/fb_employmenthistory.yml"
+    prefix:   /fb/employmenthistory
+
 ObjectsInternJumpBundle_test:
     pattern:  /test
     defaults: { _controller: ObjectsInternJumpBundle:Default:test }
