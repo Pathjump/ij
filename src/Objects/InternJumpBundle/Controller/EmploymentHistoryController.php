@@ -5,12 +5,13 @@ namespace Objects\InternJumpBundle\Controller;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Objects\InternJumpBundle\Entity\EmploymentHistory;
 use Objects\InternJumpBundle\Form\EmploymentHistoryType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * EmploymentHistory controller.
  *
  */
-class EmploymentHistoryController extends ObjectsController {
+class EmploymentHistoryController extends Controller {
 
     /**
      * the create cv third step

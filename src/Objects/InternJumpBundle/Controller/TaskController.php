@@ -5,12 +5,13 @@ namespace Objects\InternJumpBundle\Controller;
 use Objects\InternJumpBundle\Entity\Task;
 use Objects\InternJumpBundle\Form\TaskType;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Task controller.
  *
  */
-class TaskController extends ObjectsController {
+class TaskController extends Controller {
 
     /**
      * Lists Student's all Task entities.

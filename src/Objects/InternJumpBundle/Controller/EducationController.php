@@ -6,12 +6,13 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Objects\InternJumpBundle\Entity\Education;
 use Objects\InternJumpBundle\Form\EducationType;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Education controller.
  *
  */
-class EducationController extends ObjectsController {
+class EducationController extends Controller {
 
     /**
      * the undergraduate degrees auto complete action

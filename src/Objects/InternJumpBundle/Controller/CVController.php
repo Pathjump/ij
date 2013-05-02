@@ -8,12 +8,13 @@ use Objects\APIBundle\Controller\LinkedinController;
 use Objects\APIBundle\Controller\FacebookController;
 use Objects\InternJumpBundle\Entity\CV;
 use Objects\InternJumpBundle\Form\CVType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * CV controller.
  * @author Mahmoud
  */
-class CVController extends ObjectsController {
+class CVController extends Controller {
 
     /**
      * the cv create first step

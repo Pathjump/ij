@@ -5,12 +5,13 @@ namespace Objects\InternJumpBundle\Controller;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Objects\InternJumpBundle\Entity\Message;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * UserMessage controller.
  * @author Mahmoud
  */
-class UserMessageController extends ObjectsController {
+class UserMessageController extends Controller {
 
     /**
      * the inbox messages page action

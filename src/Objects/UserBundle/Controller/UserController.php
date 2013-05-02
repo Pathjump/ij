@@ -2,7 +2,7 @@
 
 namespace Objects\UserBundle\Controller;
 
-use Objects\InternJumpBundle\Controller\ObjectsController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Validator\Constraints\Collection;

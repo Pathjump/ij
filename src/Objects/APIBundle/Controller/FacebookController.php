@@ -6,12 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Dumper;
-use Objects\InternJumpBundle\Controller\ObjectsController;
 
 /**
  * @author mirehan
  */
-class FacebookController extends ObjectsController {
+class FacebookController extends Controller {
 
     /**
      * this action take

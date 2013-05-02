@@ -3,7 +3,6 @@
 namespace Objects\InternJumpBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Objects\InternJumpBundle\Controller\ObjectsController;
 use Objects\APIBundle\Controller\FacebookController;
 use Objects\APIBundle\Controller\TwitterController;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,7 +12,7 @@ use Symfony\Component\Validator\Constraints\Email;
 
 require_once __DIR__ . '/../../../../vendor/FacebookSDK/src/facebook.php';
 
-class InternjumpController extends ObjectsController {
+class InternjumpController extends Controller {
 
     /**
      * this function used to caculate worth for user

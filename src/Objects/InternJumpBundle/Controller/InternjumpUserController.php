@@ -12,8 +12,9 @@ use Objects\InternJumpBundle\Form\UserLanguageType;
 use Objects\InternJumpBundle\Entity\Skill;
 use Objects\InternJumpBundle\Entity\Education;
 use Objects\InternJumpBundle\Entity\EmploymentHistory;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class InternjumpUserController extends ObjectsController {
+class InternjumpUserController extends Controller {
 
     /**
      * @author Mahmoud

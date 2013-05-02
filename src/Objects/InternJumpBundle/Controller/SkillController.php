@@ -6,12 +6,13 @@ use Objects\InternJumpBundle\Entity\Skill;
 use Objects\InternJumpBundle\Form\SkillType;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Skill controller.
  *
  */
-class SkillController extends ObjectsController {
+class SkillController extends Controller {
 
     /**
      * this function will delete user skill
