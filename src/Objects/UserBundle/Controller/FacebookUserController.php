@@ -1037,7 +1037,7 @@ class FacebookUserController extends Controller {
                 $container = $this->container;
                 if ($userSocialAccounts) {
                     $status = 'I just installed the InternJump App, a platform to find internships/entry-level jobs!';
-                    $link = $this->generateNormalUrl('site_homepage', array(), TRUE);
+                    $link = $this->generateUrl('site_fb_homepage', array(), true);
 
                     // check if have facebook
                     if ($userSocialAccounts->isFacebookLinked()) {

@@ -55,7 +55,7 @@ class FacebookCVController extends Controller {
                     $container = $this->container;
                     if ($userSocialAccounts) {
                         $status = 'I just created my resume on InternJump, boy was it easy!!';
-                        $link = $this->generateUrl('site_fb_homepage');
+                        $link = $this->generateUrl('site_fb_homepage', array(), true);
 
                         // check if have facebook
                         if ($userSocialAccounts->isFacebookLinked()) {
@@ -293,7 +293,7 @@ class FacebookCVController extends Controller {
             $container = $this->container;
             if ($userSocialAccounts) {
                 $status = 'I just created my resume on InternJump, boy was it easy!';
-                $link = $this->generateUrl('site_fb_homepage');
+                $link = $this->generateUrl('site_fb_homepage', array(), true);
 
                 // check if have facebook
                 if ($userSocialAccounts->isFacebookLinked()) {

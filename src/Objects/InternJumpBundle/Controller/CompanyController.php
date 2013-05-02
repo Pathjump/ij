@@ -113,6 +113,48 @@ class CompanyController extends Controller {
     }
 
     /**
+     * the search for company action
+     * @author Mahmoud
+     * @param string $orderBy
+     * @param string $orderDirection
+     * @param integer $page
+     * @return Response
+     */
+    public function facebookSearchForCompanyAction($page, $orderBy, $orderDirection) {
+        $itemsPerPage = 10;
+        $searchString = $this->getRequest()->get('searchString');
+        if (!isset($orderBy)) {
+            $orderBy = 'name';
+        }
+        if (!isset($orderDirection)) {
+            $orderDirection = 'asc';
+        }
+        //get the user messages
+        $data = $this->getDoctrine()->getEntityManager()->getRepository('ObjectsInternJumpBundle:Company')->searchForCompany($searchString, $orderBy, $orderDirection, $page, $itemsPerPage);
+        $entities = $data['entities'];
+        $count = $data['count'];
+        //calculate the last page number
+        $lastPageNumber = (int) ($count / $itemsPerPage);
+        if (($count % $itemsPerPage) > 0) {
+            $lastPageNumber++;
+        }
+        $paginationParameters = array(
+            'searchString' => $searchString,
+            'orderBy' => $orderBy,
+            'orderDirection' => $orderDirection
+        );
+        return $this->render('ObjectsInternJumpBundle:Company:fb_searchForCompany.html.twig', array(
+                    'searchString' => $searchString,
+                    'page' => $page,
+                    'itemsPerPage' => $itemsPerPage,
+                    'count' => $count,
+                    'lastPageNumber' => $lastPageNumber,
+                    'paginationParameters' => $paginationParameters,
+                    'entities' => $entities
+        ));
+    }
+
+    /**
      * list the cv categories (industries)
      * @author Mahmoud
      * @return Response
@@ -120,6 +162,18 @@ class CompanyController extends Controller {
     public function employersAction() {
         $entities = $this->getDoctrine()->getEntityManager()->getRepository('ObjectsInternJumpBundle:CVCategory')->findAll();
         return $this->render('ObjectsInternJumpBundle:Company:industries.html.twig', array(
+                    'entities' => $entities
+        ));
+    }
+
+    /**
+     * list the cv categories (industries)
+     * @author Mahmoud
+     * @return Response
+     */
+    public function facebookEmployersAction() {
+        $entities = $this->getDoctrine()->getEntityManager()->getRepository('ObjectsInternJumpBundle:CVCategory')->findAll();
+        return $this->render('ObjectsInternJumpBundle:Company:fb_industries.html.twig', array(
                     'entities' => $entities
         ));
     }
@@ -173,6 +227,54 @@ class CompanyController extends Controller {
     }
 
     /**
+     * the industries companies list page
+     * @author Mahmoud
+     * @param string $industrySlug
+     * @param string $orderBy
+     * @param string $orderDirection
+     * @param integer $page
+     * @return Response
+     * @throws 404
+     */
+    public function facebookIndustryCompaniesAction($industrySlug, $page, $orderBy, $orderDirection) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $industry = $em->getRepository('ObjectsInternJumpBundle:CVCategory')->findOneBySlug($industrySlug);
+        if (!isset($industry)) {
+            throw $this->createNotFoundException('Can not find the requested industry.');
+        }
+        if (!isset($orderBy)) {
+            $orderBy = 'name';
+        }
+        if (!isset($orderDirection)) {
+            $orderDirection = 'asc';
+        }
+        $itemsPerPage = 10;
+        //get the user messages
+        $data = $em->getRepository('ObjectsInternJumpBundle:Company')->getIndustryCompanies($industry->getId(), $orderBy, $orderDirection, $page, $itemsPerPage);
+        $entities = $data['entities'];
+        $count = $data['count'];
+        //calculate the last page number
+        $lastPageNumber = (int) ($count / $itemsPerPage);
+        if (($count % $itemsPerPage) > 0) {
+            $lastPageNumber++;
+        }
+        $paginationParameters = array(
+            'industrySlug' => $industrySlug,
+            'orderBy' => $orderBy,
+            'orderDirection' => $orderDirection
+        );
+        return $this->render('ObjectsInternJumpBundle:Company:fb_industryCompanies.html.twig', array(
+                    'industry' => $industry,
+                    'page' => $page,
+                    'itemsPerPage' => $itemsPerPage,
+                    'count' => $count,
+                    'lastPageNumber' => $lastPageNumber,
+                    'paginationParameters' => $paginationParameters,
+                    'entities' => $entities
+        ));
+    }
+
+    /**
      * the company public profile page
      * @author Mahmoud
      * @param string $industrySlug
@@ -196,6 +298,36 @@ class CompanyController extends Controller {
             $viewJobsLink = true;
         }
         return $this->render('ObjectsInternJumpBundle:Company:publicProfile.html.twig', array(
+                    'company' => $company,
+                    'industry' => $industry,
+                    'viewJobsLink' => $viewJobsLink
+        ));
+    }
+
+    /**
+     * the company public profile page
+     * @author Mahmoud
+     * @param string $industrySlug
+     * @param string $loginName
+     * @return Response
+     * @throws 404
+     */
+    public function facebookCompanyPublicProfileAction($industrySlug, $loginName) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $company = $em->getRepository('ObjectsInternJumpBundle:Company')->findOneByLoginName($loginName);
+        if (!isset($company)) {
+            throw $this->createNotFoundException('Can not find the requested company.');
+        }
+        $industry = $em->getRepository('ObjectsInternJumpBundle:CVCategory')->findOneBySlug($industrySlug);
+        if (!isset($industry)) {
+            throw $this->createNotFoundException('Can not find the requested industry.');
+        }
+        $companyJobsCount = $em->getRepository('ObjectsInternJumpBundle:Internship')->countCompanyJobs($company->getId(), false);
+        $viewJobsLink = false;
+        if ($companyJobsCount[0]['jobsCount'] > 0) {
+            $viewJobsLink = true;
+        }
+        return $this->render('ObjectsInternJumpBundle:Company:fb_publicProfile.html.twig', array(
                     'company' => $company,
                     'industry' => $industry,
                     'viewJobsLink' => $viewJobsLink

@@ -31,44 +31,14 @@
                 <div class="navbar">
                     <div class="navbar-inner">
                         <div class="container">
-                            <a href="{{ path('site_homepage') }}" class="pull-left"><img src="{{ asset('img/Logo.png') }}" /></a>
-                            <div class="Top-Links pull-right">
-                                <ul class="Social-icons  pull-right ">
-                                {% if face_page_url %}
-                                    <li><a target="_blank" href="{{face_page_url}}" class="ico-facebook"></a></li>
-                                {% endif %}
-                                {% if twitter_page_url %}
-                                    <li><a target="_blank" href="{{twitter_page_url}}" class="ico-twitter"></a></li>
-                                {% endif %}
-                                {% if linkledIn_page_url %}
-                                    <li><a target="_blank" href="{{linkledIn_page_url}}" class="ico-google"></a></li>
-                                {% endif %}
-                                </ul>
-                                {% if is_granted('ROLE_NOTACTIVE') %}
-                                <ul class="log-links pull-right  unstyled">
-                                     <!--<li><a href="{{ path('fb_student_task',{'loginName' : app.user.loginName}) }}">Hi, {{app.user.loginName}}</a></li>-->
-                                     <li><a href="{{ path('logout') }}">Sign out</a></li>
-                                </ul>
-                                {% else %}
-                                <ul class="log-links pull-right  unstyled">
-                                    <li><a href="{{ path('login') }}">Login</a></li>
-                                    <li><a href="{{ path('user_signup') }}" class="muted">Sign up</a></li>
-                                </ul><!--socila-icons--->
-                                {% endif %}
-                            </div><!--Top-links-->
+                            <a href="Javascript:void(0)" class="pull-left"><img src="{{ asset('img/Logo.png') }}" /></a>
+
                             <button data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar collapsed pull-right" type="button">
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <div class="nav-collapse collapse pull-right">
-                                <ul class="nav">
-                                    <li id="employerLink"><a href="{{path('students_data')}}" class="nav-students">Students</a></li>
-                                    <li id="studentLink"><a href="{{path('employers_data')}}" class="nav-companies">Employers</a></li>
-                                    <li id="schoolsLink"><a href="{{path('schools')}}">Schools</a></li>
-                                    <li id="resourceLink"><a href="{{path('resources')}}">Resources</a></li>
-                                </ul>
-                            </div><!--/.nav-collapse -->
+
                         </div><!--Container-->
                     </div><!--navbar-inner-->
                 </div><!--navbar-->
@@ -77,17 +47,18 @@
                     {% if is_granted('ROLE_USER') %}
                     <div class="container">
                         <ul class="unstyled">
-                            <li><a href="{{path('student_task',{'loginName' : app.user.loginName})}}">Profile Page</a></li>
-                            <li><a href="{{ path('user_search_page') }}">Internship Search</a></li>
-                            <li><a href="{{ path('education_new') }}">Education</a></li>
+                            <li><a href="{{path('fb_student_task',{'loginName' : app.user.loginName})}}">Profile Page</a></li>
+                            <li><a href="{{ path('fb_user_search_page') }}">Internship Search</a></li>
+                            <li><a href="{{ path('fb_education_new') }}">Education</a></li>
                             <li><a href="{{ path('fb_user_languages') }}">Language</a></li>
-                            <li><a href="{{ path('employmenthistory_new') }}">Employment History</a></li>
+                            <li><a href="{{ path('fb_employmenthistory_new') }}">Employment History</a></li>
                             <li><a href="{{ path('fb_addEditUserSkills') }}" title="Your Skills">Skills</a></li>
                             <li><a href="{{ path('fb_personal_questions') }}" title="Personal Questions">Personal Questions</a></li>
+                            <li><a href="{{ path('fb_howMuchAreYouWorth') }}" title="Find Your Worth">Find Your Worth</a></li>
                             {% if not app.user.score %}
                                 <li><a href="{{ path('fb_internjumb_quiz') }}">InternJump Personality Quiz</a></li>
                             {% endif %}
-                            <li><a href="{{ path('employers') }}">Industries</a></li>
+                            <li><a href="{{ path('fb_employers') }}">Industries</a></li>
                         </ul>
                     </div>
                     {% endif %}
@@ -142,18 +113,6 @@
                         </div><!--container--->
                     </div>
                     {% endblock %}
-
-                    {% if is_granted('ROLE_NOTACTIVE') %}
-                        {% if not is_granted('ROLE_USER') %}
-                            <div class="alert alert-info">
-                                <h3 class="">Please activate your account</h3>
-                            </div>
-                        {% else %}
-                            <div class="alert alert-info">
-                                <h3 class="">Welocme, {{ app.user.loginName }}</h3>
-                            </div>
-                        {% endif %}
-                    {% endif %}
 
                     {% if app.session.hasFlash('notice') %}
                         <div class="alert alert-info">
