@@ -129,7 +129,7 @@ class FacebookCVController extends Controller {
         $entity = $em->getRepository('ObjectsInternJumpBundle:CV')->find($id);
         if (!$entity) {
              $message = $this->container->getParameter('cv_not_found_error_msg');
-             return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+             return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
                         'message' => $message,));
         }
         $this->checkUserOwnObject($entity);
@@ -196,7 +196,7 @@ class FacebookCVController extends Controller {
         $entity = $em->getRepository('ObjectsInternJumpBundle:CV')->find($id);
         if (!$entity) {
             $message = $this->container->getParameter('cv_not_found_error_msg');
-            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+            return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
                         'message' => $message,));
         }
         $this->checkUserOwnObject($entity);
@@ -332,7 +332,7 @@ class FacebookCVController extends Controller {
         $entity = $em->getRepository('ObjectsInternJumpBundle:CV')->find($id);
         if (!$entity) {
             $message = $this->container->getParameter('cv_not_found_error_msg');
-            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+            return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
                         'message' => $message,));
         }
         $this->checkUserOwnObject($entity);
@@ -360,7 +360,7 @@ class FacebookCVController extends Controller {
         $entity = $em->getRepository('ObjectsInternJumpBundle:CV')->find($id);
         if (!$entity) {
             $message = $this->container->getParameter('cv_not_found_error_msg');
-            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+            return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
                         'message' => $message,));
         }
         $this->checkUserOwnObject($entity);
@@ -397,7 +397,7 @@ class FacebookCVController extends Controller {
             $entity = $em->getRepository('ObjectsInternJumpBundle:CV')->find($id);
             if (!$entity) {
                 $message = $this->container->getParameter('cv_not_found_error_msg');
-                return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
                         'message' => $message,));
             }
             $this->checkUserOwnObject($entity);
