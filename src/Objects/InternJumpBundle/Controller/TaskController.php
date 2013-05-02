@@ -166,7 +166,7 @@ class TaskController extends ObjectsController {
         $flag = $this->checkWhere($url);
 
         if (false === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) { //if (false === $this->get('security.context')->isGranted('ROLE_USER')) {
-            return $this->redirect($this->generateUrl('site_homepage'));
+            return $this->redirect($this->generateUrl('site_fb_homepage'));
         }
 
         $em = $this->getDoctrine()->getEntityManager();
