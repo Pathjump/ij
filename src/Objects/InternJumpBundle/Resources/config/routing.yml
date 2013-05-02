@@ -38,6 +38,10 @@ ObjectsInternJumpBundle_cv:
     resource: "@ObjectsInternJumpBundle/Resources/config/routing/cv.yml"
     prefix:   /cv
 
+ObjectsInternJumpBundle_facebook_cv:
+    resource: "@ObjectsInternJumpBundle/Resources/config/routing/fb_cv.yml"
+    prefix:   /fb/cv
+
 ObjectsInternJumpBundle_employmenthistory:
     resource: "@ObjectsInternJumpBundle/Resources/config/routing/employmenthistory.yml"
     prefix:   /employmenthistory
