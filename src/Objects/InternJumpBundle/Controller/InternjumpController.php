@@ -375,7 +375,7 @@ class InternjumpController extends Controller {
                 //post resutl on user facebook wall
                 $status = $this->container->getParameter('worth_facebook_message');
                 $picture = $this->generateNormalUrl('site_homepage', array(), TRUE) . 'img/faceLogo.png';
-                $link = $this->generateNormalUrl('site_homepage', array(), TRUE);
+                $link = $this->generateNormalUrl('site_fb_homepage', array(), TRUE);
                 FacebookController::postOnUserWallAndFeedAction($loggedInUser->getSocialAccounts()->getFacebookId(), $loggedInUser->getSocialAccounts()->getAccessToken(), $status, null, null, $link, $picture);
 
                 //get user facebook friends
