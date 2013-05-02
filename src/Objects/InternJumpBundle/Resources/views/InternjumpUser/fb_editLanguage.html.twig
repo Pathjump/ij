@@ -1,4 +1,4 @@
-{% extends '::base.html.twig' %}
+{% extends '::fb_base.html.twig' %}
 
 {% block title %}Edit Language{% endblock %}
 
@@ -27,7 +27,7 @@
 
                 <div class="Sign-Up">
 
-                    <form action="{{ path('user_edit_language',{'id':id}) }}" method="post">
+                    <form action="{{ path('fb_user_edit_language',{'id':id}) }}" method="post">
                         <fieldset>
                             <legend><h3>{% if formName %}{{ formName }}{% endif %}</h3></legend>
                             <p>{% if formDesc %}{{ formDesc }}{% endif %}</p>
@@ -125,7 +125,7 @@
                 'Warning',
                 function(confirm) {
                     if (confirm) {
-                        window.location = '{{ path('user_delete_language', {'id': id}) }}';
+                        window.location = '{{ path('fb_user_delete_language', {'id': id}) }}';
                     }
                 }
         );

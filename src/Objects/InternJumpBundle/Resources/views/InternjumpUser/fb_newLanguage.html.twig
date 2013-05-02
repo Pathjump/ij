@@ -1,13 +1,11 @@
-{% extends '::base.html.twig' %}
+{% extends '::fb_base.html.twig' %}
 
-{% block title %}Edit Language{% endblock %}
+{% block title %}New Language{% endblock %}
 
-{% block pageTitle %}Edit Language{% endblock %}
+{% block pageTitle %}New Language{% endblock %}
 
 {% block stylesheets %}
 {{ parent() }}
-<link href="{{ asset('css/jquery.alerts.css') }}" rel="stylesheet" type="text/css"/>
-<link href="{{ asset('css/jquery-ui-1.8.24.custom.css') }}" rel="stylesheet" type="text/css"/>
 <style>
     #tooltip{color:#444;font-size:12px;text-shadow:1px 1px 0 #fff;border:1px solid #666;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;background-repeat:repeat-x;background-position:left top;background-color:#D7D7D7;-moz-box-shadow:0 0 4px #bbb;-webkit-box-shadow:0 0 4px #bbb;box-shadow:0 0 4px #bbb;line-height:1.2em;position:absolute;z-index:100000;display:none;padding:5px}
 </style>
@@ -27,7 +25,7 @@
 
                 <div class="Sign-Up">
 
-                    <form action="{{ path('user_edit_language',{'id':id}) }}" method="post">
+                    <form action="{{ path('fb_user_languages') }}" method="post">
                         <fieldset>
                             <legend><h3>{% if formName %}{{ formName }}{% endif %}</h3></legend>
                             <p>{% if formDesc %}{{ formDesc }}{% endif %}</p>
@@ -101,8 +99,7 @@
                             </div>
 
                             {{ form_rest(form) }}
-                            <button type="submit" class="btn btn-primary pull-right">Edit</button>
-                            <a style="margin-right: 10px;" class="btn btn-danger pull-right" onclick="confirmDelete();return false;">Delete</a>
+                            <button type="submit" class="btn btn-primary pull-right">Save</button>
                         </fieldset>
                     </form>
                 </div><!--Sign-Up-->
@@ -113,22 +110,5 @@
 
 {% block javascripts %}
 {{ parent() }}
-<script src="{{ asset('js/libs/jquery-ui-1.8.24.custom.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('js/jquery.alerts.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/tooltip/tooltip.js') }}"></script>
-<script>
-    function confirmDelete() {
-        jConfirm(
-                'ok',
-                'cancel',
-                'Are you sure you want to Delete This Language ?',
-                'Warning',
-                function(confirm) {
-                    if (confirm) {
-                        window.location = '{{ path('user_delete_language', {'id': id}) }}';
-                    }
-                }
-        );
-    }
-</script>
 {% endblock %}

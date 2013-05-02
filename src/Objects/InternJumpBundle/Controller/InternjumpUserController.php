@@ -249,6 +249,7 @@ class InternjumpUserController extends ObjectsController {
         }
         $em->remove($language);
         $em->flush();
+        $this->getRequest()->getSession()->setFlash('success', 'Language Deleted successfully');
         return $this->redirect($this->generateUrl('student_task', array('loginName' => $user->getLoginName())));
     }
 
@@ -288,7 +289,7 @@ class InternjumpUserController extends ObjectsController {
                     //save the new language
                     $em->flush();
 
-
+                    $request->getSession()->setFlash('success', 'Language Updated successfully');
                     return $this->redirect($this->generateUrl('user_edit_language', array('id' => $id)));
                 }
             }
@@ -334,7 +335,7 @@ class InternjumpUserController extends ObjectsController {
                 $em->persist($newUserLanguage);
                 $em->flush();
 
-
+                $request->getSession()->setFlash('success', 'New Language Added successfully');
                 return $this->redirect($this->generateUrl('user_edit_language', array('id' => $newUserLanguage->getId())));
             }
         }
@@ -347,6 +348,129 @@ class InternjumpUserController extends ObjectsController {
         ));
     }
 
+    public function fb_deleteLanguageAction($id) {
+        //check for logrdin company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            //redirect to login page if user not loggedin
+            return $this->redirect($this->generateUrl('site_fb_homepage'));
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        //get loggedin user objects
+        $user = $this->get('security.context')->getToken()->getUser();
+        //check if this language exist
+        $language = $em->getRepository('ObjectsInternJumpBundle:UserLanguage')->find($id);
+        if (!$language) {
+            throw $this->createNotFoundException('Language Not Found');
+        }
+        if ($user->getId() !== $language->getUser()->getId()) {
+            throw new AccessDeniedHttpException('This Language is not yours');
+        }
+        $em->remove($language);
+        $em->flush();
+        $this->getRequest()->getSession()->setFlash('success', 'Language Deleted successfully');
+        return $this->redirect($this->generateUrl('fb_student_task', array('loginName' => $user->getLoginName())));
+    }
+
+    /**
+     * this function used to edit langauge
+     * @author ahmed
+     * @param integer $id
+     */
+    public function fb_userEditLanguageAction($id) {
+        //check for logrdin company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            //redirect to login page if user not loggedin
+            return $this->redirect($this->generateUrl('site_fb_homepage'));
+        }
+
+        $em = $this->getDoctrine()->getEntityManager();
+        //get request object
+        $request = $this->getRequest();
+
+        //get loggedin user objects
+        $user = $this->get('security.context')->getToken()->getUser();
+        $languageRepo = $em->getRepository('ObjectsInternJumpBundle:UserLanguage');
+        //check if this language exist
+        $language = $languageRepo->find($id);
+        if (!$language) {
+            return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
+                        'message' => "This language dosn't exist."));
+        }
+
+        //check if this user the owner
+        if ($user->getId() == $language->getUser()->getId()) {
+            $form = $this->createForm(new UserLanguageType(), $language);
+
+            if ($request->getMethod() == 'POST') {
+                $form->bindRequest($request);
+                if ($form->isValid()) {
+                    //save the new language
+                    $em->flush();
+
+                    $request->getSession()->setFlash('success', 'Language Updated successfully');
+                    return $this->redirect($this->generateUrl('fb_user_edit_language', array('id' => $id)));
+                }
+            }
+
+            return $this->render('ObjectsInternJumpBundle:InternjumpUser:fb_editLanguage.html.twig', array(
+                        'form' => $form->createView(),
+                        'id' => $id,
+                        'formName' => $this->container->getParameter('studentEditLanguage_FormName'),
+                        'formDesc' => $this->container->getParameter('studentEditLanguage_FormDesc'),
+            ));
+        } else {
+            return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
+                        'message' => "You can't edit this language."));
+        }
+    }
+
+    /**
+     * this function used to add languages for active users
+     * @author ahmed
+     */
+    public function fb_userLanguagesAction() {
+        //check for logrdin company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            //redirect to login page if user not loggedin
+            return $this->redirect($this->generateUrl('site_fb_homepage'));
+        }
+
+        $em = $this->getDoctrine()->getEntityManager();
+        //get request object
+        $request = $this->getRequest();
+
+        //get loggedin user objects
+        $user = $this->get('security.context')->getToken()->getUser();
+        //create new user language
+        $newUserLanguage = new UserLanguage();
+        $newUserLanguage->setUser($user);
+        $form = $this->createForm(new UserLanguageType(), $newUserLanguage);
+
+        if ($request->getMethod() == 'POST') {
+            $form->bindRequest($request);
+            if ($form->isValid()) {
+                //save the new language
+                $em->persist($newUserLanguage);
+                $em->flush();
+
+                $request->getSession()->setFlash('success', 'New Language Added successfully');
+                return $this->redirect($this->generateUrl('fb_user_edit_language', array('id' => $newUserLanguage->getId())));
+            }
+        }
+
+        return $this->render('ObjectsInternJumpBundle:InternjumpUser:fb_newLanguage.html.twig', array(
+                    'newUserLanguage' => $newUserLanguage,
+                    'form' => $form->createView(),
+                    'formName' => $this->container->getParameter('studentAddLanguage_FormName'),
+                    'formDesc' => $this->container->getParameter('studentAddLanguage_FormDesc'),
+        ));
+    }
+
+    /**
+     * this function used to extract data from user cv template
+     * @author ahmed
+     * @param type $documentFile
+     */
     public function getUplodedCvData($documentFile) {
         //read the cv file
 //        $document_file = '/opt/lampp/htdocs/symfony-projects/ij/web/cvFiles/working.doc';
@@ -644,6 +768,158 @@ class InternjumpUserController extends ObjectsController {
     }
 
     /**
+     * this function used to upload users cv file
+     * @author ahmed
+     */
+    public function fb_uploadCvAction() {
+        //check for logrdin user
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('site_fb_homepage'));
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        $skillRepo = $em->getRepository('ObjectsInternJumpBundle:Skill');
+        //get the logedin user
+        $user = $this->get('security.context')->getToken()->getUser();
+        $session = $this->getRequest()->getSession();
+
+        //create new cv
+        $newCV = new \Objects\InternJumpBundle\Entity\CV();
+        $newCV->setUser($user);
+
+        // creating the upload form
+        $formValidationGroups = array('cvFile');
+        $form = $this->createFormBuilder($newCV, array(
+                    'validation_groups' => $formValidationGroups
+                ))
+                ->add('file', 'file')
+                ->getForm();
+        // checking the validation of the form
+        if ($this->getRequest()->getMethod() === 'POST') {
+            $form->bindRequest($this->getRequest());
+            if ($form->isValid()) {
+                $em = $this->getDoctrine()->getEntityManager();
+                //set cv name
+                $nowDate = new \DateTime();
+                $newCV->setName('auto ' . $nowDate->format('Y-m-d h:i:s A'));
+
+                $newCV->setObjective('');
+
+                $em->persist($newCV);
+                $em->flush();
+                $cvDataArray = $this->getUplodedCvData($newCV->getAbsolutePath());
+                if (sizeof($cvDataArray) > 0) {
+                    //add cv objective
+                    if (isset($cvDataArray['objective'])) {
+                        $newCV->setObjective($cvDataArray['objective']);
+                    }
+                    //create skills
+                    if (isset($cvDataArray['skills'])) {
+                        $skills = explode(',', $cvDataArray['skills']);
+                        //check if this skill not exist
+                        foreach ($skills as $skill) {
+                            $skillObject = $skillRepo->findOneBy(array('title' => $skill));
+                            if (!$skillObject) {
+                                //create new skill
+                                $newSkill = new Skill();
+                                $newSkill->setTitle($skill);
+                                $newSkill->setUsersCount(1);
+                                $em->persist($newSkill);
+                                //add the skill to the user
+                                $newCV->addSkill($newSkill);
+
+                                $user->addSkill($newSkill);
+                            } else {
+                                //check if the user have this skill
+                                if (!$newCV->getSkills()->contains($skillObject)) {
+                                    //add the skill to the user
+                                    $newCV->addSkill($skillObject);
+                                }
+                                //check if the user have this skill
+                                if (!$user->getSkills()->contains($skillObject)) {
+                                    //add the skill to the user
+                                    $user->addSkill($skillObject);
+                                    //increment skill user count
+                                    $skillObject->setUsersCount($skillObject->getUsersCount() + 1);
+                                }
+                            }
+                        }
+                    }
+                    //creat educations
+                    if (isset($cvDataArray['educations'])) {
+                        foreach ($cvDataArray['educations'] as $newEducation) {
+                            $newEducationObject = new Education();
+                            $newEducationObject->setUser($user);
+
+                            if (isset($newEducation['shoolName'])) {
+                                $newEducationObject->setSchoolName($newEducation['shoolName']);
+                            } else {
+                                $newEducationObject->setSchoolName('');
+                            }
+                            if (isset($newEducation['major']))
+                                $newEducationObject->setMajor($newEducation['major']);
+                            if (isset($newEducation['minor']))
+                                $newEducationObject->setMinor($newEducation['minor']);
+                            if (isset($newEducation['majorGPA']))
+                                $newEducationObject->setMajorGPA($newEducation['majorGPA']);
+                            if (isset($newEducation['startDate']))
+                                $newEducationObject->setStartDate($newEducation['startDate']);
+                            if (isset($newEducation['endDate']))
+                                $newEducationObject->setEndDate($newEducation['endDate']);
+
+                            $em->persist($newEducationObject);
+                        }
+                    }
+
+                    //creat employment history
+                    if (isset($cvDataArray['experience'])) {
+                        foreach ($cvDataArray['experience'] as $experience) {
+                            $newEmploymentHistory = new EmploymentHistory();
+                            $newEmploymentHistory->setUser($user);
+                            if (isset($experience['companyName'])) {
+                                $newEmploymentHistory->setCompanyName($experience['companyName']);
+                            } else {
+                                $newEmploymentHistory->setCompanyName('');
+                            }
+                            if (isset($experience['jobTitle'])) {
+                                $newEmploymentHistory->setTitle($experience['jobTitle']);
+                            } else {
+                                $newEmploymentHistory->setTitle('');
+                            }
+                            if (isset($experience['companyUrl']))
+                                $newEmploymentHistory->setCompanyUrl($experience['companyUrl']);
+                            if (isset($experience['startDate'])) {
+                                $newEmploymentHistory->setStartedFrom(new \DateTime($experience['startDate']));
+                            } else {
+                                $newEmploymentHistory->setStartedFrom(new \DateTime());
+                            }
+                            if (isset($experience['endDate']))
+                                $newEmploymentHistory->setEndedIn(new \DateTime($experience['endDate']));
+                            if (isset($experience['present']))
+                                $newEmploymentHistory->setIsCurrent(TRUE);
+
+                            $em->persist($newEmploymentHistory);
+                            $newCV->addEmploymentHistory($newEmploymentHistory);
+                        }
+                    }
+
+                    $em->flush();
+
+                    $session->setFlash('success', 'Uploaded successfully');
+                    return $this->redirect($this->generateUrl('fb_user_portal_home', array(
+                                        'loginName' => $user->getLoginName(),
+                                        'cvId' => $newCV->getid()
+                    )));
+                }
+            }
+        }
+
+        return $this->render('ObjectsInternJumpBundle:InternjumpUser:fb_uploadCv.html.twig', array(
+                    'form' => $form->createView()
+        ));
+    }
+
+    /**
      * this function used to add/edit personal question for the logedin user
      * @author Ahmed
      * @param int $questionId
@@ -710,6 +986,33 @@ class InternjumpUserController extends ObjectsController {
 
 
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:personalQuestions.html.twig', array(
+                    'questions' => $questions
+        ));
+    }
+
+    /**
+     * this action used for answer internjump personal quiz
+     * @author Ahmed
+     * @return type
+     */
+    public function fb_personalQuestionsAction() {
+        //check for logrdin company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
+            //return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('login'));
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        $PersonalQuestionRepo = $em->getRepository('ObjectsInternJumpBundle:PersonalQuestion');
+
+        //get logedin user objects
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        //get all personal questiond
+        $questions = $PersonalQuestionRepo->getUserPersonalQuestions($user->getId());
+
+
+        return $this->render('ObjectsInternJumpBundle:InternjumpUser:fb_personalQuestions.html.twig', array(
                     'questions' => $questions
         ));
     }
@@ -817,6 +1120,45 @@ class InternjumpUserController extends ObjectsController {
     }
 
     /**
+     * this action for the logedin users to answer know you quiz link
+     * @author Ahmed
+     */
+    public function fb_internjumbQuizPageAction() {
+        //check for logrdin company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
+            //return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('login'));
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        $quizRepo = $em->getRepository('ObjectsInternJumpBundle:Quiz');
+        $quizResultRepo = $em->getRepository('ObjectsInternJumpBundle:QuizResult');
+
+        //get logedin user objects
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        $quiz = $quizRepo->findAll();
+
+        //check if user pass the quiz before
+        $resultObject = null;
+        if ($user->getScore()) {
+            //find all quiz results
+            $quizResults = $quizResultRepo->findAll();
+            foreach ($quizResults as $result) {
+                if ($result->getScore() >= $user->getScore()) {
+                    $resultObject = $result;
+                    break;
+                }
+                $resultObject = $result;
+            }
+        }
+
+        return $this->render('ObjectsInternJumpBundle:InternjumpUser:fb_internjumbQuizPage.html.twig', array(
+                    'quiz' => $quiz, 'user' => $user, 'resultObject' => $resultObject
+        ));
+    }
+
+    /**
      * this function will show user notifications
      * @author Ahmed
      * @return \Symfony\Component\HttpFoundation\Response
@@ -841,6 +1183,38 @@ class InternjumpUserController extends ObjectsController {
         $newMessagesCount = $companyMessageRepo->getUserNewMessagesCount($user->getId());
 
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:userNotifications.html.twig', array(
+                    'allUserNotificationsCount' => $allUserNotificationsCount,
+                    'user' => $user,
+                    'userNotificationsCountByType' => $userNotificationsCountByType,
+                    'newMessagesCount' => $newMessagesCount
+        ));
+    }
+
+    /**
+     * this function will show user notifications
+     * @author Ahmed
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function fb_getUserNotificationsAction() {
+        //check for logrdin company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
+            return new Response('faild');
+        }
+
+        //get logedin user objects
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        $userNotificationRepo = $em->getRepository('ObjectsInternJumpBundle:UserNotification');
+        $companyMessageRepo = $em->getRepository('ObjectsInternJumpBundle:Message');
+
+        //count all user notifications
+        $allUserNotificationsCount = $userNotificationRepo->countAllUserNotifications($user->getId());
+        //get the user new notifications by type
+        $userNotificationsCountByType = $userNotificationRepo->countUserNotifications($user->getId());
+        //count new company message
+        $newMessagesCount = $companyMessageRepo->getUserNewMessagesCount($user->getId());
+
+        return $this->render('ObjectsInternJumpBundle:InternjumpUser:fb_userNotifications.html.twig', array(
                     'allUserNotificationsCount' => $allUserNotificationsCount,
                     'user' => $user,
                     'userNotificationsCountByType' => $userNotificationsCountByType,
@@ -957,6 +1331,43 @@ class InternjumpUserController extends ObjectsController {
     }
 
     /**
+     * this function will show an job hire request for the logedin owner user
+     * @author Ahmed
+     * @param int $userInternshipId
+     */
+    public function fb_userHireAction($userInternshipId) {
+        //check for logrdin company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
+            //return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('site_fb_homepage'));
+        }
+
+        //get logedin user objects
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        $userInternshipRepo = $em->getRepository('ObjectsInternJumpBundle:UserInternship');
+
+        //get the userInternship object
+        $userInternship = $userInternshipRepo->find($userInternshipId);
+        if (!$userInternship || $userInternship->getUser()->getId() != $user->getId()) {
+            $message = $this->container->getParameter('request_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
+                        'message' => $message,));
+        }
+
+
+        //get the company
+        $company = $userInternship->getInternship()->getCompany();
+
+        return $this->render('ObjectsInternJumpBundle:InternjumpUser:fb_userHire.html.twig', array(
+                    'user' => $user,
+                    'userInternship' => $userInternship,
+                    'company' => $company
+        ));
+    }
+
+    /**
      * this function will used to accept/reject company interview from the owner logedin user
      * @author Ahmed
      * @param int $interviewId
@@ -1040,6 +1451,50 @@ class InternjumpUserController extends ObjectsController {
 
 
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:userInterview.html.twig', array(
+                    'user' => $user,
+                    'interview' => $interview,
+                    'validToFalg' => $validToFalg,
+                    'company' => $company
+        ));
+    }
+
+    /**
+     * this function will show an interview for the logedin owner user
+     * @author Ahmed
+     * @param int $interviewId
+     */
+    public function fb_userInterviewAction($interviewId) {
+        //check for logrdin company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
+            //return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('site_fb_homepage'));
+        }
+
+        //get logedin user objects
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        $interviewRepo = $em->getRepository('ObjectsInternJumpBundle:Interview');
+
+        //get the interview object
+        $interview = $interviewRepo->find($interviewId);
+        if (!$interview || $interview->getUser()->getId() != $user->getId()) {
+            $message = $this->container->getParameter('interview_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
+                        'message' => $message,));
+        }
+
+        //get the company
+        $company = $interview->getCompany();
+
+        //check for the valid to date
+        $validToFalg = 1;
+        if ($interview->getInterviewDate() < new \DateTime('today')) {
+            $validToFalg = 0;
+        }
+
+
+        return $this->render('ObjectsInternJumpBundle:InternjumpUser:fb_userInterview.html.twig', array(
                     'user' => $user,
                     'interview' => $interview,
                     'validToFalg' => $validToFalg,
@@ -1136,6 +1591,55 @@ class InternjumpUserController extends ObjectsController {
 
 
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:userInterest.html.twig', array(
+                    'user' => $user,
+                    'interest' => $interest,
+                    'validToFalg' => $validToFalg,
+                    'cv' => $cv,
+                    'company' => $company
+        ));
+    }
+
+    /**
+     * this function will show company interest to the owner user
+     * @author Ahmed
+     * @param int $interestId
+     */
+    public function fb_userInterestAction($interestId) {
+        //check for logrdin company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
+            //return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('site_fb_homepage'));
+        }
+
+        //get logedin user objects
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        $interestRepo = $em->getRepository('ObjectsInternJumpBundle:Interest');
+        $cvRepo = $em->getRepository('ObjectsInternJumpBundle:CV');
+
+        //get the interest object
+        $interest = $interestRepo->find($interestId);
+        if (!$interest || $interest->getUser()->getId() != $user->getId()) {
+            $message = $this->container->getParameter('interest_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
+                        'message' => $message,));
+        }
+
+        //get the interest cv
+        $cv = $cvRepo->find($interest->getCvId());
+
+        //get the interest company
+        $company = $interest->getCompany();
+
+        //check for the valid to date
+        $validToFalg = 1;
+        if ($interest->getValidTo() < new \DateTime('today')) {
+            $validToFalg = 0;
+        }
+
+
+        return $this->render('ObjectsInternJumpBundle:InternjumpUser:fb_userInterest.html.twig', array(
                     'user' => $user,
                     'interest' => $interest,
                     'validToFalg' => $validToFalg,
@@ -1247,6 +1751,63 @@ class InternjumpUserController extends ObjectsController {
         $unreadNotifications = $userNotificationRepo->findBy(array('user' => $user->getId(), 'isNew' => TRUE));
 
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:userNotification.html.twig', array(
+                    'user' => $user,
+                    'type' => $type,
+                    'page' => $page,
+                    'itemsPerPage' => $itemsPerPage,
+                    'lastPageNumber' => $lastPageNumber,
+                    'userNotifications' => $userNotifications,
+                    'unreadNotifications' => $unreadNotifications
+        ));
+    }
+
+    /**
+     * this function will show all user notification
+     * @author Ahmed
+     */
+    public function fb_UserNotificationAction($type, $page, $itemsPerPage) {
+        //check for logrdin company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
+            //return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('site_fb_homepage'));
+        }
+
+        //get logedin user objects
+        $user = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getEntityManager();
+        $userNotificationRepo = $em->getRepository('ObjectsInternJumpBundle:UserNotification');
+
+        //check if we do not have the items per page number
+        if (!$itemsPerPage) {
+            //get the items per page from cookie or the default value
+            $itemsPerPage = $this->getRequest()->cookies->get('user_notifications_per_page_' . $user->getId(), 10);
+        }
+
+        //get all user notifications
+        if ($type == 'all') {
+            $userNotifications = $userNotificationRepo->getUserNotifications($user->getId(), null, $page, $itemsPerPage);
+            $count = sizeof($userNotificationRepo->getUserNotifications($user->getId(), null, 1, null));
+
+            //calculate the last page number
+            $lastPageNumber = (int) ($count / $itemsPerPage);
+            if (($count % $itemsPerPage) > 0) {
+                $lastPageNumber++;
+            }
+        } else {
+            $userNotifications = $userNotificationRepo->getUserNotifications($user->getId(), $type, $page, $itemsPerPage);
+            $count = sizeof($userNotificationRepo->getUserNotifications($user->getId(), $type, 1, null));
+
+            //calculate the last page number
+            $lastPageNumber = (int) ($count / $itemsPerPage);
+            if (($count % $itemsPerPage) > 0) {
+                $lastPageNumber++;
+            }
+        }
+        //check if there is unread notifications
+        $unreadNotifications = $userNotificationRepo->findBy(array('user' => $user->getId(), 'isNew' => TRUE));
+
+        return $this->render('ObjectsInternJumpBundle:InternjumpUser:fb_userNotification.html.twig', array(
                     'user' => $user,
                     'type' => $type,
                     'page' => $page,
@@ -1415,6 +1976,65 @@ class InternjumpUserController extends ObjectsController {
         $userPersonalQuestionAnswers = $personalQuestionAnswerRepo->findBy(array('user' => $user->getId()));
 
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:userPortalHome.html.twig', array(
+                    'user' => $user,
+                    'userCv' => $userCv,
+                    'cvId' => $cvId,
+                    'age' => $age,
+                    'companiesQuestions' => $companiesQuestions,
+                    'userPersonalQuestionAnswers' => $userPersonalQuestionAnswers
+        ));
+    }
+
+    /**
+     * this function will show the user cv for the owner user
+     * @author Ahmed
+     * @param string $loginName
+     * @param int $cvId
+     */
+    public function fb_userPortalHomeAction($loginName, $cvId) {
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            //get the user
+            $user = $this->get('security.context')->getToken()->getUser();
+            if ($user->getLoginName() != $loginName) {
+                return $this->redirect($this->generateUrl('site_fb_homepage', array(), TRUE));
+            }
+        } else {
+            //return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('site_fb_homepage'));
+        }
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $cvRepo = $em->getRepository('ObjectsInternJumpBundle:CV');
+        $companyQuestionRepo = $em->getRepository('ObjectsInternJumpBundle:CompanyQuestion');
+        $personalQuestionAnswerRepo = $em->getRepository('ObjectsInternJumpBundle:PersonalQuestionAnswer');
+
+        //get user cv
+        $userCv = $cvRepo->find($cvId);
+
+        if (!$userCv || $userCv->getUser()->getId() != $user->getId()) {
+            $message = $this->container->getParameter('cv_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
+                        'message' => $message,));
+        }
+
+        //get user companies questions
+        $companiesQuestions = $companyQuestionRepo->findBy(array('user' => $user->getId()), array('createdAt' => 'desc'));
+
+        //calculate birth date
+        $age = null;
+        if ($user->getDateOfBirth()) {
+            $date = $user->getDateOfBirth();
+            $now = new \DateTime();
+            $age = $now->diff($date);
+            $age = $age->y;
+        }
+
+
+        //get user personal question answers
+        $userPersonalQuestionAnswers = $personalQuestionAnswerRepo->findBy(array('user' => $user->getId()));
+
+        return $this->render('ObjectsInternJumpBundle:InternjumpUser:fb_userPortalHome.html.twig', array(
                     'user' => $user,
                     'userCv' => $userCv,
                     'cvId' => $cvId,

@@ -131,6 +131,103 @@ class InternshipController extends Controller {
     }
 
     /**
+     * this function will list all company jobs
+     * @author Ahmed
+     * @param string $loginName
+     * @param int $page
+     */
+    public function fb_indexAction($loginName, $page) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
+        $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
+        $interestRepo = $em->getRepository('ObjectsInternJumpBundle:Interest');
+        $InterviewRepo = $em->getRepository('ObjectsInternJumpBundle:Interview');
+
+        //get company object
+        $company = $companyRepo->findOneBy(array('loginName' => $loginName));
+
+
+        if (!$company) {
+            $message = $this->container->getParameter('company_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
+                        'message' => $message,));
+        }
+
+        //the results per page number
+        $itemsPerPage = $this->container->getParameter('jobs_per_page_index_jobs_page');
+
+        //get company jobs
+        //check if the owner company
+        if (True === $this->get('security.context')->isGranted('ROLE_COMPANY') && $this->get('security.context')->getToken()->getUser()->getLoginName() == $loginName) {
+            $companyJobs = $internshipRepo->getCompanyJobs($company->getId(), $page, $itemsPerPage, TRUE);
+        } else {
+            $companyJobs = $internshipRepo->getCompanyJobs($company->getId(), $page, $itemsPerPage, FALSE);
+        }
+
+        //all questionsCount
+        //check if the owner company
+        $companyHiredUsers = array();
+        $hiredUsersJobsArray = array();
+        $companyInterests = array();
+        $companyInterviews = array();
+        $ownerCompanyFlag = 0;
+
+        if (True === $this->get('security.context')->isGranted('ROLE_COMPANY') && $this->get('security.context')->getToken()->getUser()->getLoginName() == $loginName) {
+            $ownerCompanyFlag = 1;
+            $allcompanyJobsCount = $internshipRepo->countCompanyJobs($company->getId(), TRUE);
+            //get compaqny hired users
+            $companyJobsIds = $internshipRepo->getCompanyJobsIds($company->getId());
+            $companyJobsIdsArray = array();
+            foreach ($companyJobsIds as $job) {
+                $companyJobsIdsArray [] = $job['id'];
+            }
+
+            if (sizeof($companyJobsIdsArray) > 0) {
+                $companyHiredUsers = $internshipRepo->getCompanyHiredUsers($companyJobsIdsArray);
+            }
+
+            if (sizeof($companyHiredUsers) > 0) {
+                $hiredUsersJobsArray = array();
+                foreach ($companyHiredUsers as $companyHiredUser) {
+                    if (!in_array($companyHiredUser->getInternship()->getTitle(), $hiredUsersJobsArray)) {
+                        array_push($hiredUsersJobsArray, $companyHiredUser->getInternship()->getTitle());
+                    }
+                }
+            }
+
+            //get company interests requests
+            $companyInterests = $interestRepo->findBy(array('company' => $company->getId()), array('createdAt' => 'desc'));
+
+            //get company interviews
+            $companyInterviews = $InterviewRepo->getCompanyInterviews($company->getId());
+        } else {
+            $allcompanyJobsCount = $internshipRepo->countCompanyJobs($company->getId(), FALSE);
+        }
+        $allcompanyJobsCount = $allcompanyJobsCount['0']['jobsCount'];
+
+        //calculate the last page number
+        $lastPageNumber = (int) ($allcompanyJobsCount / $itemsPerPage);
+        if (($allcompanyJobsCount % $itemsPerPage) > 0) {
+            $lastPageNumber++;
+        }
+
+
+
+        return $this->render('ObjectsInternJumpBundle:Internship:fb_index.html.twig', array(
+                    'companyJobs' => $companyJobs,
+                    'page' => $page,
+                    'lastPageNumber' => $lastPageNumber,
+                    'loginName' => $loginName,
+                    'company' => $company,
+                    'hiredUsersJobsArray' => $hiredUsersJobsArray,
+                    'companyHiredUsers' => $companyHiredUsers,
+                    'companyInterests' => $companyInterests,
+                    'companyInterviews' => $companyInterviews,
+                    'ownerCompanyFlag' => $ownerCompanyFlag
+        ));
+    }
+
+    /**
      * Finds and displays a Internship entity.
      *
      */
@@ -238,6 +335,132 @@ class InternshipController extends Controller {
 
 
         return $this->render('ObjectsInternJumpBundle:Internship:show.html.twig', array(
+                    'entity' => $entity,
+                    'company' => $company,
+                    'otherJobs' => $otherJobs,
+                    'interviewsUsers' => $interviewsUsers,
+                    'jobAvailabilityFlag' => $jobAvailabilityFlag,
+                    'addedBeforeFlag' => $addedBeforeFlag,
+                    'applyedUsers' => $applyedUsers,
+                    'jobCategories' => $jobCategories,
+                    'job_added_before_message' => $this->container->getParameter('job_added_before_message_show_job_page'),
+                    'job_apply_success_message' => $this->container->getParameter('job_apply_success_message_show_job_page'),
+                    'allCompanies' => $allCompanies,
+                    'allCities' => $allCities,
+                    'allState' => $allState,
+                    'allCategory' => $allCategory,
+                    'LatestJobs' => $LatestJobs
+        ));
+    }
+
+    /**
+     * Finds and displays a Internship entity.
+     *
+     */
+    public function fb_showAction($id) {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $entity = $em->getRepository('ObjectsInternJumpBundle:Internship')->find($id);
+        $userInternshipRepo = $em->getRepository('ObjectsInternJumpBundle:UserInternship');
+        $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
+        $interviewRepo = $em->getRepository('ObjectsInternJumpBundle:Interview');
+        $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
+        $cityRepo = $em->getRepository('ObjectsInternJumpBundle:City');
+        $stateRepo = $em->getRepository('ObjectsInternJumpBundle:State');
+        $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
+
+        $categ = array();
+        if (!$entity) {
+            $message = $this->container->getParameter('internship_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
+                        'message' => $message,));
+        } else {
+            //check if not the owner company
+            //so will check for job active or not
+            if (FALSE === $this->get('security.context')->isGranted('ROLE_COMPANY') || $this->get('security.context')->getToken()->getUser()->getId() != $entity->getCompany()->getId()) {
+                $todayDate = new \DateTime('today');
+                if (!$entity->getActive() || $entity->getActiveTo() < $todayDate || $entity->getActiveFrom() > $todayDate) {
+                    $message = $this->container->getParameter('internship_not_found_error_msg');
+                    return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
+                                'message' => $message,));
+                }
+            }
+        }
+
+
+        //get this job company
+        $company = $entity->getCompany();
+
+        //check if this job available
+        $nowDate = date('Y-m-d');
+        $jobAvailabilityFlag = 0;
+        if (strtotime($nowDate) <= strtotime($entity->getActiveTo()->format('Y-m-d')) && strtotime($entity->getActiveFrom()->format('Y-m-d')) <= strtotime($nowDate)) {
+            $jobAvailabilityFlag = 1;
+        }
+
+        //check if the logein user add this job before
+        $addedBeforeFlag = 1;
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_USER')) {
+            //get logedin user object
+            $user = $this->get('security.context')->getToken()->getUser();
+            $userInternshipObject = $userInternshipRepo->findOneBy(array('user' => $user->getId(), 'internship' => $id));
+            if ($userInternshipObject) {
+                $addedBeforeFlag = 0;
+            }
+        }
+
+        //get applyed users
+        $applyedUsers = array();
+        $otherJobs = array();
+        $interviewsUsers = array();
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            //get applyed users
+            $applyedUsers = $userInternshipRepo->getJobApplyedUsers($id);
+            //get others company jobs
+            $otherJobs = $internshipRepo->getOtherJobs($id, $company->getId());
+            //get interviews user
+            $interviewsUsers = $interviewRepo->findBy(array('company' => $company->getId(), 'internship' => $id), array('interviewDate' => 'desc'));
+        }
+
+        //get job categories
+        $jobCategories = array();
+        foreach ($entity->getCategories() as $category) {
+            $jobCategories [] = $category->getId();
+        }
+
+
+        //all companies
+        $allCompanies = $companyRepo->findAll();
+        //all cities
+        $allCities = $cityRepo->findBy(array('country' => 'US'));
+        //all state
+        $allState = $stateRepo->findAll();
+        //all category
+        $allCategory = $categoryRepo->findAll();
+
+        //get latest jobs
+        $LatestJobs = array();
+        if (true === $this->get('security.context')->isGranted('ROLE_USER')) {
+            //get logedin user object
+            $user = $this->get('security.context')->getToken()->getUser();
+
+            $cvs = $em->getRepository('ObjectsInternJumpBundle:CV')->getAllCvs($user->getId());
+            //print_r($cvs);
+            if ($cvs) {//if student Has CVs
+                //echo "found cvs <br>";
+                foreach ($cvs as $cv) {
+                    foreach ($cv->getCategories() as $cat)
+                        $categ[] = $cat->getId();
+                }
+            }
+
+            if (sizeof($categ) > 0) { //found array of categories
+                $LatestJobs = $em->getRepository('ObjectsInternJumpBundle:Internship')->getLatestJobs($categ, 5);
+            }
+        }
+
+
+        return $this->render('ObjectsInternJumpBundle:Internship:fb_show.html.twig', array(
                     'entity' => $entity,
                     'company' => $company,
                     'otherJobs' => $otherJobs,

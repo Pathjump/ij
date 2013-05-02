@@ -1,0 +1,13 @@
+<ul class="manage-list pull-right">
+    <li><a class="Notifi  active" href="{{path('fb_User_notification')}}"></a>
+                {% if allUserNotificationsCount > 0 %}
+            <span class="noti-num">{{allUserNotificationsCount}}</span>
+                {% endif %}
+        </li>
+        <li><a class="Messag" href="{{ path('fb_user_box', {'box': 'inbox'}) }}"></a>
+                {% if newMessagesCount > 0 %}
+                <span class="noti-num">{{newMessagesCount}}</span>
+                {% endif %}
+            </li>
+            <li><a class="Sitt" href="{{path('fb_user_edit')}}"></a></li>
+        </ul>

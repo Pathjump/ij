@@ -1089,6 +1089,58 @@ class CompanyController extends Controller {
     }
 
     /**
+     * this function will show single question for the owner company and user
+     * @author Ahmed
+     * @param int $questionId
+     */
+    public function fb_questionShowAction($questionId) {
+        //check for logrdin company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_COMPANY') && FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
+            return $this->redirect($this->generateUrl('site_fb_homepage', array(), TRUE));
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        $companyQuestionRepo = $em->getRepository('ObjectsInternJumpBundle:CompanyQuestion');
+
+        //get the question
+        $question = $companyQuestionRepo->find($questionId);
+        if (!$question) {
+            $message = $this->container->getParameter('question_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
+                        'message' => $message,));
+        }
+
+        //get the company
+        $questionCompany = $question->getCompany();
+
+        $variables = array();
+        $variables ['question'] = $question;
+        $variables ['questionCompany'] = $questionCompany;
+
+        //check if company view or user view
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            //get logedin company objects
+            $company = $this->get('security.context')->getToken()->getUser();
+            //check if not this company is the owner
+            if ($question->getCompany()->getId() != $company->getId()) {
+                return $this->redirect($this->generateUrl('site_fb_homepage', array(), TRUE));
+            }
+            $variables ['company'] = $company;
+        }if (TRUE === $this->get('security.context')->isGranted('ROLE_USER')) {
+            //get logedin user objects
+            $user = $this->get('security.context')->getToken()->getUser();
+            //check if not this user is the owner
+            if ($question->getUser()->getId() != $user->getId()) {
+                return $this->redirect($this->generateUrl('site_fb_homepage', array(), TRUE));
+            }
+            $variables ['user'] = $user;
+        }
+
+
+
+        return $this->render('ObjectsInternJumpBundle:Company:fb_questionShow.html.twig', $variables);
+    }
+
+    /**
      * this function will mark all notifications as read for the logedin company
      * @author Ahmed
      */

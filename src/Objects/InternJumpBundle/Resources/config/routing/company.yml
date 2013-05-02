@@ -42,6 +42,12 @@ question_show:
     requirements:
         questionId:  \d+
 
+fb_question_show:
+    pattern:  /fb_question/{questionId}/show
+    defaults: { _controller: "ObjectsInternJumpBundle:Company:fb_questionShow" }
+    requirements:
+        questionId:  \d+
+        
 interview_show:
     pattern:  /interview/{interviewId}/show
     defaults: { _controller: "ObjectsInternJumpBundle:Company:interviewShow" }

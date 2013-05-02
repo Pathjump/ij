@@ -4,11 +4,13 @@ namespace Objects\InternJumpBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping\UniqueConstraint;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Objects\InternJumpBundle\Entity\UserLanguage
- *
- * @ORM\Table()
+ * @UniqueEntity(fields={"user","language"})
+ * @ORM\Table(uniqueConstraints={@UniqueConstraint(name="user_langauge_idx", columns={"user_id", "language_id"})})
  * @ORM\Entity(repositoryClass="Objects\InternJumpBundle\Entity\UserLanguageRepository")
  */
 class UserLanguage {

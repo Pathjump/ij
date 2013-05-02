@@ -105,7 +105,6 @@ class SkillController extends ObjectsController {
     public function addEditUserSkillsAction() {
         //check for logrdin user
         if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
-            //return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
             $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
             return $this->redirect($this->generateUrl('login'));
         }
@@ -119,6 +118,32 @@ class SkillController extends ObjectsController {
         $userSkills = $user->getSkills();
 
         return $this->render('ObjectsInternJumpBundle:Skill:addEditUserSkills.html.twig', array(
+                    'userSkills' => $userSkills,
+                    'formName' => $this->container->getParameter('studentEditSkill_FormName'),
+                    'formDesc' => $this->container->getParameter('studentEditSkill_FormDesc'),
+        ));
+    }
+
+    /**
+     * this function will used to add/edit logedin user skills
+     * @author Ahmed
+     */
+    public function fb_addEditUserSkillsAction() {
+        //check for logrdin user
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('login'));
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        $skillRepo = $em->getRepository('ObjectsInternJumpBundle:Skill');
+
+        //get logedin user objects
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        //get all user skills
+        $userSkills = $user->getSkills();
+
+        return $this->render('ObjectsInternJumpBundle:Skill:fb_addEditUserSkills.html.twig', array(
                     'userSkills' => $userSkills,
                     'formName' => $this->container->getParameter('studentEditSkill_FormName'),
                     'formDesc' => $this->container->getParameter('studentEditSkill_FormDesc'),

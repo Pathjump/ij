@@ -145,3 +145,19 @@ user_delete_language:
 howMuchAreYouWorth:
     pattern:  /findyourworth
     defaults: { _controller: "ObjectsInternJumpBundle:Internjump:howMuchAreYouWorth" }
+
+fb_user_languages:
+    pattern:  /fb_language/new
+    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:fb_userLanguages" }
+
+fb_user_edit_language:
+    pattern:  /fb_language/edit/{id}
+    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:fb_userEditLanguage" }
+    requirements:
+        id: \d+
+
+fb_user_delete_language:
+    pattern:  /fb_language/delete/{id}
+    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:fb_deleteLanguage" }
+    requirements:
+        id: \d+

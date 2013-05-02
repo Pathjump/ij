@@ -98,12 +98,12 @@
                                             <li><a href="{{path('student_task',{'loginName' : app.user.loginName})}}">Profile Page</a></li>
                                             <li><a href="{{ path('user_search_page') }}">Internship Search</a></li>
                                             <li><a href="{{ path('education_new') }}">Education</a></li>
-                                            <li><a href="{{ path('user_languages') }}">Language</a></li>
+                                            <li><a href="{{ path('fb_user_languages') }}">Language</a></li>
                                             <li><a href="{{ path('employmenthistory_new') }}">Employment History</a></li>
-                                            <li><a href="{{ path('addEditUserSkills') }}" title="Your Skills">Skills</a></li>
-                                            <li><a href="{{ path('personal_questions') }}" title="Personal Questions">Personal Questions</a></li>
+                                            <li><a href="{{ path('fb_addEditUserSkills') }}" title="Your Skills">Skills</a></li>
+                                            <li><a href="{{ path('fb_personal_questions') }}" title="Personal Questions">Personal Questions</a></li>
                                             {% if not app.user.score %}
-                                                <li><a href="{{path('internjumb_quiz')}}">InternJump Personality Quiz</a></li>
+                                                <li><a href="{{path('fb_internjumb_quiz')}}">InternJump Personality Quiz</a></li>
                                             {% endif %}
                                             <li><a href="{{path('employers')}}">Industries</a></li>
                                         </ul>
@@ -157,9 +157,7 @@
                                     <h1 class="pull-left">{% block pageTitle %}Home{% endblock %}</h1>
                                     <div class="notifsWrapper">
                                 {% if is_granted('ROLE_USER') %}
-                                    {% render "ObjectsInternJumpBundle:InternjumpUser:getUserNotifications" %}
-                                {% elseif is_granted('ROLE_COMPANY') %}
-                                    {% render "ObjectsInternJumpBundle:Company:getCompanyNotifications" %}
+                                    {% render "ObjectsInternJumpBundle:InternjumpUser:fb_getUserNotifications" %}
                                 {% endif %}
                                     </div>
                                 </div><!--container--->
