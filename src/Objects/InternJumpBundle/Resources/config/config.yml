@@ -80,4 +80,4 @@ parameters:
   worth_no_skills: 'Add your skills'
   worth_year_boost: 3
   worth_facebook_message: 'My expected worth on internjump is'
-  worth_select_from: manually
+  worth_select_from: automatic
