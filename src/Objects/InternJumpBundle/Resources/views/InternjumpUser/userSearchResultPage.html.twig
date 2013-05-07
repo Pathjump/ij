@@ -2,22 +2,22 @@
 <ul class="">
                                 {% if lastPageNumber > 1 %}
                     {% if page > 1 %}
-                       <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang }) }}">&laquo;&laquo;</a></li>
-                                                <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang ,'page': page - 1}) }}">&laquo;</a></li>
+                       <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang, 'jobt': jobtype }) }}">&laquo;&laquo;</a></li>
+                                                <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang, 'jobt': jobtype ,'page': page - 1}) }}">&laquo;</a></li>
                     {% endif %}
 
 
 
         {% for numberOfPage in 1..lastPageNumber %}
         {% if numberOfPage > page - 3 and numberOfPage < page + 3 %}
-                                {% if page == numberOfPage %}<li class="active"><a href="javascript:void(0)">{{ numberOfPage }}</a></li>{% else %}<li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang ,'page': numberOfPage}) }}" >{{ numberOfPage }}</a></li>{%endif%}
+                                {% if page == numberOfPage %}<li class="active"><a href="javascript:void(0)">{{ numberOfPage }}</a></li>{% else %}<li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang, 'jobt': jobtype ,'page': numberOfPage}) }}" >{{ numberOfPage }}</a></li>{%endif%}
         {% endif %}
         {% endfor %}
 
 
                     {% if page < lastPageNumber %}
-                                                <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang ,'page': page + 1}) }}" >&raquo;</a></li>
-                                                <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang ,'page': lastPageNumber}) }}" >&raquo;&raquo;</a></li>
+                                                <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang, 'jobt': jobtype ,'page': page + 1}) }}" >&raquo;</a></li>
+                                                <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang, 'jobt': jobtype ,'page': lastPageNumber}) }}" >&raquo;&raquo;</a></li>
 {% endif %}
                 {% endif %}
                                             </ul>
@@ -97,22 +97,22 @@
 <ul class="">
                                 {% if lastPageNumber > 1 %}
                     {% if page > 1 %}
-                       <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang }) }}">&laquo;&laquo;</a></li>
-                                                <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang ,'page': page - 1}) }}">&laquo;</a></li>
+                       <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang, 'jobt': jobtype }) }}">&laquo;&laquo;</a></li>
+                                                <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang, 'jobt': jobtype ,'page': page - 1}) }}">&laquo;</a></li>
                     {% endif %}
 
 
 
         {% for numberOfPage in 1..lastPageNumber %}
         {% if numberOfPage > page - 3 and numberOfPage < page + 3 %}
-                                {% if page == numberOfPage %}<li class="active"><a href="javascript:void(0)">{{ numberOfPage }}</a></li>{% else %}<li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang ,'page': numberOfPage}) }}" >{{ numberOfPage }}</a></li>{%endif%}
+                                {% if page == numberOfPage %}<li class="active"><a href="javascript:void(0)">{{ numberOfPage }}</a></li>{% else %}<li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang, 'jobt': jobtype ,'page': numberOfPage}) }}" >{{ numberOfPage }}</a></li>{%endif%}
         {% endif %}
         {% endfor %}
 
 
                     {% if page < lastPageNumber %}
-                                                <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang ,'page': page + 1}) }}" >&raquo;</a></li>
-                                                <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang ,'page': lastPageNumber}) }}" >&raquo;&raquo;</a></li>
+                                                <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang, 'jobt': jobtype ,'page': page + 1}) }}" >&raquo;</a></li>
+                                                <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'lang': lang, 'jobt': jobtype ,'page': lastPageNumber}) }}" >&raquo;&raquo;</a></li>
 {% endif %}
                 {% endif %}
                                             </ul>

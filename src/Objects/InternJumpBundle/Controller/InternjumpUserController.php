@@ -2220,22 +2220,23 @@ class InternjumpUserController extends Controller {
         //get request
         $request = $this->getRequest();
         //Get request's parameters
-        $company = $request->get("company");
+        $jobType = $request->get("jobType");
         $city = $request->get("city");
         $state = $request->get("state");
         $category = $request->get("industry");
+        $keyword = $request->get("keyword");
 
 
         //Get city Repo
         $cityRepo = $em->getRepository('ObjectsInternJumpBundle:City');
 
-        if ($company || $category || $city || $state) {
+        if ($jobType || $category || $city || $state ||$keyword) {
             //set the check to be true
             $check = true;
 
             //now make sure which parameters been sent and which not
-            if (!$company) {
-                $company = "empty";
+            if (!$jobType) {
+                $jobType = "empty";
             }
             if (!$city) {
                 $city = "empty";
@@ -2246,13 +2247,16 @@ class InternjumpUserController extends Controller {
             if (!$category) {
                 $category = "empty";
             }
+            if (!$keyword) {
+                $keyword = "empty";
+            }
 
             //get number of jobs per page
             $jobsPerPage = $this->container->getParameter('jobs_per_search_results_page');
 
             $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
             //get jobs search results array
-            $userSearchResults = $internshipRepo->getJobsSearchResult("empty", "empty", $city, $state, $category, $company, "empty", "empty", 1, $jobsPerPage);
+            $userSearchResults = $internshipRepo->getJobsSearchResult($keyword, "empty", $city, $state, $category, "empty", "empty", "empty", $jobType, 1, $jobsPerPage);
 
             //Limit the details to only 200 character
             foreach ($userSearchResults as &$job) {
@@ -2265,7 +2269,7 @@ class InternjumpUserController extends Controller {
             }
             /* pagenation part */
             //get count of all search result jobs
-            $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult("empty", "empty", $city, $state, $category, $company, "empty", "empty", 1, null));
+            $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($keyword, "empty", $city, $state, $category, "empty", "empty", "empty", $jobType, 1, null));
 
             $lastPageNumber = (int) ($userSearchResultsCount / $jobsPerPage);
             if (($userSearchResultsCount % $jobsPerPage) > 0) {
@@ -2279,6 +2283,8 @@ class InternjumpUserController extends Controller {
             $state = null;
             $category = null;
             $company = null;
+            $jobType = null;
+            $keyword = null;
         }
         /*         * ********End Partial Search part*********** */
         /*         * ********************************************************** */
@@ -2324,6 +2330,7 @@ class InternjumpUserController extends Controller {
         $stateOptionsArr = array('empty_value' => '--- choose State ---');
         $categoryOptionsArr = array('empty_value' => '--- choose Industry ---', 'choices' => $allCategoriesArray);
         $companyOptionsArr = array('empty_value' => '--- choose Company ---', 'choices' => $allCompanysArray);
+        $jobTypeOptionsArr = array('choices' => array('Internship'=> 'Internship','Entry Level'=>'Entry Level' ),'empty_value' => '--- choose job type ---');
 
         //inspect if check been set to be true then set the defaults values of the form
         if ($check) {
@@ -2343,8 +2350,9 @@ class InternjumpUserController extends Controller {
             }
             if ($category != "empty") {
                 $categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($category));
-            } if ($company != "empty") {
-                $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($company));
+            }
+            if ($jobType != "empty") {
+                $jobTypeOptionsArr = array('choices' => array('Internship'=> 'Internship','Entry Level'=>'Entry Level' ), 'preferred_choices' => array($jobType));
             }
         }
 
@@ -2356,7 +2364,8 @@ class InternjumpUserController extends Controller {
                 ->add('state', 'choice', $stateOptionsArr)
                 ->add('category', 'choice', $categoryOptionsArr)
                 ->add('company', 'choice', $companyOptionsArr)
-                ->add('language', 'entity', $allLanguagesArray);
+                ->add('language', 'entity', $allLanguagesArray)
+                ->add('jobtype', 'choice', $jobTypeOptionsArr);
         //create the form
         $form = $formBuilder->getForm();
 
@@ -2369,7 +2378,7 @@ class InternjumpUserController extends Controller {
                     'title' => "empty",
                     'country' => "empty",
                     'city' => $city,
-                    'state' => $state, 'category' => $category, 'company' => $company, 'lang' => "empty",
+                    'state' => $state, 'category' => $category, 'lang' => "empty",'jobtype'=> $jobType, 'keyword'=>$keyword,
         ));
     }
 
@@ -2386,7 +2395,6 @@ class InternjumpUserController extends Controller {
 //            return $this->redirect($this->generateUrl('login'));
 //        }
 
-
         $em = $this->getDoctrine()->getEntityManager();
 
         //Check to fill the form with parameters if been sent with the request
@@ -2397,22 +2405,23 @@ class InternjumpUserController extends Controller {
         //get request
         $request = $this->getRequest();
         //Get request's parameters
-        $company = $request->get("company");
+        $jobType = $request->get("jobType");
         $city = $request->get("city");
         $state = $request->get("state");
         $category = $request->get("industry");
+        $keyword = $request->get("keyword");
 
 
         //Get city Repo
         $cityRepo = $em->getRepository('ObjectsInternJumpBundle:City');
 
-        if ($company || $category || $city || $state) {
+        if ($jobType || $category || $city || $state ||$keyword) {
             //set the check to be true
             $check = true;
 
             //now make sure which parameters been sent and which not
-            if (!$company) {
-                $company = "empty";
+            if (!$jobType) {
+                $jobType = "empty";
             }
             if (!$city) {
                 $city = "empty";
@@ -2423,13 +2432,16 @@ class InternjumpUserController extends Controller {
             if (!$category) {
                 $category = "empty";
             }
+            if (!$keyword) {
+                $keyword = "empty";
+            }
 
             //get number of jobs per page
             $jobsPerPage = $this->container->getParameter('jobs_per_search_results_page');
 
             $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
             //get jobs search results array
-            $userSearchResults = $internshipRepo->getJobsSearchResult("empty", "empty", $city, $state, $category, $company, "empty", "empty", 1, $jobsPerPage);
+            $userSearchResults = $internshipRepo->getJobsSearchResult($keyword, "empty", $city, $state, $category, "empty", "empty", "empty", $jobType, 1, $jobsPerPage);
 
             //Limit the details to only 200 character
             foreach ($userSearchResults as &$job) {
@@ -2442,7 +2454,7 @@ class InternjumpUserController extends Controller {
             }
             /* pagenation part */
             //get count of all search result jobs
-            $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult("empty", "empty", $city, $state, $category, $company, "empty", "empty", 1, null));
+            $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($keyword, "empty", $city, $state, $category, "empty", "empty", "empty", $jobType, 1, null));
 
             $lastPageNumber = (int) ($userSearchResultsCount / $jobsPerPage);
             if (($userSearchResultsCount % $jobsPerPage) > 0) {
@@ -2456,9 +2468,14 @@ class InternjumpUserController extends Controller {
             $state = null;
             $category = null;
             $company = null;
+            $jobType = null;
+            $keyword = null;
         }
         /*         * ********End Partial Search part*********** */
         /*         * ********************************************************** */
+
+
+
 
         //Get country Repo
         $countryRepo = $em->getRepository('ObjectsInternJumpBundle:Country');
@@ -2498,6 +2515,7 @@ class InternjumpUserController extends Controller {
         $stateOptionsArr = array('empty_value' => '--- choose State ---');
         $categoryOptionsArr = array('empty_value' => '--- choose Industry ---', 'choices' => $allCategoriesArray);
         $companyOptionsArr = array('empty_value' => '--- choose Company ---', 'choices' => $allCompanysArray);
+        $jobTypeOptionsArr = array('choices' => array('Internship'=> 'Internship','Entry Level'=>'Entry Level' ),'empty_value' => '--- choose job type ---');
 
         //inspect if check been set to be true then set the defaults values of the form
         if ($check) {
@@ -2517,8 +2535,9 @@ class InternjumpUserController extends Controller {
             }
             if ($category != "empty") {
                 $categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($category));
-            } if ($company != "empty") {
-                $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($company));
+            }
+            if ($jobType != "empty") {
+                $jobTypeOptionsArr = array('choices' => array('Internship'=> 'Internship','Entry Level'=>'Entry Level' ), 'preferred_choices' => array($jobType));
             }
         }
 
@@ -2530,7 +2549,8 @@ class InternjumpUserController extends Controller {
                 ->add('state', 'choice', $stateOptionsArr)
                 ->add('category', 'choice', $categoryOptionsArr)
                 ->add('company', 'choice', $companyOptionsArr)
-                ->add('language', 'entity', $allLanguagesArray);
+                ->add('language', 'entity', $allLanguagesArray)
+                ->add('jobtype', 'choice', $jobTypeOptionsArr);
         //create the form
         $form = $formBuilder->getForm();
 
@@ -2543,7 +2563,7 @@ class InternjumpUserController extends Controller {
                     'title' => "empty",
                     'country' => "empty",
                     'city' => $city,
-                    'state' => $state, 'category' => $category, 'company' => $company, 'lang' => "empty",
+                    'state' => $state, 'category' => $category, 'company' => $company, 'lang' => "empty",'jobtype'=> $jobType,'keyword'=>$keyword,
         ));
     }
 
@@ -2552,7 +2572,7 @@ class InternjumpUserController extends Controller {
      * This function for search ajax action
      * @author Ola
      */
-    public function searchAction($title, $country, $city, $state, $category, $company, $lang, $page) {
+    public function searchAction($title, $country, $city, $state, $category, $company, $lang, $jobt, $page) {
         $request = $request = $this->getRequest();
 
         //to check if Ajax Request
@@ -2570,7 +2590,7 @@ class InternjumpUserController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
         $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
         //get jobs search results array
-        $userSearchResults = $internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray, $page, $jobsPerPage);
+        $userSearchResults = $internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray, $jobt, $page, $jobsPerPage);
 
         //Limit the details to only 200 character
         foreach ($userSearchResults as &$job) {
@@ -2583,7 +2603,7 @@ class InternjumpUserController extends Controller {
         }
         /* pagenation part */
         //get count of all search result jobs
-        $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray, 1, null));
+        $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray,$jobt, 1, null));
 
         $lastPageNumber = (int) ($userSearchResultsCount / $jobsPerPage);
         if (($userSearchResultsCount % $jobsPerPage) > 0) {
@@ -2594,7 +2614,7 @@ class InternjumpUserController extends Controller {
          /*****************[ End API Search Results ]***********************/
         /**************************************************/
          $apiJobsArr =array();
-         if(sizeof($userSearchResults) < 5 ){
+         if(sizeof($userSearchResults) < 24 ){
          $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null);
            // print_r($apiJobsArr);
 
@@ -2618,7 +2638,7 @@ class InternjumpUserController extends Controller {
                     'title' => $title,
                     'country' => $country,
                     'city' => $city,
-                    'state' => $state, 'category' => $category, 'company' => $company, 'lang' => $lang,
+                    'state' => $state, 'category' => $category, 'company' => $company, 'lang' => $lang,'jobtype'=> $jobt,
         ));
     }
 

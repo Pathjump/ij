@@ -28,14 +28,14 @@
 
                 <div class="span8">
                     <div class="company-form profile-page">
-                        <h2>Go on Search for your  internships</h2>
+                        <h2>Go on, search for your dream internship/job!</h2>
 
                         <form>
 
                         <fieldset>
                         {% if allCategory |length > 0 %}
                         <div class="controls">
-                              <label>You are Spetialised in ...</label>
+                              <label>I am interested in ..</label>
                         <select  Class="Choosen chzn-select span12" id="industryFilter">
                             <option value="">Industry</option>
                             {% for category in allCategory %}
@@ -48,14 +48,17 @@
 
                         {% if allCities |length > 0 %}
                         <div class="controls">
-                        <label>Location near to ...</label>
+                        <label>With the keywords..</label>
 
-                        <select  Class="Choosen chzn-select span12" id="cityFilter">
+                        {# <select  Class="Choosen chzn-select span12" id="cityFilter">
                             <option value="">City</option>
                             {% for city in allCities %}
                             <option value="{{city.id}}">{{city}}</option>
                             {% endfor %}
                         </select>
+                        #}
+                        <input class="span12" id="keyword" type="text" placeholder="Keyword..">
+                        <input id="userState" type="hidden" value="{{state}}">
                         </div>
                                 <br>
                         {% endif %}
@@ -65,7 +68,7 @@
                                     </label>
                             <button  id="homeSearchJob" class="btn btn-primary pull-right">See Your Results</button>
                             <div class="clearfix"></div>
-                             <a href="user_search_page" class="pull-right back">Advance Search</a>
+                             <a href="{{path('user_search_page')}}{% if state %}&state={{state}}{% endif %}" class="pull-right back">Advance Search</a>
                            </div>
                          </fieldset>
                     </form>
@@ -321,6 +324,21 @@
     </div><!-- Quiz Results block -->
 {%endif%}
 
+        <div class="Tasks"><!-- Your worth block -->
+
+    <h2>Your worth:</h2>
+    <div class="tasks-block">
+<ul class="list2">
+    <li>
+        {% if worth > 1 %}Your worth: {{worth}}{% endif %}
+         <a href="{{path('howMuchAreYouWorth')}}  ">View your earning projection</a>
+
+      </li>
+     </ul>
+    </div>
+    </div><!-- Quiz Results block -->
+
+
 
 
                         </div><!--profile-pag--->
@@ -445,16 +463,18 @@
                     });
 
          $('#homeSearchJob').click(function(){
-                  var city = $('#cityFilter').val();
+                  var state = $('#userState').val();
                   var category = $('#industryFilter').val();
+                  var keyword = $('#keyword').val();
 
-                  if(  city || category)
+                  if(  state || category || keyword)
                       searchJobsUrl += '?';
 
 
-                  if(city)
-                      searchJobsUrl += "&city="+city;
-
+                  if(state)
+                      searchJobsUrl += "&state="+state;
+                  if(keyword)
+                      searchJobsUrl += "&keyword="+keyword;
 
                   if(category)
                       searchJobsUrl += "&industry="+category;

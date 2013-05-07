@@ -258,7 +258,7 @@ class InternshipRepository extends EntityRepository {
      * @param int $page
      * @return array of jobs
      */
-    public function getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray, $page, $jobsPerPage) {
+    public function getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray, $jobType, $page, $jobsPerPage) {
 //print_r($keywordsArray);exit;
         if ($page < 1) {
             return array();
@@ -308,6 +308,10 @@ class InternshipRepository extends EntityRepository {
         if ($lang != 'empty'){
              $query .= ' AND l = :lang';
              $para ['lang'] = $lang;
+        }
+        if ($jobType != 'empty'){
+             $query .= ' AND j.positionType = :jobtype';
+             $para ['jobtype'] = $jobType;
         }
 //print_r($query);exit;
         $query .= ' GROUP BY j.id  ORDER BY j.createdAt DESC';
