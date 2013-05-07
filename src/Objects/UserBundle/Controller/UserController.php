@@ -797,7 +797,7 @@ class UserController extends Controller {
                 $this->get('security.context')->setToken($token);
                 //redirect the user
                 if ($this->getRequest()->get('access_method') == "face") {
-                    return $this->redirect($this->generateUrl('fb_student_task',array(),TRUE));
+                    return $this->redirect($this->generateUrl('fb_student_task', array('loginName' => $user->getLoginName()), TRUE));
                 }
                 else
                 return $this->redirectUserAction();

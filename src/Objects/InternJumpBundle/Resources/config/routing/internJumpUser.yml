@@ -117,7 +117,7 @@ user_search_page:
     defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:StudentInternshipsSearch" }
 
 fb_user_search_page:
-    pattern:  /search
+    pattern:  /fb_search
     defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:fb_StudentInternshipsSearch" }
 
 user_search_ajax:

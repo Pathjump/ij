@@ -115,7 +115,7 @@ student_task:
     defaults: { _controller: "ObjectsInternJumpBundle:Task:studentAllTasks", itemsPerPage: ~, status: all, page: 1 }
 
 fb_student_task:
-    pattern:  /userPortal/{loginName}/{status}/{page}/{itemsPerPage}
+    pattern:  /fb_userPortal/{loginName}/{status}/{page}/{itemsPerPage}
     defaults: { _controller: "ObjectsInternJumpBundle:Task:fb_studentAllTasks", itemsPerPage: ~, status: all, page: 1 }
 
 employers_data:
