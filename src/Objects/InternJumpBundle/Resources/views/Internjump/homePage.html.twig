@@ -20,18 +20,31 @@
                     <h4>How much are they Worth? </h4>
                     <div class="Worth-content">
                         <ul class="thumb-a">
-                            {% for user in worthUsers %}
-                            <li>
-                                <img src="{{user.getTimThumbUrl(97,94)}}" />
-                                <div class="caption text-right">
-                                    <h5>{{user}} - $ {{user.currentWorth}}</h5>
-                                    {% if user.dateOfBirth %}
-                                    <p>Age: {{user.getAge()}} years old</p>
-                                    {% endif %}
-                                    <p>Source of wealth: Facebook</p>
-                                </div>
-                            </li>
-                            {% endfor %}
+                            {% if worthFrom == 'automatic' %}
+                                {% for user in worthUsers %}
+                                <li>
+                                    <img src="{{user.getTimThumbUrl(97,94)}}" />
+                                    <div class="caption text-right">
+                                        <h5>{{user}} - $ {{user.currentWorth}}</h5>
+                                        {% if user.dateOfBirth %}
+                                        <p>Age: {{user.getAge()}} years old</p>
+                                        {% endif %}
+                                        <p>Source of wealth: Facebook</p>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            {% else %}
+                                {% for user in worthUsers %}
+                                <li>
+                                    <img src="{{user.getTimThumbUrl(97,94)}}" />
+                                    <div class="caption text-right">
+                                        <h5>{{user}} - $ {{user.worth}}</h5>
+                                        <p>Age: {{user.age}} years old</p>
+                                        <p>Source of wealth: {{user.source}}</p>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            {% endif %}
                         </ul>
                     </div>
                 </div><!--Worth-conten--->
@@ -66,14 +79,11 @@
 
                 <div class="Home-Search-form">
                     <form>
-                        {% if allCompanies |length > 0 %}
                         <select  Class="Choosen" id="companyFilter">
-                            <option value="">company</option>
-                            {% for company in allCompanies %}
-                            <option value="{{company.id}}">{{company}}</option>
-                            {% endfor %}
+                            <option value="">job type</option>
+                            <option value="Internship">Internship</option>
+                            <option value="Entry Level">Entry Level</option>
                         </select>
-                        {% endif %}
 
                         {% if allCities |length > 0 %}
                         <select  Class="Choosen" id="cityFilter">
@@ -152,8 +162,14 @@
                                     <div class="thumbnail">
                                         <img src="{{userInternship.user.getTimThumbUrl(97,94)}}" />
                                         <div class="caption">
-                                            <div class="titl-blue">{{userInternship.user}}</div>
-                                            {{userInternship.user.address}}
+                                            <div class="titl-blue">
+                                                {% if userInternship.user.firstName %}
+                                                {{userInternship.user.firstName}} {{userInternship.user.lastName|slice(0, 1)}}.
+                                                {% else %}
+                                                {{userInternship.user.loginName}}
+                                                {% endif %}
+                                            </div>
+                                            {{userInternship.user.state}}
                                         </div><!--caption-->
                                     </div><!--thumbnail-->
                                 </li>
@@ -177,8 +193,13 @@
                         {% for internship in latestInternShips %}
                         <a href="{{path('internship_show',{'id' : internship.id})}}" class="pull-left"><img src="{{internship.company.getTimThumbUrl(130,97)}}" /></a>
                         <div class="media-body">
-                            <div class="titl-blue"> {{internship.title}}</div>
-                            {{internship.company}}
+                            <div class="titl-blue">
+                                <a href="{{path('internship_show',{'id' : internship.id})}}">
+                                {{internship.title}}
+                                </a>
+                                </div>
+                            {{internship.company}}<br/>
+                            {{internship.company.city}}{% if internship.company.state %}, {{internship.company.state}}{% endif %}
                         </div>
                         <div class="clearfix"></div>
                         {% endfor %}
@@ -213,7 +234,7 @@
               searchJobsUrl += '?';
 
           if(company)
-              searchJobsUrl += "&company="+company;
+              searchJobsUrl += "&jobType="+company;
 
           if(city)
               searchJobsUrl += "&city="+city;

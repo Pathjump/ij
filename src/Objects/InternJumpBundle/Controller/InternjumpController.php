@@ -184,14 +184,9 @@ class InternjumpController extends Controller {
     public function howMuchAreYouWorthAction() {
         //check if loggedin user
         if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
-            //get the session to set flag
-            $session = $this->getRequest()->getSession();
-            //clear the previous flashes
-            $session->clearFlashes();
-            //set the error flag
-            $session->setFlash('notice', 'you must login first To Know your worth .. !');
-            //redirect to home page
-            return $this->redirect($this->generateUrl('login'));
+            return $this->render('ObjectsInternJumpBundle:Internjump:howMuchAreYouWorth.html.twig', array(
+                        'facebook' => 'notlinked'
+            ));
         } else {
             $em = $this->getDoctrine()->getEntityManager();
             $ImproveResultsMessageArray = array();
@@ -345,24 +340,25 @@ class InternjumpController extends Controller {
 
                 $yearWorth = $userTotalWorth;
                 $fiveYearsWorthArray[date('Y')] = $yearWorth;
+                $worthIncrementRatio = 0.03;
                 if ($userMaxLevelEducation) {
                     //check if graduate or undergradute
                     if ($userMaxLevelEducation->getUnderGraduate() == 1) {
                         //get end date
                         $endDate = $userMaxLevelEducation->getEndDate();
                         for ($index = date('Y') + 1; $index <= $endDate; $index++) {
-                            $fiveYearsWorthArray["$index"] = $yearWorth;
+                            $fiveYearsWorthArray["$index"] = $yearWorth + $fiveYearsWorthArray[$index-1];
                         }
 
                         $reset = 5 - sizeof($fiveYearsWorthArray);
                         for ($index = date('Y') + 1; $index <= date('Y') + $reset; $index++) {
-                            $yearWorth = $yearWorth + (0.03 * $yearWorth);
-                            $fiveYearsWorthArray["$index"] = $yearWorth;
+                            $yearWorth = ceil($yearWorth + ($worthIncrementRatio * $yearWorth));
+                            $fiveYearsWorthArray["$index"] = $yearWorth + $fiveYearsWorthArray[$index-1];
                         }
                     } else {
                         for ($index = date('Y') + 1; $index < date('Y') + 5; $index++) {
-                            $yearWorth = $yearWorth + (0.03 * $yearWorth);
-                            $fiveYearsWorthArray["$index"] = $yearWorth;
+                            $yearWorth = ceil($yearWorth + ($worthIncrementRatio * $yearWorth));
+                            $fiveYearsWorthArray["$index"] = $yearWorth + $fiveYearsWorthArray[$index-1];
                         }
                     }
                 }
@@ -399,11 +395,28 @@ class InternjumpController extends Controller {
                     }
                 }
 
+                //caculate net worth
+                $userAge = 22;
+                if ($loggedInUser->getAge()) {
+                    $userAge = $loggedInUser->getAge();
+                }
+
+                $userYearNetWorth = null;
+                $userNetWorthSum = 0;
+                if ($userAge < 65) {
+                    $userYearNetWorth = $userTotalWorth;
+                    for ($index = $userAge + 1; $index <= 65; $index++) {
+                        $userYearNetWorth = $userYearNetWorth + ($worthIncrementRatio * $userYearNetWorth);
+                        $userNetWorthSum += $userYearNetWorth;
+                    }
+                }
+
                 return $this->render('ObjectsInternJumpBundle:Internjump:howMuchAreYouWorth.html.twig', array(
                             'userTotalWorth' => $userTotalWorth,
                             'fiveYearsWorthArray' => $fiveYearsWorthArray,
                             'userFriendsWorth' => $userFriendsWorth,
-                            'ImproveResultsMessageArray' => $ImproveResultsMessageArray
+                            'ImproveResultsMessageArray' => $ImproveResultsMessageArray,
+                            'userNetWorth' => ceil($userNetWorthSum)
                 ));
             } else {
                 return $this->render('ObjectsInternJumpBundle:Internjump:howMuchAreYouWorth.html.twig', array(
@@ -1075,7 +1088,13 @@ class InternjumpController extends Controller {
         $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
 
         //get worth users
-        $worthUsers = $userRepo->getWorthUsers(3);
+        $worthUsers = array();
+        $worthFrom = $this->container->getParameter('worth_select_from');
+        if ($worthFrom == 'automatic') {
+            $worthUsers = $userRepo->getWorthUsers(3);
+        } else {
+            $worthUsers = $userRepo->getManuallyWorthUsers(3);
+        }
         //get featured companies
         $featuredCompanies = $companyRepo->findBy(array('isHome' => 1));
         //get latest internships
@@ -1083,7 +1102,7 @@ class InternjumpController extends Controller {
         //get Recently Hired interns
         $latestHiredUsers = $internshipRepo->getLatestHiredUsers(4);
         //all companies
-        $allCompanies = $companyRepo->findAll();
+//        $allCompanies = $companyRepo->findAll();
         //all cities
         $allCities = $cityRepo->findBy(array('country' => 'US'));
         //all state
@@ -1096,19 +1115,19 @@ class InternjumpController extends Controller {
                     'featuredCompanies' => $featuredCompanies,
                     'latestInternShips' => $latestInternShips,
                     'latestHiredUsers' => $latestHiredUsers,
-                    'allCompanies' => $allCompanies,
+//                    'allCompanies' => $allCompanies,
                     'allCities' => $allCities,
                     'allState' => $allState,
-                    'allCategory' => $allCategory
+                    'allCategory' => $allCategory,
+                    'worthFrom' => $worthFrom
         ));
     }
-
 
     /**
      * @author Ola
      * Facebook Homepage/Landing action
      */
-     public function fb_homePageAction() {
+    public function fb_homePageAction() {
         //get the request object
         $request = $this->getRequest();
         //get the session object
@@ -1117,7 +1136,7 @@ class InternjumpController extends Controller {
         //variables for auth
         $redirectFlag = "";
         $Url = "";
-        $flag="";
+        $flag = "";
 
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -1151,32 +1170,32 @@ class InternjumpController extends Controller {
         $appSecrete = $this->container->getParameter('fb_app_secret');
 
 
-            //Yes, inside facebook
-            $facebook = new \Facebook(array(
-                'appId' => $appId,
-                'secret' => $appSecrete,
-            ));
-            // Get User ID
-            $user = $facebook->getUser();
+        //Yes, inside facebook
+        $facebook = new \Facebook(array(
+            'appId' => $appId,
+            'secret' => $appSecrete,
+        ));
+        // Get User ID
+        $user = $facebook->getUser();
 
-            //if($this->getRequest()->get('open')=="yes")
-            //{
-            if ($user) {
+        //if($this->getRequest()->get('open')=="yes")
+        //{
+        if ($user) {
 
-                if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE') || TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {//->getEmail() != $user->
-                    $this->executeLogoutAction();
-                    return $this->redirect($this->generateUrl('site_fb_homepage',array('open'=>'yes')));
-                };
+            if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE') || TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {//->getEmail() != $user->
+                $this->executeLogoutAction();
+                return $this->redirect($this->generateUrl('site_fb_homepage', array('open' => 'yes')));
+            };
 
 
-                try {
-                    // Proceed knowing you have a logged in user who's authenticated.
-                    $graph_url = 'https://graph.facebook.com/me?access_token=' . $facebook->getAccessToken();
-                    $faceUser = json_decode(file_get_contents($graph_url));
-                    $session->set('facebook_user', $faceUser);
-                    $session->set('facebook_short_live_access_token', $facebook->getAccessToken());
-                    $session->set('currentURL', 'http://apps.facebook.com/internjumpnew');
-                    return $this->redirect($this->generateUrl('facebook_logging', array('access_method' => 'face'), True));
+            try {
+                // Proceed knowing you have a logged in user who's authenticated.
+                $graph_url = 'https://graph.facebook.com/me?access_token=' . $facebook->getAccessToken();
+                $faceUser = json_decode(file_get_contents($graph_url));
+                $session->set('facebook_user', $faceUser);
+                $session->set('facebook_short_live_access_token', $facebook->getAccessToken());
+                $session->set('currentURL', 'http://apps.facebook.com/internjumpnew');
+                return $this->redirect($this->generateUrl('facebook_logging', array('access_method' => 'face'), True));
 
 
 //                    /****************************/
@@ -1184,26 +1203,26 @@ class InternjumpController extends Controller {
 //                    /****************************/
 //                    $user1 = $em->getRepository('ObjectsUserBundle:User')->findOneBy(array('email' => $user_profile['email']));
 //
-                } catch (FacebookApiException $e) {
-                    error_log($e);
-                    $user = null;
-                }
-            } else {
-                //not logged in FB user, then GO to fb login;
-                $params = array(
-                    //'scope' => 'read_stream, friends_likes',
-                    'redirect_uri' => 'http://apps.facebook.com/internjumpnew' // 'http://internjump.com/app_dev.php/'
-                );
-
-                $loginUrl = $facebook->getLoginUrl($params);
-                return $this->redirect($loginUrl);
+            } catch (FacebookApiException $e) {
+                error_log($e);
+                $user = null;
             }
-           // }
+        } else {
+            //not logged in FB user, then GO to fb login;
+            $params = array(
+                //'scope' => 'read_stream, friends_likes',
+                'redirect_uri' => 'http://apps.facebook.com/internjumpnew' // 'http://internjump.com/app_dev.php/'
+            );
+
+            $loginUrl = $facebook->getLoginUrl($params);
+            return $this->redirect($loginUrl);
+        }
+        // }
 
 
 
         return $this->render('ObjectsInternJumpBundle:Internjump:fb_homePage.html.twig', array(
-                   'flag' => $flag,
+                    'flag' => $flag,
                     'reFlag' => $redirectFlag,
                     'url' => $Url,
                     'homeCompanies' => $homeCompanies,
@@ -1218,7 +1237,6 @@ class InternjumpController extends Controller {
                     'allCategory' => $allCategory
         ));
     }
-
 
     /**
      * @author Ola

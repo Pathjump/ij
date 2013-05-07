@@ -14,14 +14,15 @@ find your worth
 <div class="container Main-content">
 
     <div class="step2 pagination-centered text-center">
-        <strong class="text-success">You are one step closer to securing that Killer Internship</strong>. As part of InternJump's privacy policy your Facebook data will never be shared with employers,our
-        Facebook application is simply for our user's convenience. Please fill in your general contact details before you create your InternJump Resume.
+        Our sophiscated algorthium uses Facebook data to evaluate your worth. Please login with facebook by using the following
+        Facebook login button. <br/>
+        <strong class="text-success">What you waiting for? You are just one click away from finding out your worth.</strong>
         <div class="Facebook-login span8">
 
             <strong>Please!</strong> Connect by <strong>Facebook</strong><br>
             to Know your worth<br><br>
 
-            {% render "ObjectsAPIBundle:Facebook:facebookButton" with {'facebookUserHandleRoute' : 'facebook_link','permissions': 'email,publish_stream','cssClass' : 'face' , 'linkText' : 'Connect with your Facebook account' | trans} %}
+            {% render "ObjectsAPIBundle:Facebook:facebookButton" with {'facebookUserHandleRoute' : 'facebook_link','permissions': 'email,publish_stream','cssClass' : 'facebookButton' , 'linkText' : '' | trans} %}
         </div><!--facebook-login--->
 
 
@@ -43,6 +44,10 @@ find your worth
             <div class=" text-center span5">
                 <p>You're worth</p>
                 <span class="Worth-value">  ${{userTotalWorth}} USD</span>
+                {% if userNetWorth %}
+                <p>You're net worth</p>
+                <span class="Worth-value">  ${{userNetWorth}} USD</span>
+                {% endif %}
                 <a class="btn btn-primary large" href="{{path('howMuchAreYouWorth')}}">Recalculate</a>
             </div>
             <img width="197" height="354" class=" span2 pull-right" src="{{asset('img/drowpng.png')}}">

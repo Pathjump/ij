@@ -1429,7 +1429,7 @@ form select{
     font-size: 18px;
     font-weight: normal;
 }
-.facebook-login{
+/*.facebook-login{
     width:245px;
     background: url(../img/face-login.png) no-repeat;
     height:51px;
@@ -1439,7 +1439,7 @@ form select{
 
 .facebook-login:hover{
     opacity:0.7
-}
+}*/
 
 
 .Worth .step3 p{
@@ -2634,4 +2634,12 @@ only screen and (min-resolution: 144dpi) {
     h3 {
         page-break-after: avoid;
     }
+}
+
+
+.Facebook-login .facebookButton {
+    background-image: url("../img/face-login.png");
+    display: inline-block;
+    width: 245px;
+    height: 51px;
 }

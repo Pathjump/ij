@@ -9,7 +9,7 @@ $(document).ready(function() {
             searchJobsUrl += '?';
 
         if (company)
-            searchJobsUrl += "&company=" + company;
+            searchJobsUrl += "&jobType=" + company;
 
         if (city)
             searchJobsUrl += "&city=" + city;

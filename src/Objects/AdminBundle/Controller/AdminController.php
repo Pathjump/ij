@@ -113,7 +113,7 @@ class AdminController extends Controller {
             $config['company_message_not_found_error_msg'] = $container->getParameter('company_message_not_found_error_msg');
             $config['internship_not_found_error_msg'] = $container->getParameter('internship_not_found_error_msg');
 
-      
+
             $config['worth_default_statrting_salary'] = $container->getParameter('worth_default_statrting_salary');
             $config['worth_experience_boost_value'] = $container->getParameter('worth_experience_boost_value');
             $config['worth_no_education'] = $container->getParameter('worth_no_education');
@@ -124,7 +124,8 @@ class AdminController extends Controller {
             $config['worth_no_skills'] = $container->getParameter('worth_no_skills');
             $config['worth_year_boost'] = $container->getParameter('worth_year_boost');
             $config['worth_facebook_message'] = $container->getParameter('worth_facebook_message');
-            
+            $config['worth_select_from'] = $container->getParameter('worth_select_from');
+
             //make form to fill it with data
             $form = $this->createFormBuilder($config)
                     ->add('contact_us_email', 'email')
@@ -197,7 +198,7 @@ class AdminController extends Controller {
                     ->add('user_message_not_found_error_msg', 'textarea')
                     ->add('company_message_not_found_error_msg', 'textarea')
                     ->add('internship_not_found_error_msg', 'textarea')
-                    
+
                     ->add('worth_default_statrting_salary', 'integer')
                     ->add('worth_experience_boost_value', 'integer')
                     ->add('worth_no_education', 'text')
@@ -208,8 +209,10 @@ class AdminController extends Controller {
                     ->add('worth_no_skills', 'text')
                     ->add('worth_year_boost', 'integer')
                     ->add('worth_facebook_message', 'text')
-                      
-                    
+                    ->add('worth_select_from', 'choice',array(
+                        'choices' => array('automatic' => 'Automatic','manually' => 'Manually')
+                    ))
+
                     ->getForm();
 
             $request = $this->getRequest();
@@ -257,8 +260,12 @@ class AdminController extends Controller {
                     if ($formDataArray['worth_facebook_message'] != $container->getParameter('worth_facebook_message')) {
                         $firstFileChange = TRUE;
                     }
-                    
-                    
+                    if ($formDataArray['worth_select_from'] != $container->getParameter('worth_select_from')) {
+                        $firstFileChange = TRUE;
+                    }
+
+
+
                     if ($formDataArray['contact_us_email'] != $container->getParameter('contact_us_email')) {
                         $firstFileChange = TRUE;
                     }
@@ -438,9 +445,9 @@ class AdminController extends Controller {
                     if ($formDataArray['contact_info_address_part2'] != $container->getParameter('contact_info_address_part2')) {
                         $firstFileChange = TRUE;
                     }
-                       
 
-                    
+
+
                     if ($formDataArray['user_not_found_error_msg'] != $container->getParameter('user_not_found_error_msg')) {
                         $firstFileChange = TRUE;
                     }
@@ -483,7 +490,7 @@ class AdminController extends Controller {
                     if ($formDataArray['internship_not_found_error_msg'] != $container->getParameter('internship_not_found_error_msg')) {
                         $firstFileChange = TRUE;
                     }
-                    
+
 
                     //check if we need to open the first file to change it is config
                     if ($firstFileChange) {
@@ -519,8 +526,9 @@ class AdminController extends Controller {
                             $value['parameters']['worth_no_skills'] = $formDataArray['worth_no_skills'];
                             $value['parameters']['worth_year_boost'] = $formDataArray['worth_year_boost'];
                             $value['parameters']['worth_facebook_message'] = $formDataArray['worth_facebook_message'];
-                            
-                            
+                            $value['parameters']['worth_select_from'] = $formDataArray['worth_select_from'];
+
+
                             $value['parameters']['contact_us_email'] = $formDataArray['contact_us_email'];
                             $value['parameters']['site_meta_title'] = $formDataArray['site_meta_title'];
                             $value['parameters']['site_meta_keywords'] = $formDataArray['site_meta_keywords'];
@@ -596,7 +604,7 @@ class AdminController extends Controller {
                             $value['parameters']['company_message_not_found_error_msg'] = $formDataArray['company_message_not_found_error_msg'];
                             $value['parameters']['internship_not_found_error_msg'] = $formDataArray['internship_not_found_error_msg'];
 
-                            
+
                             //dump to make spaces and format of the file before update it
                             $dumper = new \Symfony\Component\Yaml\Dumper();
                             $yaml = $dumper->dump($value, 3);
@@ -767,7 +775,7 @@ class AdminController extends Controller {
     }
 
     /**
-     * This Action to edit shcools static page 
+     * This Action to edit shcools static page
      * @author Ola
      */
     public function schoolsAction() {
@@ -1009,7 +1017,7 @@ class AdminController extends Controller {
                     'status' => $status
                 ));
     }
-    
+
     /**
      * Action to edit about us page content (CampusReps.txt)
      * @return response

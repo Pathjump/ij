@@ -51,7 +51,7 @@ services:
 #        class: Objects\AdminBundle\Admin\CVAdmin
 #        tags:
 #          - { name: sonata.admin, manager_type: orm, label: CV }
-#        arguments: [null, Objects\InternJumpBundle\Entity\CV, ObjectsAdminBundle:CVAdmin] 
+#        arguments: [null, Objects\InternJumpBundle\Entity\CV, ObjectsAdminBundle:CVAdmin]
 
   education_admin:
         class: Objects\AdminBundle\Admin\EducationAdmin
@@ -70,58 +70,64 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, label: InternJump Personality Quiz Answer }
         arguments: [null, Objects\InternJumpBundle\Entity\QuizAnswer, ObjectsAdminBundle:QuizAnswerAdmin]
-        
+
   quiz_result_admin:
         class: Objects\AdminBundle\Admin\QuizResultAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, label: InternJump Personality Quiz Result }
-        arguments: [null, Objects\InternJumpBundle\Entity\QuizResult, ObjectsAdminBundle:QuizResultAdmin]        
+        arguments: [null, Objects\InternJumpBundle\Entity\QuizResult, ObjectsAdminBundle:QuizResultAdmin]
 
   founder_admin:
         class: Objects\AdminBundle\Admin\FounderAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, label: Founder }
-        arguments: [null, Objects\InternJumpBundle\Entity\Founder, ObjectsAdminBundle:FounderAdmin]        
-    
+        arguments: [null, Objects\InternJumpBundle\Entity\Founder, ObjectsAdminBundle:FounderAdmin]
+
   FAQ_admin:
         class: Objects\AdminBundle\Admin\AskedQuestionAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, label: FAQ }
-        arguments: [null, Objects\InternJumpBundle\Entity\AskedQuestion, ObjectsAdminBundle:AskedQuestionAdmin] 
-        
+        arguments: [null, Objects\InternJumpBundle\Entity\AskedQuestion, ObjectsAdminBundle:AskedQuestionAdmin]
+
   post_admin:
         class: Objects\AdminBundle\Admin\PostAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, label: Resource }
-        arguments: [null, Objects\InternJumpBundle\Entity\Post, ObjectsAdminBundle:PostAdmin] 
+        arguments: [null, Objects\InternJumpBundle\Entity\Post, ObjectsAdminBundle:PostAdmin]
 
   post_category_admin:
         class: Objects\AdminBundle\Admin\postCategoryAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, label: Resource Categories }
-        arguments: [null, Objects\InternJumpBundle\Entity\postCategory, ObjectsAdminBundle:postCategoryAdmin] 
-        
+        arguments: [null, Objects\InternJumpBundle\Entity\postCategory, ObjectsAdminBundle:postCategoryAdmin]
+
   personal_question_admin:
         class: Objects\AdminBundle\Admin\PersonalQuestionAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, label: Personal Questions }
-        arguments: [null, Objects\InternJumpBundle\Entity\PersonalQuestion, ObjectsAdminBundle:PersonalQuestionAdmin]         
-        
+        arguments: [null, Objects\InternJumpBundle\Entity\PersonalQuestion, ObjectsAdminBundle:PersonalQuestionAdmin]
+
   languages_admin:
         class: Objects\AdminBundle\Admin\languagesAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, label: Languages }
-        arguments: [null, Objects\InternJumpBundle\Entity\Language, ObjectsAdminBundle:languagesAdmin] 
-        
+        arguments: [null, Objects\InternJumpBundle\Entity\Language, ObjectsAdminBundle:languagesAdmin]
+
   Internship_language_admin:
         class: Objects\AdminBundle\Admin\internshipLanguageAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, label: InternshipLanguage }
         arguments: [null, Objects\InternJumpBundle\Entity\InternshipLanguage, ObjectsAdminBundle:internshipLanguage]
-        
-        
+
+
   keywords_admin:
         class: Objects\AdminBundle\Admin\keywordsAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, label: Keywords }
-        arguments: [null, Objects\InternJumpBundle\Entity\Keywords, ObjectsAdminBundle:keywords]        
+        arguments: [null, Objects\InternJumpBundle\Entity\Keywords, ObjectsAdminBundle:keywords]
+
+  worth_admin:
+        class: Objects\AdminBundle\Admin\WorthPeopleAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: WorthPeople }
+        arguments: [null, Objects\InternJumpBundle\Entity\worthPeople, ObjectsAdminBundle:WorthPeopleAdmin]

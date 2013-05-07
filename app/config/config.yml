@@ -113,6 +113,7 @@ sonata_admin:
                     - post_admin
                     - post_category_admin
                     - languages_admin
+                    - worth_admin
 
 sonata_block:
     default_contexts: [cms]

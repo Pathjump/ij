@@ -29,6 +29,13 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
         ")->setMaxResults($maxResults);
         return $query->getResult();
     }
+    public function getManuallyWorthUsers($maxResults){
+        $query = $this->getEntityManager()->createQuery("
+            select u From ObjectsInternJumpBundle:worthPeople u
+            order by u.worth desc
+        ")->setMaxResults($maxResults);
+        return $query->getResult();
+    }
 
     /**
      * implementation of loadUserByUsername for UserProviderInterface
