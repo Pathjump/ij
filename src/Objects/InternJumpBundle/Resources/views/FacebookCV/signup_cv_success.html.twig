@@ -6,27 +6,6 @@
 
 {% block body %}
 
-        {% if app.session.hasFlash('notice') %}
-        <div class="alert">
-            <button data-dismiss="alert" class="close" type="button"> &times; </button>
-            {{ app.session.flash('notice') | raw }}
-        </div>
-        {% endif %}
-
-        {% if app.session.hasFlash('success') %}
-        <div class="alert alert-success">
-            <button data-dismiss="alert" class="close" type="button"> &times; </button>
-            {{ app.session.flash('success') | raw }}
-        </div>
-        {% endif %}
-
-        {% if app.session.hasFlash('error') %}
-        <div class="alert alert-error">
-            <button data-dismiss="alert" class="close" type="button"> &times; </button>
-            {{ app.session.flash('error') | raw }}
-        </div>
-        {% endif %}
-
         <div class="container Main-content">
             <div class="Student CVSuccess">
                 <div class="row-fluid show-grid">
