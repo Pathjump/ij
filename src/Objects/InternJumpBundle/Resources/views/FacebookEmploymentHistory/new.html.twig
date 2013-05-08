@@ -159,6 +159,43 @@
                 </div><!--Sign-Up-->
 
             </div><!--Sign-Up-->
+
+            {% if app.user.employmentHistories | length > 0 %}
+            <div class="company-form">
+                <h2>Your Employment History</h2>
+                <div class="Notifications">
+
+                    <table width="100%" border="0" class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Job Title</th>
+                                <th scope="row">Current Position</th>
+                                <th scope="row">Started Position</th>
+                                <th scope="row">Position Ended</th>
+                                <th scope="row">Company Name</th>
+                                <th scope="row">Company Website</th>
+                                <th scope="row">Industry</th>
+                                <th scope="row">More Details</th>
+                                <th scope="row">Action</th>
+                            </tr>
+                            {% for employmentHistory in app.user.employmentHistories %}
+                            <tr>
+                                <td>{{ employmentHistory.title }}</td>
+                                <td>{{ employmentHistory.getJobStatus() }}</td>
+                                <td>{{ employmentHistory.startedFrom | date('Y-m-d') }}</td>
+                                <td>{{ employmentHistory.endedIn | date('Y-m-d') }}</td>
+                                <td>{{ employmentHistory.companyName }}</td>
+                                <td>{{ employmentHistory.companyUrl }}</td>
+                                <td>{{ employmentHistory.industry }}</td>
+                                <td>{{ employmentHistory.description }}</td>
+                                <td><a href="{{ path('employmenthistory_edit',{'id' : employmentHistory.id }) }}"><i class="icon-pencil"></i></a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div><!--Notifications--->
+            </div>
+            {% endif %}
         </div><!--container-->
 {% endblock %}
 

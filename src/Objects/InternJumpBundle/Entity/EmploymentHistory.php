@@ -348,4 +348,15 @@ class EmploymentHistory {
         return $this->industry;
     }
 
+    /**
+     * @author Mahmoud
+     * @return string
+     */
+    public function getJobStatus() {
+        if ($this->isCurrent) {
+            return 'Yes';
+        }
+        return 'No';
+    }
+
 }
