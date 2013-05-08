@@ -115,6 +115,7 @@ class EmploymentHistoryController extends Controller {
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($entity);
             $em->flush();
+            $request->getSession()->setFlash('success', 'Created Successfuly');
             return $this->redirect($this->generateUrl('employmenthistory_edit', array('id' => $entity->getId())));
         }
         return $this->render('ObjectsInternJumpBundle:EmploymentHistory:new.html.twig', array(
@@ -187,6 +188,7 @@ class EmploymentHistoryController extends Controller {
                 $cv->setTotalPoints();
             }
             $em->flush();
+            $request->getSession()->setFlash('success', 'Edited Successfuly');
             return $this->redirect($this->generateUrl('employmenthistory_edit', array('id' => $id)));
         }
         return $this->render('ObjectsInternJumpBundle:EmploymentHistory:edit.html.twig', array(
@@ -233,6 +235,7 @@ class EmploymentHistoryController extends Controller {
                 $cv->setTotalPoints();
             }
             $em->flush();
+            $request->getSession()->setFlash('success', 'Deleted Successfuly');
         }
         return $this->redirect($this->generateUrl('student_task', array('loginName' => $this->get('security.context')->getToken()->getUser()->getLoginName())));
     }

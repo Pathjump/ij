@@ -371,6 +371,7 @@ class FacebookCVController extends Controller {
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
+            $request->getSession()->setFlash('success', 'Edited Successfuly');
             return $this->redirect($this->generateUrl('fb_cv_edit', array('id' => $id)));
         }
         return $this->render('ObjectsInternJumpBundle:FacebookCV:edit.html.twig', array(
@@ -403,6 +404,7 @@ class FacebookCVController extends Controller {
             $this->checkUserOwnObject($entity);
             $em->remove($entity);
             $em->flush();
+            $request->getSession()->setFlash('success', 'Deleted Successfuly');
         }
         return $this->redirect($this->generateUrl('fb_student_task', array('loginName' => $this->get('security.context')->getToken()->getUser()->getLoginName())));
     }

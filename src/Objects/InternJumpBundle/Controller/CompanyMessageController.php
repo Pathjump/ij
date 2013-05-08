@@ -271,6 +271,7 @@ class CompanyMessageController extends Controller {
         if ($request->isXmlHttpRequest()) {
             return new Response('Done');
         }
+        $request->getSession()->setFlash('success', 'Deleted Successfuly');
         return $this->redirect($this->generateUrl('company_messages', array('box' => 'inbox')));
     }
 

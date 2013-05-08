@@ -136,6 +136,7 @@ class FacebookEducationController extends Controller {
             }
             $em->persist($entity);
             $em->flush();
+            $request->getSession()->setFlash('success', 'Created Successfuly');
             return $this->redirect($this->generateUrl('fb_education_edit', array('id' => $entity->getId())));
         }
         return $this->render('ObjectsInternJumpBundle:FacebookEducation:new.html.twig', array(
@@ -214,6 +215,7 @@ class FacebookEducationController extends Controller {
                 $cv->setTotalPoints();
             }
             $em->flush();
+            $request->getSession()->setFlash('success', 'Edited Successfuly');
             return $this->redirect($this->generateUrl('fb_education_edit', array('id' => $id)));
         }
         return $this->render('ObjectsInternJumpBundle:FacebookEducation:edit.html.twig', array(
@@ -267,6 +269,7 @@ class FacebookEducationController extends Controller {
                 $cv->setTotalPoints();
             }
             $em->flush();
+            $request->getSession()->setFlash('success', 'Deleted Successfuly');
         }
         return $this->redirect($this->generateUrl('fb_student_task', array('loginName' => $this->get('security.context')->getToken()->getUser()->getLoginName())));
     }
