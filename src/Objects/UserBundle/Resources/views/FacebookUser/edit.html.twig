@@ -308,13 +308,13 @@
 <br/><br/>
 
 {% if socialAccounts and socialAccounts.isLinkedInLinked() %}
-<a href="{{ path('fb_social_unlink', {'social': 'linkedin'}) }}" title="{% trans %}unlink linkedin{% endtrans %}">{% trans %}Disconnect from your Linkedin account{% endtrans %}</a><br/><br/>
+<a class="linkedin disconnect" href="{{ path('fb_social_unlink', {'social': 'linkedin'}) }}" title="{% trans %}unlink linkedin{% endtrans %}">{% trans %}Disconnect from your Linkedin account{% endtrans %}</a><br/><br/>
 {% else %}
 <a class="linkedin" onclick="newWindow = window.open('{{ path('linkedInButton', {'callbackUrl': 'fb_linkedin_link','popup' : 'yes'}) }}', '{% trans %}LinkedIn Link{% endtrans %}', 'height=400, width=600');if(window.focus)newWindow.focus();return false;" target="_blank" title="{% trans %}LinkedIn Link{% endtrans %}" href="{{ path('linkedInButton', {'callbackUrl': 'fb_linkedin_link'}) }}">{% trans %}Connect with your LinkedIN Account{% endtrans %}</a><br/><br/>
 {% endif %}
 
 {% if socialAccounts and socialAccounts.isTwitterLinked() %}
-<a href="{{ path('fb_social_unlink', {'social': 'twitter'}) }}" title="{% trans %}unlink twitter{% endtrans %}">{% trans %}Disconnect from your Twitter account{% endtrans %}</a>
+<a class="twitter disconnect" href="{{ path('fb_social_unlink', {'social': 'twitter'}) }}" title="{% trans %}unlink twitter{% endtrans %}">{% trans %}Disconnect from your Twitter account{% endtrans %}</a>
 {% else %}
 <a class="twitter" onclick="javascript:startTwitterLink();return false;" target="_blank" title="{% trans %}Twitter Link{% endtrans %}" href="{{ path('twitter_authentication', {'redirectRoute': 'fb_twitter_link'}) }}">{% trans %}Connect with your Twitter Account{% endtrans %}</a>
 {% endif %}
