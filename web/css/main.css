@@ -1268,6 +1268,10 @@ form select{
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) inset;
     padding:20px;
 }
+.Search-student .tab-content{
+    overflow: inherit !important;
+}
+
 .tasks-table {
     text-align:left;
 }
