@@ -371,6 +371,7 @@ class CVController extends Controller {
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
+            $request->getSession()->setFlash('success', 'Edited Successfuly');
             return $this->redirect($this->generateUrl('cv_edit', array('id' => $id)));
         }
         return $this->render('ObjectsInternJumpBundle:CV:edit.html.twig', array(
