@@ -126,6 +126,12 @@ class TaskController extends Controller {
         $allCities = $cityRepo->findBy(array('country' => 'US'));
         //all category
         $allCategory = $categoryRepo->findAll();
+        //Get users State for the hidden Feild
+        $uState = $user->getState();
+
+
+        //Get the user's worth result
+        $worth = $user->getCurrentWorth();
 
         return $this->render('ObjectsInternJumpBundle:Task:studentTasks.html.twig', array(
                     'entities' => $tasks,
@@ -146,7 +152,9 @@ class TaskController extends Controller {
                     'latestNotifications' => $latestNotifications,
                     'latestMessages' => $latestMessages,
                     'allCities' => $allCities,
-                    'allCategory' => $allCategory
+                    'allCategory' => $allCategory,
+                    'state' => $uState,
+                    'worth' => $worth,
                 ));
     }
 

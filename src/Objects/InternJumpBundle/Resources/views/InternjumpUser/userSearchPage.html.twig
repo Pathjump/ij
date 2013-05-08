@@ -1,9 +1,9 @@
 {% extends '::base.html.twig' %}
 {% block title %}
-Internship Search
+Job Search
 {% endblock %}
 
-{% block pageTitle %}Student Search Page{% endblock %}
+{% block pageTitle %}Job Search{% endblock %}
 
 {% block stylesheets %}
 {{parent()}}
@@ -52,6 +52,11 @@ Internship Search
                                 <label>Language</label>
                                 {{form_widget(form.language, { 'attr': {'class': 'chzn-select', 'id' : 'language_search'} })}}
                             </div>
+
+                            <div class="span4 ">
+                                <label>Job Type</label>
+                                {{form_widget(form.jobtype, { 'attr': {'class': 'chzn-select', 'id' : 'jobtype_search'} })}}
+                            </div>
                    	 	</div>
 
                     </fieldset>
@@ -61,7 +66,7 @@ Internship Search
             <div class="Search-Internships Search-box text-center">
             <form id="search_form" action="" method="POST" class="form-search">
                 <div class="input-append">
-                    <input id="search_text" name="" type="text" placeholder="Keywords" class="span6 search-query">
+                    <input id="search_text" name="" type="text" {% if keyword != "empty"%} value="{{keyword}}" {%else%}placeholder="Keywords"{% endif %} class="span6 search-query">
                     <input id="search_button" name="" type="button" value="Search" class="btn btn-info">
                 </div>
             </form>
@@ -156,22 +161,22 @@ No Results found
     <ul class="pging">
                                 {% if lastPageNumber > 1 %}
                     {% if page > 1 %}
-                       <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company}) }}">&laquo;&laquo;</a></li>
-                                                <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'page': page - 1}) }}">&laquo;</a></li>
+                       <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company, 'jobt' : jobtype,}) }}">&laquo;&laquo;</a></li>
+                                                <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company, 'jobt' : jobtype,'page': page - 1}) }}">&laquo;</a></li>
                     {% endif %}
 
 
 
         {% for numberOfPage in 1..lastPageNumber %}
         {% if numberOfPage > page - 3 and numberOfPage < page + 3 %}
-                                {% if page == numberOfPage %}<li class="active"><a href="javascript:void(0)">{{ numberOfPage }}</a></li>{% else %}<li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'page': numberOfPage}) }}" >{{ numberOfPage }}</a></li>{%endif%}
+                                {% if page == numberOfPage %}<li class="active"><a href="javascript:void(0)">{{ numberOfPage }}</a></li>{% else %}<li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company, 'jobt' : jobtype,'page': numberOfPage}) }}" >{{ numberOfPage }}</a></li>{%endif%}
         {% endif %}
         {% endfor %}
 
 
                     {% if page < lastPageNumber %}
-                                                <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'page': page + 1}) }}" >&raquo;</a></li>
-                                                <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company,'page': lastPageNumber}) }}" >&raquo;&raquo;</a></li>
+                                                <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company, 'jobt' : jobtype, 'page': page + 1}) }}" >&raquo;</a></li>
+                                                <li><a class="pagenum" href="{{url('user_search_ajax', {'title' : title,'country' : country,'city' : city,'state' : state,'category' : category,'company' :  company, 'jobt' : jobtype,'page': lastPageNumber}) }}" >&raquo;&raquo;</a></li>
 {% endif %}
                 {% endif %}
                                             </ul>
@@ -185,7 +190,7 @@ No Results found
 
 </div><!--Search-student-->
 
-
+</div>
 
 
 {% endblock %}
@@ -201,11 +206,12 @@ No Results found
     $(document).ready(function(){
         $('#logedInStudent,#jobSearch').addClass('crnt');
         $('#studentNav').show();
+        $('#search_button').click();
     });
 
 
     var countryCitiesStatesUrl = '{{url('get_countey_cities_states',{'countryId' : ''})}}';
-    var searchJobsUrl= '{{url('user_search_ajax', {'title' : '','country' : '','city' : '','state' : '','category' : '','company' :  '','lang' :  '','page' :  1})}}';
+    var searchJobsUrl= '{{url('user_search_ajax', {'title' : '','country' : '','city' : '','state' : '','category' : '','company' :  '','lang' :  '', 'jobt': '' , 'page' :  1})}}';
     var autoCompleteUrl='{{url('auto_complete_url')}}';
     var cityAutoCompleteUrl= '{{url('city_auto_complete_url')}}';
     var text="empty";
@@ -215,7 +221,7 @@ No Results found
     var category="empty";
     var company="empty";
     var language="empty";
-
+    var jobType="empty";
     </script>
 
     <script>
@@ -224,7 +230,7 @@ No Results found
     });
 
     $('#search_button').click(function(){
-    var searchJobsUrl= '{{url('user_search_ajax', {'title' : '','country' : '','city' : '','state' : '','category' : '','company' :  '','lang' :  '','page' :  1})}}';
+    var searchJobsUrl= '{{url('user_search_ajax', {'title' : '','country' : '','city' : '','state' : '','category' : '','company' :  '','lang' :  '', 'jobt' : '' ,'page' :  1})}}';
     $('.loading').show();
 
     if($('#search_text').val()!= ""){ var text=$('#search_text').val();}
@@ -248,13 +254,15 @@ No Results found
     if($('#form_language').val()!= ""){ var language=$('#form_language').val();}
     else{ var language="empty";}
 
+    if($('#form_jobtype').val()!= ""){ var jobType=$('#form_jobtype').val();}
+    else{ var jobType="empty";}
 
-    if(text || country || city || state || category || company || language){
+    if(text || country || city || state || category || company || language || jobType){
     $('#search_error').hide();
                         {% if app.request.get('access_method') == 'facebook' %}
                             searchJobsUrl=searchJobsUrl+"/"+text+"/"+country+"/"+city+"/"+state+"/"+category+"/"+company+"/"+language+"?access_method=facebook";
                         {% else %}
-                            searchJobsUrl=searchJobsUrl+"/"+text+"/"+country+"/"+city+"/"+state+"/"+category+"/"+company+"/"+language;
+                            searchJobsUrl=searchJobsUrl+"/"+text+"/"+country+"/"+city+"/"+state+"/"+category+"/"+company+"/"+language+"/"+jobType;
                     {%endif%}
 
     $.ajax({
@@ -317,7 +325,7 @@ No Results found
                     {% if app.request.get('access_method') == 'facebook' %}
                         searchJobsUrl=searchJobsUrl+"/empty/empty/empty/empty/"+result+"/empty"+"/empty"+"?access_method=facebook";
                     {% else %}
-                        searchJobsUrl=searchJobsUrl+"/empty/empty/empty/empty/"+result+"/empty"+"/empty";
+                        searchJobsUrl=searchJobsUrl+"/empty/empty/empty/empty/"+result+"/empty"+"/empty"+"/empty";
                     {%endif%}
                     $.ajax({
                     url: searchJobsUrl,
