@@ -23,7 +23,13 @@
                 <p></p>
             </div>
             <div class="span4">
-                <div class="Area"><a href="javascript:void(0)" class="edit-btn addEditAnswerLink" id="{{question.id}}"><i class="icon-file"></i>Edit Answer</a></div>
+                <div class="Area"><a href="javascript:void(0)" class="edit-btn addEditAnswerLink" id="{{question.id}}"><i class="icon-file"></i>
+                        {% if question.userAnswer %}
+                        Edit Your Answer
+                        {% else %}
+                        Answer this question
+                        {% endif %}
+                    </a></div>
             </div>
                 <div class="editQuestionAnswer">
                     <form action="" method="get" id="addEditQuestionAnswerDiv-{{question.id}}" style="display: none;">

@@ -870,8 +870,8 @@ form select{
 .company-form .btn-primary,.Student .btn-primary{
     margin-left:20px;
 }
-/*
-.chzn-choices li {
+
+.Add-Job-description .chzn-choices li {
     background: none repeat scroll 0 0 #D9EDF7;
     border: 1px solid #BCE8F1;
     border-radius: 5px 5px 5px 5px;
@@ -882,7 +882,7 @@ form select{
     position: relative;
 }
 
-.chzn-choices li a {
+.Add-Job-description .chzn-choices li a {
     border-radius: 3px 3px 3px 3px;
     color: #666666;
     display: block;
@@ -895,10 +895,10 @@ form select{
     right: 4px;
     top: 7px;
 }
-.chzn-choices li a:hover{
+.Add-Job-description .chzn-choices li a:hover{
         background:#fff;
         text-decoration:none;
-}*/
+}
 .Add-links {
     margin-top:25px;
     text-align:right
@@ -2640,6 +2640,6 @@ only screen and (min-resolution: 144dpi) {
 .Facebook-login .facebookButton {
     background-image: url("../img/face-login.png");
     display: inline-block;
-    width: 245px;
+    width: 215px;
     height: 51px;
 }

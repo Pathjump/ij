@@ -388,11 +388,15 @@ class InternjumpUserController extends Controller {
             }
         }
 
+        //get user langauges
+        $userLangauges = $user->getLanguages();
+
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:newLanguage.html.twig', array(
                     'newUserLanguage' => $newUserLanguage,
                     'form' => $form->createView(),
                     'formName' => $this->container->getParameter('studentAddLanguage_FormName'),
                     'formDesc' => $this->container->getParameter('studentAddLanguage_FormDesc'),
+                    'userLangauges' => $userLangauges
         ));
     }
 
@@ -506,11 +510,15 @@ class InternjumpUserController extends Controller {
             }
         }
 
+        //get user langauges
+        $userLangauges = $user->getLanguages();
+
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:fb_newLanguage.html.twig', array(
                     'newUserLanguage' => $newUserLanguage,
                     'form' => $form->createView(),
                     'formName' => $this->container->getParameter('studentAddLanguage_FormName'),
                     'formDesc' => $this->container->getParameter('studentAddLanguage_FormDesc'),
+                    'userLangauges' => $userLangauges
         ));
     }
 
@@ -2373,8 +2381,7 @@ class InternjumpUserController extends Controller {
         ));
     }
 
-
-     /**
+    /**
      * This function for displaying user search page and fill drop down lists with data
      * @author  Ola
      */
@@ -2547,7 +2554,6 @@ class InternjumpUserController extends Controller {
         ));
     }
 
-
     /**
      * This function for search ajax action
      * @author Ola
@@ -2591,21 +2597,21 @@ class InternjumpUserController extends Controller {
         }
 
 
-         /*****************[ End API Search Results ]***********************/
-        /**************************************************/
-         $apiJobsArr =array();
-         if(sizeof($userSearchResults) < 5 ){
-         $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null);
-           // print_r($apiJobsArr);
+        /*         * ***************[ End API Search Results ]********************** */
+        /*         * *********************************************** */
+        $apiJobsArr = array();
+        if (sizeof($userSearchResults) < 5) {
+            $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null);
+            // print_r($apiJobsArr);
 
-         $lastPageNumber = (int) ($apiJobsArr['count'] / $jobsPerPage);
+            $lastPageNumber = (int) ($apiJobsArr['count'] / $jobsPerPage);
             if (($apiJobsArr['count'] % $jobsPerPage) > 0) {
                 $lastPageNumber++;
             }
-         }
+        }
 
-        /***************** [ End API Search Results ]*******************/
-        /**************************************************/
+        /*         * *************** [ End API Search Results ]****************** */
+        /*         * *********************************************** */
 
 //        print_r($userSearchResults);
         //return new Response("Done");

@@ -178,7 +178,7 @@ user_edit_language:
 
 user_delete_language:
     pattern:  /language/delete/{id}
-    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:deleteLanguage" }
+    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:deleteLanguage",id : ~ }
     requirements:
         id: \d+
 
@@ -202,6 +202,6 @@ fb_user_edit_language:
 
 fb_user_delete_language:
     pattern:  /fb_language/delete/{id}
-    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:fb_deleteLanguage" }
+    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:fb_deleteLanguage" ,id : ~}
     requirements:
         id: \d+
