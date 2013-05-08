@@ -60,3 +60,11 @@ fb_internship:
     defaults: { _controller: "ObjectsInternJumpBundle:Internship:fb_index" ,page : 1}
     requirements:
         page:  \d+
+
+show_indeed_job:
+    pattern:  /indeed/{jobkey}/show
+    defaults: { _controller: "ObjectsInternJumpBundle:Internship:showIndeedJob" }
+
+fb_show_indeed_job:
+    pattern:  /fb_indeed/{jobkey}/show
+    defaults: { _controller: "ObjectsInternJumpBundle:Internship:fb_showIndeedJob" }

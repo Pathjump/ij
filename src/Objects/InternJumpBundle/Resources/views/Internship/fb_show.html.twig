@@ -198,17 +198,12 @@
                                         <h2>Search</h2>
                                         <div class="Search-form">
                                             <form>
-                            {% if allCompanies |length > 0 %}
-                                                    <label>company</label>
-                                                    <select id="companyFilter">
-                                                        <option value="">Company</option>
-                                    {% for company in allCompanies %}
-                                                        <option value="{{company.id}}">{{company}}</option>
-                                    {% endfor %}
-                                                    </select>
-                            {% endif %}
+                            <select id="companyFilter">
+                                                <option value="">job type</option>
+                                                <option value="Internship">Internship</option>
+                                                <option value="Entry Level">Entry Level</option>
+                                            </select>
                             {% if allCities |length > 0 %}
-                                                    <label>company</label>
                                                     <select id="cityFilter">
                                                         <option value="">City</option>
                                     {% for city in allCities %}
@@ -217,7 +212,6 @@
                                                     </select>
                             {% endif %}
                             {% if allState |length > 0 %}
-                                                    <label>company</label>
                                                     <select id="stateFilter">
                                                         <option value="">State</option>
                                     {% for state in allState %}
@@ -225,8 +219,7 @@
                                     {% endfor %}
                                                     </select>
                             {% endif %}
-                            {% if allCompanies |length > 0 %}
-                                                    <label>company</label>
+                            {% if allCategory |length > 0 %}
                                                     <select id="industryFilter">
                                                         <option value="">Industry</option>
                                     {% for category in allCategory %}

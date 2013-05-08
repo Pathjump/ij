@@ -16,6 +16,191 @@ use Doctrine\Common\Collections\ArrayCollection;
 class InternshipController extends Controller {
 
     /**
+     * @author Mahmoud
+     * @param type $jobkey
+     * @return boolean
+     */
+    private function getIndeedJob($jobkey) {
+        $apiSearchString = 'http://api.indeed.com/ads/apigetjobs?publisher=5399161479070076&v=2&format=json&jobkeys=' . $jobkey;
+        $result = file_get_contents($apiSearchString);
+        if ($result === false) {
+            return false;
+        }
+        $jobsArray = json_decode($result, true);
+        $searchResult = array();
+        $searchResult['jobtitle'] = '';
+        $searchResult['company'] = '';
+        $searchResult['snippet'] = '';
+        $searchResult['city'] = '';
+        $searchResult['state'] = '';
+        $searchResult['country'] = '';
+        $searchResult['longitude'] = '';
+        $searchResult['latitude'] = '';
+        $searchResult['date'] = null;
+        $searchResult['formattedRelativeTime'] = '';
+        $searchResult['expired'] = false;
+        $searchResult['url'] = '';
+        $searchResult['jobkey'] = '';
+        if (isset($jobsArray['results'])) {
+            $results = $jobsArray['results'];
+            foreach ($results as $result) {
+                if (isset($result['jobtitle'])) {
+                    $searchResult['jobtitle'] = $result['jobtitle'];
+                }
+                if (isset($result['company'])) {
+                    $searchResult['company'] = $result['company'];
+                }
+                if (isset($result['snippet'])) {
+                    $searchResult['snippet'] = $result['snippet'];
+                }
+                if (isset($result['city'])) {
+                    $searchResult['city'] = $result['city'];
+                }
+                if (isset($result['state'])) {
+                    $searchResult['state'] = $result['state'];
+                }
+                if (isset($result['country'])) {
+                    $searchResult['country'] = $result['country'];
+                }
+                if (isset($result['longitude'])) {
+                    $searchResult['longitude'] = $result['longitude'];
+                }
+                if (isset($result['latitude'])) {
+                    $searchResult['latitude'] = $result['latitude'];
+                }
+                if (isset($result['date'])) {
+                    $searchResult['date'] = new \DateTime($result['date']);
+                }
+                if (isset($result['formattedRelativeTime'])) {
+                    $searchResult['formattedRelativeTime'] = $result['formattedRelativeTime'];
+                }
+                if (isset($result['expired'])) {
+                    $searchResult['expired'] = (boolean) $result['expired'];
+                }
+                if (isset($result['url'])) {
+                    $searchResult['url'] = $result['url'];
+                }
+                if (isset($result['jobkey'])) {
+                    $searchResult['jobkey'] = $result['jobkey'];
+                }
+            }
+        }
+        return $searchResult;
+    }
+
+    /**
+     * show indeed job
+     * @author ahmed
+     * @param type $jobkey
+     */
+    public function showIndeedJobAction($jobkey) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $cityRepo = $em->getRepository('ObjectsInternJumpBundle:City');
+        $stateRepo = $em->getRepository('ObjectsInternJumpBundle:State');
+        $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
+
+        //get the job details
+        $jobDetails = $this->getIndeedJob($jobkey);
+        if(!$jobDetails['jobtitle']){
+            $message = $this->container->getParameter('internship_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
+        }
+
+        //all cities
+        $allCities = $cityRepo->findBy(array('country' => 'US'));
+        //all state
+        $allState = $stateRepo->findAll();
+        //all category
+        $allCategory = $categoryRepo->findAll();
+
+        //get latest jobs
+        $LatestJobs = array();
+        if (true === $this->get('security.context')->isGranted('ROLE_USER')) {
+            //get logedin user object
+            $user = $this->get('security.context')->getToken()->getUser();
+
+            $cvs = $em->getRepository('ObjectsInternJumpBundle:CV')->getAllCvs($user->getId());
+            //print_r($cvs);
+            if ($cvs) {//if student Has CVs
+                //echo "found cvs <br>";
+                foreach ($cvs as $cv) {
+                    foreach ($cv->getCategories() as $cat)
+                        $categ[] = $cat->getId();
+                }
+            }
+
+            if (sizeof($categ) > 0) { //found array of categories
+                $LatestJobs = $em->getRepository('ObjectsInternJumpBundle:Internship')->getLatestJobs($categ, 5);
+            }
+        }
+
+        return $this->render('ObjectsInternJumpBundle:Internship:showIndeedJob.html.twig', array(
+                    'allCities' => $allCities,
+                    'allState' => $allState,
+                    'allCategory' => $allCategory,
+                    'LatestJobs' => $LatestJobs,
+                    'jobDetails' => $jobDetails
+        ));
+    }
+
+    /**
+     * show indeed job
+     * @author ahmed
+     * @param type $jobkey
+     */
+    public function fb_showIndeedJobAction($jobkey) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $cityRepo = $em->getRepository('ObjectsInternJumpBundle:City');
+        $stateRepo = $em->getRepository('ObjectsInternJumpBundle:State');
+        $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
+
+        //get the job details
+        $jobDetails = $this->getIndeedJob($jobkey);
+        if(!$jobDetails['jobtitle']){
+            $message = $this->container->getParameter('internship_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
+                        'message' => $message,));
+        }
+
+        //all cities
+        $allCities = $cityRepo->findBy(array('country' => 'US'));
+        //all state
+        $allState = $stateRepo->findAll();
+        //all category
+        $allCategory = $categoryRepo->findAll();
+
+        //get latest jobs
+        $LatestJobs = array();
+        if (true === $this->get('security.context')->isGranted('ROLE_USER')) {
+            //get logedin user object
+            $user = $this->get('security.context')->getToken()->getUser();
+
+            $cvs = $em->getRepository('ObjectsInternJumpBundle:CV')->getAllCvs($user->getId());
+            //print_r($cvs);
+            if ($cvs) {//if student Has CVs
+                //echo "found cvs <br>";
+                foreach ($cvs as $cv) {
+                    foreach ($cv->getCategories() as $cat)
+                        $categ[] = $cat->getId();
+                }
+            }
+
+            if (sizeof($categ) > 0) { //found array of categories
+                $LatestJobs = $em->getRepository('ObjectsInternJumpBundle:Internship')->getLatestJobs($categ, 5);
+            }
+        }
+
+        return $this->render('ObjectsInternJumpBundle:Internship:fb_showIndeedJob.html.twig', array(
+                    'allCities' => $allCities,
+                    'allState' => $allState,
+                    'allCategory' => $allCategory,
+                    'LatestJobs' => $LatestJobs,
+                    'jobDetails' => $jobDetails
+        ));
+    }
+
+    /**
      * this function will get position from google map by zipcode
      * @author Ahmed
      * @param int $zipcode
@@ -304,7 +489,7 @@ class InternshipController extends Controller {
 
 
         //all companies
-        $allCompanies = $companyRepo->findAll();
+//        $allCompanies = $companyRepo->findAll();
         //all cities
         $allCities = $cityRepo->findBy(array('country' => 'US'));
         //all state
@@ -345,7 +530,7 @@ class InternshipController extends Controller {
                     'jobCategories' => $jobCategories,
                     'job_added_before_message' => $this->container->getParameter('job_added_before_message_show_job_page'),
                     'job_apply_success_message' => $this->container->getParameter('job_apply_success_message_show_job_page'),
-                    'allCompanies' => $allCompanies,
+//                    'allCompanies' => $allCompanies,
                     'allCities' => $allCities,
                     'allState' => $allState,
                     'allCategory' => $allCategory,
@@ -430,7 +615,7 @@ class InternshipController extends Controller {
 
 
         //all companies
-        $allCompanies = $companyRepo->findAll();
+//        $allCompanies = $companyRepo->findAll();
         //all cities
         $allCities = $cityRepo->findBy(array('country' => 'US'));
         //all state
@@ -471,7 +656,7 @@ class InternshipController extends Controller {
                     'jobCategories' => $jobCategories,
                     'job_added_before_message' => $this->container->getParameter('job_added_before_message_show_job_page'),
                     'job_apply_success_message' => $this->container->getParameter('job_apply_success_message_show_job_page'),
-                    'allCompanies' => $allCompanies,
+//                    'allCompanies' => $allCompanies,
                     'allCities' => $allCities,
                     'allState' => $allState,
                     'allCategory' => $allCategory,
