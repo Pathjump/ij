@@ -124,6 +124,11 @@ user_search_ajax:
     pattern:  /search/{title}/{country}/{city}/{state}/{category}/{company}/{lang}/{jobt}/{page}
     defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:search",country: null, city: null, state: null, category: null, company: null, lang: null, jobt: null, page: 1 }
 
+fb_user_search_ajax:
+    pattern:  /search/{title}/{country}/{city}/{state}/{category}/{company}/{lang}/{jobt}/{page}
+    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:fb_search",country: null, city: null, state: null, category: null, company: null, lang: null, jobt: null, page: 1 }
+
+
 auto_complete_url:
     pattern:  /autocompleteurl
     defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:autocomplete", _format: json}

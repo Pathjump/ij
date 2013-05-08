@@ -2570,7 +2570,7 @@ class InternjumpUserController extends Controller {
                     'title' => "empty",
                     'country' => "empty",
                     'city' => $city,
-                    'state' => $state, 'category' => $category, 'company' => $company, 'lang' => "empty",'jobtype'=> $jobType,'keyword'=>$keyword,
+                    'state' => $state, 'category' => $category, 'jobtype'=> $jobType, 'lang' => "empty",'jobtype'=> $jobType,'keyword'=>$keyword,
         ));
     }
 
@@ -2647,6 +2647,82 @@ class InternjumpUserController extends Controller {
                     'state' => $state, 'category' => $category, 'company' => $company, 'lang' => $lang,'jobtype'=> $jobt,
         ));
     }
+
+
+     /**
+     * This function for search ajax action
+     * @author Ola
+     */
+    public function fb_searchAction($title, $country, $city, $state, $category, $company, $lang, $jobt, $page) {
+        $request = $request = $this->getRequest();
+
+        //to check if Ajax Request
+//        if (!$request->isXmlHttpRequest()) {
+//            return new Response("Faild");
+//        }
+
+        /*         * **to get array of keywords from search text *** */
+        $keywordsArray = explode(" ", $title);
+
+//        print_r($keywordsArray);exit;
+        //get number of jobs per page
+        $jobsPerPage = $this->container->getParameter('jobs_per_search_results_page');
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
+        //get jobs search results array
+        $userSearchResults = $internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray, $jobt, $page, $jobsPerPage);
+
+        //Limit the details to only 200 character
+        foreach ($userSearchResults as &$job) {
+            $jobDesc = strip_tags($job->getDescription());
+            if (strlen($jobDesc) > 200) {
+                $job->setDescription(substr($jobDesc, 0, 200) . '...');
+            } else {
+                $job->setDescription($jobDesc);
+            }
+        }
+        /* pagenation part */
+        //get count of all search result jobs
+        $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray,$jobt, 1, null));
+
+        $lastPageNumber = (int) ($userSearchResultsCount / $jobsPerPage);
+        if (($userSearchResultsCount % $jobsPerPage) > 0) {
+            $lastPageNumber++;
+        }
+
+
+         /*****************[ End API Search Results ]***********************/
+        /**************************************************/
+         $apiJobsArr =array();
+         if(sizeof($userSearchResults) < 24 ){
+         $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null);
+           // print_r($apiJobsArr);
+
+            $lastPageNumber = (int) ($apiJobsArr['count'] / $jobsPerPage);
+            if (($apiJobsArr['count'] % $jobsPerPage) > 0) {
+                $lastPageNumber++;
+            }
+        }
+
+        /*         * *************** [ End API Search Results ]****************** */
+        /*         * *********************************************** */
+
+//        print_r($userSearchResults);
+        //return new Response("Done");
+        return $this->render('ObjectsInternJumpBundle:InternjumpUser:fb_userSearchResultPage.html.twig', array(
+                    'jobs' => $userSearchResults,
+                    'apiJobs' => $apiJobsArr,
+                    'page' => $page,
+                    'jobsPerPage' => $jobsPerPage,
+                    'lastPageNumber' => $lastPageNumber,
+                    'title' => $title,
+                    'country' => $country,
+                    'city' => $city,
+                    'state' => $state, 'category' => $category, 'company' => $company, 'lang' => $lang,'jobtype'=> $jobt,
+        ));
+    }
+
 
     /**
      * @author Ola
