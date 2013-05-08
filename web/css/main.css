@@ -2640,6 +2640,6 @@ only screen and (min-resolution: 144dpi) {
 .Facebook-login .facebookButton {
     background-image: url("../img/face-login.png");
     display: inline-block;
-    width: 215px;
-    height: 51px;
+    width: 205px;
+    height: 45px;
 }
