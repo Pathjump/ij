@@ -295,6 +295,7 @@ class UserMessageController extends Controller {
         if ($request->isXmlHttpRequest()) {
             return new Response('Done');
         }
+        $request->getSession()->setFlash('success', 'Deleted Successfuly');
         return $this->redirect($this->generateUrl('user_messages', array('box' => 'inbox')));
     }
 

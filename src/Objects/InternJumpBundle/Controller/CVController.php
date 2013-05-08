@@ -404,6 +404,7 @@ class CVController extends Controller {
             $this->checkUserOwnObject($entity);
             $em->remove($entity);
             $em->flush();
+            $request->getSession()->setFlash('success', 'Deleted Successfuly');
         }
         return $this->redirect($this->generateUrl('student_task', array('loginName' => $this->get('security.context')->getToken()->getUser()->getLoginName())));
     }
