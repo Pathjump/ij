@@ -11,12 +11,12 @@
             <div class="resources">
 
                 <div class="media">
-                    <a href="{{ path('show_resources',{'id' : post.id}) }}" class="pull-left">
+                    <a href="{{ path('show_resources',{'slug' : post.slug}) }}" class="pull-left">
                         <img src="{{ post.getTimThumbUrl(175,130) }}" class="media-object" alt="{{ post.postTitle }}" />
                     </a>
 
                     <div class="media-body">
-                        <h4 class="media-heading"><a href="{{ path('show_resources',{'id' : post.id}) }}">{{ post.postTitle }}</a>
+                        <h4 class="media-heading"><a href="{{ path('show_resources',{'slug' : post.slug}) }}">{{ post.postTitle }}</a>
                             <div>
                                 {% for cat in post.getCategories() %}
                                 <i><strong>{{ cat.catName }}</strong></i>

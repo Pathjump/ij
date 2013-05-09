@@ -5,9 +5,11 @@ namespace Objects\InternJumpBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints as Unique;
 
 /**
  * Objects\InternJumpBundle\Entity\Post
+ * @Unique\UniqueEntity(fields={"slug"})
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Objects\InternJumpBundle\Entity\PostRepository")
@@ -58,7 +60,16 @@ class Post
      */
     private $isPublished= true;
 
-    
+    /**
+     * @var string $slug
+     * @var string $slug
+     * @Assert\NotNull
+     * @Assert\Regex(pattern="/^\w+$/u", message="Only characters, numbers and _")
+     * @ORM\Column(name="slug", type="string", length=255, unique=true)
+     */
+    private $slug;
+
+
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection $categories
      * @Assert\NotNull
@@ -73,7 +84,7 @@ class Post
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -93,7 +104,7 @@ class Post
     /**
      * Get postTitle
      *
-     * @return string 
+     * @return string
      */
     public function getPostTitle()
     {
@@ -113,7 +124,7 @@ class Post
     /**
      * Get postBody
      *
-     * @return text 
+     * @return text
      */
     public function getPostBody()
     {
@@ -133,7 +144,7 @@ class Post
     /**
      * Get postImage
      *
-     * @return string 
+     * @return string
      */
     public function getPostImage()
     {
@@ -153,7 +164,7 @@ class Post
     /**
      * Get createdAt
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getCreatedAt()
     {
@@ -173,45 +184,66 @@ class Post
     /**
      * Get isPublished
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsPublished()
     {
         return $this->isPublished;
     }
-    
+
+        /**
+     * Set slug
+     *
+     * @param string $slug
+     */
+    public function setSlug($slug)
+    {
+        // replace all non letters or digits by - then remove any extra white spaces
+        $this->slug = trim(preg_replace('/\W+/u', '-', $slug));
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
    /**ToString**/
     public function __toString() {
         return $this->postImage;
-    }    
-    
+    }
+
     public function __construct() {
         $this->createdAt = new \DateTime();
         $this->categories = new ArrayCollection();
     }
-    
+
     /****************file upload********************/
     /**********************************************/
-    
+
     /**
      * @Assert\Image
      * @var \Symfony\Component\HttpFoundation\File\UploadedFile
      */
     public $file;
-    
+
     /**
      *
      * a temp variable  for storing the old image name to delete the old image after the update
      * @var string $temp
      */
     private $temp;
-    
+
     /**
      * this flag is for detecting if the image has been handled
      * @var boolean $imageHandeled
      */
     private $imageHandeled = FALSE;
-    
+
     /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
@@ -295,7 +327,7 @@ class Post
     }
 
     /**
-     * @return string the relative path of image starting from web directory 
+     * @return string the relative path of image starting from web directory
      */
     public function getWebPath() {
         return NULL === $this->postImage ? NULL : '/' . $this->getUploadDir() . '/' . $this->postImage;
@@ -325,10 +357,10 @@ class Post
         return 'images/posts-Images';
     }
 
-    
+
     /***************end file upload****************/
    /**********************************************/
-    
+
 
     /**
      * Add categories
@@ -343,13 +375,13 @@ class Post
     /**
      * Get categories
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getCategories()
     {
         return $this->categories;
     }
-    
+
     /**
      * Set categories
      *
