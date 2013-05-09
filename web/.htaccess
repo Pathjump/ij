@@ -4,7 +4,7 @@
     RewriteRule ^company-logo/([0-9]+)/([0-9]+)/([0-9a-zA-Z\-_]+).([a-zA-Z]{3,4})$ timthumb.php?src=/images/companies-logos/$3.$4&w=$1&h=$2&zc=0 [NC,L]
     RewriteRule ^quiz-result-image/([0-9]+)/([0-9]+)/([0-9a-zA-Z\-_]+).([a-zA-Z]{3,4})$ timthumb.php?src=/images/quiz-results-images/$3.$4&w=$1&h=$2&zc=0 [NC,L]
     RewriteRule ^founders-Image/([0-9]+)/([0-9]+)/([0-9a-zA-Z\-_]+).([a-zA-Z]{3,4})$ timthumb.php?src=/images/founders-Images/$3.$4&w=$1&h=$2&zc=0 [NC,L]
-    RewriteRule ^posts-Images/([0-9]+)/([0-9]+)/([0-9a-zA-Z\-_]+).([a-zA-Z]{3,4})$ timthumb.php?src=/images/posts-Images/$3.$4&w=$1&h=$2&zc=0 [NC,L]
+    RewriteRule ^posts-Images/([0-9]+)/([0-9]+)/([0-9a-zA-Z\-_]+).([a-zA-Z]{3,4})$ timthumb.php?src=/images/posts-Images/$3.$4&w=$1&h=$2&zc=1 [NC,L]
     RewriteRule ^worth-image/([0-9]+)/([0-9]+)/([0-9a-zA-Z\-_]+).([a-zA-Z]{3,4})$ timthumb.php?src=/images/worth-images/$3.$4&w=$1&h=$2&zc=0 [NC,L]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^(.*)$ app.php [QSA,L]
