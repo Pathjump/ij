@@ -226,6 +226,8 @@
                             <script src="{{asset('js/main.js')}}"></script>
                             <script>
                                 $(document).ready(function(){
+                                  $('a.notifiToTooltip,a.editTooltip,a.messageTooltip').tooltip();
+
                                    setTimeout(function(){
                                        $('div.timeMessage').slideUp(1000);
                                     },6000);
