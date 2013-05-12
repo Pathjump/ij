@@ -40,14 +40,14 @@
             <label>Filter By</label>
             <select  onchange="window.location = '{{ path('fb_User_notification', {'type': ''}) }}/' + this.value;">
                 <option {% if type == 'all' %}selected="selected"{% endif %} value="all">Show all</option>
-                <option {% if type == 'company_question' %}selected="company_question"{% endif %} value="company_question">Company question</option>
-                <option {% if type == 'company_interest' %}selected="company_interest"{% endif %} value="company_interest">Company interest</option>
-                <option {% if type == 'company_job_hire' %}selected="company_job_hire"{% endif %} value="company_job_hire">Job offer</option>
-                <option {% if type == 'company_interview' %}selected="company_interview"{% endif %} value="company_interview">Company interview</option>
-                <option {% if type == 'company_edit_task' %}selected="company_edit_task"{% endif %} value="company_edit_task">Company update task</option>
-                <option {% if type == 'company_add_note' %}selected="company_add_note"{% endif %} value="company_add_note">Company add task note</option>
-                <option {% if type == 'company_assign_task' %}selected="company_assign_task"{% endif %} value="company_assign_task">Company assign task</option>
-                <option {% if type == 'company_edit_note' %}selected="company_edit_note"{% endif %} value="company_edit_note">Company edit task note</option>
+                <option {% if type == 'company_question' %}selected="company_question"{% endif %} value="company_question">Company Question</option>
+                <option {% if type == 'company_interest' %}selected="company_interest"{% endif %} value="company_interest">Company Interest</option>
+                <option {% if type == 'company_job_hire' %}selected="company_job_hire"{% endif %} value="company_job_hire">Job Offer</option>
+                <option {% if type == 'company_interview' %}selected="company_interview"{% endif %} value="company_interview">Company Interview</option>
+                <option {% if type == 'company_edit_task' %}selected="company_edit_task"{% endif %} value="company_edit_task">Company Update Task</option>
+                <option {% if type == 'company_add_note' %}selected="company_add_note"{% endif %} value="company_add_note">Company Add Task Note</option>
+                <option {% if type == 'company_assign_task' %}selected="company_assign_task"{% endif %} value="company_assign_task">Company Assign Task</option>
+                <option {% if type == 'company_edit_note' %}selected="company_edit_note"{% endif %} value="company_edit_note">Company Edit Task Note</option>
             </select>
     </div>
 

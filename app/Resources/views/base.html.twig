@@ -45,7 +45,7 @@
                         <a href="{{ path('site_homepage') }}" class="pull-left"><img src="{{ asset('img/Logo.png') }}" /></a>
                         <div class="Top-Links pull-right">
                             {% if not is_granted('ROLE_NOTACTIVE_COMPANY') and not is_granted('ROLE_NOTACTIVE') %}
-                                <p> Are you an employer? Connect with top interns from all around the nation. <a href="{{path('employers_data')}}">More Information</a>.</p>
+                                <p><strong>Are you an employer? Connect with top interns from all around the nation. <a href="{{path('employers_data')}}">Start Hiring</a>.</strong></p>
                             {% endif %}
                             <ul class="Social-icons  pull-right ">
                                 {% if face_page_url %}
@@ -98,9 +98,9 @@
                                     <div class="container">
                                         <ul class="unstyled">
                                             <li><a href="{{ path('internship',{'loginName' : app.user.loginName}) }}">Home</a></li>
-                                            <li><a href="{{ path('internship_new') }}">Add new internship</a></li>
-                                            <li><a href="{{path('employers')}}">Industries</a></li>
-                                            <li><a href="{{ path('company_task') }}">Manage Interns</a></li>
+                                            <li><a href="{{ path('internship_new') }}">Add new Position</a></li>
+                                            <li><a href="{{ path('company_task') }}">Manage Interns/Employees</a></li>
+                                            <li><a href="{{path('FAQ_page')}}">FAQ</a></li>
                                         </ul>
                                     </div>
                                 {% elseif is_granted('ROLE_USER') %}
@@ -144,21 +144,19 @@
                                         <h3 class="">Please activate your account</h3>
                                         <a href="{{path('company_reActivation')}}">Resend activation email</a>
                                     </div>
-                                {% else %}
-                                    <div class="alert alert-info">
-                                        <h3 class="">Welocme, {{app.user.loginName}}</h3>
-                                    </div>
                                 {% endif %}
                             {% elseif is_granted('ROLE_NOTACTIVE') %}
                                 {% if not is_granted('ROLE_USER') %}
                                     <div class="alert alert-info">
                                         <h3 class="">Please activate your account</h3>
                                     </div>
-                                {% else %}
-                                    <div class="alert alert-info">
-                                        <h3 class="">Welocme, {{app.user.loginName}}</h3>
-                                    </div>
                                 {% endif %}
+                            {% endif %}
+
+                            {% if app.session.hasFlash('loginSuccess') %}
+                                <div class="alert alert-info timeMessage">
+                                    <h3 class="">Welcome, {{app.user.loginName}}</h3>
+                                </div>
                             {% endif %}
 
                             {% if app.session.hasFlash('notice') %}
@@ -228,6 +226,11 @@
                             <script src="{{asset('js/main.js')}}"></script>
                             <script>
                                 $(document).ready(function(){
+                                   setTimeout(function(){
+                                       $('div.timeMessage').slideUp(1000);
+                                    },6000);
+
+
                                    {% if is_granted('ROLE_USER') %}
                                     setInterval(function(){
                                         $.ajax({

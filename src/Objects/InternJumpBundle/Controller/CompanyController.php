@@ -1047,18 +1047,10 @@ class CompanyController extends Controller {
                     'second_name' => 'ReEmail',
                     'invalid_message' => "The emails don't match"
                 ))
-                ->add('telephone')
-                ->add('fax')
-                ->add('url')
-                ->add('facebookUrl')
-                ->add('twitterUrl')
-                ->add('googlePlusUrl')
-                ->add('linkedInUrl')
-                ->add('youtubeUrl')
                 ->add('zipcode')
                 ->add('Latitude', 'hidden')
                 ->add('Longitude', 'hidden')
-                ->add('file', 'file', array('required' => false, 'label' => 'Logo', 'attr' => array('onchange' => 'readURL(this);')))
+
                 ->add('professions', null, array('required' => FALSE))
         ;
         //create the form

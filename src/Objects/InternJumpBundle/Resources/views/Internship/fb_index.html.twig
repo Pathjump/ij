@@ -6,7 +6,7 @@
 <link href="{{ asset('css/colorBox/colorbox.css') }}" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
-{% block pageTitle %}{{company}} Internships{% endblock %}
+{% block pageTitle %}{{company}} Profile{% endblock %}
 
 {% block body %}
 
@@ -89,11 +89,11 @@
                                         </div><!--company-form-->
 
 
-                                        <h3>{{company}} internship lists</h3>
+                                        <h3>Internship list</h3>
 
                                         <div class="Result-box">
 
-                                            <div class="title3">Page {{page}} of {{lastPageNumber}}
+                                            <div class="title3">{% if lastPageNumber > 1 %}Page {{page}} of {{lastPageNumber}}{% endif %}
 
                                                 <div class="Select-a btn-group pull-right">
 
@@ -106,7 +106,7 @@
                                                 <li class="row-fluid show-grid">
                                                     <div class="span8">
                                                         <h4><a class="titl-blue" href="{{path('fb_internship_show',{'id' : entity.id})}}">{{ entity.title }}</a></h4>
-                                                        <i><strong><a href="javascript:void(0)">Active From : {{ entity.activeFrom|date('d M Y') }} <br/>To : {{ entity.activeTo|date('d M Y') }}</a></strong></i>
+                                                        <i><strong><a href="{{path('fb_internship_show',{'id' : entity.id})}}">Active From : {{ entity.activeFrom|date('d M Y') }} <br/>To : {{ entity.activeTo|date('d M Y') }}</a></strong></i>
                                                         <p><br></p>
                                                         <p></p>
                                                         {% if entity.active and is_granted('ROLE_COMPANY') and company.id == app.user.id %}
@@ -155,7 +155,7 @@
         {% if ownerCompanyFlag == 1 %}
                                     <div class="span4 search-right-col">
                                         <div class="Col-block">
-                                            <h2>Manage interns</h2>
+                                            <h2>Manage interns/Employees</h2>
                 {% if hiredUsersJobsArray|length > 0 %}
                     {% for jobName in hiredUsersJobsArray %}
                                             <h3><strong>{{jobName}}</strong></h3>
@@ -179,7 +179,7 @@
                                                 </ul>
                     {% endfor %}
                {% else %}
-                                                <h3><strong>You have yet to hire an intern through InternJump.</strong></h3>
+                                                <h3><strong>You have not hired an intern/employee through InternJump</strong></h3>
                {% endif %}
                                             </div>
 
