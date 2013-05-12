@@ -6,7 +6,7 @@
 <link href="{{ asset('css/chosen.css') }}" rel="stylesheet" type="text/css"/>
 {% endblock %}
 
-{% block pageTitle %}Manage Interns{% endblock %}
+{% block pageTitle %}Interns/Employees{% endblock %}
 
 {%block body%}
 
@@ -88,7 +88,8 @@
            </div><!--User-Interns-->
 
 {% else %}
-            <p class="lead"> <i class="icon-hand-right"></i> You don't have Interns yet;<br><i class="icon-certificate"></i> Create your Internships, search for interns and Start Hiring.</p>
+
+            <p class="lead"> <i class="icon-hand-right"></i> You have not hired anyone yet; Create a position, search for candidates and start hiring!</p>
 {%endif%}
 
 
@@ -199,7 +200,8 @@
 
 
   {% else %}
-            <p class="lead"> <i class="icon-hand-right"></i> You don't have tasks yet;<br><i class="icon-certificate"></i> Hire Interns and start assigning tasks</p>
+
+            <p class="lead"> <i class="icon-hand-right"></i> Hire Interns/Employees and start assigning tasks</p>
 {%endif%}
 </div><!--Tasks-->
       </div><!--Manage-Interns-->
