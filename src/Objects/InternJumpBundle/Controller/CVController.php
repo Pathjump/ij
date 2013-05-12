@@ -371,6 +371,7 @@ class CVController extends Controller {
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
+            $request->getSession()->setFlash('success', 'Edited Successfuly');
             return $this->redirect($this->generateUrl('cv_edit', array('id' => $id)));
         }
         return $this->render('ObjectsInternJumpBundle:CV:edit.html.twig', array(
@@ -403,6 +404,7 @@ class CVController extends Controller {
             $this->checkUserOwnObject($entity);
             $em->remove($entity);
             $em->flush();
+            $request->getSession()->setFlash('success', 'Deleted Successfuly');
         }
         return $this->redirect($this->generateUrl('student_task', array('loginName' => $this->get('security.context')->getToken()->getUser()->getLoginName())));
     }

@@ -2220,13 +2220,27 @@ class InternjumpUserController extends Controller {
 
         $em = $this->getDoctrine()->getEntityManager();
 
+        //Check data in session In case User pressed back button
+        //get request
+        $request = $this->getRequest();
+        $session = $request->getSession();
+        $sessionData = $session->get('searchQuery');
+
+         //Check to fill the form with parameters if been set in the session Used when users [back] to page
+        $sessionCheck = false;
+
+        //Inspect if the sessionData been set
+        if(isset($sessionData)){
+           $sessionCheck = true;
+        }
+
         //Check to fill the form with parameters if been sent with the request
         $check = false;
 
         /*         * ********************************************************** */
         /*         * ********Start Partial Search part*********** */
-        //get request
-        $request = $this->getRequest();
+
+
         //Get request's parameters
         $jobType = $request->get("jobType");
         $city = $request->get("city");
@@ -2340,6 +2354,44 @@ class InternjumpUserController extends Controller {
         $companyOptionsArr = array('empty_value' => '--- choose Company ---', 'choices' => $allCompanysArray);
         $jobTypeOptionsArr = array('choices' => array('Internship'=> 'Internship','Entry Level'=>'Entry Level' ),'empty_value' => '--- choose job type ---');
 
+        /******************************************************************************/
+        //inspect if check been set to be true then set the defaults values of the form
+        if ($sessionCheck) {
+
+            if ($sessionData['title'] != "empty") {
+
+            }
+            if ($sessionData['country'] != "empty") {
+                $countryOptionsArr = array('choices' => $allCountriesArray, 'preferred_choices' => array($sessionData['country']));
+            }
+            if ($sessionData['city'] != "empty") {
+                //get the city name
+                $theCity = "";
+                if ($cityRepo->findOneBy(array('id' => $sessionData['city']))) {
+                    $theCity = $cityRepo->findOneBy(array('id' => $sessionData['city']));
+                    $cityOptionsArr = array('data' => $theCity);
+                }
+                else
+                    $cityOptionsArr = array();
+            }
+            if ($sessionData['state'] != "empty") {
+                $stateOptionsArr = array('empty_value' => '--- choose State ---');
+            }
+            if ($sessionData['category'] != "empty") {
+                $categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($sessionData['category']));
+            }
+            if ($sessionData['company'] != "empty") {
+                $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($sessionData['company']));
+            }
+            if ($sessionData['lang'] != "empty") {
+                $allLanguagesArray = array('class' => 'ObjectsInternJumpBundle:Language', 'property' => 'name', 'preferred_choices' => array($sessionData['lang']));
+            }
+            if ($sessionData['jobt'] != "empty") {
+                $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($sessionData['jobt']));
+            }
+        }
+
+        /******************************************************************************/
         //inspect if check been set to be true then set the defaults values of the form
         if ($check) {
             $countryOptionsArr = array('choices' => $allCountriesArray, 'empty_value' => '--- choose Country ---');
@@ -2402,15 +2454,30 @@ class InternjumpUserController extends Controller {
 //            return $this->redirect($this->generateUrl('login'));
 //        }
 
+
         $em = $this->getDoctrine()->getEntityManager();
+
+        //Check data in session In case User pressed back button
+        //get request
+        $request = $this->getRequest();
+        $session = $request->getSession();
+        $sessionData = $session->get('searchQuery');
+
+         //Check to fill the form with parameters if been set in the session Used when users [back] to page
+        $sessionCheck = false;
+
+        //Inspect if the sessionData been set
+        if(isset($sessionData)){
+           $sessionCheck = true;
+        }
 
         //Check to fill the form with parameters if been sent with the request
         $check = false;
 
         /*         * ********************************************************** */
         /*         * ********Start Partial Search part*********** */
-        //get request
-        $request = $this->getRequest();
+
+
         //Get request's parameters
         $jobType = $request->get("jobType");
         $city = $request->get("city");
@@ -2524,6 +2591,44 @@ class InternjumpUserController extends Controller {
         $companyOptionsArr = array('empty_value' => '--- choose Company ---', 'choices' => $allCompanysArray);
         $jobTypeOptionsArr = array('choices' => array('Internship'=> 'Internship','Entry Level'=>'Entry Level' ),'empty_value' => '--- choose job type ---');
 
+        /******************************************************************************/
+        //inspect if check been set to be true then set the defaults values of the form
+        if ($sessionCheck) {
+
+            if ($sessionData['title'] != "empty") {
+
+            }
+            if ($sessionData['country'] != "empty") {
+                $countryOptionsArr = array('choices' => $allCountriesArray, 'preferred_choices' => array($sessionData['country']));
+            }
+            if ($sessionData['city'] != "empty") {
+                //get the city name
+                $theCity = "";
+                if ($cityRepo->findOneBy(array('id' => $sessionData['city']))) {
+                    $theCity = $cityRepo->findOneBy(array('id' => $sessionData['city']));
+                    $cityOptionsArr = array('data' => $theCity);
+                }
+                else
+                    $cityOptionsArr = array();
+            }
+            if ($sessionData['state'] != "empty") {
+                $stateOptionsArr = array('empty_value' => '--- choose State ---');
+            }
+            if ($sessionData['category'] != "empty") {
+                $categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($sessionData['category']));
+            }
+            if ($sessionData['company'] != "empty") {
+                $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($sessionData['company']));
+            }
+            if ($sessionData['lang'] != "empty") {
+                $allLanguagesArray = array('class' => 'ObjectsInternJumpBundle:Language', 'property' => 'name', 'preferred_choices' => array($sessionData['lang']));
+            }
+            if ($sessionData['jobt'] != "empty") {
+                $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($sessionData['jobt']));
+            }
+        }
+
+        /******************************************************************************/
         //inspect if check been set to be true then set the defaults values of the form
         if ($check) {
             $countryOptionsArr = array('choices' => $allCountriesArray, 'empty_value' => '--- choose Country ---');
@@ -2570,7 +2675,7 @@ class InternjumpUserController extends Controller {
                     'title' => "empty",
                     'country' => "empty",
                     'city' => $city,
-                    'state' => $state, 'category' => $category, 'company' => $company, 'lang' => "empty",'jobtype'=> $jobType,'keyword'=>$keyword,
+                    'state' => $state, 'category' => $category, 'jobtype'=> $jobType, 'lang' => "empty",'jobtype'=> $jobType,'keyword'=>$keyword,
         ));
     }
 
@@ -2579,8 +2684,14 @@ class InternjumpUserController extends Controller {
      * @author Ola
      */
     public function searchAction($title, $country, $city, $state, $category, $company, $lang, $jobt, $page) {
-        $request = $request = $this->getRequest();
+        $request = $this->getRequest();
 
+
+        $session = $request->getSession();
+        $searchQuery = array('title' => $title, 'country'=>$country, 'city' =>  $city, 'state' => $state, 'category' => $category, 'company' => $company, 'lang' => $lang, 'jobt' => $jobt);
+        $session->set('searchQuery', $searchQuery);
+
+        $session->set('page', $page);
         //to check if Ajax Request
 //        if (!$request->isXmlHttpRequest()) {
 //            return new Response("Faild");
@@ -2647,6 +2758,89 @@ class InternjumpUserController extends Controller {
                     'state' => $state, 'category' => $category, 'company' => $company, 'lang' => $lang,'jobtype'=> $jobt,
         ));
     }
+
+
+     /**
+     * This function for search ajax action
+     * @author Ola
+     */
+    public function fb_searchAction($title, $country, $city, $state, $category, $company, $lang, $jobt, $page) {
+         $request = $this->getRequest();
+
+
+        $session = $request->getSession();
+        $searchQuery = array('title' => $title, 'country'=>$country, 'city' =>  $city, 'state' => $state, 'category' => $category, 'company' => $company, 'lang' => $lang, 'jobt' => $jobt);
+        $session->set('searchQuery', $searchQuery);
+
+        $session->set('page', $page);
+
+        //to check if Ajax Request
+//        if (!$request->isXmlHttpRequest()) {
+//            return new Response("Faild");
+//        }
+
+        /*         * **to get array of keywords from search text *** */
+        $keywordsArray = explode(" ", $title);
+
+//        print_r($keywordsArray);exit;
+        //get number of jobs per page
+        $jobsPerPage = $this->container->getParameter('jobs_per_search_results_page');
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
+        //get jobs search results array
+        $userSearchResults = $internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray, $jobt, $page, $jobsPerPage);
+
+        //Limit the details to only 200 character
+        foreach ($userSearchResults as &$job) {
+            $jobDesc = strip_tags($job->getDescription());
+            if (strlen($jobDesc) > 200) {
+                $job->setDescription(substr($jobDesc, 0, 200) . '...');
+            } else {
+                $job->setDescription($jobDesc);
+            }
+        }
+        /* pagenation part */
+        //get count of all search result jobs
+        $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray,$jobt, 1, null));
+
+        $lastPageNumber = (int) ($userSearchResultsCount / $jobsPerPage);
+        if (($userSearchResultsCount % $jobsPerPage) > 0) {
+            $lastPageNumber++;
+        }
+
+
+         /*****************[ End API Search Results ]***********************/
+        /**************************************************/
+         $apiJobsArr =array();
+         if(sizeof($userSearchResults) < 24 ){
+         $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null);
+           // print_r($apiJobsArr);
+
+            $lastPageNumber = (int) ($apiJobsArr['count'] / $jobsPerPage);
+            if (($apiJobsArr['count'] % $jobsPerPage) > 0) {
+                $lastPageNumber++;
+            }
+        }
+
+        /*         * *************** [ End API Search Results ]****************** */
+        /*         * *********************************************** */
+
+//        print_r($userSearchResults);
+        //return new Response("Done");
+        return $this->render('ObjectsInternJumpBundle:InternjumpUser:fb_userSearchResultPage.html.twig', array(
+                    'jobs' => $userSearchResults,
+                    'apiJobs' => $apiJobsArr,
+                    'page' => $page,
+                    'jobsPerPage' => $jobsPerPage,
+                    'lastPageNumber' => $lastPageNumber,
+                    'title' => $title,
+                    'country' => $country,
+                    'city' => $city,
+                    'state' => $state, 'category' => $category, 'company' => $company, 'lang' => $lang,'jobtype'=> $jobt,
+        ));
+    }
+
 
     /**
      * @author Ola

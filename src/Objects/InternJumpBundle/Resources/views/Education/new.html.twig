@@ -14,27 +14,6 @@
 
 {% block body %}
 
-        {% if app.session.hasFlash('notice') %}
-        <div class="alert">
-            <button data-dismiss="alert" class="close" type="button"> &times; </button>
-            {{ app.session.flash('notice') | raw }}
-        </div>
-        {% endif %}
-
-        {% if app.session.hasFlash('success') %}
-        <div class="alert alert-success">
-            <button data-dismiss="alert" class="close" type="button"> &times; </button>
-            {{ app.session.flash('success') | raw }}
-        </div>
-        {% endif %}
-
-        {% if app.session.hasFlash('error') %}
-        <div class="alert alert-error">
-            <button data-dismiss="alert" class="close" type="button"> &times; </button>
-            {{ app.session.flash('error') | raw }}
-        </div>
-        {% endif %}
-
         {% if form_errors(form) %}
         <div class="alert alert-error">
             <button data-dismiss="alert" class="close" type="button"> &times; </button>
@@ -231,6 +210,51 @@
                 </div><!--Sign-Up-->
 
             </div><!--Sign-Up-->
+
+            {% if app.user.educations | length > 0 %}
+            <div class="company-form">
+                <h2>Your Educations</h2>
+                <div class="Notifications">
+
+                    <table width="100%" border="0" class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th scope="row">School</th>
+                                <th scope="row">Degree Type</th>
+                                <th scope="row">Major</th>
+                                <th scope="row">Minor</th>
+                                <th scope="row">Cumulative GPA</th>
+                                <th scope="row">Major GPA</th>
+                                <th scope="row">Graduate Degree</th>
+                                <th scope="row">UnderGraduate Degree</th>
+                                <th scope="row">Start Date</th>
+                                <th scope="row">End Date</th>
+                                <th scope="row">Relevant Coursework Taken</th>
+                                <th scope="row">Extracurricular Activity</th>
+                                <th scope="row">Action</th>
+                            </tr>
+                            {% for education in app.user.educations %}
+                            <tr>
+                                <td>{{ education.schoolName }}</td>
+                                <td>{{ education.underGraduate }}</td>
+                                <td>{{ education.major }}</td>
+                                <td>{{ education.minor }}</td>
+                                <td>{{ education.cumulativeGPA }}</td>
+                                <td>{{ education.majorGPA }}</td>
+                                <td>{{ education.graduateDegree }}</td>
+                                <td>{{ education.underGraduateDegree }}</td>
+                                <td>{{ education.startDate | date('Y-m-d') }}</td>
+                                <td>{{ education.endDate | date('Y-m-d') }}</td>
+                                <td>{{ education.relevantCourseworkTaken }}</td>
+                                <td>{{ education.extracurricularActivity }}</td>
+                                <td><a href="{{ path('education_edit',{'id' : education.id }) }}"><i class="icon-pencil"></i></a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div><!--Notifications--->
+            </div>
+            {% endif %}
         </div><!--container-->
 {% endblock %}
 

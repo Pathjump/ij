@@ -280,6 +280,7 @@ class EducationController extends Controller {
             }
             $em->persist($entity);
             $em->flush();
+            $request->getSession()->setFlash('success', 'Created Successfuly');
             return $this->redirect($this->generateUrl('education_edit', array('id' => $entity->getId())));
         }
         return $this->render('ObjectsInternJumpBundle:Education:new.html.twig', array(
@@ -358,6 +359,7 @@ class EducationController extends Controller {
                 $cv->setTotalPoints();
             }
             $em->flush();
+            $request->getSession()->setFlash('success', 'Edited Successfuly');
             return $this->redirect($this->generateUrl('education_edit', array('id' => $id)));
         }
         return $this->render('ObjectsInternJumpBundle:Education:edit.html.twig', array(
@@ -411,6 +413,7 @@ class EducationController extends Controller {
                 $cv->setTotalPoints();
             }
             $em->flush();
+            $request->getSession()->setFlash('success', 'Deleted Successfuly');
         }
         return $this->redirect($this->generateUrl('student_task', array('loginName' => $this->get('security.context')->getToken()->getUser()->getLoginName())));
     }

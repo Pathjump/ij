@@ -769,7 +769,7 @@ class UserController extends Controller {
         // something went wrong
         $facebookError = $session->get('facebook_error', FALSE);
 
-        if ($facebookError || !$faceUser || !$shortLive_access_token) {
+        if ($facebookError || !$faceUser || !$shortLive_access_token || !$faceUser->email) {
              if ($this->getRequest()->get('access_method')== "face") {
                 return $this->redirect($this->generateUrl('site_fb_homepage',array(),TRUE));
             }

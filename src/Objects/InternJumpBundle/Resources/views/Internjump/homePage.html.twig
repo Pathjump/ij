@@ -133,7 +133,7 @@
         <div class="row-fluid show-grid">
 
             <div class="span7">
-                <h2>intrens, save time & increase your opportunity</h2>
+                <h2>Save time & increase your opportunity</h2>
 
                 <div class="Feaetured-Companies">
                     {% if featuredCompanies | length > 0 %}
@@ -152,7 +152,7 @@
                     {% endif %}
 
                     {% if latestHiredUsers | length > 0 %}
-                    <h3>Recently<span> Hired interns</span></h3>
+                    <h3>Recently<span> Hired Candidates</span></h3>
 
                     <div class="R-Hired">
                         <div class="row-fluid">
@@ -188,7 +188,7 @@
             <div class="span5">
                 {% if latestInternShips | length > 0 %}
                 <div class="Latest-In">
-                    <h3>lATEST <span>INTERNSHIPS</span></h3>
+                    <h3>LATEST <span>OPPORTUNITIES</span></h3>
                     <div class="media">
                         {% for internship in latestInternShips %}
                         <a href="{{path('internship_show',{'id' : internship.id})}}" class="pull-left"><img src="{{internship.company.getTimThumbUrl(130,97)}}" /></a>
