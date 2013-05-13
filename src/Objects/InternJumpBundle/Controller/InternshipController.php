@@ -8,6 +8,8 @@ use Objects\InternJumpBundle\Form\InternshipType;
 use Symfony\Component\HttpFoundation\Response;
 use Objects\InternJumpBundle\Entity\City;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityRepository;
+use Objects\InternJumpBundle\Entity\Skill;
 
 /**
  * Internship controller.
@@ -101,7 +103,7 @@ class InternshipController extends Controller {
 
         //get the job details
         $jobDetails = $this->getIndeedJob($jobkey);
-        if(!$jobDetails['jobtitle']){
+        if (!$jobDetails['jobtitle']) {
             $message = $this->container->getParameter('internship_not_found_error_msg');
             return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
                         'message' => $message,));
@@ -157,7 +159,7 @@ class InternshipController extends Controller {
 
         //get the job details
         $jobDetails = $this->getIndeedJob($jobkey);
-        if(!$jobDetails['jobtitle']){
+        if (!$jobDetails['jobtitle']) {
             $message = $this->container->getParameter('internship_not_found_error_msg');
             return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
                         'message' => $message,));
@@ -830,7 +832,17 @@ class InternshipController extends Controller {
                 ->add('activeFrom', 'date', array('attr' => array('class' => 'activeFrom'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('activeTo', 'date', array('attr' => array('class' => 'activeTo'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('title')
-                ->add('skills', null, array('required' => FALSE))
+                ->add('otherSkills', 'text', array('required' => FALSE))
+                ->add('skills', 'entity', array(
+                    'required' => FALSE,
+                    'multiple' => true,
+                    'class' => 'ObjectsInternJumpBundle:Skill',
+                    'query_builder' => function(EntityRepository $er) {
+                        $qb = $er->createQueryBuilder('s');
+                        $qb->where('s.isSystem = 1');
+                        return $qb;
+                    }
+                ))
 //                ->add('keywords', 'text', array('required' => FALSE))
                 ->add('compensation')
                 ->add('description', null, array('required' => FALSE))
@@ -856,6 +868,32 @@ class InternshipController extends Controller {
             if ($form->isValid()) {
                 //get the user object from the form
                 $entity = $form->getData();
+
+                //check for other skills
+                if ($entity->otherSkills) {
+                    $skills = explode(',', $entity->otherSkills);
+                    foreach ($skills as $skill) {
+                        $skillRepo = $em->getRepository('ObjectsInternJumpBundle:Skill');
+                        //check if this skill not exist in database
+                        $skillObject = $skillRepo->findOneBy(array('title' => trim($skill)));
+                        if (!$skillObject) {
+                            //create new skill
+                            $newSkill = new Skill();
+                            $newSkill->setTitle(trim($skill));
+                            $newSkill->setIsSystem(true);
+                            $em->persist($newSkill);
+                            $em->flush();
+                            //add the skill to the user
+                            $entity->addSkill($newSkill);
+                        } else {
+                            //check if the user have this skill
+                            if (!$entity->getSkills()->contains($skillObject)) {
+                                //add the skill to the user
+                                $entity->addSkill($skillObject);
+                            }
+                        }
+                    }
+                }
 
                 //check for keywords
                 $keywrodsRepo = $em->getRepository('ObjectsInternJumpBundle:Keywords');
@@ -1038,7 +1076,19 @@ class InternshipController extends Controller {
                 ->add('activeTo', 'date', array('attr' => array('class' => 'activeTo'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('title')
 //                ->add('keywords', null, array('required' => FALSE))
-                ->add('skills', null, array('required' => FALSE, 'attr' => array('class' => 'chzn-select', 'style' => 'width:310px;')))
+//                ->add('skills', null, array('required' => FALSE, 'attr' => array('class' => 'chzn-select', 'style' => 'width:310px;')))
+                ->add('otherSkills', 'text', array('required' => FALSE))
+                ->add('skills', 'entity', array(
+                    'required' => FALSE,
+                    'multiple' => true,
+                    'class' => 'ObjectsInternJumpBundle:Skill',
+                    'query_builder' => function(EntityRepository $er) {
+                        $qb = $er->createQueryBuilder('s');
+                        $qb->where('s.isSystem = 1');
+                        return $qb;
+                    },
+                    'attr' => array('class' => 'chzn-select', 'style' => 'width:310px;')
+                ))
                 ->add('compensation')
                 ->add('description', null, array('required' => FALSE))
                 ->add('requirements')
@@ -1061,6 +1111,32 @@ class InternshipController extends Controller {
             if ($editForm->isValid()) {
                 //get the user object from the form
                 $entity = $editForm->getData();
+
+                //check for other skills
+                if ($entity->otherSkills) {
+                    $skills = explode(',', $entity->otherSkills);
+                    foreach ($skills as $skill) {
+                        $skillRepo = $em->getRepository('ObjectsInternJumpBundle:Skill');
+                        //check if this skill not exist in database
+                        $skillObject = $skillRepo->findOneBy(array('title' => trim($skill)));
+                        if (!$skillObject) {
+                            //create new skill
+                            $newSkill = new Skill();
+                            $newSkill->setTitle(trim($skill));
+                            $newSkill->setIsSystem(true);
+                            $em->persist($newSkill);
+                            $em->flush();
+                            //add the skill to the user
+                            $entity->addSkill($newSkill);
+                        } else {
+                            //check if the user have this skill
+                            if (!$entity->getSkills()->contains($skillObject)) {
+                                //add the skill to the user
+                                $entity->addSkill($skillObject);
+                            }
+                        }
+                    }
+                }
 
                 //check for keywords
                 if ($request->get('keywords')) {
@@ -1086,6 +1162,8 @@ class InternshipController extends Controller {
                         }
                     }
                 }
+
+
 
                 $entity->setCompany($company);
                 $em->persist($entity);

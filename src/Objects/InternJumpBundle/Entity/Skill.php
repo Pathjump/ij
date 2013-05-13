@@ -38,6 +38,13 @@ class Skill {
      */
     private $usersCount = 1;
 
+    /**
+     * @var boolean $isSystem
+     *
+     * @ORM\Column(name="isSystem", type="boolean")
+     */
+    private $isSystem = false;
+
     public function __toString() {
         return $this->title;
     }
@@ -94,4 +101,24 @@ class Skill {
         $this->title = strtolower($this->title);
     }
 
+
+    /**
+     * Set isSystem
+     *
+     * @param boolean $isSystem
+     */
+    public function setIsSystem($isSystem)
+    {
+        $this->isSystem = $isSystem;
+    }
+
+    /**
+     * Get isSystem
+     *
+     * @return boolean
+     */
+    public function getIsSystem()
+    {
+        return $this->isSystem;
+    }
 }
