@@ -1,7 +1,21 @@
-$(document).ready(function(){
+$(document).ready(function() {
+    $('.addToFavorite').click(function() {
+        var status = $(this).attr('data-status');
+        //show loading img
+        $('.loading').show();
+        $.ajax({
+            url: addRemoveFavoriteUrl + "/" + status,
+            success: function(msg) {
+            },
+            complete: function(msg) {
+                location.reload();
+            }
+        });
+    });
+
     //add inerest
-    $('#addInerest').click(function(){
-        jConfirm('ok','cancle','Are you sure you want to show this student interest', 'Show interest', function (r) {
+    $('#addInerest').click(function() {
+        jConfirm('ok', 'cancle', 'Are you sure you want to show this student interest', 'Show interest', function(r) {
             if (r == true) {
                 //hide the link
                 $('#addInerest').hide();
@@ -66,16 +80,16 @@ $(document).ready(function(){
     //    });
 
     //company add question to user
-    $('#companyAddQuestionButton').click(function(){
+    $('#companyAddQuestionButton').click(function() {
         //question text
         questionText = $('#companyAddQuestionText').val();
-        if($.trim(questionText)){
+        if ($.trim(questionText)) {
             //hide the button
             $('#companyAddQuestionButton').hide();
             //show loading img
             $('.loading').show();
             $.ajax({
-                url: addUserQuestionUrl+"/"+encodeURIComponent(questionText),
+                url: addUserQuestionUrl + "/" + encodeURIComponent(questionText),
                 success: function(msg) {
                 },
                 complete: function(msg) {

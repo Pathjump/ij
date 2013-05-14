@@ -2152,6 +2152,7 @@ class InternjumpUserController extends Controller {
 
         //check if this user accept company interest
         $companyUserInterestFlag = 0;
+        $companyUserFavoriteFlag = FALSE;
         if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
             //get logedin company objects
             $company = $this->get('security.context')->getToken()->getUser();
@@ -2160,6 +2161,10 @@ class InternjumpUserController extends Controller {
                 if ($interestObject->getAccepted() == 'accepted') {
                     //user accept interest
                     $companyUserInterestFlag = 1;
+                    //check if company favorite this user
+                    if ($company->getFavoriteUsers()->contains($userObject)) {
+                        $companyUserFavoriteFlag = TRUE;
+                    }
                 } elseif ($interestObject->getAccepted() == 'rejected') {
                     $companyUserInterestFlag = 2;
                 } elseif ($interestObject->getAccepted() == 'pending') {
@@ -2194,6 +2199,7 @@ class InternjumpUserController extends Controller {
                     'errorMessage' => $errorMessage,
                     'companyUserInterestFlag' => $companyUserInterestFlag,
                     'companiesQuestions' => $companiesQuestions,
+                    'companyUserFavoriteFlag' => $companyUserFavoriteFlag,
                     'user_interset_waiting_message' => $this->container->getParameter('company_user_interset_waiting_message_user_data_page'),
                     'company_user_interset_reject_message' => $this->container->getParameter('company_user_interset_reject_message_user_data_page'),
                     'company_user_hire_pending_message' => $this->container->getParameter('company_user_hire_pending_message_user_data_page'),
@@ -2226,12 +2232,12 @@ class InternjumpUserController extends Controller {
         $session = $request->getSession();
         $sessionData = $session->get('searchQuery');
 
-         //Check to fill the form with parameters if been set in the session Used when users [back] to page
+        //Check to fill the form with parameters if been set in the session Used when users [back] to page
         $sessionCheck = false;
 
         //Inspect if the sessionData been set
-        if(isset($sessionData)){
-           $sessionCheck = true;
+        if (isset($sessionData)) {
+            $sessionCheck = true;
         }
 
         //Check to fill the form with parameters if been sent with the request
@@ -2252,7 +2258,7 @@ class InternjumpUserController extends Controller {
         //Get city Repo
         $cityRepo = $em->getRepository('ObjectsInternJumpBundle:City');
 
-        if ($jobType || $category || $city || $state ||$keyword) {
+        if ($jobType || $category || $city || $state || $keyword) {
             //set the check to be true
             $check = true;
 
@@ -2352,9 +2358,9 @@ class InternjumpUserController extends Controller {
         $stateOptionsArr = array('empty_value' => '--- choose State ---');
         $categoryOptionsArr = array('empty_value' => '--- choose Industry ---', 'choices' => $allCategoriesArray);
         $companyOptionsArr = array('empty_value' => '--- choose Company ---', 'choices' => $allCompanysArray);
-        $jobTypeOptionsArr = array('choices' => array('Internship'=> 'Internship','Entry Level'=>'Entry Level' ),'empty_value' => '--- choose job type ---');
+        $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'empty_value' => '--- choose job type ---');
 
-        /******************************************************************************/
+        /*         * *************************************************************************** */
         //inspect if check been set to be true then set the defaults values of the form
         if ($sessionCheck) {
 
@@ -2391,7 +2397,7 @@ class InternjumpUserController extends Controller {
             }
         }
 
-        /******************************************************************************/
+        /*         * *************************************************************************** */
         //inspect if check been set to be true then set the defaults values of the form
         if ($check) {
             $countryOptionsArr = array('choices' => $allCountriesArray, 'empty_value' => '--- choose Country ---');
@@ -2412,7 +2418,7 @@ class InternjumpUserController extends Controller {
                 $categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($category));
             }
             if ($jobType != "empty") {
-                $jobTypeOptionsArr = array('choices' => array('Internship'=> 'Internship','Entry Level'=>'Entry Level' ), 'preferred_choices' => array($jobType));
+                $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($jobType));
             }
         }
 
@@ -2438,7 +2444,7 @@ class InternjumpUserController extends Controller {
                     'title' => "empty",
                     'country' => "empty",
                     'city' => $city,
-                    'state' => $state, 'category' => $category, 'lang' => "empty",'jobtype'=> $jobType, 'keyword'=>$keyword,
+                    'state' => $state, 'category' => $category, 'lang' => "empty", 'jobtype' => $jobType, 'keyword' => $keyword,
         ));
     }
 
@@ -2463,12 +2469,12 @@ class InternjumpUserController extends Controller {
         $session = $request->getSession();
         $sessionData = $session->get('searchQuery');
 
-         //Check to fill the form with parameters if been set in the session Used when users [back] to page
+        //Check to fill the form with parameters if been set in the session Used when users [back] to page
         $sessionCheck = false;
 
         //Inspect if the sessionData been set
-        if(isset($sessionData)){
-           $sessionCheck = true;
+        if (isset($sessionData)) {
+            $sessionCheck = true;
         }
 
         //Check to fill the form with parameters if been sent with the request
@@ -2489,7 +2495,7 @@ class InternjumpUserController extends Controller {
         //Get city Repo
         $cityRepo = $em->getRepository('ObjectsInternJumpBundle:City');
 
-        if ($jobType || $category || $city || $state ||$keyword) {
+        if ($jobType || $category || $city || $state || $keyword) {
             //set the check to be true
             $check = true;
 
@@ -2589,9 +2595,9 @@ class InternjumpUserController extends Controller {
         $stateOptionsArr = array('empty_value' => '--- choose State ---');
         $categoryOptionsArr = array('empty_value' => '--- choose Industry ---', 'choices' => $allCategoriesArray);
         $companyOptionsArr = array('empty_value' => '--- choose Company ---', 'choices' => $allCompanysArray);
-        $jobTypeOptionsArr = array('choices' => array('Internship'=> 'Internship','Entry Level'=>'Entry Level' ),'empty_value' => '--- choose job type ---');
+        $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'empty_value' => '--- choose job type ---');
 
-        /******************************************************************************/
+        /*         * *************************************************************************** */
         //inspect if check been set to be true then set the defaults values of the form
         if ($sessionCheck) {
 
@@ -2628,7 +2634,7 @@ class InternjumpUserController extends Controller {
             }
         }
 
-        /******************************************************************************/
+        /*         * *************************************************************************** */
         //inspect if check been set to be true then set the defaults values of the form
         if ($check) {
             $countryOptionsArr = array('choices' => $allCountriesArray, 'empty_value' => '--- choose Country ---');
@@ -2649,7 +2655,7 @@ class InternjumpUserController extends Controller {
                 $categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($category));
             }
             if ($jobType != "empty") {
-                $jobTypeOptionsArr = array('choices' => array('Internship'=> 'Internship','Entry Level'=>'Entry Level' ), 'preferred_choices' => array($jobType));
+                $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($jobType));
             }
         }
 
@@ -2675,7 +2681,7 @@ class InternjumpUserController extends Controller {
                     'title' => "empty",
                     'country' => "empty",
                     'city' => $city,
-                    'state' => $state, 'category' => $category, 'jobtype'=> $jobType, 'lang' => "empty",'jobtype'=> $jobType,'keyword'=>$keyword,
+                    'state' => $state, 'category' => $category, 'jobtype' => $jobType, 'lang' => "empty", 'jobtype' => $jobType, 'keyword' => $keyword,
         ));
     }
 
@@ -2688,7 +2694,7 @@ class InternjumpUserController extends Controller {
 
 
         $session = $request->getSession();
-        $searchQuery = array('title' => $title, 'country'=>$country, 'city' =>  $city, 'state' => $state, 'category' => $category, 'company' => $company, 'lang' => $lang, 'jobt' => $jobt);
+        $searchQuery = array('title' => $title, 'country' => $country, 'city' => $city, 'state' => $state, 'category' => $category, 'company' => $company, 'lang' => $lang, 'jobt' => $jobt);
         $session->set('searchQuery', $searchQuery);
 
         $session->set('page', $page);
@@ -2720,7 +2726,7 @@ class InternjumpUserController extends Controller {
         }
         /* pagenation part */
         //get count of all search result jobs
-        $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray,$jobt, 1, null));
+        $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray, $jobt, 1, null));
 
         $lastPageNumber = (int) ($userSearchResultsCount / $jobsPerPage);
         if (($userSearchResultsCount % $jobsPerPage) > 0) {
@@ -2728,12 +2734,12 @@ class InternjumpUserController extends Controller {
         }
 
 
-         /*****************[ End API Search Results ]***********************/
-        /**************************************************/
-         $apiJobsArr =array();
-         if(sizeof($userSearchResults) < 24 ){
-         $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null);
-           // print_r($apiJobsArr);
+        /*         * ***************[ End API Search Results ]********************** */
+        /*         * *********************************************** */
+        $apiJobsArr = array();
+        if (sizeof($userSearchResults) < 24) {
+            $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null);
+            // print_r($apiJobsArr);
 
             $lastPageNumber = (int) ($apiJobsArr['count'] / $jobsPerPage);
             if (($apiJobsArr['count'] % $jobsPerPage) > 0) {
@@ -2755,21 +2761,20 @@ class InternjumpUserController extends Controller {
                     'title' => $title,
                     'country' => $country,
                     'city' => $city,
-                    'state' => $state, 'category' => $category, 'company' => $company, 'lang' => $lang,'jobtype'=> $jobt,
+                    'state' => $state, 'category' => $category, 'company' => $company, 'lang' => $lang, 'jobtype' => $jobt,
         ));
     }
 
-
-     /**
+    /**
      * This function for search ajax action
      * @author Ola
      */
     public function fb_searchAction($title, $country, $city, $state, $category, $company, $lang, $jobt, $page) {
-         $request = $this->getRequest();
+        $request = $this->getRequest();
 
 
         $session = $request->getSession();
-        $searchQuery = array('title' => $title, 'country'=>$country, 'city' =>  $city, 'state' => $state, 'category' => $category, 'company' => $company, 'lang' => $lang, 'jobt' => $jobt);
+        $searchQuery = array('title' => $title, 'country' => $country, 'city' => $city, 'state' => $state, 'category' => $category, 'company' => $company, 'lang' => $lang, 'jobt' => $jobt);
         $session->set('searchQuery', $searchQuery);
 
         $session->set('page', $page);
@@ -2802,7 +2807,7 @@ class InternjumpUserController extends Controller {
         }
         /* pagenation part */
         //get count of all search result jobs
-        $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray,$jobt, 1, null));
+        $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray, $jobt, 1, null));
 
         $lastPageNumber = (int) ($userSearchResultsCount / $jobsPerPage);
         if (($userSearchResultsCount % $jobsPerPage) > 0) {
@@ -2810,12 +2815,12 @@ class InternjumpUserController extends Controller {
         }
 
 
-         /*****************[ End API Search Results ]***********************/
-        /**************************************************/
-         $apiJobsArr =array();
-         if(sizeof($userSearchResults) < 24 ){
-         $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null);
-           // print_r($apiJobsArr);
+        /*         * ***************[ End API Search Results ]********************** */
+        /*         * *********************************************** */
+        $apiJobsArr = array();
+        if (sizeof($userSearchResults) < 24) {
+            $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null);
+            // print_r($apiJobsArr);
 
             $lastPageNumber = (int) ($apiJobsArr['count'] / $jobsPerPage);
             if (($apiJobsArr['count'] % $jobsPerPage) > 0) {
@@ -2837,10 +2842,9 @@ class InternjumpUserController extends Controller {
                     'title' => $title,
                     'country' => $country,
                     'city' => $city,
-                    'state' => $state, 'category' => $category, 'company' => $company, 'lang' => $lang,'jobtype'=> $jobt,
+                    'state' => $state, 'category' => $category, 'company' => $company, 'lang' => $lang, 'jobtype' => $jobt,
         ));
     }
-
 
     /**
      * @author Ola

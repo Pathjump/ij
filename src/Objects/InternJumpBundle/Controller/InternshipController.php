@@ -248,8 +248,19 @@ class InternshipController extends Controller {
 
         //get company jobs
         //check if the owner company
+        $comanyFavoriteusersArray = array();
         if (True === $this->get('security.context')->isGranted('ROLE_COMPANY') && $this->get('security.context')->getToken()->getUser()->getLoginName() == $loginName) {
             $companyJobs = $internshipRepo->getCompanyJobs($company->getId(), $page, $itemsPerPage, TRUE);
+            //get favorite users
+            $comanyFavoriteusers = $company->getFavoriteUsers();
+            //get intersted user cv id
+            foreach ($comanyFavoriteusers as $comanyFavoriteuser) {
+                $comanyFavoriteuserArray = array();
+                $comanyFavoriteuserArray['user'] = $comanyFavoriteuser;
+                $interestObject = $interestRepo->findOneBy(array('accepted' => 'accepted','company' => $company->getId(), 'user' => $comanyFavoriteuser->getId()));
+                $comanyFavoriteuserArray['cvId'] = $interestObject->getCvId();
+                $comanyFavoriteusersArray [] = $comanyFavoriteuserArray;
+            }
         } else {
             $companyJobs = $internshipRepo->getCompanyJobs($company->getId(), $page, $itemsPerPage, FALSE);
         }
@@ -313,7 +324,8 @@ class InternshipController extends Controller {
                     'companyHiredUsers' => $companyHiredUsers,
                     'companyInterests' => $companyInterests,
                     'companyInterviews' => $companyInterviews,
-                    'ownerCompanyFlag' => $ownerCompanyFlag
+                    'ownerCompanyFlag' => $ownerCompanyFlag,
+                    'comanyFavoriteusers' => $comanyFavoriteusersArray
         ));
     }
 

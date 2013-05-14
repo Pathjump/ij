@@ -228,6 +228,27 @@
                                                         </ul>
                                                     </div>
             {% endif %}
+
+                                            {% if comanyFavoriteusers | length > 0 %}
+                                            <div class="Col-block">
+                                                    <h2>Favorite Candidates</h2>
+                                                    <ul class="list2">
+                {% for user in comanyFavoriteusers %}
+                                                            <li>
+                                                                <div class="media">
+                                                                    <a class="pull-left" href="{{path('company_see_user_data',{'userLoginName' : user.user.loginName,'cvId' : user.cvId})}}">
+                                                                        <img src="{{user.user.getTimThumbUrl(90,80)}}" style="width: 30px; height: 30px;" alt="" class="media-object">
+                                                                    </a>
+                                                                    <div class="media-body">
+                                                                        <div>{{user.user}}</div>
+                                                                        <a class="label label-important pull-right removeUserFromFavorite" href="javascript:void(0)" data-user-id="{{user.user.id}}">Remove</a>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                            {% endif %}
                                                 </div><!--span4 search-right-col-->
         {% endif %}
                                             </div><!--row-fluid-->
@@ -258,6 +279,20 @@
                                             var latitude = '{{company.Latitude}}';
                                             var longitude = '{{company.Longitude}}';
                                             $(document).ready(function() {
+                                                $('a.removeUserFromFavorite').click(function(){
+                                                   var userId = $(this).attr('data-user-id');
+                                                   //show loading img
+                                                    $('.loading').show();
+                                                    $.ajax({
+                                                        url: "{{ path('add_user_to_favorite') }}" + "/" + userId + "/remove",
+                                                        success: function(msg) {
+                                                        },
+                                                        complete: function(msg) {
+                                                            location.reload();
+                                                        }
+                                                    });
+                                                });
+
                                                 $('.showCompanyMap').colorbox({
                                             inline: true,
                                             onLoad: function() {

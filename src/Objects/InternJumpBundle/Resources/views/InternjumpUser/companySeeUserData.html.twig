@@ -17,6 +17,13 @@
         <div class="span12">
             {% if companyUserInterestFlag == 1 and is_granted('ROLE_COMPANY')%}
                 <ul class="nav nav-tabs">
+                    <li>
+                        {% if not companyUserFavoriteFlag %}
+                            <a href="javascript:void(0)" data-status="add" class="addToFavorite">Add to favorite</a>
+                        {% else %}
+                            <a href="javascript:void(0)" data-status="remove" class="addToFavorite">Remove from favorite</a>
+                        {% endif %}
+                    </li>
                     <li><a href="{{path('interview_request',{'userId' : user.id,'cvId' : cvId})}}" id="interviewAsk">Ask for interview</a></li>
                     <li><a href="{{path('company_new_message',{'userName' : user.loginName})}}">Send message</a></li>
                     <li><a href="{{path('company_hire_user',{'userId' : user.id,'cvId' : cvId})}}" id="companyHireUser">Hire him</a></li>
@@ -183,7 +190,7 @@
 {% block javascripts %}
 {{parent()}}
                             <script>
-
+                                var addRemoveFavoriteUrl = '{{path('add_user_to_favorite',{'userId' : user.id})}}';
                                 var askForInterviewUrl = '{{path('interview_request',{'userId' : user.id,'cvId' : cvId})}}';
                                 var companyHireUserUrl = '{{path('company_hire_user',{'userId' : user.id,'cvId' : cvId})}}';
                                 var addInterestUrl = '{{path('add_interest',{'loginName' : user.loginName,'cvId' : cvId})}}';

@@ -56,6 +56,15 @@ class Company implements AdvancedUserInterface {
     private $professions;
 
     /**
+     * @ORM\ManyToMany(targetEntity="\Objects\UserBundle\Entity\User")
+     * @ORM\JoinTable(name="favorite_user",
+     *     joinColumns={@ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)}
+     * )
+     */
+    private $favoriteUsers;
+
+    /**
      * the tasks of the company
      * @var \Doctrine\Common\Collections\ArrayCollection $tasks
      * @ORM\OneToMany(targetEntity="\Objects\InternJumpBundle\Entity\Task", mappedBy="company", cascade={"persist", "remove"}, orphanRemoval=true)
@@ -346,6 +355,7 @@ class Company implements AdvancedUserInterface {
         $this->interviews = new ArrayCollection();
         $this->internships = new ArrayCollection();
         $this->messages = new ArrayCollection();
+        $this->favoriteUsers = new ArrayCollection();
     }
 
     /**
@@ -1389,4 +1399,24 @@ class Company implements AdvancedUserInterface {
         return $this->youtubeUrl;
     }
 
+
+    /**
+     * Add favoriteUsers
+     *
+     * @param Objects\UserBundle\Entity\User $favoriteUsers
+     */
+    public function addUser(\Objects\UserBundle\Entity\User $favoriteUsers)
+    {
+        $this->favoriteUsers[] = $favoriteUsers;
+    }
+
+    /**
+     * Get favoriteUsers
+     *
+     * @return Doctrine\Common\Collections\Collection
+     */
+    public function getFavoriteUsers()
+    {
+        return $this->favoriteUsers;
+    }
 }

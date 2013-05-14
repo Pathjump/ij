@@ -117,3 +117,7 @@ fb_company_public_profile:
 company_reActivation:
     pattern:  /activation/code/resend
     defaults: { _controller: "ObjectsInternJumpBundle:Company:reActivation" }
+
+add_user_to_favorite:
+    pattern:  /add_user/favorite/{userId}/{status}
+    defaults: { _controller: "ObjectsInternJumpBundle:Company:addUserToFavorite" , userId : ~ ,status : ~}
