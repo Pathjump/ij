@@ -941,39 +941,39 @@ class InternshipController extends Controller {
 
 
                 //send email for suitable users
-                $categoryIdsArray = array();
-                foreach ($entity->getCategories() as $category) {
-                    $categoryIdsArray[] = $category->getId();
-                }
-                //get suitable cvs for this job categories
-                if (sizeof($categoryIdsArray) > 0) {
-
-                    //Now Get Country and State to compare them with useres' before sending them emails
-                    //get Job Country
-                    $country = $entity->getCountry();
-                    //get Job State
-                    $state = $entity->getState();
-                    //get suitable users' cvs
-                    $suitableCvs = $cvRepo->getNewJobSuitableCvs($categoryIdsArray, $country, $state);
-
-                    $newJobLink = $container->get('router')->generate('internship_show', array('id' => $entity->getId()), TRUE);
-                    $messageText = $container->getParameter('new_job_to_suitable_users_message_text');
-                    $subject = $container->getParameter('new_job_to_suitable_users_subject_text');
-                    //send email for the results users
-                    foreach ($suitableCvs as $user) {
-                        $message = \Swift_Message::newInstance()
-                                ->setSubject($subject)
-                                ->setFrom($container->getParameter('contact_us_email'))
-                                ->setTo($user['email'])
-                                ->setBody($container->get('templating')->render('ObjectsInternJumpBundle:Internship:newjobMail.html.twig', array(
-                                    'messageText' => $messageText,
-                                    'newJobLink' => $newJobLink
-                                )))
-                        ;
-                        //send the mail
-                        $container->get('mailer')->send($message);
-                    }
-                }
+//                $categoryIdsArray = array();
+//                foreach ($entity->getCategories() as $category) {
+//                    $categoryIdsArray[] = $category->getId();
+//                }
+//                //get suitable cvs for this job categories
+//                if (sizeof($categoryIdsArray) > 0) {
+//
+//                    //Now Get Country and State to compare them with useres' before sending them emails
+//                    //get Job Country
+//                    $country = $entity->getCountry();
+//                    //get Job State
+//                    $state = $entity->getState();
+//                    //get suitable users' cvs
+//                    $suitableCvs = $cvRepo->getNewJobSuitableCvs($categoryIdsArray, $country, $state);
+//
+//                    $newJobLink = $container->get('router')->generate('internship_show', array('id' => $entity->getId()), TRUE);
+//                    $messageText = $container->getParameter('new_job_to_suitable_users_message_text');
+//                    $subject = $container->getParameter('new_job_to_suitable_users_subject_text');
+//                    //send email for the results users
+//                    foreach ($suitableCvs as $user) {
+//                        $message = \Swift_Message::newInstance()
+//                                ->setSubject($subject)
+//                                ->setFrom($container->getParameter('contact_us_email'))
+//                                ->setTo($user['email'])
+//                                ->setBody($container->get('templating')->render('ObjectsInternJumpBundle:Internship:newjobMail.html.twig', array(
+//                                    'messageText' => $messageText,
+//                                    'newJobLink' => $newJobLink
+//                                )))
+//                        ;
+//                        //send the mail
+//                        $container->get('mailer')->send($message);
+//                    }
+//                }
                 //check if company want to add another job
 //                if (isset($_POST['create'])) {
                 return $this->redirect($this->generateUrl('internship_show', array('id' => $entity->getId())));
