@@ -39,6 +39,22 @@
 
                     </div><!--Resume-title--->
                 </div><!--profile-pag--->
+
+                <div class="Box-a">
+                    <h3>	About</h3>
+                    {% if user.about %}<p>{{user.about}}</p>{% endif %}
+
+                    <h5 class="titl-blue">Address</h5>
+                    <p>{{user.address}}</p>
+
+                    <h5 class="titl-blue">Email</h5>
+                    <p>{{user.email}}</p>
+
+                    {% if user.dateOfBirth %}
+                    <h5 class="titl-blue">Date Of Birth</h5>
+                    <p>{{user.dateOfBirth | date('d-m-Y')}}</p>
+                    {% endif %}
+                </div>
                 {% elseif companyUserInterestFlag == 2 and is_granted('ROLE_COMPANY')%}
                 <div class="company-form Resume">
                     <div class="row-fluid Resume-title show-grid">

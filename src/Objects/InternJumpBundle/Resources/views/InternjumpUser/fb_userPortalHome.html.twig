@@ -28,6 +28,23 @@
                 {% endif %}
 
                 <div class="Box-a">
+                    <h3>	About</h3>
+                    <a class="btn btn-small pull-right" href="{{path('user_edit')}}"><i class="icon-pencil"></i> Edit</a>
+                    {% if user.about %}<p>{{user.about}}</p>{% endif %}
+
+                    <h5 class="titl-blue">Address</h5>
+                    <p>{{user.address}}</p>
+
+                    <h5 class="titl-blue">Email</h5>
+                    <p>{{user.email}}</p>
+
+                    {% if user.dateOfBirth %}
+                    <h5 class="titl-blue">Date Of Birth</h5>
+                    <p>{{user.dateOfBirth | date('d-m-Y')}}</p>
+                    {% endif %}
+                </div>
+
+                <div class="Box-a">
                     <h3>	Objectives</h3>
                     <a class="btn btn-small pull-right" href="{{path('fb_cv_edit',{'id' : userCv.id})}}"><i class="icon-pencil"></i> Edit</a>
                     <h5 class="titl-blue">Description</h5>
