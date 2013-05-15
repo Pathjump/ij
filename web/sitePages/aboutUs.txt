@@ -5,7 +5,7 @@
 <div class="row-fluid about-a ">
     <div class="media thumbnail span6">
         <a href="#" class="pull-left">
-            <img src="img/about.png">
+            <img src="http://new.internjump.com/images/founders-Images/50a6a928cd0e2.jpg">
         </a>
         <div class="media-body">
             <h3 class="media-heading">Media heading</h3>
@@ -15,7 +15,7 @@
     </div>
     <div class="media thumbnail span6">
         <a href="#" class="pull-left">
-            <img src="img/about.png">
+            <img src="http://new.internjump.com/images/founders-Images/50a6a9440b225.jpg">
         </a>
         <div class="media-body">
             <h3 class="media-heading">M. Hasan Ali</h3>
@@ -30,7 +30,7 @@
     <ul class="thumbnails">
         <li class="span4">
             <div class="thumbnail">
-                <img src="img/about.png">
+                <img src="http://new.internjump.com/img/stephanie.jpg">
                     <div class="caption">
                         <h4>Steven Fitzpatrick
                             Employer Relations Associate</h4>
@@ -39,7 +39,7 @@
         </li>
         <li class="span4">
             <div class="thumbnail">
-                <img src="img/about.png">
+                <img src="http://new.internjump.com/img/sarah.jpg">
                     <div class="caption">
                         <h4>Sarah Yosefov
                             Employer Relations Associate</h4>
@@ -48,7 +48,7 @@
         </li>
         <li class="span4">
             <div class="thumbnail">
-                <img src="img/about.png">
+                <img src="http://new.internjump.com/img/userThumb.png">
                     <div class="caption">
                         <h4>Stephanie Evans
                             University Relations Associate</h4>
@@ -66,7 +66,7 @@
 
 <div class="media">
     <a href="#" class="pull-left">
-        <img src="img/Wilmerhale-logo.JPG" /></a>
+        <img src="http://new.internjump.com/img/Wilmerhale-logo.JPG" /></a>
     <div class="media-body">
         <a href="#" > <h4 class="media-heading">Wilmer Hale</h4></a>
     </div>
@@ -74,7 +74,7 @@
 
 <div class="media">
     <a href="#" class="pull-left">
-        <img src="img/.headhunterlabs-logo.jpg" /></a>
+        <img src="http://new.internjump.com/img/.headhunterlabs-logo.jpg" /></a>
     <div class="media-body">
         <a href="#" > <h4 class="media-heading">Headhunter labs</h4></a>
         <p>“Our goal is to bring together passionate entrepreneurs to build the next generation of job search and
