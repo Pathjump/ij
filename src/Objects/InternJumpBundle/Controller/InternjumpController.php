@@ -863,11 +863,11 @@ class InternjumpController extends Controller {
         $founders = $founderRepo->findAll();
 
         $data = array();
-        if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
-            $company = $this->get('security.context')->getToken()->getUser();
-            $data['Name'] = $company->__toString();
-            $data['Email'] = $company->getEmail();
-        } elseif (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {
+        if (true === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $user = $this->get('security.context')->getToken()->getUser();
+            $data['Name'] = $user->__toString();
+            $data['Email'] = $user->getEmail();
+        } elseif (true === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {
             $company = $this->get('security.context')->getToken()->getUser();
             $data['Name'] = $company->__toString();
             $data['Email'] = $company->getEmail();
@@ -1307,11 +1307,11 @@ class InternjumpController extends Controller {
         // print_r($allSubjects);
 
         $data = array();
-        if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
-            $company = $this->get('security.context')->getToken()->getUser();
-            $data['Name'] = $company->__toString();
-            $data['Email'] = $company->getEmail();
-        } elseif (FALSE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {
+        if (true === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
+            $user = $this->get('security.context')->getToken()->getUser();
+            $data['Name'] = $user->__toString();
+            $data['Email'] = $user->getEmail();
+        } elseif (true === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {
             $company = $this->get('security.context')->getToken()->getUser();
             $data['Name'] = $company->__toString();
             $data['Email'] = $company->getEmail();
