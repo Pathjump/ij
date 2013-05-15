@@ -41,8 +41,12 @@ find your worth
         <div class="step4 span8 Your-worth">
 
             <div class=" text-center span5">
-                <p>You're worth</p>
+                <p>Projected Annual Salary <a class="notifiToTooltip" data-original-title="{{user_worth_description}}" data-placement="bottom" data-toggle="tooltip" href="javascript:void(0)">?</a></p>
                 <span class="Worth-value">  ${{userTotalWorth}} USD</span>
+                {% if userNetWorth %}
+                <p>Lifetime Projected Earnings <a class="notifiToTooltip" data-original-title="{{user_net_worth_description}}" data-placement="bottom" data-toggle="tooltip" href="javascript:void(0)">?</a></p>
+                <span class="Worth-value">  ${{userNetWorth}} USD</span>
+                {% endif %}
                 <a class="btn btn-primary large" href="{{path('fb_howMuchAreYouWorth')}}">Recalculate</a>
             </div>
             <img width="197" height="354" class=" span2 pull-right" src="{{asset('img/drowpng.png')}}">
@@ -93,6 +97,8 @@ find your worth
 <script src="{{asset('js/Highcharts-3.0.0/highcharts.js')}}"></script>
 <script>
         $(window).load(function(){
+            $('a.notifiToTooltip').tooltip();
+
             $('.worthLoading').fadeOut(500,function(){
                $('.worthResult').fadeIn(500);
             });

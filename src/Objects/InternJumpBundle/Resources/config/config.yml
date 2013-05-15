@@ -81,3 +81,5 @@ parameters:
   worth_year_boost: 3
   worth_facebook_message: 'My expected worth on internjump is'
   worth_select_from: automatic
+  user_worth_description: 'Your Curren Worth'
+  user_net_worth_description: 'Your Net Worth'

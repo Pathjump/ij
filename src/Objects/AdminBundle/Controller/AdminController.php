@@ -125,6 +125,8 @@ class AdminController extends Controller {
             $config['worth_year_boost'] = $container->getParameter('worth_year_boost');
             $config['worth_facebook_message'] = $container->getParameter('worth_facebook_message');
             $config['worth_select_from'] = $container->getParameter('worth_select_from');
+            $config['user_worth_description'] = $container->getParameter('user_worth_description');
+            $config['user_net_worth_description'] = $container->getParameter('user_net_worth_description');
 
             //make form to fill it with data
             $form = $this->createFormBuilder($config)
@@ -212,6 +214,8 @@ class AdminController extends Controller {
                     ->add('worth_select_from', 'choice',array(
                         'choices' => array('automatic' => 'Automatic','manually' => 'Manually')
                     ))
+                    ->add('user_worth_description', 'text')
+                    ->add('user_net_worth_description', 'text')
 
                     ->getForm();
 
@@ -230,6 +234,12 @@ class AdminController extends Controller {
                     $firstFileChange = FALSE;
                     //compare existed data with the data entered by the user
                     //check if any of the configurations in the first file need change
+                    if ($formDataArray['user_worth_description'] != $container->getParameter('user_worth_description')) {
+                        $firstFileChange = TRUE;
+                    }
+                    if ($formDataArray['user_net_worth_description'] != $container->getParameter('user_net_worth_description')) {
+                        $firstFileChange = TRUE;
+                    }
                     if ($formDataArray['worth_default_statrting_salary'] != $container->getParameter('worth_default_statrting_salary')) {
                         $firstFileChange = TRUE;
                     }
@@ -527,6 +537,8 @@ class AdminController extends Controller {
                             $value['parameters']['worth_year_boost'] = $formDataArray['worth_year_boost'];
                             $value['parameters']['worth_facebook_message'] = $formDataArray['worth_facebook_message'];
                             $value['parameters']['worth_select_from'] = $formDataArray['worth_select_from'];
+                            $value['parameters']['user_worth_description'] = $formDataArray['user_worth_description'];
+                            $value['parameters']['user_net_worth_description'] = $formDataArray['user_net_worth_description'];
 
 
                             $value['parameters']['contact_us_email'] = $formDataArray['contact_us_email'];

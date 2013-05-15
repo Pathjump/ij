@@ -365,14 +365,7 @@ class InternjumpController extends Controller {
 
 
                 $userTotalWorth = $userTotalWorth;
-                //add the result to database
-                $loggedInUser->setCurrentWorth($userTotalWorth);
-                $em->flush();
-                //post resutl on user facebook wall
-                $status = $this->container->getParameter('worth_facebook_message');
-                $picture = $this->generateUrl('site_homepage', array(), TRUE) . 'img/faceLogo.png';
-                $link = $this->generateUrl('site_fb_homepage', array(), TRUE);
-                FacebookController::postOnUserWallAndFeedAction($loggedInUser->getSocialAccounts()->getFacebookId(), $loggedInUser->getSocialAccounts()->getAccessToken(), $status, null, null, $link, $picture);
+
 
                 //get user facebook friends
                 $friends = json_decode(FacebookController::getUserFriends($loggedInUser->getSocialAccounts()->getFacebookId(), $loggedInUser->getSocialAccounts()->getAccessToken()), true);
@@ -411,12 +404,25 @@ class InternjumpController extends Controller {
                     }
                 }
 
+                //add the result to database
+                $loggedInUser->setCurrentWorth($userTotalWorth);
+                $loggedInUser->setNetWorth(ceil($userNetWorthSum));
+                $em->flush();
+
+                //post resutl on user facebook wall
+                $status = $this->container->getParameter('worth_facebook_message').' $'.number_format(ceil($userNetWorthSum));
+                $picture = $this->generateUrl('site_homepage', array(), TRUE) . 'img/faceLogo.png';
+                $link = $this->generateUrl('site_fb_homepage', array(), TRUE);
+                FacebookController::postOnUserWallAndFeedAction($loggedInUser->getSocialAccounts()->getFacebookId(), $loggedInUser->getSocialAccounts()->getAccessToken(), $status, null, null, $link, $picture);
+
                 return $this->render('ObjectsInternJumpBundle:Internjump:howMuchAreYouWorth.html.twig', array(
-                            'userTotalWorth' => $userTotalWorth,
+                            'userTotalWorth' => number_format($userTotalWorth),
                             'fiveYearsWorthArray' => $fiveYearsWorthArray,
                             'userFriendsWorth' => $userFriendsWorth,
                             'ImproveResultsMessageArray' => $ImproveResultsMessageArray,
-                            'userNetWorth' => ceil($userNetWorthSum)
+                            'userNetWorth' => number_format(ceil($userNetWorthSum)),
+                            'user_worth_description' => $this->container->getParameter('user_worth_description'),
+                            'user_net_worth_description' => $this->container->getParameter('user_net_worth_description')
                 ));
             } else {
                 return $this->render('ObjectsInternJumpBundle:Internjump:howMuchAreYouWorth.html.twig', array(
@@ -594,6 +600,7 @@ class InternjumpController extends Controller {
 
                 $yearWorth = $userTotalWorth;
                 $fiveYearsWorthArray[date('Y')] = $yearWorth;
+                $worthIncrementRatio = 0.03;
                 if ($userMaxLevelEducation) {
                     //check if graduate or undergradute
                     if ($userMaxLevelEducation->getUnderGraduate() == 1) {
@@ -605,12 +612,12 @@ class InternjumpController extends Controller {
 
                         $reset = 5 - sizeof($fiveYearsWorthArray);
                         for ($index = date('Y') + 1; $index <= date('Y') + $reset; $index++) {
-                            $yearWorth = $yearWorth + (0.03 * $yearWorth);
+                            $yearWorth = $yearWorth + ($worthIncrementRatio * $yearWorth);
                             $fiveYearsWorthArray["$index"] = $yearWorth;
                         }
                     } else {
                         for ($index = date('Y') + 1; $index < date('Y') + 5; $index++) {
-                            $yearWorth = $yearWorth + (0.03 * $yearWorth);
+                            $yearWorth = $yearWorth + ($worthIncrementRatio * $yearWorth);
                             $fiveYearsWorthArray["$index"] = $yearWorth;
                         }
                     }
@@ -618,14 +625,6 @@ class InternjumpController extends Controller {
 
 
                 $userTotalWorth = $userTotalWorth;
-                //add the result to database
-                $loggedInUser->setCurrentWorth($userTotalWorth);
-                $em->flush();
-                //post resutl on user facebook wall
-                $status = $this->container->getParameter('worth_facebook_message');
-                $picture = $this->generateUrl('site_homepage', array(), TRUE) . 'img/faceLogo.png';
-                $link = $this->generateUrl('site_fb_homepage', array(), TRUE);
-                FacebookController::postOnUserWallAndFeedAction($loggedInUser->getSocialAccounts()->getFacebookId(), $loggedInUser->getSocialAccounts()->getAccessToken(), $status, null, null, $link, $picture);
 
                 //get user facebook friends
                 $friends = json_decode(FacebookController::getUserFriends($loggedInUser->getSocialAccounts()->getFacebookId(), $loggedInUser->getSocialAccounts()->getAccessToken()), true);
@@ -648,11 +647,42 @@ class InternjumpController extends Controller {
                     }
                 }
 
+                //caculate net worth
+                $userAge = 22;
+                if ($loggedInUser->getAge()) {
+                    $userAge = $loggedInUser->getAge();
+                }
+
+                $userYearNetWorth = null;
+                $userNetWorthSum = 0;
+                if ($userAge < 65) {
+                    $userYearNetWorth = $userTotalWorth;
+                    for ($index = $userAge + 1; $index <= 65; $index++) {
+                        $userYearNetWorth = $userYearNetWorth + ($worthIncrementRatio * $userYearNetWorth);
+                        $userNetWorthSum += $userYearNetWorth;
+                    }
+                }
+
+                //add the result to database
+                $loggedInUser->setCurrentWorth($userTotalWorth);
+                $loggedInUser->setNetWorth(ceil($userNetWorthSum));
+                $em->flush();
+                
+                //post resutl on user facebook wall
+                $status = $this->container->getParameter('worth_facebook_message').' $'.number_format(ceil($userNetWorthSum));
+                $picture = $this->generateUrl('site_homepage', array(), TRUE) . 'img/faceLogo.png';
+                $link = $this->generateUrl('site_fb_homepage', array(), TRUE);
+                FacebookController::postOnUserWallAndFeedAction($loggedInUser->getSocialAccounts()->getFacebookId(), $loggedInUser->getSocialAccounts()->getAccessToken(), $status, null, null, $link, $picture);
+
+
                 return $this->render('ObjectsInternJumpBundle:Internjump:fb_howMuchAreYouWorth.html.twig', array(
-                            'userTotalWorth' => $userTotalWorth,
+                            'userTotalWorth' => number_format($userTotalWorth),
                             'fiveYearsWorthArray' => $fiveYearsWorthArray,
                             'userFriendsWorth' => $userFriendsWorth,
-                            'ImproveResultsMessageArray' => $ImproveResultsMessageArray
+                            'ImproveResultsMessageArray' => $ImproveResultsMessageArray,
+                            'userNetWorth' => number_format(ceil($userNetWorthSum)),
+                            'user_worth_description' => $this->container->getParameter('user_worth_description'),
+                            'user_net_worth_description' => $this->container->getParameter('user_net_worth_description')
                 ));
             } else {
                 return $this->render('ObjectsInternJumpBundle:Internjump:howMuchAreYouWorth.html.twig', array(

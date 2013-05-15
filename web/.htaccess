@@ -2,6 +2,7 @@
     RewriteEngine On
     RewriteRule ^user-profile-image/([0-9]+)/([0-9]+)/([0-9a-zA-Z\-_.]+).([a-zA-Z]{3,4})$ timthumb.php?src=/images/users-profiles-images/$3.$4&w=$1&h=$2&zc=0 [NC,L]
     RewriteRule ^company-logo/([0-9]+)/([0-9]+)/([0-9a-zA-Z\-_]+).([a-zA-Z]{3,4})$ timthumb.php?src=/images/companies-logos/$3.$4&w=$1&h=$2&zc=0 [NC,L]
+    RewriteRule ^default-company-logo/([0-9]+)/([0-9]+)$ timthumb.php?src=/img/company-default-img.jpg&w=$1&h=$2&zc=0 [NC,L]
     RewriteRule ^quiz-result-image/([0-9]+)/([0-9]+)/([0-9a-zA-Z\-_]+).([a-zA-Z]{3,4})$ timthumb.php?src=/images/quiz-results-images/$3.$4&w=$1&h=$2&zc=0 [NC,L]
     RewriteRule ^founders-Image/([0-9]+)/([0-9]+)/([0-9a-zA-Z\-_]+).([a-zA-Z]{3,4})$ timthumb.php?src=/images/founders-Images/$3.$4&w=$1&h=$2&zc=0 [NC,L]
     RewriteRule ^posts-Images/([0-9]+)/([0-9]+)/([0-9a-zA-Z\-_]+).([a-zA-Z]{3,4})$ timthumb.php?src=/images/posts-Images/$3.$4&w=$1&h=$2&zc=1 [NC,L]

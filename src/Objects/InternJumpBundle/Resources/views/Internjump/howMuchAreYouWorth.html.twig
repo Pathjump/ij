@@ -42,10 +42,10 @@ find your worth
         <div class="step4 span8 Your-worth">
 
             <div class=" text-center span5">
-                <p>You're worth</p>
+                <p>Projected Annual Salary <a class="notifiToTooltip" data-original-title="{{user_worth_description}}" data-placement="bottom" data-toggle="tooltip" href="javascript:void(0)">?</a></p>
                 <span class="Worth-value">  ${{userTotalWorth}} USD</span>
                 {% if userNetWorth %}
-                <p>You're net worth</p>
+                <p>Lifetime Projected Earnings <a class="notifiToTooltip" data-original-title="{{user_net_worth_description}}" data-placement="bottom" data-toggle="tooltip" href="javascript:void(0)">?</a></p>
                 <span class="Worth-value">  ${{userNetWorth}} USD</span>
                 {% endif %}
                 <a class="btn btn-primary large" href="{{path('howMuchAreYouWorth')}}">Recalculate</a>
@@ -55,100 +55,102 @@ find your worth
         <div class="clearfix"></div>
 
             {% for message in ImproveResultsMessageArray %}
-                <p class=" pagination-centered">
+        <p class=" pagination-centered">
                     {{message}}
-                </p>
+            </p>
             {% endfor %}
 
 
 
-        <div class="row">
+            <div class="row">
             {% if userFriendsWorth | length > 0%}
-            <div class="span4 friends-worth">
-                <h3>How much your friends are worth</h3>
+                    <div class="span4 friends-worth">
+                        <h3>How much your friends are worth</h3>
                 {% for userFriendWorth in userFriendsWorth %}
-                <div class="media">
-                    <a class="pull-left" href="javascript:void(0)">
-                        <img src="{{userFriendWorth.image}}" style="width: 50px; height: 50px;" alt="64x64" class="media-object" data-src="holder.js/64x64">
-                    </a>
-                    <div class="media-body">
-                        <h4 class="media-heading">{{userFriendWorth.name}}</h4>
-                        $ {{userFriendWorth.worth}}
-                    </div>
-                </div><!--media--->
+                        <div class="media">
+                            <a class="pull-left" href="javascript:void(0)">
+                                <img src="{{userFriendWorth.image}}" style="width: 50px; height: 50px;" alt="64x64" class="media-object" data-src="holder.js/64x64">
+                            </a>
+                            <div class="media-body">
+                                <h4 class="media-heading">{{userFriendWorth.name}}</h4>
+                                $ {{userFriendWorth.worth}}
+                            </div>
+                        </div><!--media--->
                 {% endfor %}
-            </div><!--friends-worth-->
+                    </div><!--friends-worth-->
             {% endif %}
 
-            <div class="span5 graph-box text-center pull-right ">
-                <h3>Your projected worth over the next 5 years</h3>
-                <div id="chart" style="min-width: 494px; height: 293px;"></div>
-            </div><!--span5-->
-        </div><!--row-->
-        <div class="clearfix"></div>
+                    <div class="span5 graph-box text-center pull-right ">
+                        <h3>Your projected worth over the next 5 years</h3>
+                        <div id="chart" style="min-width: 494px; height: 293px;"></div>
+                    </div><!--span5-->
+                </div><!--row-->
+                <div class="clearfix"></div>
 
-    </div>
-</div>
+            </div>
+        </div>
 {% endif %}
 
 {%endblock%}
 
 {%block javascripts%}
  {{parent()}}
-<script src="{{asset('js/Highcharts-3.0.0/highcharts.js')}}"></script>
-<script>
-        $(window).load(function(){
-            $('.worthLoading').fadeOut(500,function(){
-               $('.worthResult').fadeIn(500);
+        <script src="{{asset('js/Highcharts-3.0.0/highcharts.js')}}"></script>
+        <script>
+            $(window).load(function() {
+                $('a.notifiToTooltip').tooltip();
+
+                $('.worthLoading').fadeOut(500, function() {
+                    $('.worthResult').fadeIn(500);
+                });
             });
-        });
-</script>
+            </script>
 {% if userTotalWorth is defined %}
-<script>
-    $(function() {
-        $('#chart').highcharts({
-            chart: {
-                type: 'line',
-                marginRight: 130,
-                marginBottom: 25
-            },
-            credits: {enabled: false},
-            title: {
-                text: '',
-                x: -20 //center
-            },
-            xAxis: {
-                categories: [{% if fiveYearsWorthArray %}{% for year,worth in fiveYearsWorthArray %}'{{year}}',{% endfor %}{% endif %}]
-            },
-            yAxis: {
-                title: {
-                    text: 'Worth'
-                },
-                plotLines: [{
-                        value: 0,
-                        width: 1,
-                        color: '#808080'
-                    }]
-            },
-            tooltip: {
-                formatter: function() {
-                    return '<strong>' + this.x + '</strong><br/>$' + this.y;
-                }
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'top',
-                x: -10,
-                y: 100,
-                borderWidth: 0
-            },
-            series: [{
-                    name: 'worth',
-                    data: [{% if fiveYearsWorthArray %}{% for year,worth in fiveYearsWorthArray %}{{worth}},{% endfor %}{% endif %}]
-                }]
-        });
-    });
-    </script>
+            <script>
+                $(function() {
+                    $('#chart').highcharts({
+                        chart: {
+                            type: 'line',
+                            marginRight: 130,
+                            marginBottom: 25
+                        },
+                        credits: {enabled: false},
+                        title: {
+                            text: '',
+                            x: -20 //center
+                        },
+                        xAxis: {
+                            categories: [{% if fiveYearsWorthArray %}{% for year,worth in fiveYearsWorthArray %}'{{year}}',{% endfor %}{% endif %}]
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Worth'
+                            },
+                            plotLines: [{
+                                    value: 0,
+                                    width: 1,
+                                    color: '#808080'
+                                }]
+                        },
+                        tooltip: {
+                            formatter: function() {
+                                return '<strong>' + this.x + '</strong><br/>$' + this.y;
+                            }
+                        },
+                        legend: {
+                            layout: 'vertical',
+                            align: 'right',
+                            verticalAlign: 'top',
+                            x: -10,
+                            y: 100,
+                            borderWidth: 0
+                        },
+                        series: [{
+                                name: 'worth',
+                                data: [{% if fiveYearsWorthArray %}{% for year,worth in fiveYearsWorthArray %}{{worth}},{% endfor %}{% endif %}]
+                            }]
+                    });
+                });
+                </script>
 {% endif %}
 {%endblock%}
