@@ -510,7 +510,7 @@ class Company implements AdvancedUserInterface {
      * @return string the htaccess file url pattern which map to timthumb url
      */
     public function getTimThumbUrl($width = 50, $height = 50) {
-        return NULL === $this->image ? '/img/company-default-img.jpg' : "/company-logo/$width/$height/$this->image";
+        return NULL === $this->image ? "/default-company-logo/$width/$height" : "/company-logo/$width/$height/$this->image";
     }
 
     /**
