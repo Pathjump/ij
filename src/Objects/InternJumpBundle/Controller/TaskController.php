@@ -131,7 +131,7 @@ class TaskController extends Controller {
 
 
         //Get the user's worth result
-        $worth = $user->getCurrentWorth();
+        $worth = $user->getNetWorth();
 
         return $this->render('ObjectsInternJumpBundle:Task:studentTasks.html.twig', array(
                     'entities' => $tasks,
