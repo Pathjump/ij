@@ -36,17 +36,17 @@
             <label>Filter By</label>
             <select onchange="window.location = '{{ path('company_notification', {'type': ''}) }}/' + this.value;">
                 <option {% if type == 'all' %}selected="selected"{% endif %} value="all">Show all</option>
-                <option {% if type == 'user_answer_question' %}selected="user_answer_question"{% endif %} value="user_answer_question">Question answer</option>
-                <option {% if type == 'user_job_apply' %}selected="user_job_apply"{% endif %} value="user_job_apply">Job apply</option>
-                <option {% if type == 'user_accept_job' %}selected="user_accept_job"{% endif %} value="user_accept_job">Offer accepted</option>
-                <option {% if type == 'user_reject_job' %}selected="user_reject_job"{% endif %} value="user_reject_job">Offer declined</option>
-                <option {% if type == 'user_accept_interest' %}selected="user_accept_interest"{% endif %} value="user_accept_interest">Interest accepted</option>
-                <option {% if type == 'user_reject_interest' %}selected="user_reject_interest"{% endif %} value="user_reject_interest">Interest declined</option>
-                <option {% if type == 'user_accept_interview' %}selected="user_accept_interview"{% endif %} value="user_accept_interview">Interview accepted</option>
-                <option {% if type == 'user_reject_interview' %}selected="user_reject_interview"{% endif %} value="user_reject_interview">Interview declined</option>
-                <option {% if type == 'user_edit_task' %}selected="user_edit_task"{% endif %} value="user_edit_task">Update task</option>
-                <option {% if type == 'user_add_note' %}selected="user_add_note"{% endif %} value="user_add_note">Add task note</option>
-                <option {% if type == 'user_edit_note' %}selected="user_edit_note"{% endif %} value="user_edit_note">Edit task note</option>
+                <option {% if type == 'user_answer_question' %}selected="user_answer_question"{% endif %} value="user_answer_question">Question Answer</option>
+                <option {% if type == 'user_job_apply' %}selected="user_job_apply"{% endif %} value="user_job_apply">Job Apply</option>
+                <option {% if type == 'user_accept_job' %}selected="user_accept_job"{% endif %} value="user_accept_job">Offer Accepted</option>
+                <option {% if type == 'user_reject_job' %}selected="user_reject_job"{% endif %} value="user_reject_job">Offer Declined</option>
+                <option {% if type == 'user_accept_interest' %}selected="user_accept_interest"{% endif %} value="user_accept_interest">Interest Accepted</option>
+                <option {% if type == 'user_reject_interest' %}selected="user_reject_interest"{% endif %} value="user_reject_interest">Interest Declined</option>
+                <option {% if type == 'user_accept_interview' %}selected="user_accept_interview"{% endif %} value="user_accept_interview">Interview Accepted</option>
+                <option {% if type == 'user_reject_interview' %}selected="user_reject_interview"{% endif %} value="user_reject_interview">Interview Declined</option>
+                <option {% if type == 'user_edit_task' %}selected="user_edit_task"{% endif %} value="user_edit_task">Update Task</option>
+                <option {% if type == 'user_add_note' %}selected="user_add_note"{% endif %} value="user_add_note">Add Task Note</option>
+                <option {% if type == 'user_edit_note' %}selected="user_edit_note"{% endif %} value="user_edit_note">Edit Task Note</option>
            </select>
     </div>
 

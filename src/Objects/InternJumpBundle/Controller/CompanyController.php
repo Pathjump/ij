@@ -14,6 +14,40 @@ use Objects\InternJumpBundle\Entity\UserLanguage;
 class CompanyController extends Controller {
 
     /**
+     * this function used to add user to favorite list for company
+     * @author ahmed
+     * @param integer $userId
+     * @param string $userId
+     */
+    public function addUserToFavoriteAction($userId, $status) {
+        //check if the company is already active
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            return new Response('failed');
+        }
+        //get logedin company objects
+        $company = $this->get('security.context')->getToken()->getUser();
+        //get the entity manager
+        $em = $this->getDoctrine()->getEntityManager();
+        $userRepo = $em->getRepository('ObjectsUserBundle:User');
+        //get the user
+        $user = $userRepo->find($userId);
+
+        if (!$user) {
+            return new Response('failed');
+        }
+
+        if ($status == 'add') {
+            //add the user to company favorite list
+            $company->addUser($user);
+        }else{
+            $company->getFavoriteUsers()->removeElement($user);
+        }
+        $em->flush();
+
+        return new Response('done');
+    }
+
+    /**
      * this function used to resend activation mail to not actice company
      * @author ahmed
      */
@@ -1047,18 +1081,9 @@ class CompanyController extends Controller {
                     'second_name' => 'ReEmail',
                     'invalid_message' => "The emails don't match"
                 ))
-                ->add('telephone')
-                ->add('fax')
-                ->add('url')
-                ->add('facebookUrl')
-                ->add('twitterUrl')
-                ->add('googlePlusUrl')
-                ->add('linkedInUrl')
-                ->add('youtubeUrl')
                 ->add('zipcode')
                 ->add('Latitude', 'hidden')
                 ->add('Longitude', 'hidden')
-                ->add('file', 'file', array('required' => false, 'label' => 'Logo', 'attr' => array('onchange' => 'readURL(this);')))
                 ->add('professions', null, array('required' => FALSE))
         ;
         //create the form

@@ -107,10 +107,14 @@ class UserController extends Controller {
                 if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_COMPANY')) {
                     //get logedin company objects
                     $company = $this->get('security.context')->getToken()->getUser();
+                    //add login success flash
+                    $this->getRequest()->getSession()->setFlash('loginSuccess', TRUE);
                     return $this->redirect($this->generateUrl('internship', array('loginName' => $company->getLoginName()), TRUE));
                 } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
                     //get logedin user objects
                     $user = $this->get('security.context')->getToken()->getUser();
+                    //add login success flash
+                    $this->getRequest()->getSession()->setFlash('loginSuccess', TRUE);
                     return $this->redirect($this->generateUrl('student_task', array('loginName' => $user->getLoginName()), TRUE));
                 }
                 if (TRUE === $this->get('security.context')->isGranted('ROLE_ACTIVE_SOCIAL') || TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_SOCIAL')) {

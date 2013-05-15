@@ -1409,13 +1409,13 @@ class InternjumpController extends Controller {
      * This action to display one resource
      * @author Ola
      */
-    public function showOneResourceAction($id) {
+    public function showOneResourceAction($slug) {
         $em = $this->getDoctrine()->getEntityManager();
         //get post repo
         $postRepo = $em->getRepository('ObjectsInternJumpBundle:Post');
 
         //Get post
-        $post = $postRepo->findOneBy(array('id' => $id));
+        $post = $postRepo->findOneBy(array('slug' => $slug));
 
 
         return $this->render('ObjectsInternJumpBundle:Internjump:showPost.html.twig', array(

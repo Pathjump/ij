@@ -27,6 +27,8 @@ class Internship {
      */
     private $id;
 
+    public $otherSkills;
+
     /**
      * the company of the internship
      * @var \Objects\InternJumpBundle\Entity\Company $company

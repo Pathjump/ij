@@ -25,7 +25,7 @@
         <div class="Add-Job-description span12">
 
 
-                <legend><h2>{%if formName%}{{formName}}{%endif%}  <small>(Job description)</small></h2></legend>
+                <legend><h2>{%if formName%}{{formName}}{%endif%}  <small>(Job Description Continued)</small></h2></legend>
                 <fieldset>
 
                     <div class="controls">
@@ -159,6 +159,16 @@
                             <div class="alert alert-error">
                                 <button type="button" class="close" data-dismiss="alert"> × </button>
                                 {{ form_errors(form.skills) }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="controls row-fluid show-grid">
+                        <label>Skills <i><em class="muted">add other skills comma separated</em></i></label>
+                        {{ form_widget(form.otherSkills,{'attr' : {'class' :  'span12'}}) }}
+                        {% if form_errors(form.otherSkills) %}
+                            <div class="alert alert-error">
+                                <button type="button" class="close" data-dismiss="alert"> × </button>
+                                {{ form_errors(form.otherSkills) }}
                             </div>
                         {% endif %}
                     </div>

@@ -76,17 +76,20 @@
                                     </span>
                                 </div>
                                 <div class="span6">
-                                    <label>Password Confirm</label>
+                                    <label>Confirm Password</label>
                                     {{ form_widget(form.userPassword.RePassword,{'attr' : {'class' : 'span12'}}) }}
                                     <span style="display: inline-block;margin-bottom: 13px;">
                                         <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                    </span>
+                                    <span style="display: inline-block;margin-bottom: 13px;margin-left: 5px;">
+                                        <img style="opacity: 1;" class="tooltip" title="For Security Purposes InternJump Requires Users To Confirm Their Password" src="{{asset('js/tooltip/Question.png')}}">
                                     </span>
                                 </div>
                             </div>
 
                             <div class="controls row-fluid show-grid">
                                 <div class="span6">
-                                    <label>Companey Email</label>
+                                    <label>Email</label>
                                     {{ form_widget(form.email.Email,{'attr' : {'class' : 'span12'}}) }}
                                     {% if form_errors(form.email) %}
                                     <div class="alert alert-error">
@@ -99,134 +102,11 @@
                                     </span>
                                 </div>
                                 <div class="span6">
-                                    <label>Confirm Companey Email</label>
+                                    <label>Confirm Email</label>
                                     {{ form_widget(form.email.ReEmail,{'attr' : {'class' : 'span12'}}) }}
                                     <span style="display: inline-block;margin-bottom: 13px;">
                                         <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
                                     </span>
-                                </div>
-                            </div>
-
-                            <div class="controls row-fluid show-grid">
-                                <div class="span6">
-                                    <label>Industry</label>
-                                    {{ form_widget(form.professions,{'attr' : {'class' : 'chzn-select'}}) }}
-                                    {% if form_errors(form.professions) %}
-                                    <div class="alert alert-error">
-                                        <button type="button" class="close" data-dismiss="alert"> × </button>
-                                        {{ form_errors(form.professions) }}
-                                    </div>
-                                    {% endif %}
-                                    <span style="display: inline-block;margin-bottom: 13px;">
-                                        <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
-                                    </span>
-                                </div>
-                                <div class="span6">
-                                    <label>Company Logo</label>
-                                    {{ form_widget(form.file) }}
-                                    {% if form_errors(form.file) %}
-                                    <div class="alert alert-error">
-                                        <button type="button" class="close" data-dismiss="alert"> × </button>
-                                        {{ form_errors(form.file) }}
-                                    </div>
-                                    {% endif %}
-                                    <img id="yourImage" src="#" style="border: none;" width="65" height="60"/>
-                                </div>
-                            </div>
-
-                            <div class="controls row-fluid show-grid">
-                                <div class="span6">
-                                    <label>Telephone</label>
-                                    {{ form_widget(form.telephone,{'attr' : {'class' : 'span12'}}) }}
-                                    {% if form_errors(form.telephone) %}
-                                    <div class="alert alert-error">
-                                        <button type="button" class="close" data-dismiss="alert"> × </button>
-                                        {{ form_errors(form.telephone) }}
-                                    </div>
-                                    {% endif %}
-                                </div>
-                                <div class="span6">
-                                    <label>Fax</label>
-                                    {{ form_widget(form.fax,{'attr' : {'class' : 'span12'}}) }}
-                                    {% if form_errors(form.fax) %}
-                                    <div class="alert alert-error">
-                                        <button type="button" class="close" data-dismiss="alert"> × </button>
-                                        {{ form_errors(form.fax) }}
-                                    </div>
-                                    {% endif %}
-                                </div>
-                            </div>
-
-
-
-                            <div class="controls row-fluid show-grid">
-                                <div class="span6">
-                                    <label>Company Website</label>
-                                    {{ form_widget(form.url,{'attr' : {'class' : 'span12'}}) }}
-                                    {% if form_errors(form.url) %}
-                                    <div class="alert alert-error">
-                                        <button type="button" class="close" data-dismiss="alert"> × </button>
-                                        {{ form_errors(form.url) }}
-                                    </div>
-                                    {% endif %}
-                                </div>
-                                <div class="span6">
-                                    <label>Facebook Url</label>
-                                    {{ form_widget(form.facebookUrl,{'attr' : {'class' : 'span12'}}) }}
-                                    {% if form_errors(form.facebookUrl) %}
-                                    <div class="alert alert-error">
-                                        <button type="button" class="close" data-dismiss="alert"> × </button>
-                                        {{ form_errors(form.facebookUrl) }}
-                                    </div>
-                                    {% endif %}
-                                </div>
-                            </div>
-
-                            <div class="controls row-fluid show-grid">
-                                <div class="span6">
-                                    <label>Twitter Url</label>
-                                    {{ form_widget(form.twitterUrl,{'attr' : {'class' : 'span12'}}) }}
-                                    {% if form_errors(form.twitterUrl) %}
-                                    <div class="alert alert-error">
-                                        <button type="button" class="close" data-dismiss="alert"> × </button>
-                                        {{ form_errors(form.twitterUrl) }}
-                                    </div>
-                                    {% endif %}
-                                </div>
-                                <div class="span6">
-                                    <label>Google+ Url</label>
-                                    {{ form_widget(form.googlePlusUrl,{'attr' : {'class' : 'span12'}}) }}
-                                    {% if form_errors(form.googlePlusUrl) %}
-                                    <div class="alert alert-error">
-                                        <button type="button" class="close" data-dismiss="alert"> × </button>
-                                        {{ form_errors(form.googlePlusUrl) }}
-                                    </div>
-                                    {% endif %}
-                                </div>
-                            </div>
-
-
-
-                            <div class="controls row-fluid show-grid">
-                                <div class="span6">
-                                    <label>LinkedIn Url</label>
-                                    {{ form_widget(form.linkedInUrl,{'attr' : {'class' : 'span12'}}) }}
-                                    {% if form_errors(form.linkedInUrl) %}
-                                    <div class="alert alert-error">
-                                        <button type="button" class="close" data-dismiss="alert"> × </button>
-                                        {{ form_errors(form.linkedInUrl) }}
-                                    </div>
-                                    {% endif %}
-                                </div>
-                                <div class="span6">
-                                    <label>Youtube Url</label>
-                                    {{ form_widget(form.youtubeUrl,{'attr' : {'class' : 'span12'}}) }}
-                                    {% if form_errors(form.youtubeUrl) %}
-                                    <div class="alert alert-error">
-                                        <button type="button" class="close" data-dismiss="alert"> × </button>
-                                        {{ form_errors(form.youtubeUrl) }}
-                                    </div>
-                                    {% endif %}
                                 </div>
                             </div>
 
@@ -298,8 +178,22 @@
                                     <span style="display: inline-block;margin-bottom: 13px;">
                                         <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
                                     </span>
+                                    <br/>
                                     <a href="javascript:void(0)" id="getMyPosition">Update Position On Map</a>
                                     <img src="{{asset('img/loadingfacebox.gif')}}" id="getMyPositionImg" style="display: none;"/>
+                                </div>
+                                <div class="span6">
+                                    <label>Industry</label>
+                                    {{ form_widget(form.professions,{'attr' : {'class' : 'chzn-select'}}) }}
+                                    {% if form_errors(form.professions) %}
+                                    <div class="alert alert-error">
+                                        <button type="button" class="close" data-dismiss="alert"> × </button>
+                                        {{ form_errors(form.professions) }}
+                                    </div>
+                                    {% endif %}
+                                    <span style="display: inline-block;margin-bottom: 13px;">
+                                        <img style="opacity: 1;" class="tooltip" title="Required Field" src="{{asset('js/tooltip/required.png')}}">
+                                    </span>
                                 </div>
                             </div>
 

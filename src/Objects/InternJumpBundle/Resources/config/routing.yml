@@ -155,7 +155,7 @@ resources:
     defaults: { _controller: "ObjectsInternJumpBundle:Internjump:AllResources", page: 1 }
 
 show_resources:
-    pattern:  /Resource/{id}
+    pattern:  /Resource/{slug}
     defaults: { _controller: "ObjectsInternJumpBundle:Internjump:showOneResource" }
 
 campus_resps:

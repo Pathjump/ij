@@ -8,6 +8,8 @@ use Objects\InternJumpBundle\Form\InternshipType;
 use Symfony\Component\HttpFoundation\Response;
 use Objects\InternJumpBundle\Entity\City;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityRepository;
+use Objects\InternJumpBundle\Entity\Skill;
 
 /**
  * Internship controller.
@@ -101,7 +103,7 @@ class InternshipController extends Controller {
 
         //get the job details
         $jobDetails = $this->getIndeedJob($jobkey);
-        if(!$jobDetails['jobtitle']){
+        if (!$jobDetails['jobtitle']) {
             $message = $this->container->getParameter('internship_not_found_error_msg');
             return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
                         'message' => $message,));
@@ -157,7 +159,7 @@ class InternshipController extends Controller {
 
         //get the job details
         $jobDetails = $this->getIndeedJob($jobkey);
-        if(!$jobDetails['jobtitle']){
+        if (!$jobDetails['jobtitle']) {
             $message = $this->container->getParameter('internship_not_found_error_msg');
             return $this->render('ObjectsInternJumpBundle:Internjump:fb_general.html.twig', array(
                         'message' => $message,));
@@ -246,8 +248,19 @@ class InternshipController extends Controller {
 
         //get company jobs
         //check if the owner company
+        $comanyFavoriteusersArray = array();
         if (True === $this->get('security.context')->isGranted('ROLE_COMPANY') && $this->get('security.context')->getToken()->getUser()->getLoginName() == $loginName) {
             $companyJobs = $internshipRepo->getCompanyJobs($company->getId(), $page, $itemsPerPage, TRUE);
+            //get favorite users
+            $comanyFavoriteusers = $company->getFavoriteUsers();
+            //get intersted user cv id
+            foreach ($comanyFavoriteusers as $comanyFavoriteuser) {
+                $comanyFavoriteuserArray = array();
+                $comanyFavoriteuserArray['user'] = $comanyFavoriteuser;
+                $interestObject = $interestRepo->findOneBy(array('accepted' => 'accepted','company' => $company->getId(), 'user' => $comanyFavoriteuser->getId()));
+                $comanyFavoriteuserArray['cvId'] = $interestObject->getCvId();
+                $comanyFavoriteusersArray [] = $comanyFavoriteuserArray;
+            }
         } else {
             $companyJobs = $internshipRepo->getCompanyJobs($company->getId(), $page, $itemsPerPage, FALSE);
         }
@@ -311,7 +324,8 @@ class InternshipController extends Controller {
                     'companyHiredUsers' => $companyHiredUsers,
                     'companyInterests' => $companyInterests,
                     'companyInterviews' => $companyInterviews,
-                    'ownerCompanyFlag' => $ownerCompanyFlag
+                    'ownerCompanyFlag' => $ownerCompanyFlag,
+                    'comanyFavoriteusers' => $comanyFavoriteusersArray
         ));
     }
 
@@ -830,7 +844,17 @@ class InternshipController extends Controller {
                 ->add('activeFrom', 'date', array('attr' => array('class' => 'activeFrom'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('activeTo', 'date', array('attr' => array('class' => 'activeTo'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('title')
-                ->add('skills', null, array('required' => FALSE))
+                ->add('otherSkills', 'text', array('required' => FALSE))
+                ->add('skills', 'entity', array(
+                    'required' => FALSE,
+                    'multiple' => true,
+                    'class' => 'ObjectsInternJumpBundle:Skill',
+                    'query_builder' => function(EntityRepository $er) {
+                        $qb = $er->createQueryBuilder('s');
+                        $qb->where('s.isSystem = 1');
+                        return $qb;
+                    }
+                ))
 //                ->add('keywords', 'text', array('required' => FALSE))
                 ->add('compensation')
                 ->add('description', null, array('required' => FALSE))
@@ -856,6 +880,32 @@ class InternshipController extends Controller {
             if ($form->isValid()) {
                 //get the user object from the form
                 $entity = $form->getData();
+
+                //check for other skills
+                if ($entity->otherSkills) {
+                    $skills = explode(',', $entity->otherSkills);
+                    foreach ($skills as $skill) {
+                        $skillRepo = $em->getRepository('ObjectsInternJumpBundle:Skill');
+                        //check if this skill not exist in database
+                        $skillObject = $skillRepo->findOneBy(array('title' => trim($skill)));
+                        if (!$skillObject) {
+                            //create new skill
+                            $newSkill = new Skill();
+                            $newSkill->setTitle(trim($skill));
+                            $newSkill->setIsSystem(true);
+                            $em->persist($newSkill);
+                            $em->flush();
+                            //add the skill to the user
+                            $entity->addSkill($newSkill);
+                        } else {
+                            //check if the user have this skill
+                            if (!$entity->getSkills()->contains($skillObject)) {
+                                //add the skill to the user
+                                $entity->addSkill($skillObject);
+                            }
+                        }
+                    }
+                }
 
                 //check for keywords
                 $keywrodsRepo = $em->getRepository('ObjectsInternJumpBundle:Keywords');
@@ -891,39 +941,39 @@ class InternshipController extends Controller {
 
 
                 //send email for suitable users
-                $categoryIdsArray = array();
-                foreach ($entity->getCategories() as $category) {
-                    $categoryIdsArray[] = $category->getId();
-                }
-                //get suitable cvs for this job categories
-                if (sizeof($categoryIdsArray) > 0) {
-
-                    //Now Get Country and State to compare them with useres' before sending them emails
-                    //get Job Country
-                    $country = $entity->getCountry();
-                    //get Job State
-                    $state = $entity->getState();
-                    //get suitable users' cvs
-                    $suitableCvs = $cvRepo->getNewJobSuitableCvs($categoryIdsArray, $country, $state);
-
-                    $newJobLink = $container->get('router')->generate('internship_show', array('id' => $entity->getId()), TRUE);
-                    $messageText = $container->getParameter('new_job_to_suitable_users_message_text');
-                    $subject = $container->getParameter('new_job_to_suitable_users_subject_text');
-                    //send email for the results users
-                    foreach ($suitableCvs as $user) {
-                        $message = \Swift_Message::newInstance()
-                                ->setSubject($subject)
-                                ->setFrom($container->getParameter('contact_us_email'))
-                                ->setTo($user['email'])
-                                ->setBody($container->get('templating')->render('ObjectsInternJumpBundle:Internship:newjobMail.html.twig', array(
-                                    'messageText' => $messageText,
-                                    'newJobLink' => $newJobLink
-                                )))
-                        ;
-                        //send the mail
-                        $container->get('mailer')->send($message);
-                    }
-                }
+//                $categoryIdsArray = array();
+//                foreach ($entity->getCategories() as $category) {
+//                    $categoryIdsArray[] = $category->getId();
+//                }
+//                //get suitable cvs for this job categories
+//                if (sizeof($categoryIdsArray) > 0) {
+//
+//                    //Now Get Country and State to compare them with useres' before sending them emails
+//                    //get Job Country
+//                    $country = $entity->getCountry();
+//                    //get Job State
+//                    $state = $entity->getState();
+//                    //get suitable users' cvs
+//                    $suitableCvs = $cvRepo->getNewJobSuitableCvs($categoryIdsArray, $country, $state);
+//
+//                    $newJobLink = $container->get('router')->generate('internship_show', array('id' => $entity->getId()), TRUE);
+//                    $messageText = $container->getParameter('new_job_to_suitable_users_message_text');
+//                    $subject = $container->getParameter('new_job_to_suitable_users_subject_text');
+//                    //send email for the results users
+//                    foreach ($suitableCvs as $user) {
+//                        $message = \Swift_Message::newInstance()
+//                                ->setSubject($subject)
+//                                ->setFrom($container->getParameter('contact_us_email'))
+//                                ->setTo($user['email'])
+//                                ->setBody($container->get('templating')->render('ObjectsInternJumpBundle:Internship:newjobMail.html.twig', array(
+//                                    'messageText' => $messageText,
+//                                    'newJobLink' => $newJobLink
+//                                )))
+//                        ;
+//                        //send the mail
+//                        $container->get('mailer')->send($message);
+//                    }
+//                }
                 //check if company want to add another job
 //                if (isset($_POST['create'])) {
                 return $this->redirect($this->generateUrl('internship_show', array('id' => $entity->getId())));
@@ -1038,7 +1088,19 @@ class InternshipController extends Controller {
                 ->add('activeTo', 'date', array('attr' => array('class' => 'activeTo'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('title')
 //                ->add('keywords', null, array('required' => FALSE))
-                ->add('skills', null, array('required' => FALSE, 'attr' => array('class' => 'chzn-select', 'style' => 'width:310px;')))
+//                ->add('skills', null, array('required' => FALSE, 'attr' => array('class' => 'chzn-select', 'style' => 'width:310px;')))
+                ->add('otherSkills', 'text', array('required' => FALSE))
+                ->add('skills', 'entity', array(
+                    'required' => FALSE,
+                    'multiple' => true,
+                    'class' => 'ObjectsInternJumpBundle:Skill',
+                    'query_builder' => function(EntityRepository $er) {
+                        $qb = $er->createQueryBuilder('s');
+                        $qb->where('s.isSystem = 1');
+                        return $qb;
+                    },
+                    'attr' => array('class' => 'chzn-select', 'style' => 'width:310px;')
+                ))
                 ->add('compensation')
                 ->add('description', null, array('required' => FALSE))
                 ->add('requirements')
@@ -1061,6 +1123,32 @@ class InternshipController extends Controller {
             if ($editForm->isValid()) {
                 //get the user object from the form
                 $entity = $editForm->getData();
+
+                //check for other skills
+                if ($entity->otherSkills) {
+                    $skills = explode(',', $entity->otherSkills);
+                    foreach ($skills as $skill) {
+                        $skillRepo = $em->getRepository('ObjectsInternJumpBundle:Skill');
+                        //check if this skill not exist in database
+                        $skillObject = $skillRepo->findOneBy(array('title' => trim($skill)));
+                        if (!$skillObject) {
+                            //create new skill
+                            $newSkill = new Skill();
+                            $newSkill->setTitle(trim($skill));
+                            $newSkill->setIsSystem(true);
+                            $em->persist($newSkill);
+                            $em->flush();
+                            //add the skill to the user
+                            $entity->addSkill($newSkill);
+                        } else {
+                            //check if the user have this skill
+                            if (!$entity->getSkills()->contains($skillObject)) {
+                                //add the skill to the user
+                                $entity->addSkill($skillObject);
+                            }
+                        }
+                    }
+                }
 
                 //check for keywords
                 if ($request->get('keywords')) {
@@ -1086,6 +1174,8 @@ class InternshipController extends Controller {
                         }
                     }
                 }
+
+
 
                 $entity->setCompany($company);
                 $em->persist($entity);
