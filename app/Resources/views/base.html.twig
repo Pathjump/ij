@@ -96,7 +96,7 @@
                                 {% elseif is_granted('ROLE_USER') %}
                                     <div class="container">
                                         <ul class="unstyled">
-                                            <li><a href="{{path('student_task',{'loginName' : app.user.loginName})}}">Profile Page</a></li>
+                                            <li><a href="{{path('student_task',{'loginName' : app.user.loginName})}}">My Profile</a></li>
                                             <li><a href="{{ path('user_search_page') }}">Internship Search</a></li>
                                             <li><a href="{{ path('education_new') }}">Education</a></li>
                                             <li><a href="{{ path('user_languages') }}">Language</a></li>
