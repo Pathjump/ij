@@ -61,12 +61,12 @@
                             {% if is_granted('ROLE_NOTACTIVE_COMPANY') %}
                                 <ul class="log-links pull-right  unstyled">
                                      <!--<li><a href="{{ path('internship',{'loginName' : app.user.loginName}) }}">Hi, {{app.user.loginName}}</a></li>-->
-                                     <li><a href="{{ path('logout') }}">Sign out</a></li>
+                                     <li><i class="icon-off"></i><a href="{{ path('logout') }}">Sign out</a></li>
                                 </ul>
                             {% elseif is_granted('ROLE_NOTACTIVE') %}
                                 <ul class="log-links pull-right  unstyled">
                                      <!--<li><a href="{{ path('student_task',{'loginName' : app.user.loginName}) }}">Hi, {{app.user.loginName}}</a></li>-->
-                                     <li><a href="{{ path('logout') }}">Sign out</a></li>
+                                     <li><i class="icon-off"></i><a href="{{ path('logout') }}">Sign out</a></li>
                                 </ul>
                             {% else %}
                                             <ul class="log-links pull-right  unstyled">
