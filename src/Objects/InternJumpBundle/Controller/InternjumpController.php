@@ -667,7 +667,7 @@ class InternjumpController extends Controller {
                 $loggedInUser->setCurrentWorth($userTotalWorth);
                 $loggedInUser->setNetWorth(ceil($userNetWorthSum));
                 $em->flush();
-                
+
                 //post resutl on user facebook wall
                 $status = $this->container->getParameter('worth_facebook_message').' $'.number_format(ceil($userNetWorthSum));
                 $picture = $this->generateUrl('site_homepage', array(), TRUE) . 'img/faceLogo.png';
@@ -1122,8 +1122,14 @@ class InternjumpController extends Controller {
         $worthFrom = $this->container->getParameter('worth_select_from');
         if ($worthFrom == 'automatic') {
             $worthUsers = $userRepo->getWorthUsers(3);
+            foreach ($worthUsers as $worthUser) {
+                $worthUser->worthResult = number_format($worthUser->getCurrentWorth());
+            }
         } else {
             $worthUsers = $userRepo->getManuallyWorthUsers(3);
+            foreach ($worthUsers as $worthUser) {
+                $worthUser->worthResult = number_format($worthUser->getWorth());
+            }
         }
         //get featured companies
         $featuredCompanies = $companyRepo->findBy(array('isHome' => 1));

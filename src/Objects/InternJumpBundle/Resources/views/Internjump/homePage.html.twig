@@ -25,9 +25,9 @@
                                 <li>
                                     <img src="{{user.getTimThumbUrl(97,94)}}" />
                                     <div class="caption text-right">
-                                        <h5>{{user}} - $ {{user.currentWorth}}</h5>
+                                        <h5>{{user}} - $ {% if user.worthResult == 0 %}?{% else %}{{user.worthResult}}{% endif %}</h5>
                                         {% if user.dateOfBirth %}
-                                        <p>Age: {{user.getAge()}} years old</p>
+                                        <p>Age: {% if user.getAge() == 0 %}?{% else %}{{user.getAge()}} years old{% endif %}</p>
                                         {% endif %}
                                         <p>Source of wealth: Facebook</p>
                                     </div>
@@ -38,8 +38,8 @@
                                 <li>
                                     <img src="{{user.getTimThumbUrl(97,94)}}" />
                                     <div class="caption text-right">
-                                        <h5>{{user}} - $ {{user.worth}}</h5>
-                                        <p>Age: {{user.age}} years old</p>
+                                        <h5>{{user}} - $ {% if user.worthResult == 0 %}?{% else %}{{user.worthResult}}{% endif %}</h5>
+                                        <p>Age: {% if user.age == 0 %}?{% else %}{{user.age}} years old{% endif %}</p>
                                         <p>Source of wealth: {{user.source}}</p>
                                     </div>
                                 </li>
