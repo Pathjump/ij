@@ -26,7 +26,7 @@ parameters:
   user_does_not_have_cv_message: 'You do not have any active resume'
   default_latitude_company_signup_page: '42.722661000000'
   default_longitude_company_signup_page: '-73.830143700000'
-  company_signup_welcome_message: 'Thank you for registering your company with InternJump. Your account is inactive, please check  your mail for activation code.'
+  company_signup_welcome_message: 'Thank you for registering your company on InternJump. To activate your account and begin recruiting, please check your email for an activation code. Make sure to check the spam folder if the email does not show up in your inbox. Click above to resend the activation email.'
   tasks_per_show_page: 10
   jobs_per_search_results_page: 24
   face_page_url: 'http://www.facebook.com/internjump'
@@ -81,3 +81,5 @@ parameters:
   worth_year_boost: 3
   worth_facebook_message: 'My expected worth on internjump is'
   worth_select_from: automatic
+  user_worth_description: 'Your Curren Worth'
+  user_net_worth_description: 'Your Net Worth'

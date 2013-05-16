@@ -119,11 +119,11 @@ fb_student_task:
     defaults: { _controller: "ObjectsInternJumpBundle:Task:fb_studentAllTasks", itemsPerPage: ~, status: all, page: 1 }
 
 employers_data:
-    pattern:  /employers_data
+    pattern:  /employers
     defaults: { _controller: "ObjectsInternJumpBundle:Internjump:employersData" }
 
 students_data:
-    pattern:  /students_data
+    pattern:  /students
     defaults: { _controller: "ObjectsInternJumpBundle:Internjump:studentsData" }
 
 privacy:

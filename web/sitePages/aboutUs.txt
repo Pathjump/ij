@@ -1,6 +1,84 @@
-<h2>InternJump about us</h2>
-<p>Cartography or map-making is the study and practice of crafting representations of the Earth upon a flat surface (see History of cartography), and one who makes maps is called a cartographer.</p>
-<p>Road maps are perhaps the most widely used maps today, and for m a subset of navigational maps, which also include aeronautical and nautical charts, railroad network maps, and hiking and bicycling maps. In terms of quantity, the largest number of drawn map sheets is probably made up by local surveys, carried out by municipalities, utilities, tax assessors, emergency services providers, and other local agencies. Many national surveying projects have been carried out by the military, such as the British Ordnance Survey (now a civilian government agency internationally renowned for its comprehensively detailed work).</p>
-<h2>term term Privacy policy</h2>
-<p>The orientation of a map is the relationship between the directions on the map and the corresponding compass directions in reality. The word "orient" is derived from Latin oriens, meaning East. In the Middle Ages many maps, including the T and O maps, were drawn with East at the top (meaning that the direction "up" on the map corresponds to East on the compass). Today, the most common &ndash; but far from universal &ndash; cartographic convention is that North is at the top of a map. Several kinds of maps are often traditionally not oriented with North at the top:</p>
-<p>Maps from non-Western traditions are oriented a variety of ways. Old maps of Edo show the Japanese imperial palace as the "top", but also at the centre, of the map. Labels on the map are oriented in such a way that you cannot read them properly unless you put the imperial palace above your head.[citation needed] Medieval European T and O maps such as the Hereford Mappa Mundi were centred on Jerusalem with East at the top. Indeed, prior to the reintroduction of Ptolemy's Geography to Europe around 1400, there was no single convention in the West. Portolan charts, for example, are oriented to the shores they describe. Maps of cities bordering a sea are often conventionally oriented with the sea at the top. Route and channel maps have traditionally been oriented to the road or waterway they describe. Polar maps of the Arctic or Antarctic regions are conventionally centred on the pole; the direction North would be towards or away from the centre of the map, respectively. Typical maps of the Arctic have 0&deg; meridian towards the bottom of the page; maps of the Antarctic have the 0&deg; meridian towards the top of the page. Reversed maps, also known as Upside-Down maps or South-Up maps, reverse the "North is up" convention and have South at the top. Buckminster Fuller's Dymaxion maps are based on a projection of the Earth's sphere onto an icosahedron. The resulting triangular pieces may be arranged in any order or orientation. Modern digital GIS maps such as ArcMap typically project north at the top of the map, but use math degrees (0 is east, degrees increase counter-clockwise), rather than compass degrees (0 is north, degrees increase clockwise) for orientation of transects. Compass decimal degrees can be converted to math degrees by subtracting them from 450; if the answer is greater than 360, subtract 360.</p>
+<strong>About Us:</strong></h2>
+<p>
+    InternJump is founded by graduates of some of the most prestigious schools and who are former interns themselves. InternJump was founded to close the gap that exists between top candidates and top firms. Our mission is to help students find great internships and ultimately increase their marketability for full-time positions. We are the premier internet destination for assisting students looking to break into notoriously competitive industies. InternJump is also the first internship company to offer a standalone Facebook application for students with a seamless user interface. InternJump promises to always be cutting edge.</p>
+
+<div class="row-fluid about-a ">
+    <div class="media thumbnail span6">
+        <a href="#" class="pull-left">
+            <img src="https://new.internjump.com/images/founders-Images/50a6a928cd0e2.jpg">
+        </a>
+        <div class="media-body">
+            <h3 class="media-heading">Media heading</h3>
+            <h4 class="muted">CEO</h4>
+            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac
+        </div>
+    </div>
+    <div class="media thumbnail span6">
+        <a href="#" class="pull-left">
+            <img src="https://new.internjump.com/images/founders-Images/50a6a9440b225.jpg">
+        </a>
+        <div class="media-body">
+            <h3 class="media-heading">M. Hasan Ali</h3>
+            <h4 class="muted">CTO</h4>
+            Cras sit  Nulla ve. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+        </div>
+    </div>
+</div>
+<hr/>
+
+<div class="row-fluid about-b">
+    <ul class="thumbnails">
+        <li class="span4">
+            <div class="thumbnail">
+                <img src="http://new.internjump.com/img/stephanie.jpg" width='150' height='150'>
+                    <div class="caption">
+                        <h4>Steven Fitzpatrick
+                            Employer Relations Associate</h4>
+                    </div>
+            </div>
+        </li>
+        <li class="span4">
+            <div class="thumbnail">
+                <img src="http://new.internjump.com/img/sarah.jpg" width='150' height='150'>
+                    <div class="caption">
+                        <h4>Sarah Yosefov
+                            Employer Relations Associate</h4>
+                    </div>
+            </div>
+        </li>
+        <li class="span4">
+            <div class="thumbnail">
+                <img src="http://new.internjump.com/img/userThumb.png" width='150' height='150'>
+                    <div class="caption">
+                        <h4>Stephanie Evans
+                            University Relations Associate</h4>
+                    </div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+
+
+
+<hr/>
+<h2><strong>Partners:</strong></h2>
+
+<div class="media">
+    <a href="#" class="pull-left">
+        <img src="http://new.internjump.com/img/Wilmerhale-logo.JPG" /></a>
+    <div class="media-body">
+        <a href="#" > <h4 class="media-heading">Wilmer Hale</h4></a>
+    </div>
+</div>
+
+<div class="media">
+    <a href="#" class="pull-left">
+        <img src="http://new.internjump.com/img/.headhunterlabs-logo.jpg" /></a>
+    <div class="media-body">
+        <a href="#" > <h4 class="media-heading">Headhunter labs</h4></a>
+        <p>“Our goal is to bring together passionate entrepreneurs to build the next generation of job search and
+            recruitment technology. We offer our start-up companies: office space, mentorship, and access to real
+            customers. Since the staffing firm Mitchell Martin sponsors Headhunter Labs it is free to join.“</p>
+    </div>
+</div>

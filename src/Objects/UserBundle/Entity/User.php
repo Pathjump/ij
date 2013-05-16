@@ -39,9 +39,16 @@ class User implements AdvancedUserInterface {
     /**
      * @var integer $currentWorth
      *
-     * @ORM\Column(name="currentWorth", type="integer", nullable=true)
+     * @ORM\Column(name="currentWorth", type="integer")
      */
     private $currentWorth = 1;
+
+    /**
+     * @var integer $netWorth
+     *
+     * @ORM\Column(name="netWorth", type="integer")
+     */
+    private $netWorth = 0;
 
     /**
      * the required languages for the internship
@@ -1530,5 +1537,35 @@ class User implements AdvancedUserInterface {
     public function getCurrentWorth()
     {
         return $this->currentWorth;
+    }
+
+    /**
+     * Set netWorth
+     *
+     * @param integer $netWorth
+     */
+    public function setNetWorth($netWorth)
+    {
+        $this->netWorth = $netWorth;
+    }
+
+    /**
+     * Get netWorth
+     *
+     * @return integer 
+     */
+    public function getNetWorth()
+    {
+        return $this->netWorth;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param date $createdAt
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
     }
 }

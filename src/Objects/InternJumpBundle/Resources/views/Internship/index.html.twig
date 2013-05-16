@@ -30,10 +30,10 @@
                                 <li><a class="ico-twitter" href="{{ company.twitterUrl }}" target="_blank" rel="nofollow"></a></li>
                 {% endif %}
                 {% if company.googlePlusUrl %}
-                                    <li><a href="{{ company.googlePlusUrl }}" target="_blank" rel="nofollow"></a></li>
+                                    <li><a class="ico-google" href="{{ company.googlePlusUrl }}" target="_blank" rel="nofollow"></a></li>
                 {% endif %}
                 {% if company.linkedInUrl %}
-                                        <li><a class="ico-google" href="{{ company.linkedInUrl }}" target="_blank" rel="nofollow"></a></li>
+                                        <li><a class="ico-linkedin" href="{{ company.linkedInUrl }}" target="_blank" rel="nofollow"></a></li>
                 {% endif %}
                 {% if company.youtubeUrl %}
                                             <li><a href="{{ company.youtubeUrl }}" target="_blank" rel="nofollow"></a></li>
@@ -256,11 +256,11 @@
                                             <div style="display: none;">
                                                 <div  id="companyMap">
                                                     <div class="modal-header">
-                                                        <h3>Map</h3>
+                                                        <h3>{{ company }} </h3>
                                                     </div>
                                                     <div class="modal-body">
                                                         <p>
-                                                        <div id="map_canvas" style="width: 400px;height: 168px;"></div>
+                                                        <div id="map_canvas" style="width: 900px;height: 350px;"></div>
                                                         </p>
                                                     </div>
                                                 </div>
@@ -296,7 +296,9 @@
                                                 $('.showCompanyMap').colorbox({
                                             inline: true,
                                             onLoad: function() {
-                                                initialize();
+                                                setTimeout(function(){
+                                                      initialize();
+                                                },1000);
                                             }
                                         });
                                             })

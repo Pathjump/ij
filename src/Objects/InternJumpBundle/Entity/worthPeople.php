@@ -30,9 +30,9 @@ class worthPeople
     private $name;
 
     /**
-     * @var integer $worth
+     * @var bigint $worth
      * @Assert\NotBlank
-     * @ORM\Column(name="worth", type="integer")
+     * @ORM\Column(name="worth", type="bigint")
      */
     private $worth;
 
@@ -276,7 +276,7 @@ class worthPeople
     /**
      * Set worth
      *
-     * @param integer $worth
+     * @param bigint $worth
      */
     public function setWorth($worth)
     {
@@ -286,7 +286,7 @@ class worthPeople
     /**
      * Get worth
      *
-     * @return integer
+     * @return bigint
      */
     public function getWorth()
     {
