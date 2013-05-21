@@ -347,18 +347,18 @@ class InternjumpController extends Controller {
                         //get end date
                         $endDate = $userMaxLevelEducation->getEndDate();
                         for ($index = date('Y') + 1; $index <= $endDate; $index++) {
-                            $fiveYearsWorthArray["$index"] = $yearWorth + $fiveYearsWorthArray[$index-1];
+                            $fiveYearsWorthArray["$index"] = $yearWorth + $fiveYearsWorthArray[$index - 1];
                         }
 
                         $reset = 5 - sizeof($fiveYearsWorthArray);
                         for ($index = date('Y') + 1; $index <= date('Y') + $reset; $index++) {
                             $yearWorth = ceil($yearWorth + ($worthIncrementRatio * $yearWorth));
-                            $fiveYearsWorthArray["$index"] = $yearWorth + $fiveYearsWorthArray[$index-1];
+                            $fiveYearsWorthArray["$index"] = $yearWorth + $fiveYearsWorthArray[$index - 1];
                         }
                     } else {
                         for ($index = date('Y') + 1; $index < date('Y') + 5; $index++) {
                             $yearWorth = ceil($yearWorth + ($worthIncrementRatio * $yearWorth));
-                            $fiveYearsWorthArray["$index"] = $yearWorth + $fiveYearsWorthArray[$index-1];
+                            $fiveYearsWorthArray["$index"] = $yearWorth + $fiveYearsWorthArray[$index - 1];
                         }
                     }
                 }
@@ -410,7 +410,7 @@ class InternjumpController extends Controller {
                 $em->flush();
 
                 //post resutl on user facebook wall
-                $status = $this->container->getParameter('worth_facebook_message').' $'.number_format(ceil($userNetWorthSum));
+                $status = $this->container->getParameter('worth_facebook_message') . ' $' . number_format(ceil($userNetWorthSum));
                 $picture = $this->generateUrl('site_homepage', array(), TRUE) . 'img/faceLogo.png';
                 $link = $this->generateUrl('site_fb_homepage', array(), TRUE);
                 FacebookController::postOnUserWallAndFeedAction($loggedInUser->getSocialAccounts()->getFacebookId(), $loggedInUser->getSocialAccounts()->getAccessToken(), $status, null, null, $link, $picture);
@@ -669,7 +669,7 @@ class InternjumpController extends Controller {
                 $em->flush();
 
                 //post resutl on user facebook wall
-                $status = $this->container->getParameter('worth_facebook_message').' $'.number_format(ceil($userNetWorthSum));
+                $status = $this->container->getParameter('worth_facebook_message') . ' $' . number_format(ceil($userNetWorthSum));
                 $picture = $this->generateUrl('site_homepage', array(), TRUE) . 'img/faceLogo.png';
                 $link = $this->generateUrl('site_fb_homepage', array(), TRUE);
                 FacebookController::postOnUserWallAndFeedAction($loggedInUser->getSocialAccounts()->getFacebookId(), $loggedInUser->getSocialAccounts()->getAccessToken(), $status, null, null, $link, $picture);
@@ -1140,7 +1140,7 @@ class InternjumpController extends Controller {
         //all companies
 //        $allCompanies = $companyRepo->findAll();
         //all cities
-        $allCities = $cityRepo->findBy(array('country' => 'US'));
+        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
         //all state
         $allState = $stateRepo->findAll();
         //all category

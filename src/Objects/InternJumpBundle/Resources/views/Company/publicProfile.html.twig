@@ -106,7 +106,7 @@
                 </div>
                 <div class="modal-body">
                     <p>
-                    <div id="map_canvas" style="width: 400px;height: 168px;"></div>
+                    <div id="map_canvas" style="width: 900px;height: 350px;"></div>
                     </p>
                 </div>
             </div>
@@ -127,7 +127,9 @@
             $('.showCompanyMap').colorbox({
                 inline: true,
                 onLoad: function() {
-                    initialize();
+                    setTimeout(function(){
+                          initialize();
+                    },1000);
                 }
             });
         });

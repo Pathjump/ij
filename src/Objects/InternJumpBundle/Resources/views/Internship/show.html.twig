@@ -22,7 +22,7 @@
                             <h3>{{ entity.title }}</h3>
 
                         </div>
-                        <div class="span2 logo-box"><img src="{{entity.company.getTimThumbUrl(130,60)}}"></div><h4 class="span6">{{entity.company}}</h4>
+                        <div class="span2 logo-box"><img src="{{entity.company.getTimThumbUrl(75,60)}}"></div><h4 class="span6">{{entity.company}}</h4>
                     </div><!--intern-title--->
 
 
@@ -243,7 +243,7 @@
                                             <h2>Latest Interrnships</h2>
                                             <div class="media">
                         {% for job in LatestJobs %}
-                                                    <a href="{{path('internship',{'loginName' : job.company.loginName})}}" class="pull-left"><img src="{{job.company.getTimThumbUrl(130,60)}}"></a>
+                                                    <a href="{{path('internship',{'loginName' : job.company.loginName})}}" class="pull-left"><img src="{{job.company.getTimThumbUrl(60,60)}}"></a>
                                                     <div class="media-body">
                                                         <div class="titl-blue">
                                                             <a href="{{path('internship_show',{'id' : job.id})}}">

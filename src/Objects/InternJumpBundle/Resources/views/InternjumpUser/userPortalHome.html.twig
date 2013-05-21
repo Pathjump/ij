@@ -40,7 +40,7 @@
 
                     {% if user.dateOfBirth %}
                     <h5 class="titl-blue">Date Of Birth</h5>
-                    <p>{{user.dateOfBirth | date('d-m-Y')}}</p>
+                    <p>{{user.dateOfBirth | date('m-d-Y')}}</p>
                     {% endif %}
                 </div>
 
@@ -51,7 +51,7 @@
                     <p>{{userCv.objective}}</p>
                 </div>
 
-                {% if userCv.skills|length > 0 %}
+
                 <div class="Box-a">
                     <h3>Skills</h3>
                     <a class="btn btn-small pull-right" href="{{path('cv_skills',{'id' : userCv.id })}}"><i class="icon-pencil"></i> Edit</a>
@@ -63,12 +63,14 @@
                                  {% else %}
                                         {{skill.title}}
                                  {% endif %}
+                            {% else %}
+                            You didn't add any skills yet to your resume.
                             {% endfor %}
                             </span></li>
                     </ul>
-                    <a href="{{ path('addEditUserSkills') }}">Add new Skill</a>
+                    <!--<a href="{{ path('addEditUserSkills') }}">Add new Skill</a>-->
                 </div>
-                {% endif %}
+
 
                 {% if user.educations|length > 0 %}
                 <div class="Box-a">
@@ -79,7 +81,7 @@
                         <h5 class="titl-blue">{{education.schoolName}}</h5>
                         {% endif %}
                         <strong>AS, A ({{education.major}})</strong>
-                        <div class="muted">Alexandria,Egypt</div>
+                        <!--<div class="muted">Alexandria,Egypt</div>-->
                         <div class="muted">{% if education.startDate %}{{education.startDate}}{% endif %} - {% if education.endDate %}{{education.endDate}}{% endif %}</div>
                         {% if education.startDate %}
                         <p>{{education.relevantCourseworkTaken}}</p>
@@ -89,11 +91,10 @@
                 </div>
                 {% endif %}
 
-                {% if userCv.employmentHistory|length > 0 %}
                 <div class="Box-a">
                     <h3>Experience</h3>
+                    <a class="btn btn-small pull-right" href="{{path('cv_employment_history',{'id' : userCv.id })}}"><i class="icon-pencil"></i> Edit</a>
                     {% for empHistory in userCv.employmentHistory %}
-                        <a class="btn btn-small pull-right" href="{{path('cv_employment_history',{'id' : userCv.id })}}"><i class="icon-pencil"></i> Edit</a>
                         <h5 class="titl-blue">{{empHistory.title}}</h5>
                         <strong>
                             {% if empHistory.companyUrl %}
@@ -111,14 +112,16 @@
                         {% if empHistory.description %}
                         <p>{{empHistory.description}}</p>
                         {% endif %}
+                    {% else %}
+                        <h5>You didn't add any work experience yet to your resume.</h5>
                     {% endfor %}
-                    <a href="{{ path('employmenthistory_new') }}">Add another position</a>
+                    <!--<a href="{{ path('employmenthistory_new') }}">Add another position</a>-->
                 </div>
-                {% endif %}
 
             </div><!--profile-pag--->
             <br>
             <div class="links text-right">
+                <a class="btn btn-primary" href="{{path('cv_edit',{'id' : userCv.id})}}"><i class="icon-pencil"></i> Edit Resume</a>
                 <a class="btn" href="javascript:mailpage()"><i class="icon-envelope"></i> Send</a>
                 <a class="btn" href="javascript:window.print()"><i class="icon-print"></i> Print</a>
             </div>
@@ -193,7 +196,7 @@
                 <h2>Resume Completeness</h2>
                 {% render "ObjectsInternJumpBundle:Task:userMeter" %}
                 <br>
-                <a data-toggle="modal" role="button" href="{{path('cv_new')}}" class="btn btn-primary pull-right">Add New Resme</a>
+                <a data-toggle="modal" role="button" href="{{path('cv_new')}}" class="btn btn-primary pull-right">Add New Resume</a>
             </div> <!--Col-block-->
             <br><br>
 
@@ -217,11 +220,12 @@
                     {% endfor %}
                 </ul>
             </div>
-            -->
+
             <div class="Col-block ">
                 <h2>Vedio Introduction</h2>
                 <img src="{{asset('img/Internjump---Resume.jpg')}}">
             </div>
+            -->
 
         </div><!--span4-->
 

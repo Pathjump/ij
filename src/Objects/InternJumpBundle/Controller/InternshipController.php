@@ -110,7 +110,7 @@ class InternshipController extends Controller {
         }
 
         //all cities
-        $allCities = $cityRepo->findBy(array('country' => 'US'));
+        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
         //all state
         $allState = $stateRepo->findAll();
         //all category
@@ -166,7 +166,7 @@ class InternshipController extends Controller {
         }
 
         //all cities
-        $allCities = $cityRepo->findBy(array('country' => 'US'));
+        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
         //all state
         $allState = $stateRepo->findAll();
         //all category
@@ -505,7 +505,7 @@ class InternshipController extends Controller {
         //all companies
 //        $allCompanies = $companyRepo->findAll();
         //all cities
-        $allCities = $cityRepo->findBy(array('country' => 'US'));
+        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
         //all state
         $allState = $stateRepo->findAll();
         //all category
@@ -631,7 +631,7 @@ class InternshipController extends Controller {
         //all companies
 //        $allCompanies = $companyRepo->findAll();
         //all cities
-        $allCities = $cityRepo->findBy(array('country' => 'US'));
+        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
         //all state
         $allState = $stateRepo->findAll();
         //all category

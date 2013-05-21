@@ -123,7 +123,7 @@ class TaskController extends Controller {
 
         //For search form
         //all cities
-        $allCities = $cityRepo->findBy(array('country' => 'US'));
+        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
         //all category
         $allCategory = $categoryRepo->findAll();
         //Get users State for the hidden Feild
@@ -269,7 +269,7 @@ class TaskController extends Controller {
 
         //For search form
         //all cities
-        $allCities = $cityRepo->findBy(array('country' => 'US'));
+        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
         //all category
         $allCategory = $categoryRepo->findAll();
 
