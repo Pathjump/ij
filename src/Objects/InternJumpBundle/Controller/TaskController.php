@@ -123,7 +123,7 @@ class TaskController extends Controller {
 
         //For search form
         //all cities
-        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
+        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
         //all category
         $allCategory = $categoryRepo->findAll();
         //Get users State for the hidden Feild
@@ -132,6 +132,9 @@ class TaskController extends Controller {
 
         //Get the user's worth result
         $worth = $user->getNetWorth();
+
+        //get favorite companies
+        $favCompanies = $user->getFavoriteComapnies();
 
         return $this->render('ObjectsInternJumpBundle:Task:studentTasks.html.twig', array(
                     'entities' => $tasks,
@@ -155,7 +158,8 @@ class TaskController extends Controller {
                     'allCategory' => $allCategory,
                     'state' => $uState,
                     'worth' => $worth,
-                ));
+                    'favCompanies' => $favCompanies
+        ));
     }
 
     /**
@@ -269,9 +273,15 @@ class TaskController extends Controller {
 
         //For search form
         //all cities
-        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
+        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
         //all category
         $allCategory = $categoryRepo->findAll();
+
+        //Get the user's worth result
+        $worth = $user->getNetWorth();
+
+        //get favorite companies
+        $favCompanies = $user->getFavoriteComapnies();
 
         return $this->render('ObjectsInternJumpBundle:Task:fb_studentTasks.html.twig', array(
                     'entities' => $tasks,
@@ -292,16 +302,17 @@ class TaskController extends Controller {
                     'latestNotifications' => $latestNotifications,
                     'latestMessages' => $latestMessages,
                     'allCities' => $allCities,
-                    'allCategory' => $allCategory
-                ));
+                    'allCategory' => $allCategory,
+                    'worth' => $worth,
+                    'favCompanies' => $favCompanies
+        ));
     }
-
 
     /**
      * Lists Company's all Task entities.
      *
      */
-    public function companyAllTasksAction( $tasksPerPage, $status,$page) {
+    public function companyAllTasksAction($tasksPerPage, $status, $page) {
 
         if (false === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
             return $this->redirect($this->generateUrl('site_homepage'));
@@ -315,13 +326,13 @@ class TaskController extends Controller {
         $company = $this->get('security.context')->getToken()->getUser();
         $cid = $company->getId();
 
-                //check if we do not have the items per page number
+        //check if we do not have the items per page number
         if (!$tasksPerPage) {
             //get the items per page from cookie or the default value
             $tasksPerPage = $this->getRequest()->cookies->get('tasks_per_show_page_' . $cid, 3);
         }
 
-        $entities = $em->getRepository('ObjectsInternJumpBundle:Task')->getCompanyAllTasks($cid, $page, $tasksPerPage,$status);
+        $entities = $em->getRepository('ObjectsInternJumpBundle:Task')->getCompanyAllTasks($cid, $page, $tasksPerPage, $status);
 
         $companyUsers = $em->getRepository('ObjectsInternJumpBundle:Internship')->getAllCompanyUsers($cid);
 
@@ -345,7 +356,7 @@ class TaskController extends Controller {
                     'tasksPerPage' => $tasksPerPage,
                     'lastPageNumber' => $lastPageNumber,
                     'status' => $status,
-                ));
+        ));
     }
 
     /**
@@ -400,7 +411,7 @@ class TaskController extends Controller {
                     'numOfTasks' => $numberOfUserTasks,
                     'status' => $status,
                     'hireDate' => $hireDate,
-                ));
+        ));
     }
 
     /**
@@ -442,12 +453,11 @@ class TaskController extends Controller {
                     'entity' => $task,
                     'user' => $taskUser,
                     'notes' => $notes,
-                ));
+        ));
 
         //if not equal redirect to Home Page
 
-            return $this->redirect($this->generateUrl('site_homepage'));
-
+        return $this->redirect($this->generateUrl('site_homepage'));
     }
 
     /**
@@ -489,12 +499,11 @@ class TaskController extends Controller {
                     'entity' => $task,
                     'user' => $taskUser,
                     'notes' => $notes,
-                ));
+        ));
 
         //if not equal redirect to Home Page
 
-            return $this->redirect($this->generateUrl('site_fb_homepage'));
-
+        return $this->redirect($this->generateUrl('site_fb_homepage'));
     }
 
     /**
@@ -552,7 +561,7 @@ class TaskController extends Controller {
                     'user' => $taskUser,
                     'hireDate' => $hireDate,
                     'numOfTasks' => $numberOfUserTasks,
-                ));
+        ));
     }
 
     /**
@@ -624,7 +633,7 @@ class TaskController extends Controller {
                 //->add('internship')
                 ->add('internship', 'entity', array('attr' => array('style' => 'width:120px;'), 'class' => 'ObjectsInternJumpBundle:Internship', 'choices' => $jobs))
                 ->add('user', 'entity', array('attr' => array('style' => 'width:120px;'), 'class' => 'ObjectsUserBundle:User', 'choices' => array(
-                        )))
+            )))
                 ->getForm();
 
         if ($request->getMethod() == 'POST') {
@@ -653,8 +662,7 @@ class TaskController extends Controller {
                 //send email to user
                 InternjumpController::userNotificationMail($this->container, $user, $company, 'company_assign_task', $task->getId());
 
-                    return $this->redirect($this->generateUrl('company_task_show', array('id' => $task->getId())));
-
+                return $this->redirect($this->generateUrl('company_task_show', array('id' => $task->getId())));
             }
         }
 
@@ -666,7 +674,7 @@ class TaskController extends Controller {
                     'formName' => $this->container->getParameter('companyAddTask_FormName'),
                     'formName1' => $this->container->getParameter('companyAddTask_FormName1'),
                     'formDesc' => $this->container->getParameter('companyAddTask_FormDesc'),
-                ));
+        ));
     }
 
     /**
@@ -763,7 +771,7 @@ class TaskController extends Controller {
                     'edit_form' => $editForm->createView(),
                     'flag' => $flag,
                     'user' => $taskUser,
-                ));
+        ));
     }
 
     /**
@@ -843,7 +851,7 @@ class TaskController extends Controller {
                 //->add('internship')
                 ->add('internship', 'entity', array('class' => 'ObjectsInternJumpBundle:Internship', 'choices' => $jobs))
                 ->add('user', 'entity', array('attr' => array('style' => 'width:120px;'), 'class' => 'ObjectsUserBundle:User', 'choices' => array(
-                        )))
+            )))
                 ->getForm();
 //        $editForm = $this->createForm(new TaskType(), $task);
         $deleteForm = $this->createDeleteForm($id);
@@ -884,7 +892,7 @@ class TaskController extends Controller {
                     'formName' => $this->container->getParameter('companyEditTask_FormName'),
                     'formName1' => $this->container->getParameter('companyEditTask_FormName1'),
                     'formDesc' => $this->container->getParameter('companyEditTask_FormDesc'),
-                ));
+        ));
     }
 
     /**
@@ -913,7 +921,7 @@ class TaskController extends Controller {
             if (!$task) {
                 $message = $this->container->getParameter('task_not_found_error_msg');
                 return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
-                        'message' => $message,));
+                            'message' => $message,));
             }
 
             //If Task Found then check if the Current Company is the Task Owner
@@ -1047,7 +1055,7 @@ class TaskController extends Controller {
         return $this->render('ObjectsInternJumpBundle:Task:note.html.twig', array(
                     'note' => $note,
                     'entity' => $task,
-                ));
+        ));
     }
 
     /**
@@ -1213,183 +1221,182 @@ class TaskController extends Controller {
      */
     public function userMeterAction() {
 //        if (true === $this->get('security.context')->isGranted('ROLE_USER')) {
+        //total percent of CV Completion
+        $percent = 1;
+        //flags distinguishing between if entity/feild found or not
+        $flag1 = ""; //to check if user created at least/activate one cv
+        $flag2 = ""; //to check if user added eduacation or not
+        $flag3 = ""; //to check if user added employment history or not
+        $flag4 = ""; //to check if user added at least one skill or not
+        $flag5 = ""; //to check if user answered the "know you" quiz
+        $flag6 = ""; //to check if user answered ALL Personal Questions
+        $uDataFlag_fn = ""; //to check if user data contains firstname
+        $uDataFlag_ln = ""; //to check if user data contains lastname
+        $uDataFlag_ab = ""; //to check if user data contains about
+        $uDataFlag_dob = ""; //to check if user data contains date of birth
+        $uDataFlag_url = ""; //to check if user data contains url
+        $cvDescFlag = ""; // to check if each cv contains describe yourself or not
+        $allSocialLinksFlag = ""; // to check if has social or not at all
+        $fbLinkFlag = ""; // to check if user linked his profile to facebook
+        $twitterLinkFlag = ""; // to check if user linked his profile to twitter
+        $linkedLinkFlag = ""; // to check if user linked his profile to LinkedIn
 
-            //total percent of CV Completion
-            $percent = 1;
-            //flags distinguishing between if entity/feild found or not
-            $flag1 = ""; //to check if user created at least/activate one cv
-            $flag2 = ""; //to check if user added eduacation or not
-            $flag3 = ""; //to check if user added employment history or not
-            $flag4 = ""; //to check if user added at least one skill or not
-            $flag5 = ""; //to check if user answered the "know you" quiz
-            $flag6 = ""; //to check if user answered ALL Personal Questions
-            $uDataFlag_fn = ""; //to check if user data contains firstname
-            $uDataFlag_ln = ""; //to check if user data contains lastname
-            $uDataFlag_ab = ""; //to check if user data contains about
-            $uDataFlag_dob = ""; //to check if user data contains date of birth
-            $uDataFlag_url = ""; //to check if user data contains url
-            $cvDescFlag = ""; // to check if each cv contains describe yourself or not
-            $allSocialLinksFlag = ""; // to check if has social or not at all
-            $fbLinkFlag = ""; // to check if user linked his profile to facebook
-            $twitterLinkFlag = ""; // to check if user linked his profile to twitter
-            $linkedLinkFlag = ""; // to check if user linked his profile to LinkedIn
+        $em = $this->getDoctrine()->getEntityManager();
 
-            $em = $this->getDoctrine()->getEntityManager();
+        //get current user
+        $user = $this->get('security.context')->getToken()->getUser();
+        $uId = $user->getId();
 
-            //get current user
-            $user = $this->get('security.context')->getToken()->getUser();
-            $uId = $user->getId();
+        //Get Repos
+        $eduacationRepo = $em->getRepository("ObjectsInternJumpBundle:Education");
+        $experienceRepo = $em->getRepository("ObjectsInternJumpBundle:EmploymentHistory");
+        $cvRepo = $em->getRepository("ObjectsInternJumpBundle:CV");
+        $skillRepo = $em->getRepository("ObjectsInternJumpBundle:Skill");
 
-            //Get Repos
-            $eduacationRepo = $em->getRepository("ObjectsInternJumpBundle:Education");
-            $experienceRepo = $em->getRepository("ObjectsInternJumpBundle:EmploymentHistory");
-            $cvRepo = $em->getRepository("ObjectsInternJumpBundle:CV");
-            $skillRepo = $em->getRepository("ObjectsInternJumpBundle:Skill");
+        //Check if User has cv(s)
+        $cvs = $cvRepo->getAllCvs($uId);
+        $cvArray = array();
+        if ($cvs) {
+            $percent+=20;
+            /*
+              //Check if User added Describe yourself to his cv(s)
+              foreach ($cvs as $cv) {
+              //describe yourself not found in cv
+              if (!$cv->getDescribeYourself()) {
+              $cvDescFlag = "desc";
+              $cvdesc['id'] = $cv->getId();
+              $cvdesc['name'] = $cv->getName();
+              $cvArray[] = $cvdesc;
+              }
+              }
+              //in case all Cv(s) have describe yourself
+              if (!isset($cvdesc)) {
+              $percent+=10;
+              $cvdesc[] = "";
+              } */
+        } else {
+            $flag1 = "cvs";
+        }
 
-            //Check if User has cv(s)
-            $cvs = $cvRepo->getAllCvs($uId);
-            $cvArray = array();
-            if ($cvs) {
-                $percent+=20;
-                /*
-                  //Check if User added Describe yourself to his cv(s)
-                  foreach ($cvs as $cv) {
-                  //describe yourself not found in cv
-                  if (!$cv->getDescribeYourself()) {
-                  $cvDescFlag = "desc";
-                  $cvdesc['id'] = $cv->getId();
-                  $cvdesc['name'] = $cv->getName();
-                  $cvArray[] = $cvdesc;
-                  }
-                  }
-                  //in case all Cv(s) have describe yourself
-                  if (!isset($cvdesc)) {
-                  $percent+=10;
-                  $cvdesc[] = "";
-                  } */
+
+        //Check if User has education
+        $edu = $eduacationRepo->getAllEducation($uId);
+        if ($edu) {
+            $percent+=10;
+        } else {
+            $flag2 = "edu";
+        }
+
+        //Check if User has Experience
+        $exp = $experienceRepo->getAllExperince($uId);
+        if ($exp) {
+            $percent+=10;
+        } else {
+            $flag3 = "exp";
+        }
+
+        //Check if User has Skills
+        $skill = $skillRepo->getStudentAllSkills($uId);
+        if ($skill) {
+            $percent+=10;
+        } else {
+            $flag4 = "skil";
+        }
+
+        //Check if User answered Know you Quiz
+        if ($user->getScore() == null) {
+            $flag5 = "quiz";
+        } else {
+            $percent+=10;
+        }
+
+        //Check if User Completed His personal data
+        if ($user->getFirstName() == null) {
+            $uDataFlag_fn = "fn";
+        }
+        if ($user->getLastName() == null) {
+            $uDataFlag_ln = "ln";
+        }
+        if ($user->getAbout() == null) {
+            $uDataFlag_ab = "ab";
+        }
+        if ($user->getDateOfBirth() == null) {
+            $uDataFlag_dob = "dob";
+        }
+        if ($user->getUrl() == null) {
+            $uDataFlag_url = "url";
+        } else {
+            $percent+=20;
+        }
+
+        /* Check if user answered personal Questions to add more 10 % */
+        //get personal question Repo
+        $personalQuestionsRepo = $em->getRepository('ObjectsInternJumpBundle:PersonalQuestion');
+        //get count of questions
+        $numberOfQuestions = sizeof($personalQuestionsRepo->findAll());
+        //get PersonalQuestionAnswers Repo
+        $personalQuestionsAnswerRepo = $em->getRepository('ObjectsInternJumpBundle:PersonalQuestionAnswer');
+        //get count of answer by this user
+        $numberOfUserQuestions = sizeof($personalQuestionsAnswerRepo->findBy(array('user' => $uId)));
+        //if user answered
+        if ($numberOfQuestions == $numberOfUserQuestions) {
+            $percent+=10;
+        } else {//if didn't answer
+            $flag6 = "noAns";
+        }
+
+        /* Check if user has social links to add more 1% for fb, 1% for twitter, 1% for linked in */
+        //get social accounts Repo
+        $socialAccountsRepo = $em->getRepository('ObjectsUserBundle:SocialAccounts');
+        //get user social account
+        $userSocialAccount = $socialAccountsRepo->findOneBy(array('user' => $uId));
+        if (isset($userSocialAccount)) {
+            //found social Link
+            //check, has facebook link?
+            if ($userSocialAccount->isFacebookLinked()) {
+                $percent+=3;
             } else {
-                $flag1 = "cvs";
+                $fbLinkFlag = "notlinked";
             }
 
-
-            //Check if User has education
-            $edu = $eduacationRepo->getAllEducation($uId);
-            if ($edu) {
-                $percent+=10;
+            //check, has twitter link?
+            if ($userSocialAccount->isTwitterLinked()) {
+                $percent+=3;
             } else {
-                $flag2 = "edu";
+                $twitterLinkFlag = "notlinked";
             }
 
-            //Check if User has Experience
-            $exp = $experienceRepo->getAllExperince($uId);
-            if ($exp) {
-                $percent+=10;
+            //check, has Linkedin link?
+            if ($userSocialAccount->isLinkedInLinked()) {
+                $percent+=3;
             } else {
-                $flag3 = "exp";
+                $linkedLinkFlag = "notlinked";
             }
+        } else {
+            $allSocialLinksFlag = "notlinked";
+        }
 
-            //Check if User has Skills
-            $skill = $skillRepo->getStudentAllSkills($uId);
-            if ($skill) {
-                $percent+=10;
-            } else {
-                $flag4 = "skil";
-            }
-
-            //Check if User answered Know you Quiz
-            if ($user->getScore() == null) {
-                $flag5 = "quiz";
-            } else {
-                $percent+=10;
-            }
-
-            //Check if User Completed His personal data
-            if ($user->getFirstName() == null) {
-                $uDataFlag_fn = "fn";
-            }
-            if ($user->getLastName() == null) {
-                $uDataFlag_ln = "ln";
-            }
-            if ($user->getAbout() == null) {
-                $uDataFlag_ab = "ab";
-            }
-            if ($user->getDateOfBirth() == null) {
-                $uDataFlag_dob = "dob";
-            }
-            if ($user->getUrl() == null) {
-                $uDataFlag_url = "url";
-            } else {
-                $percent+=20;
-            }
-
-            /* Check if user answered personal Questions to add more 10 % */
-            //get personal question Repo
-            $personalQuestionsRepo = $em->getRepository('ObjectsInternJumpBundle:PersonalQuestion');
-            //get count of questions
-            $numberOfQuestions = sizeof($personalQuestionsRepo->findAll());
-            //get PersonalQuestionAnswers Repo
-            $personalQuestionsAnswerRepo = $em->getRepository('ObjectsInternJumpBundle:PersonalQuestionAnswer');
-            //get count of answer by this user
-            $numberOfUserQuestions = sizeof($personalQuestionsAnswerRepo->findBy(array('user' => $uId)));
-            //if user answered
-            if ($numberOfQuestions == $numberOfUserQuestions) {
-                $percent+=10;
-            } else {//if didn't answer
-                $flag6 = "noAns";
-            }
-
-            /* Check if user has social links to add more 1% for fb, 1% for twitter, 1% for linked in */
-            //get social accounts Repo
-            $socialAccountsRepo = $em->getRepository('ObjectsUserBundle:SocialAccounts');
-            //get user social account
-            $userSocialAccount = $socialAccountsRepo->findOneBy(array('user' => $uId));
-            if (isset($userSocialAccount)) {
-                //found social Link
-                //check, has facebook link?
-                if ($userSocialAccount->isFacebookLinked()) {
-                    $percent+=3;
-                } else {
-                    $fbLinkFlag = "notlinked";
-                }
-
-                //check, has twitter link?
-                if ($userSocialAccount->isTwitterLinked()) {
-                    $percent+=3;
-                } else {
-                    $twitterLinkFlag = "notlinked";
-                }
-
-                //check, has Linkedin link?
-                if ($userSocialAccount->isLinkedInLinked()) {
-                    $percent+=3;
-                } else {
-                    $linkedLinkFlag = "notlinked";
-                }
-            } else {
-                $allSocialLinksFlag = "notlinked";
-            }
-
-            return $this->render('ObjectsInternJumpBundle:Task:meter.html.twig', array(
-                        'user' => $user,
-                        'percent' => $percent,
-                        'cvsFlag' => $flag1,
-                        'eduFlag' => $flag2,
-                        'expFlag' => $flag3,
-                        'skilFlag' => $flag4,
-                        'quizFlag' => $flag5,
-                        'personalQuestionFlag' => $flag6,
-                        'fNameFlag' => $uDataFlag_fn,
-                        'lNameFlag' => $uDataFlag_ln,
-                        'aboutFlag' => $uDataFlag_ab,
-                        'dobFlag' => $uDataFlag_dob,
-                        'urlFlag' => $uDataFlag_url,
-                        'cvDescFlag' => $cvDescFlag,
-                        'cvNamesArray' => $cvArray,
-                        'allSocial' => $allSocialLinksFlag,
-                        'linked' => $linkedLinkFlag,
-                        'facebook' => $fbLinkFlag,
-                        'twitter' => $twitterLinkFlag,
-                    ));
+        return $this->render('ObjectsInternJumpBundle:Task:meter.html.twig', array(
+                    'user' => $user,
+                    'percent' => $percent,
+                    'cvsFlag' => $flag1,
+                    'eduFlag' => $flag2,
+                    'expFlag' => $flag3,
+                    'skilFlag' => $flag4,
+                    'quizFlag' => $flag5,
+                    'personalQuestionFlag' => $flag6,
+                    'fNameFlag' => $uDataFlag_fn,
+                    'lNameFlag' => $uDataFlag_ln,
+                    'aboutFlag' => $uDataFlag_ab,
+                    'dobFlag' => $uDataFlag_dob,
+                    'urlFlag' => $uDataFlag_url,
+                    'cvDescFlag' => $cvDescFlag,
+                    'cvNamesArray' => $cvArray,
+                    'allSocial' => $allSocialLinksFlag,
+                    'linked' => $linkedLinkFlag,
+                    'facebook' => $fbLinkFlag,
+                    'twitter' => $twitterLinkFlag,
+        ));
 //        }
     }
 

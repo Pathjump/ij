@@ -17,6 +17,40 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class InternjumpUserController extends Controller {
 
     /**
+     * this function used to add company to favorite list for user
+     * @author ahmed
+     * @param integer $companyId
+     * @param string $status
+     */
+    public function addCompanyToFavoriteAction($companyId, $status) {
+        //check if the company is already active
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
+            return new Response('failed');
+        }
+        //get logedin user objects
+        $user = $this->get('security.context')->getToken()->getUser();
+        //get the entity manager
+        $em = $this->getDoctrine()->getEntityManager();
+        $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
+        //get the user
+        $company = $companyRepo->find($companyId);
+
+        if (!$company) {
+            return new Response('failed');
+        }
+
+        if ($status == 'add') {
+            //add the company to user favorite list
+            $user->addCompany($company);
+        } else {
+            $user->getFavoriteComapnies()->removeElement($company);
+        }
+        $em->flush();
+
+        return new Response('done');
+    }
+
+    /**
      * @author Mahmoud
      * @param string $searchString
      * @param integer $start
