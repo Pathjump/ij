@@ -112,7 +112,7 @@ class InternshipController extends Controller {
         //all cities
         $allCities = $cityRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
         //all state
-        $allState = $stateRepo->findAll();
+        $allState = $stateRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
         //all category
         $allCategory = $categoryRepo->findAll();
 
@@ -168,7 +168,7 @@ class InternshipController extends Controller {
         //all cities
         $allCities = $cityRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
         //all state
-        $allState = $stateRepo->findAll();
+        $allState = $stateRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
         //all category
         $allCategory = $categoryRepo->findAll();
 
@@ -507,7 +507,7 @@ class InternshipController extends Controller {
         //all cities
         $allCities = $cityRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
         //all state
-        $allState = $stateRepo->findAll();
+        $allState = $stateRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
         //all category
         $allCategory = $categoryRepo->findAll();
 
@@ -633,7 +633,7 @@ class InternshipController extends Controller {
         //all cities
         $allCities = $cityRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
         //all state
-        $allState = $stateRepo->findAll();
+        $allState = $stateRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
         //all category
         $allCategory = $categoryRepo->findAll();
 
