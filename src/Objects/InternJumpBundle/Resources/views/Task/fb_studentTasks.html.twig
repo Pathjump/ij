@@ -354,7 +354,7 @@
 
 {% for job in latestJobs %}
 <div class="media">
-                                    <a href="" class="pull-left"><img src="{{job.company.getTimThumbUrl(130,60)}}"></a>
+                                    <a href="{{path('internship',{'loginName' : job.company.loginName})}}" class="pull-left"><img src="{{job.company.getTimThumbUrl(60,60)}}"></a>
                                     <div class="media-body">
                                          <div class="titl-blue">{{ job.title }}</div>
                                             {{job.company.name}}
@@ -405,7 +405,26 @@
     </div>
 
 
-
+{% if favCompanies|length > 0 %}
+        <div class="Col-block">
+            <h2>Favorite companies</h2>
+            <ul class="list2">
+    {% for company in favCompanies %}
+                <li>
+                    <div class="media">
+                        <a class="pull-left" href="{{path('internship',{'loginName' : company.loginName})}}">
+                            <img src="{{company.getTimThumbUrl(60,60)}}" alt="" class="media-object">
+                        </a>
+                        <div class="media-body">
+                            <div>{{company}}</div>
+                            <a class="label label-important pull-right removeCompanyFromFavorite" href="javascript:void(0)" data-company-id="{{company.id}}">Remove</a>
+                        </div>
+                    </div>
+                </li>
+    {% endfor %}
+            </ul>
+        </div>
+{% endif %}
 
                         </div><!--span4-->
 
@@ -451,6 +470,21 @@
         <script src="{{ asset('js/cookies.js') }}" type="text/javascript"></script>
         <script>
                     $(document).ready(function() {
+                        //remove company from fav
+                        $('a.removeCompanyFromFavorite').click(function() {
+                            var companyId = $(this).attr('data-company-id');
+                            //show loading img
+                            $('.loading').show();
+                            $.ajax({
+                                url: "{{ path('add_company_to_favorite') }}" + "/" + companyId + "/remove",
+                                success: function(msg) {
+                                },
+                                complete: function(msg) {
+                                    location.reload();
+                                }
+                            });
+                        });
+
                         $('#logedInStudent,#userHome').addClass('crnt');
                         $('#studentNav').show();
 
@@ -662,5 +696,19 @@ $('.isActiveCv').live('click',function() {
     });
 });
 </script>
+<script type="text/javascript">
+    var fb_param = {};
+    fb_param.pixel_id = '6008754338126';
+    fb_param.value = '0.00';
+(function(){
+        var fpw = document.createElement('script');
+        fpw.async = true;
+        fpw.src = '//connect.facebook.net/en_US/fp.js';
+        var ref = document.getElementsByTagName('script')[0];
+        ref.parentNode.insertBefore(fpw, ref);
+    })();
+
+</script>
+<noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/offsite_event.php?id=6008754338126&amp;value=0&quot; /></noscript>
 
 {% endblock %}

@@ -110,9 +110,9 @@ class InternshipController extends Controller {
         }
 
         //all cities
-        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
+        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
         //all state
-        $allState = $stateRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
+        $allState = $stateRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
         //all category
         $allCategory = $categoryRepo->findAll();
 
@@ -166,9 +166,9 @@ class InternshipController extends Controller {
         }
 
         //all cities
-        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
+        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
         //all state
-        $allState = $stateRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
+        $allState = $stateRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
         //all category
         $allCategory = $categoryRepo->findAll();
 
@@ -257,7 +257,7 @@ class InternshipController extends Controller {
             foreach ($comanyFavoriteusers as $comanyFavoriteuser) {
                 $comanyFavoriteuserArray = array();
                 $comanyFavoriteuserArray['user'] = $comanyFavoriteuser;
-                $interestObject = $interestRepo->findOneBy(array('accepted' => 'accepted','company' => $company->getId(), 'user' => $comanyFavoriteuser->getId()));
+                $interestObject = $interestRepo->findOneBy(array('accepted' => 'accepted', 'company' => $company->getId(), 'user' => $comanyFavoriteuser->getId()));
                 $comanyFavoriteuserArray['cvId'] = $interestObject->getCvId();
                 $comanyFavoriteusersArray [] = $comanyFavoriteuserArray;
             }
@@ -313,6 +313,17 @@ class InternshipController extends Controller {
         }
 
 
+        //check for loggedin user if add company to fav
+        $userCompanyFavoriteFlag = FALSE;
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_USER')) {
+            //get logedin user objects
+            $user = $this->get('security.context')->getToken()->getUser();
+            if ($user->getFavoriteComapnies()->contains($company)) {
+                $userCompanyFavoriteFlag = 'yes';
+            } else {
+                $userCompanyFavoriteFlag = 'no';
+            }
+        }
 
         return $this->render('ObjectsInternJumpBundle:Internship:index.html.twig', array(
                     'companyJobs' => $companyJobs,
@@ -325,7 +336,8 @@ class InternshipController extends Controller {
                     'companyInterests' => $companyInterests,
                     'companyInterviews' => $companyInterviews,
                     'ownerCompanyFlag' => $ownerCompanyFlag,
-                    'comanyFavoriteusers' => $comanyFavoriteusersArray
+                    'comanyFavoriteusers' => $comanyFavoriteusersArray,
+                    'userCompanyFavoriteFlag' => $userCompanyFavoriteFlag
         ));
     }
 
@@ -412,6 +424,18 @@ class InternshipController extends Controller {
 
 
 
+         //check for loggedin user if add company to fav
+        $userCompanyFavoriteFlag = FALSE;
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_USER')) {
+            //get logedin user objects
+            $user = $this->get('security.context')->getToken()->getUser();
+            if ($user->getFavoriteComapnies()->contains($company)) {
+                $userCompanyFavoriteFlag = 'yes';
+            } else {
+                $userCompanyFavoriteFlag = 'no';
+            }
+        }
+
         return $this->render('ObjectsInternJumpBundle:Internship:fb_index.html.twig', array(
                     'companyJobs' => $companyJobs,
                     'page' => $page,
@@ -422,7 +446,8 @@ class InternshipController extends Controller {
                     'companyHiredUsers' => $companyHiredUsers,
                     'companyInterests' => $companyInterests,
                     'companyInterviews' => $companyInterviews,
-                    'ownerCompanyFlag' => $ownerCompanyFlag
+                    'ownerCompanyFlag' => $ownerCompanyFlag,
+                    'userCompanyFavoriteFlag' => $userCompanyFavoriteFlag
         ));
     }
 
@@ -505,9 +530,9 @@ class InternshipController extends Controller {
         //all companies
 //        $allCompanies = $companyRepo->findAll();
         //all cities
-        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
+        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
         //all state
-        $allState = $stateRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
+        $allState = $stateRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
         //all category
         $allCategory = $categoryRepo->findAll();
 
@@ -631,9 +656,9 @@ class InternshipController extends Controller {
         //all companies
 //        $allCompanies = $companyRepo->findAll();
         //all cities
-        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
+        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
         //all state
-        $allState = $stateRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
+        $allState = $stateRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
         //all category
         $allCategory = $categoryRepo->findAll();
 

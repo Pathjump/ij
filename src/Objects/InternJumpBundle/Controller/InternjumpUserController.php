@@ -17,6 +17,40 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class InternjumpUserController extends Controller {
 
     /**
+     * this function used to add company to favorite list for user
+     * @author ahmed
+     * @param integer $companyId
+     * @param string $status
+     */
+    public function addCompanyToFavoriteAction($companyId, $status) {
+        //check if the company is already active
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
+            return new Response('failed');
+        }
+        //get logedin user objects
+        $user = $this->get('security.context')->getToken()->getUser();
+        //get the entity manager
+        $em = $this->getDoctrine()->getEntityManager();
+        $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
+        //get the user
+        $company = $companyRepo->find($companyId);
+
+        if (!$company) {
+            return new Response('failed');
+        }
+
+        if ($status == 'add') {
+            //add the company to user favorite list
+            $user->addCompany($company);
+        } else {
+            $user->getFavoriteComapnies()->removeElement($company);
+        }
+        $em->flush();
+
+        return new Response('done');
+    }
+
+    /**
      * @author Mahmoud
      * @param string $searchString
      * @param integer $start
@@ -24,7 +58,7 @@ class InternjumpUserController extends Controller {
      * @param type $jobLocation
      * @return false | array
      */
-    private function searchForIndeedJobs($searchString = null, $start = 1, $limit = 10, $jobLocation = null) {
+    private function searchForIndeedJobs($searchString = null, $start = 1, $limit = 10, $jobLocation = null, $jobType = "internship") {
         $userAgent = 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:16.0) Gecko/20100101 Firefox/16.0';
         $start--;
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
@@ -34,7 +68,9 @@ class InternjumpUserController extends Controller {
         if (isset($_SERVER['REMOTE_ADDR'])) {
             $userIp = $_SERVER['REMOTE_ADDR'];
         }
-        $apiSearchString = 'http://api.indeed.com/ads/apisearch?publisher=5399161479070076&jt=internship&v=2&format=json&latlong=1&useragent=' . urlencode($userAgent) . '&userip=' . urlencode($userIp) . '&start=' . $start . '&limit=' . $limit . '&q=' . urlencode($searchString);
+
+        if($jobType == "empty" || $jobType == null){$jobType = "internship";}
+        $apiSearchString = 'http://api.indeed.com/ads/apisearch?publisher=5399161479070076&jt='.urlencode($jobType).'&v=2&format=json&latlong=1&useragent=' . urlencode($userAgent) . '&userip=' . urlencode($userIp) . '&start=' . $start . '&limit=' . $limit . '&q=' . urlencode($searchString);
         if ($jobLocation) {
             $apiSearchString .= '&l=' . urlencode($jobLocation);
         }
@@ -2738,7 +2774,7 @@ class InternjumpUserController extends Controller {
         /*         * *********************************************** */
         $apiJobsArr = array();
         if (sizeof($userSearchResults) < 24) {
-            $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null);
+            $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null, $jobt);
             // print_r($apiJobsArr);
 
             $lastPageNumber = (int) ($apiJobsArr['count'] / $jobsPerPage);
@@ -2815,11 +2851,11 @@ class InternjumpUserController extends Controller {
         }
 
 
-        /*         * ***************[ End API Search Results ]********************** */
+        /*         * ***************[ Start API Search Results ]********************** */
         /*         * *********************************************** */
         $apiJobsArr = array();
         if (sizeof($userSearchResults) < 24) {
-            $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null);
+            $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null, $jobt);
             // print_r($apiJobsArr);
 
             $lastPageNumber = (int) ($apiJobsArr['count'] / $jobsPerPage);

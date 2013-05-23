@@ -37,6 +37,15 @@ class User implements AdvancedUserInterface {
     private $id;
 
     /**
+     * @ORM\ManyToMany(targetEntity="\Objects\InternJumpBundle\Entity\Company")
+     * @ORM\JoinTable(name="favorite_company",
+     *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)}
+     * )
+     */
+    private $favoriteComapnies;
+
+    /**
      * @var integer $currentWorth
      *
      * @ORM\Column(name="currentWorth", type="integer")
@@ -1552,7 +1561,7 @@ class User implements AdvancedUserInterface {
     /**
      * Get netWorth
      *
-     * @return integer 
+     * @return integer
      */
     public function getNetWorth()
     {
@@ -1567,5 +1576,25 @@ class User implements AdvancedUserInterface {
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+    }
+
+    /**
+     * Add favoriteComapnies
+     *
+     * @param Objects\InternJumpBundle\Entity\Company $favoriteComapnies
+     */
+    public function addCompany(\Objects\InternJumpBundle\Entity\Company $favoriteComapnies)
+    {
+        $this->favoriteComapnies[] = $favoriteComapnies;
+    }
+
+    /**
+     * Get favoriteComapnies
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getFavoriteComapnies()
+    {
+        return $this->favoriteComapnies;
     }
 }

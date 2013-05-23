@@ -184,3 +184,7 @@ fb_User_notification:
     requirements:
         page:  \d+
         itemsPerPage:  \d+
+
+add_company_to_favorite:
+    pattern:  /add_company/favorite/{companyId}/{status}
+    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:addCompanyToFavorite" , companyId : ~ ,status : ~}
