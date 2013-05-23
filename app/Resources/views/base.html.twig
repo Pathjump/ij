@@ -43,7 +43,7 @@
                 <div class="navbar-inner">
                     <div class="container">
                         <a href="{{ path('site_homepage') }}" class="pull-left"><img src="{{ asset('img/Logo.png') }}" /></a>
-                        <div class="Top-Links pull-right">
+                        <div class="Top-Links pull-right span6">
                             {% if not is_granted('ROLE_NOTACTIVE_COMPANY') and not is_granted('ROLE_NOTACTIVE') %}
                                 <p><strong class="notLoggedInUserMessage">Are you an employer? Connect with top interns from all around the nation. <a href="{{path('employers_data')}}" class="startHiring">Start Hiring !</a></strong></p>
                             {% endif %}

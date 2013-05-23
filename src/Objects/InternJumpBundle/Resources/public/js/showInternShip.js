@@ -39,7 +39,7 @@ $(document).ready(function() {
         });
     });
 
-    $('#notActiveUserApply').click(function() {
+    $('a#notActiveUserApply').click(function() {
         jAlert("You need to register to apply.");
     });
 
