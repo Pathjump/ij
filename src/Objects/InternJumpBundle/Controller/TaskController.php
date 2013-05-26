@@ -1398,4 +1398,187 @@ class TaskController extends Controller {
 //        }
     }
 
+     /**
+     * This action is to check and calculate values to measure how much user completed his CV
+     * @author Ola
+     */
+    public function fb_userMeterAction() {
+//        if (true === $this->get('security.context')->isGranted('ROLE_USER')) {
+        //total percent of CV Completion
+        $percent = 1;
+        //flags distinguishing between if entity/feild found or not
+        $flag1 = ""; //to check if user created at least/activate one cv
+        $flag2 = ""; //to check if user added eduacation or not
+        $flag3 = ""; //to check if user added employment history or not
+        $flag4 = ""; //to check if user added at least one skill or not
+        $flag5 = ""; //to check if user answered the "know you" quiz
+        $flag6 = ""; //to check if user answered ALL Personal Questions
+        $uDataFlag_fn = ""; //to check if user data contains firstname
+        $uDataFlag_ln = ""; //to check if user data contains lastname
+        $uDataFlag_ab = ""; //to check if user data contains about
+        $uDataFlag_dob = ""; //to check if user data contains date of birth
+        $uDataFlag_url = ""; //to check if user data contains url
+        $cvDescFlag = ""; // to check if each cv contains describe yourself or not
+        $allSocialLinksFlag = ""; // to check if has social or not at all
+        $fbLinkFlag = ""; // to check if user linked his profile to facebook
+        $twitterLinkFlag = ""; // to check if user linked his profile to twitter
+        $linkedLinkFlag = ""; // to check if user linked his profile to LinkedIn
+
+        $em = $this->getDoctrine()->getEntityManager();
+
+        //get current user
+        $user = $this->get('security.context')->getToken()->getUser();
+        $uId = $user->getId();
+
+        //Get Repos
+        $eduacationRepo = $em->getRepository("ObjectsInternJumpBundle:Education");
+        $experienceRepo = $em->getRepository("ObjectsInternJumpBundle:EmploymentHistory");
+        $cvRepo = $em->getRepository("ObjectsInternJumpBundle:CV");
+        $skillRepo = $em->getRepository("ObjectsInternJumpBundle:Skill");
+
+        //Check if User has cv(s)
+        $cvs = $cvRepo->getAllCvs($uId);
+        $cvArray = array();
+        if ($cvs) {
+            $percent+=20;
+            /*
+              //Check if User added Describe yourself to his cv(s)
+              foreach ($cvs as $cv) {
+              //describe yourself not found in cv
+              if (!$cv->getDescribeYourself()) {
+              $cvDescFlag = "desc";
+              $cvdesc['id'] = $cv->getId();
+              $cvdesc['name'] = $cv->getName();
+              $cvArray[] = $cvdesc;
+              }
+              }
+              //in case all Cv(s) have describe yourself
+              if (!isset($cvdesc)) {
+              $percent+=10;
+              $cvdesc[] = "";
+              } */
+        } else {
+            $flag1 = "cvs";
+        }
+
+
+        //Check if User has education
+        $edu = $eduacationRepo->getAllEducation($uId);
+        if ($edu) {
+            $percent+=10;
+        } else {
+            $flag2 = "edu";
+        }
+
+        //Check if User has Experience
+        $exp = $experienceRepo->getAllExperince($uId);
+        if ($exp) {
+            $percent+=10;
+        } else {
+            $flag3 = "exp";
+        }
+
+        //Check if User has Skills
+        $skill = $skillRepo->getStudentAllSkills($uId);
+        if ($skill) {
+            $percent+=10;
+        } else {
+            $flag4 = "skil";
+        }
+
+        //Check if User answered Know you Quiz
+        if ($user->getScore() == null) {
+            $flag5 = "quiz";
+        } else {
+            $percent+=10;
+        }
+
+        //Check if User Completed His personal data
+        if ($user->getFirstName() == null) {
+            $uDataFlag_fn = "fn";
+        }
+        if ($user->getLastName() == null) {
+            $uDataFlag_ln = "ln";
+        }
+        if ($user->getAbout() == null) {
+            $uDataFlag_ab = "ab";
+        }
+        if ($user->getDateOfBirth() == null) {
+            $uDataFlag_dob = "dob";
+        }
+        if ($user->getUrl() == null) {
+            $uDataFlag_url = "url";
+        } else {
+            $percent+=20;
+        }
+
+        /* Check if user answered personal Questions to add more 10 % */
+        //get personal question Repo
+        $personalQuestionsRepo = $em->getRepository('ObjectsInternJumpBundle:PersonalQuestion');
+        //get count of questions
+        $numberOfQuestions = sizeof($personalQuestionsRepo->findAll());
+        //get PersonalQuestionAnswers Repo
+        $personalQuestionsAnswerRepo = $em->getRepository('ObjectsInternJumpBundle:PersonalQuestionAnswer');
+        //get count of answer by this user
+        $numberOfUserQuestions = sizeof($personalQuestionsAnswerRepo->findBy(array('user' => $uId)));
+        //if user answered
+        if ($numberOfQuestions == $numberOfUserQuestions) {
+            $percent+=10;
+        } else {//if didn't answer
+            $flag6 = "noAns";
+        }
+
+        /* Check if user has social links to add more 1% for fb, 1% for twitter, 1% for linked in */
+        //get social accounts Repo
+        $socialAccountsRepo = $em->getRepository('ObjectsUserBundle:SocialAccounts');
+        //get user social account
+        $userSocialAccount = $socialAccountsRepo->findOneBy(array('user' => $uId));
+        if (isset($userSocialAccount)) {
+            //found social Link
+            //check, has facebook link?
+            if ($userSocialAccount->isFacebookLinked()) {
+                $percent+=3;
+            } else {
+                $fbLinkFlag = "notlinked";
+            }
+            //check, has twitter link?
+            if ($userSocialAccount->isTwitterLinked()) {
+                $percent+=3;
+            } else {
+                $twitterLinkFlag = "notlinked";
+            }
+            //check, has Linkedin link?
+            if ($userSocialAccount->isLinkedInLinked()) {
+                $percent+=3;
+            } else {
+                $linkedLinkFlag = "notlinked";
+            }
+        } else {
+            $allSocialLinksFlag = "notlinked";
+        }
+
+        return $this->render('ObjectsInternJumpBundle:Task:fb_meter.html.twig', array(
+                    'user' => $user,
+                    'percent' => $percent,
+                    'cvsFlag' => $flag1,
+                    'eduFlag' => $flag2,
+                    'expFlag' => $flag3,
+                    'skilFlag' => $flag4,
+                    'quizFlag' => $flag5,
+                    'personalQuestionFlag' => $flag6,
+                    'fNameFlag' => $uDataFlag_fn,
+                    'lNameFlag' => $uDataFlag_ln,
+                    'aboutFlag' => $uDataFlag_ab,
+                    'dobFlag' => $uDataFlag_dob,
+                    'urlFlag' => $uDataFlag_url,
+                    'cvDescFlag' => $cvDescFlag,
+                    'cvNamesArray' => $cvArray,
+                    'allSocial' => $allSocialLinksFlag,
+                    'linked' => $linkedLinkFlag,
+                    'facebook' => $fbLinkFlag,
+                    'twitter' => $twitterLinkFlag,
+        ));
+//        }
+    }
+
 }
