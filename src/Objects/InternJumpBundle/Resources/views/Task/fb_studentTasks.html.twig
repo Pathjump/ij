@@ -273,7 +273,7 @@
 
                             <span class="span7">
                             <input type="checkbox" name="checkbox" class="cvcheckbox" value="{{ cv.id }}"/>
-                            <a title="{{ cv }}" href="{{ path('fb_user_portal_home',{'loginName' : user.loginName,'cvId' : cv.id}) }}">{{ cv.name }}</a>
+                            <a title="{{ cv }}" href="{{ path('fb_user_portal_home',{'loginName' : user.loginName,'cvId' : cv.id}) }}">{% if cv.name %}{{ cv.name }}{% else %}My Resume{% endif %}</a>
                             </span>
                             <span class="span3"></span>
                             <span class="span2">
@@ -327,8 +327,9 @@
     <div class="tasks-block">
 <ul class="list2">
     <li>
-        {% if worth > 1 %}Find Your Worth: {{worth}}{% endif %}
-         <a href="{{path('howMuchAreYouWorth')}}  ">View Your Earning Projection</a>
+          <img src="{{asset('img/sign4.png')}}" width="40" />
+        {% if worth > 1 %} <strong> Your Current Worth is ${{worth}} </strong><br>{% endif %}
+         <a href="{{path('howMuchAreYouWorth')}}  "><i class="icon-eye-open"></i> View Your Expected Lifetime Earnings</a>
 
       </li>
      </ul>
@@ -341,7 +342,7 @@
 
                     <div class="span4">
                         <div class="Col-block">
-                            <h2>Resume Completeness</h2>
+                            <h2>Strength of Profile</h2>
                             {% render "ObjectsInternJumpBundle:Task:userMeter" %}
                         </div> <!--Col-block-->
 

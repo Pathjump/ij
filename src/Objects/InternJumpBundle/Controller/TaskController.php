@@ -1358,14 +1358,12 @@ class TaskController extends Controller {
             } else {
                 $fbLinkFlag = "notlinked";
             }
-
             //check, has twitter link?
             if ($userSocialAccount->isTwitterLinked()) {
                 $percent+=3;
             } else {
                 $twitterLinkFlag = "notlinked";
             }
-
             //check, has Linkedin link?
             if ($userSocialAccount->isLinkedInLinked()) {
                 $percent+=3;

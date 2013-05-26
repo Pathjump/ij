@@ -2774,7 +2774,17 @@ class InternjumpUserController extends Controller {
         /*         * *********************************************** */
         $apiJobsArr = array();
         if (sizeof($userSearchResults) < 24) {
-            $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null, $jobt);
+            $title1 = $title;
+            if($title == "empty"){
+                if($category != "empty")
+                {
+                    $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
+                    //get countries array
+                    $category = $categoryRepo->findOneBy(array('id' => $category));
+                    $title1 = $category->getSlug();
+                }
+            }
+            $apiJobsArr = $this->searchForIndeedJobs($searchString = $title1, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null, $jobt);
             // print_r($apiJobsArr);
 
             $lastPageNumber = (int) ($apiJobsArr['count'] / $jobsPerPage);
@@ -2855,6 +2865,16 @@ class InternjumpUserController extends Controller {
         /*         * *********************************************** */
         $apiJobsArr = array();
         if (sizeof($userSearchResults) < 24) {
+             $title1 = $title;
+            if($title == "empty"){
+                if($category != "empty")
+                {
+                    $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
+                    //get countries array
+                    $category = $categoryRepo->findOneBy(array('id' => $category));
+                    $title1 = $category->getSlug();
+                }
+            }
             $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null, $jobt);
             // print_r($apiJobsArr);
 
