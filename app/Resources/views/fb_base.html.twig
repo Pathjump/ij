@@ -67,11 +67,11 @@
                 <div class="container Main-content">
                     {% if is_granted('ROLE_USER') %}
                     <!---------------Invite Friends Part--------------->
-                    <div class="welcomInvite">
+                    <div class="welcomInvite text-center">
                         <span class="name"><a href="{{ path('fb_student_task',{'loginName' : app.user.loginName}) }}">{{ app.user }}</a></span>
                         <div id="fb-root"></div>
                         <script src="http://connect.facebook.net/en_US/all.js"></script>
-                        <button onclick="sendRequestViaMultiFriendSelector(); return false;"><span>Invite Friends</span></button>
+                        <button onclick="sendRequestViaMultiFriendSelector(); return false;" class="btn btn-warning btn-large"><span>Invite Friends</span></button>
                         <script>
                           FB.init({
                             appId  : '282137608565990',
