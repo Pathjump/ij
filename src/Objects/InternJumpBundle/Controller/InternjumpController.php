@@ -1164,7 +1164,9 @@ class InternjumpController extends Controller {
      * Facebook Homepage/Landing action
      */
     public function fb_homePageAction() {
-        echo "@first";
+//        if(!strpos($_SERVER['HTTP_REFERER'],"apps.facebook.com")) {
+//            // Page is running in facebook iframe.
+//        }
         //get the request object
         $request = $this->getRequest();
         //get the session object
