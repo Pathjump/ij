@@ -2471,6 +2471,7 @@ class InternjumpUserController extends Controller {
         //create the form
         $form = $formBuilder->getForm();
 
+        
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:userSearchPage.html.twig', array(
                     'form' => $form->createView(),
                     'jobs' => $userSearchResults,
