@@ -2479,6 +2479,7 @@ class InternjumpUserController extends Controller {
                     'lastPageNumber' => $lastPageNumber,
                     'title' => "empty",
                     'country' => "empty",
+                    'company' => "empty",
                     'city' => $city,
                     'state' => $state, 'category' => $category, 'lang' => "empty", 'jobtype' => $jobType, 'keyword' => $keyword,
         ));
@@ -2716,6 +2717,7 @@ class InternjumpUserController extends Controller {
                     'lastPageNumber' => $lastPageNumber,
                     'title' => "empty",
                     'country' => "empty",
+                    'company' => "empty",
                     'city' => $city,
                     'state' => $state, 'category' => $category, 'jobtype' => $jobType, 'lang' => "empty", 'jobtype' => $jobType, 'keyword' => $keyword,
         ));
