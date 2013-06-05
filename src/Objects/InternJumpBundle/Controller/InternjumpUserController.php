@@ -2788,8 +2788,13 @@ class InternjumpUserController extends Controller {
                 }
             }
             $apiJobsArr = $this->searchForIndeedJobs($searchString = $title1, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null, $jobt);
-            // print_r($apiJobsArr);
 
+            foreach ($apiJobsArr['results'] as $key => $job) {
+                if ($job['state'] == '' || $job['city'] == '') {
+                    unset($apiJobsArr['results'][$key]);
+                    $apiJobsArr['count'] = $apiJobsArr['count'] - 1;
+                }
+            }
             $lastPageNumber = (int) ($apiJobsArr['count'] / $jobsPerPage);
             if (($apiJobsArr['count'] % $jobsPerPage) > 0) {
                 $lastPageNumber++;
@@ -2880,7 +2885,12 @@ class InternjumpUserController extends Controller {
             }
             $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null, $jobt);
             // print_r($apiJobsArr);
-
+            foreach ($apiJobsArr['results'] as $key => $job) {
+                if ($job['state'] == '' || $job['city'] == '') {
+                    unset($apiJobsArr['results'][$key]);
+                    $apiJobsArr['count'] = $apiJobsArr['count'] - 1;
+                }
+            }
             $lastPageNumber = (int) ($apiJobsArr['count'] / $jobsPerPage);
             if (($apiJobsArr['count'] % $jobsPerPage) > 0) {
                 $lastPageNumber++;
