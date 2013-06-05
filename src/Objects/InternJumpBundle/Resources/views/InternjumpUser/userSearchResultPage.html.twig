@@ -60,7 +60,7 @@
                                             <div class="span8">
                                             	<h4><a class="titl-blue" href="{{ path('show_indeed_job',{'jobkey' : j['jobkey']}) }}">{{j['jobtitle']}}</a></h4>
                                                 <i><strong><a href="javascript:void(0)">{{j['company']}}</a></strong></i>
-                                                <p>{{j['snippet']}}</p>
+                                                <p>{{j['snippet']|raw}}</p>
                                                 <p></p>
                                             </div>
                                             <div class="span4">

@@ -70,7 +70,7 @@ class InternjumpUserController extends Controller {
         }
 
         if($jobType == "empty" || $jobType == null){$jobType = "internship";}
-        $apiSearchString = 'http://api.indeed.com/ads/apisearch?publisher=5399161479070076&jt='.urlencode($jobType).'&v=2&format=json&latlong=1&useragent=' . urlencode($userAgent) . '&userip=' . urlencode($userIp) . '&start=' . $start . '&limit=' . $limit . '&q=' . urlencode($searchString);
+        $apiSearchString = 'http://api.indeed.com/ads/apisearch?publisher=5399161479070076&jt='.urlencode($jobType).'&v=2&format=json&latlong=1&useragent=' . urlencode($userAgent) . '&userip=' . urlencode($userIp) . '&start=' . $start . '&limit=' . $limit . '&q=' . urlencode($searchString). '&sort=date';
         if ($jobLocation) {
             $apiSearchString .= '&l=' . urlencode($jobLocation);
         }
@@ -2471,7 +2471,7 @@ class InternjumpUserController extends Controller {
         //create the form
         $form = $formBuilder->getForm();
 
-        
+
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:userSearchPage.html.twig', array(
                     'form' => $form->createView(),
                     'jobs' => $userSearchResults,
