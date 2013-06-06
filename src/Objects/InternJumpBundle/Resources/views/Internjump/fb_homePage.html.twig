@@ -75,14 +75,15 @@
                         </select>
                         {% endif %}
 
-                        {% if allCities |length > 0 %}
+                        {#{% if allCities |length > 0 %}
                         <select  Class="Choosen" id="cityFilter">
                             <option value="">city</option>
                             {% for city in allCities %}
                             <option value="{{city.id}}">{{city}}</option>
                             {% endfor %}
                         </select>
-                        {% endif %}
+                        {% endif %}#}
+                        <input id="keywordFilter" placeholder="Keyword" type="text"/>
 
                         {% if allState |length > 0 %}
                         <select  Class="Choosen" id="stateFilter">
@@ -208,8 +209,9 @@
           var city = $('#cityFilter').val();
           var state = $('#stateFilter').val();
           var category = $('#industryFilter').val();
+          var keyword = $('#keywordFilter').val();
 
-          if(company || city || state || category)
+          if(company || city || state || category || keyword)
               searchJobsUrl += '?';
 
           if(company)
@@ -223,6 +225,9 @@
 
           if(category)
               searchJobsUrl += "&industry="+category;
+
+        if(keyword)
+              searchJobsUrl += "&keyword="+keyword;
 
           window.location = searchJobsUrl;
        });
