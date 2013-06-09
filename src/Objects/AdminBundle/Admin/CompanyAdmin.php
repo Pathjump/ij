@@ -156,13 +156,13 @@ class CompanyAdmin extends Admin {
         $currentDate = new \DateTime();
         //define the default arrays
         $countries = array();
-        $cities = array();
+//        $cities = array();
         $states = array();
         //check if we have a new object
         if ($this->getSubject()->getId()) {
             //set the object values
             $countries[$this->getSubject()->getCountry()] = $this->getSubject()->getCountry();
-            $cities[$this->getSubject()->getCity()] = $this->getSubject()->getCity();
+//            $cities[$this->getSubject()->getCity()] = $this->getSubject()->getCity();
             $states[$this->getSubject()->getState()] = $this->getSubject()->getState();
         }
         $formMapper
@@ -188,10 +188,7 @@ class CompanyAdmin extends Admin {
                     'choices' => $countries,
                     'attr' => array('class' => 'chosen countrySelect')
                 ))
-                ->add('city', 'choice', array(
-                    'choices' => $cities,
-                    'attr' => array('class' => 'chosen citySelect')
-                ))
+                ->add('city')
                 ->add('state', 'choice', array(
                     'choices' => $states,
                     'attr' => array('class' => 'chosen stateSelect'),
@@ -229,7 +226,7 @@ class CompanyAdmin extends Admin {
         $company->preUpload();
         $company->setValidPassword();
     }
-    
+
     public function prePersist($company) {
         $company->setValidPassword();
     }
