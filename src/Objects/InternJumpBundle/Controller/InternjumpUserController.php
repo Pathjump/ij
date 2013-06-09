@@ -70,7 +70,7 @@ class InternjumpUserController extends Controller {
         }
 
         if($jobType == "empty" || $jobType == null){$jobType = "internship";}
-        $apiSearchString = 'http://api.indeed.com/ads/apisearch?publisher=5399161479070076&jt='.urlencode($jobType).'&v=2&format=json&latlong=1&useragent=' . urlencode($userAgent) . '&userip=' . urlencode($userIp) . '&start=' . $start . '&limit=' . $limit . '&q=' . urlencode($searchString);
+        $apiSearchString = 'http://api.indeed.com/ads/apisearch?publisher=5399161479070076&jt='.urlencode($jobType).'&v=2&format=json&latlong=1&useragent=' . urlencode($userAgent) . '&userip=' . urlencode($userIp) . '&start=' . $start . '&limit=' . $limit . '&q=' . urlencode($searchString). '&sort=date';
         if ($jobLocation) {
             $apiSearchString .= '&l=' . urlencode($jobLocation);
         }
@@ -2471,6 +2471,7 @@ class InternjumpUserController extends Controller {
         //create the form
         $form = $formBuilder->getForm();
 
+
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:userSearchPage.html.twig', array(
                     'form' => $form->createView(),
                     'jobs' => $userSearchResults,
@@ -2479,6 +2480,7 @@ class InternjumpUserController extends Controller {
                     'lastPageNumber' => $lastPageNumber,
                     'title' => "empty",
                     'country' => "empty",
+                    'company' => "empty",
                     'city' => $city,
                     'state' => $state, 'category' => $category, 'lang' => "empty", 'jobtype' => $jobType, 'keyword' => $keyword,
         ));
@@ -2716,6 +2718,7 @@ class InternjumpUserController extends Controller {
                     'lastPageNumber' => $lastPageNumber,
                     'title' => "empty",
                     'country' => "empty",
+                    'company' => "empty",
                     'city' => $city,
                     'state' => $state, 'category' => $category, 'jobtype' => $jobType, 'lang' => "empty", 'jobtype' => $jobType, 'keyword' => $keyword,
         ));
@@ -2774,9 +2777,24 @@ class InternjumpUserController extends Controller {
         /*         * *********************************************** */
         $apiJobsArr = array();
         if (sizeof($userSearchResults) < 24) {
-            $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null, $jobt);
-            // print_r($apiJobsArr);
+            $title1 = $title;
+            if($title == "empty"){
+                if($category != "empty")
+                {
+                    $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
+                    //get countries array
+                    $category = $categoryRepo->findOneBy(array('id' => $category));
+                    $title1 = $category->getSlug();
+                }
+            }
+            $apiJobsArr = $this->searchForIndeedJobs($searchString = $title1, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null, $jobt);
 
+            foreach ($apiJobsArr['results'] as $key => $job) {
+                if ($job['state'] == '' || $job['city'] == '') {
+                    unset($apiJobsArr['results'][$key]);
+                    $apiJobsArr['count'] = $apiJobsArr['count'] - 1;
+                }
+            }
             $lastPageNumber = (int) ($apiJobsArr['count'] / $jobsPerPage);
             if (($apiJobsArr['count'] % $jobsPerPage) > 0) {
                 $lastPageNumber++;
@@ -2855,9 +2873,24 @@ class InternjumpUserController extends Controller {
         /*         * *********************************************** */
         $apiJobsArr = array();
         if (sizeof($userSearchResults) < 24) {
+             $title1 = $title;
+            if($title == "empty"){
+                if($category != "empty")
+                {
+                    $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
+                    //get countries array
+                    $category = $categoryRepo->findOneBy(array('id' => $category));
+                    $title1 = $category->getSlug();
+                }
+            }
             $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null, $jobt);
             // print_r($apiJobsArr);
-
+            foreach ($apiJobsArr['results'] as $key => $job) {
+                if ($job['state'] == '' || $job['city'] == '') {
+                    unset($apiJobsArr['results'][$key]);
+                    $apiJobsArr['count'] = $apiJobsArr['count'] - 1;
+                }
+            }
             $lastPageNumber = (int) ($apiJobsArr['count'] / $jobsPerPage);
             if (($apiJobsArr['count'] % $jobsPerPage) > 0) {
                 $lastPageNumber++;

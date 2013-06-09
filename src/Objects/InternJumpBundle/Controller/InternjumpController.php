@@ -1164,6 +1164,9 @@ class InternjumpController extends Controller {
      * Facebook Homepage/Landing action
      */
     public function fb_homePageAction() {
+//        if(!strpos($_SERVER['HTTP_REFERER'],"apps.facebook.com")) {
+//            // Page is running in facebook iframe.
+//        }
         //get the request object
         $request = $this->getRequest();
         //get the session object
@@ -1230,7 +1233,7 @@ class InternjumpController extends Controller {
                 $faceUser = json_decode(file_get_contents($graph_url));
                 $session->set('facebook_user', $faceUser);
                 $session->set('facebook_short_live_access_token', $facebook->getAccessToken());
-                $session->set('currentURL', 'http://apps.facebook.com/internjumpnew');
+                $session->set('currentURL', 'http://apps.facebook.com/internjump');
                 return $this->redirect($this->generateUrl('facebook_logging', array('access_method' => 'face'), True));
 
 
@@ -1244,10 +1247,11 @@ class InternjumpController extends Controller {
                 $user = null;
             }
         } else {
+
             //not logged in FB user, then GO to fb login;
             $params = array(
                 //'scope' => 'read_stream, friends_likes',
-                'redirect_uri' => 'http://apps.facebook.com/internjumpnew' // 'http://internjump.com/app_dev.php/'
+                'redirect_uri' => 'http://apps.facebook.com/internjump' // 'http://internjump.com/app_dev.php/'
             );
 
             $loginUrl = $facebook->getLoginUrl($params);
