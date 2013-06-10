@@ -832,6 +832,7 @@ class InternshipController extends Controller {
 
         //minimumGPA list
         $minimumGPAArray = array();
+        $minimumGPAArray ["0"] = "Doesn't Matter";
         $No = 0.1;
         for ($index = 1; $index <= 40; $index++) {
             $minimumGPAArray ["$No"] = $No;
@@ -1055,6 +1056,7 @@ class InternshipController extends Controller {
         $formValidationGroups [] = 'editInternship';
 
         $minimumGPAArray = array();
+        $minimumGPAArray ["0"] = "Doesn't Matter";
         $No = 0.1;
         for ($index = 1; $index <= 40; $index++) {
             $minimumGPAArray ["$No"] = $No;

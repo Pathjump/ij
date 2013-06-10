@@ -110,9 +110,8 @@ class Internship {
 
     /**
      * @var decimal $minimumGPA
-     * @Assert\NotNull(groups={"newInternship","editInternship"})
      * @Assert\Max(limit = 4, message = "GPA must be 4 or less.", groups={"newInternship","editInternship"})
-     * @ORM\Column(name="minimumGPA", type="decimal", precision=3, scale=2)
+     * @ORM\Column(name="minimumGPA", type="decimal", precision=3, scale=2, nullable=true)
      */
     private $minimumGPA;
 
