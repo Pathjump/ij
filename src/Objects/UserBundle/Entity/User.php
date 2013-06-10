@@ -210,6 +210,13 @@ class User implements AdvancedUserInterface {
     private $createdAt;
 
     /**
+     * @var date $activatedAt
+     *
+     * @ORM\Column(name="activatedAt", type="date", nullable=true)
+     */
+    private $activatedAt;
+
+    /**
      * @var datetime $lastSeen
      *
      * @ORM\Column(name="lastSeen", type="datetime")
@@ -1591,10 +1598,30 @@ class User implements AdvancedUserInterface {
     /**
      * Get favoriteComapnies
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getFavoriteComapnies()
     {
         return $this->favoriteComapnies;
+    }
+
+    /**
+     * Set activatedAt
+     *
+     * @param date $activatedAt
+     */
+    public function setActivatedAt($activatedAt)
+    {
+        $this->activatedAt = $activatedAt;
+    }
+
+    /**
+     * Get activatedAt
+     *
+     * @return date
+     */
+    public function getActivatedAt()
+    {
+        return $this->activatedAt;
     }
 }

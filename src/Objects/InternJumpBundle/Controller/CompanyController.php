@@ -966,6 +966,7 @@ class CompanyController extends Controller {
                 }
                 //add the company role
                 $company->addRole($roleCompany);
+                $company->setActivatedAt(new \DateTime());
                 //save the new role for the company
                 $em->flush();
                 //set a success flag

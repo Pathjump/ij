@@ -197,6 +197,13 @@ class Company implements AdvancedUserInterface {
     private $createdAt;
 
     /**
+     * @var date $activatedAt
+     *
+     * @ORM\Column(name="activatedAt", type="date", nullable=true)
+     */
+    private $activatedAt;
+    
+    /**
      * @var string $country
      * @Assert\NotNull(groups={"signup","edit"})
      * @ORM\Column(name="country", type="string", length=255)
@@ -1418,5 +1425,25 @@ class Company implements AdvancedUserInterface {
     public function getFavoriteUsers()
     {
         return $this->favoriteUsers;
+    }
+
+    /**
+     * Set activatedAt
+     *
+     * @param date $activatedAt
+     */
+    public function setActivatedAt($activatedAt)
+    {
+        $this->activatedAt = $activatedAt;
+    }
+
+    /**
+     * Get activatedAt
+     *
+     * @return date 
+     */
+    public function getActivatedAt()
+    {
+        return $this->activatedAt;
     }
 }

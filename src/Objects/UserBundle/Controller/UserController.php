@@ -1279,6 +1279,7 @@ class UserController extends Controller {
         }
         //add the user role
         $user->addRole($roleUser);
+        $user->setActivatedAt(new \DateTime());
         //save the new role for the user
         $em->flush();
         //set a success flag

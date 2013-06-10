@@ -18,6 +18,34 @@ use Objects\AdminBundle\Form\ConfigType;
 class AdminController extends Controller {
 
     /**
+     * @author ahmed
+     * @param date $from
+     * @param date $to
+     */
+    public function endOfDayReportAction($from, $to) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $dayActivityRepo = $em->getRepository('ObjectsInternJumpBundle:DayActivity');
+
+
+        if (!$from)
+            $from = new \DateTime('-1 month');
+        else
+            $from = new \DateTime($from);
+
+        if (!$to)
+            $to = new \DateTime();
+        else
+            $to = new \DateTime($to);
+
+
+        $dayActivities = $dayActivityRepo->getActivites($from, $to);
+
+        return $this->render('ObjectsAdminBundle:Admin:endOfDayReport.html.twig', array(
+                    'dayActivities' => $dayActivities
+        ));
+    }
+
+    /**
      * the default admin home page action
      * @return Response
      */
@@ -200,7 +228,6 @@ class AdminController extends Controller {
                     ->add('user_message_not_found_error_msg', 'textarea')
                     ->add('company_message_not_found_error_msg', 'textarea')
                     ->add('internship_not_found_error_msg', 'textarea')
-
                     ->add('worth_default_statrting_salary', 'integer')
                     ->add('worth_experience_boost_value', 'integer')
                     ->add('worth_no_education', 'text')
@@ -211,12 +238,11 @@ class AdminController extends Controller {
                     ->add('worth_no_skills', 'text')
                     ->add('worth_year_boost', 'integer')
                     ->add('worth_facebook_message', 'text')
-                    ->add('worth_select_from', 'choice',array(
-                        'choices' => array('automatic' => 'Automatic','manually' => 'Manually')
+                    ->add('worth_select_from', 'choice', array(
+                        'choices' => array('automatic' => 'Automatic', 'manually' => 'Manually')
                     ))
                     ->add('user_worth_description', 'text')
                     ->add('user_net_worth_description', 'text')
-
                     ->getForm();
 
             $request = $this->getRequest();
@@ -523,7 +549,7 @@ class AdminController extends Controller {
                                 // an error occurred during parsing
                                 return $this->render('::general_admin.html.twig', array(
                                             'message' => 'Unable to parse the YAML File: ' . $configFile . '<br/><strong>Please fix this: </strong>' . $e->getMessage()
-                                        ));
+                                ));
                             }
                             //set the parameters in the file
                             $value['parameters']['worth_default_statrting_salary'] = $formDataArray['worth_default_statrting_salary'];
@@ -661,7 +687,7 @@ class AdminController extends Controller {
             return $this->render('ObjectsAdminBundle:Admin:changeConstants.html.twig', array(
                         'form' => $form->createView(),
                         'config' => $config
-                    ));
+            ));
         } else {
             return $this->redirect($this->generateUrl('ObjectsInternJumpBundle_homepage'));
         }
@@ -701,7 +727,7 @@ class AdminController extends Controller {
             return $this->render('ObjectsAdminBundle:Admin:editAboutUs.html.twig', array(
                         'form' => $form->createView()
                         , 'config' => $config
-                    ));
+            ));
         } else {
             return $this->redirect($this->generateUrl('ObjectsInternJumpBundle_homepage'));
         }
@@ -740,7 +766,7 @@ class AdminController extends Controller {
             return $this->render('ObjectsAdminBundle:Admin:editTermsOfService.html.twig', array(
                         'form' => $form->createView()
                         , 'config' => $config
-                    ));
+            ));
         } else {
             return $this->redirect($this->generateUrl('ObjectsInternJumpBundle_homepage'));
         }
@@ -780,7 +806,7 @@ class AdminController extends Controller {
             return $this->render('ObjectsAdminBundle:Admin:editPrivacyPolicytext.html.twig', array(
                         'form' => $form->createView()
                         , 'config' => $config
-                    ));
+            ));
         } else {
             return $this->redirect($this->generateUrl('ObjectsInternJumpBundle_homepage'));
         }
@@ -827,7 +853,7 @@ class AdminController extends Controller {
             return $this->render('ObjectsAdminBundle:Admin:schools.html.twig', array(
                         'form' => $form->createView()
                         , 'config' => $config
-                    ));
+            ));
         } else {
             return $this->redirect($this->generateUrl('ObjectsInternJumpBundle_homepage'));
         }
@@ -921,7 +947,7 @@ class AdminController extends Controller {
                                 // an error occurred during parsing
                                 return $this->render('::general_admin.html.twig', array(
                                             'message' => 'Unable to parse the YAML File: ' . $configFile . '<br/><strong>Please fix this: </strong>' . $e->getMessage()
-                                        ));
+                                ));
                             }
                             //set the parameters in the file
                             $value['parameters']['consumer_key'] = $formDataArray['consumer_key'];
@@ -946,7 +972,7 @@ class AdminController extends Controller {
             return $this->render('ObjectsAdminBundle:Admin:changeApiConstants.html.twig', array(
                         'form' => $form->createView(),
                         'config' => $config
-                    ));
+            ));
         } else {
             return $this->redirect($this->generateUrl('ObjectsInternJumpBundle_homepage'));
         }
@@ -988,7 +1014,7 @@ class AdminController extends Controller {
                     'form' => $form->createView(),
                     'message' => $message,
                     'status' => $status
-                ));
+        ));
     }
 
     /**
@@ -1027,7 +1053,7 @@ class AdminController extends Controller {
                     'form' => $form->createView(),
                     'message' => $message,
                     'status' => $status
-                ));
+        ));
     }
 
     /**
@@ -1064,7 +1090,7 @@ class AdminController extends Controller {
             return $this->render('ObjectsAdminBundle:Admin:editCampusReps.html.twig', array(
                         'form' => $form->createView()
                         , 'config' => $config
-                    ));
+            ));
         } else {
             return $this->redirect($this->generateUrl('ObjectsInternJumpBundle_homepage'));
         }
