@@ -20,20 +20,20 @@ class UserAdmin extends Admin {
 
     /**
      * this variable holds the route name prefix for this actions
-     * @var string 
+     * @var string
      */
     protected $baseRouteName = 'user_admin';
 
     /**
      * this variable holds the url route prefix for this actions
-     * @var string 
+     * @var string
      */
     protected $baseRoutePattern = 'user';
 
     /**
      * this function configure the list action fields
      * @author Ahmed
-     * @param ListMapper $listMapper 
+     * @param ListMapper $listMapper
      */
     public function configureListFields(ListMapper $listMapper) {
         $listMapper
@@ -67,7 +67,7 @@ class UserAdmin extends Admin {
     /**
      * this function configure the show action fields
      * @author Mahmoud
-     * @param ShowMapper $showMapper 
+     * @param ShowMapper $showMapper
      */
     public function configureShowField(ShowMapper $showMapper) {
         $showMapper
@@ -99,7 +99,7 @@ class UserAdmin extends Admin {
      * this function configure the list action filters fields
      * @todo add the date filters if sonata project implemented it
      * @author Mahmoud
-     * @param DatagridMapper $datagridMapper 
+     * @param DatagridMapper $datagridMapper
      */
     public function configureDatagridFilters(DatagridMapper $datagridMapper) {
         $datagridMapper
@@ -127,18 +127,18 @@ class UserAdmin extends Admin {
     /**
      * this function configure the new, edit form fields
      * @author Mahmoud
-     * @param FormMapper $formMapper 
+     * @param FormMapper $formMapper
      */
     public function configureFormFields(FormMapper $formMapper) {
         //define the default arrays
         $countries = array();
-        $cities = array();
+//        $cities = array();
         $states = array();
         //check if we have a new object
         if ($this->getSubject()->getId()) {
             //set the object values
             $countries[$this->getSubject()->getCountry()] = $this->getSubject()->getCountry();
-            $cities[$this->getSubject()->getCity()] = $this->getSubject()->getCity();
+//            $cities[$this->getSubject()->getCity()] = $this->getSubject()->getCity();
             $states[$this->getSubject()->getState()] = $this->getSubject()->getState();
         }
         $formMapper
@@ -153,10 +153,7 @@ class UserAdmin extends Admin {
                     'choices' => $countries,
                     'attr' => array('class' => 'chosen countrySelect')
                 ))
-                ->add('city', 'choice', array(
-                    'choices' => $cities,
-                    'attr' => array('class' => 'chosen citySelect')
-                ))
+                ->add('city')
                 ->add('state', 'choice', array(
                     'choices' => $states,
                     'attr' => array('class' => 'chosen stateSelect'),
@@ -213,7 +210,7 @@ class UserAdmin extends Admin {
 
     /**
      * this function is for editing the routes of this class
-     * @param RouteCollection $collection 
+     * @param RouteCollection $collection
      */
 //    protected function configureRoutes(RouteCollection $collection) {
 //        $collection->remove('delete');

@@ -18,20 +18,20 @@ class InternshipAdmin extends Admin {
 
     /**
      * this variable holds the route name prefix for this actions
-     * @var string 
+     * @var string
      */
     protected $baseRouteName = 'internship_admin';
 
     /**
      * this variable holds the url route prefix for this actions
-     * @var string 
+     * @var string
      */
     protected $baseRoutePattern = 'internship';
 
     /**
      * this function configure the list action fields
      * @author Ahmed
-     * @param ListMapper $listMapper 
+     * @param ListMapper $listMapper
      */
     public function configureListFields(ListMapper $listMapper) {
         $listMapper
@@ -75,7 +75,7 @@ class InternshipAdmin extends Admin {
     /**
      * this function configure the show action fields
      * @author Ahmed
-     * @param ShowMapper $showMapper 
+     * @param ShowMapper $showMapper
      */
     public function configureShowField(ShowMapper $showMapper) {
         $showMapper
@@ -113,7 +113,7 @@ class InternshipAdmin extends Admin {
      * this function configure the list action filters fields
      * @todo add the date filters if sonata project implemented it
      * @author Ahmed
-     * @param DatagridMapper $datagridMapper 
+     * @param DatagridMapper $datagridMapper
      */
     public function configureDatagridFilters(DatagridMapper $datagridMapper) {
         $datagridMapper
@@ -146,19 +146,19 @@ class InternshipAdmin extends Admin {
     /**
      * this function configure the new, edit form fields
      * @author Mahmoud
-     * @param FormMapper $formMapper 
+     * @param FormMapper $formMapper
      */
     public function configureFormFields(FormMapper $formMapper) {
         $currentDate = new \DateTime();
         //define the default arrays
         $countries = array();
-        $cities = array();
+//        $cities = array();
         $states = array();
         //check if we have a new object
         if ($this->getSubject()->getId()) {
             //set the object values
             $countries[$this->getSubject()->getCountry()] = $this->getSubject()->getCountry();
-            $cities[$this->getSubject()->getCity()] = $this->getSubject()->getCity();
+//            $cities[$this->getSubject()->getCity()] = $this->getSubject()->getCity();
             $states[$this->getSubject()->getState()] = $this->getSubject()->getState();
         }
 
@@ -206,10 +206,7 @@ class InternshipAdmin extends Admin {
                     'choices' => $countries,
                     'attr' => array('class' => 'chosen countrySelect')
                 ))
-                ->add('city', 'choice', array(
-                    'choices' => $cities,
-                    'attr' => array('class' => 'chosen citySelect')
-                ))
+                ->add('city')
                 ->add('state', 'choice', array(
                     'choices' => $states,
                     'attr' => array('class' => 'chosen stateSelect'),
@@ -217,7 +214,7 @@ class InternshipAdmin extends Admin {
                 ))
                 ->add('address')
                 ->add('minimumGPA', 'choice', array('choices' => $minimumGPAArray, 'attr' => array('class' => 'chosen')))
-                ->add('skills', 'sonata_type_model', array('required' => true, 'attr' => array('class' => 'chosen')), array('edit' => 'inline'))
+                ->add('skills', 'sonata_type_model', array('required' => false, 'attr' => array('class' => 'chosen')), array('edit' => 'inline'))
                 ->add('compensation')
                 ->add('keywords', 'sonata_type_model', array('required' => true, 'attr' => array('class' => 'chosen')), array('edit' => 'inline'))
                 ->add('numberOfOpenings', 'choice', array('choices' => $numberOfOpeningsArray, 'attr' => array('class' => 'chosen')))
@@ -245,7 +242,7 @@ class InternshipAdmin extends Admin {
             $language->setInternship($internship);
         }
     }
-    
+
     public function preUpdate($internship) {
         //add the new internship to languages
         foreach ($internship->getLanguages() as $language) {
