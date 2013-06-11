@@ -19,11 +19,6 @@
 
 {% if is_granted('ROLE_USER') %}
         <div class="container Main-content">
-
-
-
-
-
             <div class="row-fluid show-grid">
 
                 <div class="span8">
@@ -410,6 +405,12 @@
 {% endif %}
          </div>
     </div>
+
+                        <div class="Col-block text-center">
+                            <a href="{{ path('upload_cv') }}">
+                                <img src="{{ asset('img/Upload-ur-CV-pic.png') }}"/>
+                            </a>
+                        </div><!--Sign-Up-->
 
 {% if favCompanies|length > 0 %}
         <div class="Col-block">
