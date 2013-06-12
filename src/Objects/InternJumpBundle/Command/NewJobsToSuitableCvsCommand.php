@@ -34,8 +34,6 @@ class NewJobsToSuitableCvsCommand extends ContainerAwareCommand {
 
         $todayDate = new \DateTime();
 
-        //select active users
-        $activeUsers
 
         echo 'aaaaaaa';exit;
     }
