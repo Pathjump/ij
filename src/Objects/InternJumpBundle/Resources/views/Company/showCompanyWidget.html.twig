@@ -13,7 +13,7 @@
             <div class="widget-contaier">
                 <div class="W-company">
                     <img src='{{ url('site_homepage') }}{{ company.getTimThumbUrl() }}'/>
-                    <a href="" class="w-c-name">{{ company }}</a>
+                    <a href="{{path('internship',{'loginName' : company.loginName})}}" class="w-c-name">{{ company }}</a>
                 </div>
                 {% for job in latestCompanyJobs %}
                 <div class="w-job-box clearfix">
