@@ -13,6 +13,43 @@ use Doctrine\ORM\EntityRepository;
 class InternshipRepository extends EntityRepository {
 
     /**
+     * this function get jobs mathching to user
+     * @author ahmed
+     * @param string $userCvCategoriesIds
+     * @param string $country
+     * @param string $state
+     */
+    public function getmatchingUserJobs($userCvCategoriesIds, $country, $state) {;
+        $parameters = array('today' => new \DateTime(date('Y-m-d')));
+        $query = '
+            SELECT j
+            FROM ObjectsInternJumpBundle:Internship j
+            JOIN j.categories c
+            WHERE j.active = true and j.createdAt = :today
+            ';
+
+        if ($userCvCategoriesIds) {
+            $query .= ' and c.id in (:userCvCategoriesIds)';
+            $parameters ['userCvCategoriesIds'] = $userCvCategoriesIds;
+        }
+
+        if ($country) {
+            $query .= ' and j.country = :country';
+            $parameters ['country'] = $country;
+        }
+
+        if ($state) {
+            $query .= ' and j.state = :state';
+            $parameters ['state'] = $state;
+        }
+
+        $query = $this->getEntityManager()
+                        ->createQuery($query)->setParameters($parameters);
+
+        return $query->getResult();
+    }
+
+    /**
      * this function is used to get the company jobs categories ids
      * the main use in CompanyController:searchForCVAction
      * @author Mahmoud
@@ -208,7 +245,7 @@ class InternshipRepository extends EntityRepository {
      * @author ahmed
      * @param integer $maxResults
      */
-    public function getLatestHiredUsers($maxResults){
+    public function getLatestHiredUsers($maxResults) {
         $query = $this->getEntityManager()
                         ->createQuery('
             SELECT ui
@@ -305,13 +342,13 @@ class InternshipRepository extends EntityRepository {
             $query .= ' AND c.id = :company';
             $para ['company'] = $company;
         }
-        if ($lang != 'empty'){
-             $query .= ' AND l = :lang';
-             $para ['lang'] = $lang;
+        if ($lang != 'empty') {
+            $query .= ' AND l = :lang';
+            $para ['lang'] = $lang;
         }
-        if ($jobType != 'empty'){
-             $query .= ' AND j.positionType = :jobtype';
-             $para ['jobtype'] = $jobType;
+        if ($jobType != 'empty') {
+            $query .= ' AND j.positionType = :jobtype';
+            $para ['jobtype'] = $jobType;
         }
 //print_r($query);exit;
         $query .= ' GROUP BY j.id  ORDER BY j.createdAt DESC';

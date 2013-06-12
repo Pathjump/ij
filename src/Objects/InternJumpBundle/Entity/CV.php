@@ -66,7 +66,7 @@ class CV {
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection $categories
      * @Assert\NotNull(message="You must select at least one category")
-     * @ORM\ManyToMany(targetEntity="\Objects\InternJumpBundle\Entity\CVCategory")
+     * @ORM\ManyToMany(targetEntity="\Objects\InternJumpBundle\Entity\CVCategory", inversedBy="cvs")
      * @ORM\JoinTable(name="cv_category",
      *     joinColumns={@ORM\JoinColumn(name="cv_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)},
      *     inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE", onUpdate="CASCADE", nullable=false)}

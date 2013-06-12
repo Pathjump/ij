@@ -342,6 +342,7 @@ class UserController extends Controller {
                 ->add('city')
                 ->add('state', 'choice', array('required' => false))
                 ->add('email')
+                ->add('matchingJobEmail',null,array('required' => FALSE))
                 ->add('file', 'file', array('required' => false, 'label' => 'image', 'attr' => array('onchange' => 'readURL(this);')))
         ;
         //check if the old password is required

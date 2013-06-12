@@ -103,6 +103,32 @@ class CVRepository extends EntityRepository {
     }
 
     /**
+     * get cv categories ids
+     * @author ahmed
+     * @param int $cvId
+     */
+    public function getCvCatIds($cvId) {
+        $query = $this->getEntityManager()
+                        ->createQuery('
+            SELECT cc.id
+            FROM ObjectsInternJumpBundle:CVCategory cc
+            JOIN cc.cvs c
+            where c.id =:id
+            ')->setParameter('id', $cvId);
+
+        $result = $query->getResult();
+        if ($result) {
+            $catIdsArray = array();
+            foreach ($result as $catId) {
+                $catIdsArray[] = $catId['id'];
+            }
+            return $catIdsArray;
+        } else {
+            return $result;
+        }
+    }
+
+    /**
      * this function will get suitable active user cvs for new job
      * @author Ahmed edited by Ola
      * @param array $categoryIdsArray

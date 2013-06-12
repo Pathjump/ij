@@ -30,12 +30,39 @@ class NewJobsToSuitableCvsCommand extends ContainerAwareCommand {
         $em = $this->getContainer()->get('doctrine')->getEntityManager();
         $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
         $userRepo = $em->getRepository('ObjectsUserBundle:User');
+        $cVRepositoryRepo = $em->getRepository('ObjectsInternJumpBundle:CV');
 
+        $container = $this->getContainer();
+        $mailer = $container->get('mailer');
 
-        $todayDate = new \DateTime();
+        //get active users
+        $users = $userRepo->getUsersForNewJobs();
+        foreach ($users as $user) {
+            //get user cv categories
+            $userCvCategoriesIds = $cVRepositoryRepo->getCvCatIds($user['cvId']);
+            if (sizeof($userCvCategoriesIds) == 0)
+                $userCvCategoriesIds = NULL;
 
+            //get matching job
+            $matchingJobs = $internshipRepo->getmatchingUserJobs($userCvCategoriesIds, $user['country'], $user['state']);
 
-        echo 'aaaaaaa';exit;
+            if (sizeof($matchingJobs) > 0) {
+                $body = $container->get('templating')->render('ObjectsInternJumpBundle:Internjump:Emails\NewJobsToSuitableCvs.txt.twig', array(
+                    'jobs' => $matchingJobs
+                ));
+
+                $message = \Swift_Message::newInstance()
+                        ->setSubject('InternJump - matching jobs')
+                        ->setFrom($container->getParameter('contact_us_email'))
+                        ->setTo($user['email'])
+                        ->setBody($body);
+                ;
+                $mailer->send($message);
+                
+            }
+        }
+
+        echo "done \n";exit;
     }
 
 }
