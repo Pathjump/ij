@@ -8,6 +8,7 @@
 {% for job in latestCompanyJobs %}
 {{ job.city }}{% if job.state %},{{ job.state }}{% endif %}
 <a href="{{ url('internship_show',{'id' : job.id}) }}">{{ job }}</a><br/>
+<a href="{{ url('internship_show',{'id' : job.id}) }}">Apply</a><br/>
 {% endfor %}
 
 
