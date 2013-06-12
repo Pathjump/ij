@@ -1,18 +1,46 @@
-<base target="_blank" />
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+        <base target="_blank" />
+            <!-- Bootstrap -->
+        <link href="{{ asset('css/bootstrap.min.css')}}" rel="stylesheet" media="screen">
+        <link href="{{ asset('css/widget.css')}}" rel="stylesheet" media="screen">
+        <link href="{{ asset('css/bootstrap-responsive.css')}}" rel="stylesheet">
 
-<img src='{{ url('site_homepage') }}{{ company.getTimThumbUrl() }}'/>
+        <link href="{{ asset('css/main.css')}}" rel="stylesheet" media="screen">
+        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,200italic,400italic,700italic' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+    </head>
+    <body>
+        <div class="container Main-content">
 
-{{ company }}
+            <div class="widget-contaier">
+                <div class="W-company">
+                    <img src='{{ url('site_homepage') }}{{ company.getTimThumbUrl() }}'/>
+                    <a href="" class="w-c-name">{{ company }}</a>
+                </div>
+                {% for job in latestCompanyJobs %}
+                <div class="w-job-box clearfix">
+                    <h4 class="w-job">
+                        <a class="titl-blue" href="{{ url('internship_show',{'id' : job.id}) }}">
+                            {{ job }}
+                        </a>
+                        </h4>
+                        <i>{{ job.city }}{% if job.state %},{{ job.state }}{% endif %}</i>
+                        <a href="{{ url('internship_show',{'id' : job.id}) }}" class="btn btn-info pull-right">Apply</a><br>
+                    </div>
+                {% endfor %}
+                    <div class="w-foot">
+                        Powered by IJ
+                        <a href="{{ path('site_homepage') }}">
+                            <img src='{{ url('site_homepage') }}img/logo-widget.png'/>
+                        </a>
+                    </div>
+                </div><!--widget-contaier--->
+            </div><!--container  Main-content-->
+    </body>
+</html>
 
-<br/>
-{% for job in latestCompanyJobs %}
-{{ job.city }}{% if job.state %},{{ job.state }}{% endif %}
-<a href="{{ url('internship_show',{'id' : job.id}) }}">{{ job }}</a><br/>
-<a href="{{ url('internship_show',{'id' : job.id}) }}">Apply</a><br/>
-{% endfor %}
 
-
-Powered by IJ
-<a href="{{ path('site_homepage') }}">
-    <img src='{{ url('site_homepage') }}img/Logo.png'/>
-</a>
