@@ -116,7 +116,7 @@
                                                 <div class="span7">{{ entity.minimumGPA }}</div>
                                             </li>
                                             {% endif %}
-                                            
+
                                             <li class="row-fluid show-grid">
                                                 <div class="span5">Language skills</div>
                                             </li>
@@ -209,6 +209,9 @@
                                                 <option value="Internship">Internship</option>
                                                 <option value="Entry Level">Entry Level</option>
                                             </select>
+
+
+                                                    {#
                             {% if allCities |length > 0 %}
                                                     <select id="cityFilter">
                                                         <option value="">City</option>
@@ -217,6 +220,8 @@
                                     {% endfor %}
                                                     </select>
                             {% endif %}
+                                                    #}
+
                             {% if allState |length > 0 %}
                                                     <select id="stateFilter">
                                                         <option value="">State</option>
@@ -233,6 +238,8 @@
                                     {% endfor %}
                                                     </select>
                             {% endif %}
+
+                                                    <input id="keywordFilter" placeholder="Keyword" type="text" style="width: 94%;"/>
 
                                                     <br>
                                                     <button class="btn btn-primary" type="button" id="homeSearchJob">Search</button>

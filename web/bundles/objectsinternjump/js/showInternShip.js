@@ -4,8 +4,9 @@ $(document).ready(function() {
         var city = $('#cityFilter').val();
         var state = $('#stateFilter').val();
         var category = $('#industryFilter').val();
+        var keyword = $('#keywordFilter').val();
 
-        if (company || city || state || category)
+        if (company || city || state || category || keyword)
             searchJobsUrl += '?';
 
         if (company)
@@ -19,6 +20,9 @@ $(document).ready(function() {
 
         if (category)
             searchJobsUrl += "&industry=" + category;
+
+        if (keyword)
+            searchJobsUrl += "&keyword=" + keyword;
 
         window.location = searchJobsUrl;
     });
