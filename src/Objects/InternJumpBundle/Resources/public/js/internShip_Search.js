@@ -5,15 +5,14 @@ $(document).ready(function(){
         allow_single_deselect:true
     });
     $('#pageination').hide();
-    
 
-        
+
     //intialize country cities and states
     if($('#form_country').val() != ''){
         $.ajax({
             url: countryCitiesStatesUrl+"/"+$('#form_country').val(),
             success: function(msg) {
-                var msg = $.parseJSON(msg); 
+                var msg = $.parseJSON(msg);
                 //set country cities
                 $('#form_city').empty().append(
                     $('<option></option>').val('').html('--- choose city ---')
@@ -40,14 +39,19 @@ $(document).ready(function(){
                 //select job state for edit action
                 if(typeof jobState != 'undefined')
                     $('#form_state').val(jobState);
+
             },
             complete: function(msg) {
+
                 $("select.chzn-select").trigger("liszt:updated");
+                if(stateParam != ''){
+                    $('#form_state').val(stateParam);
+                }
             }
         });
     }
-    
-    
+
+
     //change cities and states on country chacnge
     $('#form_country').change(function(){
         //if empty ---choose country--- is chosen refresh and empty city and state);
@@ -58,11 +62,11 @@ $(document).ready(function(){
             return false;
         }
 
-        
+
         $.ajax({
             url: countryCitiesStatesUrl+"/"+$(this).val(),
             success: function(msg) {
-                var msg = $.parseJSON(msg); 
+                var msg = $.parseJSON(msg);
                 //set country cities
                 $('#form_city').empty().append(
                     $('<option></option>').val('').html('--- choose city ---')
@@ -89,7 +93,7 @@ $(document).ready(function(){
             }
         });
     });
-    
-    
-    
+
+
+
 });

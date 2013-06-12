@@ -2436,7 +2436,7 @@ class InternjumpUserController extends Controller {
         /*         * *************************************************************************** */
         //inspect if check been set to be true then set the defaults values of the form
         if ($check) {
-            $countryOptionsArr = array('choices' => $allCountriesArray, 'empty_value' => '--- choose Country ---');
+            //$countryOptionsArr = array('choices' => $allCountriesArray, 'empty_value' => '--- choose Country ---');
             if ($city != "empty") {
                 //get the city name
                 $theCity = "";
@@ -2675,7 +2675,7 @@ class InternjumpUserController extends Controller {
         /*         * *************************************************************************** */
         //inspect if check been set to be true then set the defaults values of the form
         if ($check) {
-            $countryOptionsArr = array('choices' => $allCountriesArray, 'empty_value' => '--- choose Country ---');
+            //$countryOptionsArr = array('choices' => $allCountriesArray, 'empty_value' => '--- choose Country ---');
             if ($city != "empty") {
                 //get the city name
                 $theCity = "";
