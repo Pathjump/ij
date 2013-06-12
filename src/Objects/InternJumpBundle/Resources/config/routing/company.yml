@@ -121,3 +121,16 @@ company_reActivation:
 add_user_to_favorite:
     pattern:  /add_user/favorite/{userId}/{status}
     defaults: { _controller: "ObjectsInternJumpBundle:Company:addUserToFavorite" , userId : ~ ,status : ~}
+
+create_company_widget:
+    pattern:  /create/widget/{id}
+    defaults: { _controller: "ObjectsInternJumpBundle:Company:createCompanyWidget" }
+    requirements:
+        id: \d+
+
+show_company_widget:
+    pattern:  /show/widget/{id}/{jobs}
+    defaults: { _controller: "ObjectsInternJumpBundle:Company:showCompanyWidget" }
+    requirements:
+        id: \d+
+        jobs: \d+

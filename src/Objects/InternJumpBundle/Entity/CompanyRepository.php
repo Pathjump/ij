@@ -13,6 +13,23 @@ use Doctrine\ORM\EntityRepository;
 class CompanyRepository extends EntityRepository {
 
     /**
+     * this function will get latest internships for company
+     * @author Ahmed
+     * @param int $id
+     * @param int $maxResults
+     */
+    public function getLatestjobs($id, $maxResults) {
+        $query = $this->getEntityManager()
+                        ->createQuery('
+            SELECT j
+            FROM ObjectsInternJumpBundle:Internship j
+            WHERE j.active = true and j.activeTo >= :todayDate and j.company = :id
+            ORDER BY j.createdAt DESC
+            ')->setMaxResults($maxResults)->setParameters(array('todayDate' => new \DateTime(), 'id' => $id));
+        return $query->getResult();
+    }
+
+    /**
      * search for a company
      * the main use in CompanyController:searchForCompanyAction
      * @author Mahmoud
@@ -73,7 +90,7 @@ class CompanyRepository extends EntityRepository {
                 AND r.name in(:activeRoleName)
                 AND c.locked = 0
                 AND c.enabled = 1';
-            $parameters = array('industryId' => $industryId,'activeRoleName'=> 'ROLE_COMPANY');
+            $parameters = array('industryId' => $industryId, 'activeRoleName' => 'ROLE_COMPANY');
             $query = $this->getEntityManager()->createQuery("SELECT c $mainQuery ORDER BY c." . $orderBy . " $orderDirection")->setParameters($parameters);
             $countQuery = $this->getEntityManager()->createQuery("SELECT COUNT(c.id) $mainQuery")->setParameters($parameters);
             $query->setFirstResult($page * $maxResults);

@@ -14,7 +14,7 @@
 
     <div class="row-fluid">
         <div class="{% if ownerCompanyFlag == 0 %}span12{% else %}span8{% endif %}">
-            {% if ownerCompanyFlag == 0 %}
+            {% if ownerCompanyFlag == 0 and is_granted('ROLE_USER') %}
             <ul class="nav nav-tabs">
                 <li>
                     {% if userCompanyFavoriteFlag == 'no' %}
@@ -94,6 +94,12 @@
                                                             </tr>
                     {% endif %}
 
+                                                            <tr>
+                                                                <th scope="row">Widget</th>
+                                                                <td>
+                                                                    <a href="{{ path('create_company_widget',{ 'id' : company.id }) }}">click here</a>
+                                                                </td>
+                                                            </tr>
                                                         </tbody>
                                                     </table>
 

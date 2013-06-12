@@ -1,0 +1,17 @@
+<base target="_blank" />
+
+<img src='{{ url('site_homepage') }}{{ company.getTimThumbUrl() }}'/>
+
+{{ company }}
+
+<br/>
+{% for job in latestCompanyJobs %}
+{{ job.city }}{% if job.state %},{{ job.state }}{% endif %}
+<a href="{{ url('internship_show',{'id' : job.id}) }}">{{ job }}</a><br/>
+{% endfor %}
+
+
+Powered by IJ
+<a href="{{ path('site_homepage') }}">
+    <img src='{{ url('site_homepage') }}img/Logo.png'/>
+</a>

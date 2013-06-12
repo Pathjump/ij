@@ -14,6 +14,61 @@ use Objects\InternJumpBundle\Entity\UserLanguage;
 class CompanyController extends Controller {
 
     /**
+     * this function used to return company widget
+     * @author ahmed
+     * @param int $id
+     * @param int $jobs
+     */
+    public function showCompanyWidgetAction($id, $jobs) {
+        //get the entity manager
+        $em = $this->getDoctrine()->getEntityManager();
+        $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
+
+        $company = $companyRepo->find($id);
+
+        //get latest company jobs
+        $latestCompanyJobs = $companyRepo->getLatestjobs($id, $jobs);
+
+        return $this->render('ObjectsInternJumpBundle:Company:showCompanyWidget.html.twig', array(
+                    'company' => $company,
+                    'latestCompanyJobs' => $latestCompanyJobs
+        ));
+    }
+
+    /**
+     * this function used to create company widget
+     * @author ahmed
+     * @param integer $id
+     */
+    public function createCompanyWidgetAction($id) {
+        //get the entity manager
+        $em = $this->getDoctrine()->getEntityManager();
+        $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
+
+        $company = $companyRepo->find($id);
+
+        if (!$company) {
+            $message = $this->container->getParameter('company_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
+        }
+
+        $request = $this->getRequest();
+        $width = $request->get('width', 200);
+        $height = $request->get('height', 200);
+        $jobs = $request->get('jobs', 5);
+        $border = $request->get('border', 0);
+
+        return $this->render('ObjectsInternJumpBundle:Company:createCompanyWidget.html.twig', array(
+                    'company' => $company,
+                    'width' => $width,
+                    'height' => $height,
+                    'jobs' => $jobs,
+                    'border' => $border
+        ));
+    }
+
+    /**
      * this function used to add user to favorite list for company
      * @author ahmed
      * @param integer $userId
@@ -39,7 +94,7 @@ class CompanyController extends Controller {
         if ($status == 'add') {
             //add the user to company favorite list
             $company->addUser($user);
-        }else{
+        } else {
             $company->getFavoriteUsers()->removeElement($user);
         }
         $em->flush();
