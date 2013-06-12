@@ -54,9 +54,9 @@ class CompanyController extends Controller {
         }
 
         $request = $this->getRequest();
-        $width = $request->get('width', 200);
-        $height = $request->get('height', 200);
-        $jobs = $request->get('jobs', 5);
+        $width = $request->get('width', 250);
+        $height = $request->get('height', 250);
+        $jobs = $request->get('jobs', 2);
         $border = $request->get('border', 0);
 
         return $this->render('ObjectsInternJumpBundle:Company:createCompanyWidget.html.twig', array(

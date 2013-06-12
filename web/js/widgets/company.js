@@ -2,12 +2,12 @@ $(document).ready(function() {
     //get request data
     if ($('#ij-company-widget').length > 0) {
         var width = $('#ij-company-widget').attr('data-width');
-        if ($.trim(width) == "")
-            width = 400;
+        if ($.trim(width) == "" || parseInt($.trim(width)) < 250)
+            width = 250;
 
         var height = $('#ij-company-widget').attr('data-height');
-        if ($.trim(height) == "")
-            height = 400;
+        if ($.trim(height) == "" || parseInt($.trim(height)) < 250)
+            height = 250;
 
         var border = $('#ij-company-widget').attr('data-border');
 
