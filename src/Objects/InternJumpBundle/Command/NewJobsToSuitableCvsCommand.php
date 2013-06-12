@@ -58,7 +58,7 @@ class NewJobsToSuitableCvsCommand extends ContainerAwareCommand {
                         ->setBody($body);
                 ;
                 $mailer->send($message);
-                
+
             }
         }
 

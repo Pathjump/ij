@@ -27,9 +27,9 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
             SELECT c.id as cvId,u.id as userId,u.email,u.state,u.country
             FROM ObjectsInternJumpBundle:CV c
             JOIN c.user u
-            where u.matchingJobEmail = 1 and c.isActive = 1
+            where u.matchingJobEmail = 1 and c.isActive = 1 and u.country = :country
             group by u.email
-            ');
+            ')->setParameter('country', 'US');
 
         return $query->getResult();
     }

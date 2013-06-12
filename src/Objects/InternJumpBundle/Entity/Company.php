@@ -183,6 +183,12 @@ class Company implements AdvancedUserInterface {
     private $isHome = FALSE;
 
     /**
+     * @var boolean $notification
+     * @ORM\Column(name="notification", type="boolean")
+     */
+    private $notification = TRUE;
+
+    /**
      * @ORM\Column(type="string", length="255")
      *
      * @var string salt
@@ -202,7 +208,7 @@ class Company implements AdvancedUserInterface {
      * @ORM\Column(name="activatedAt", type="date", nullable=true)
      */
     private $activatedAt;
-    
+
     /**
      * @var string $country
      * @Assert\NotNull(groups={"signup","edit"})
@@ -1440,10 +1446,30 @@ class Company implements AdvancedUserInterface {
     /**
      * Get activatedAt
      *
-     * @return date 
+     * @return date
      */
     public function getActivatedAt()
     {
         return $this->activatedAt;
+    }
+
+    /**
+     * Set notification
+     *
+     * @param boolean $notification
+     */
+    public function setNotification($notification)
+    {
+        $this->notification = $notification;
+    }
+
+    /**
+     * Get notification
+     *
+     * @return boolean 
+     */
+    public function getNotification()
+    {
+        return $this->notification;
     }
 }

@@ -1008,19 +1008,21 @@ class InternjumpController extends Controller {
         }
 
 
-        $message = \Swift_Message::newInstance()
-                ->setSubject($subject)
-                ->setFrom($container->getParameter('contact_us_email'))
-                ->setTo($company->getEmail())
-                ->setBody($container->get('templating')->render('ObjectsInternJumpBundle:Internjump:companyNotificationMail.html.twig', array(
-                    'user' => $user,
-                    'text1' => $texat1,
-                    'texat2' => $texat2
-                )))
-        ;
-        //send the mail
-        $container->get('mailer')->send($message);
-
+        //check if comapny enable notification
+        if ($company->getNotification() == 1) {
+            $message = \Swift_Message::newInstance()
+                    ->setSubject($subject)
+                    ->setFrom($container->getParameter('contact_us_email'))
+                    ->setTo($company->getEmail())
+                    ->setBody($container->get('templating')->render('ObjectsInternJumpBundle:Internjump:companyNotificationMail.html.twig', array(
+                        'user' => $user,
+                        'text1' => $texat1,
+                        'texat2' => $texat2
+                    )))
+            ;
+            //send the mail
+            $container->get('mailer')->send($message);
+        }
         return new Response('done');
     }
 
@@ -1140,9 +1142,9 @@ class InternjumpController extends Controller {
         //all companies
 //        $allCompanies = $companyRepo->findAll();
         //all cities
-        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
+        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
         //all state
-        $allState = $stateRepo->findBy(array('country' => 'US'), array('name'=> 'asc'));
+        $allState = $stateRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
         //all category
         $allCategory = $categoryRepo->findAll();
 
