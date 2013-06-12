@@ -68,7 +68,6 @@ class InternjumpUserController extends Controller {
         if (isset($_SERVER['REMOTE_ADDR'])) {
             $userIp = $_SERVER['REMOTE_ADDR'];
         }
-
         if($jobType == "empty" || $jobType == null){$jobType = "internship";}
         $apiSearchString = 'http://api.indeed.com/ads/apisearch?publisher=5399161479070076&jt='.urlencode($jobType).'&v=2&format=json&latlong=1&useragent=' . urlencode($userAgent) . '&userip=' . urlencode($userIp) . '&start=' . $start . '&limit=' . $limit . '&q=' . urlencode($searchString). '&sort=date';
         if ($jobLocation) {
@@ -2773,7 +2772,7 @@ class InternjumpUserController extends Controller {
         }
 
 
-        /*         * ***************[ End API Search Results ]********************** */
+        /*         * ***************[ Start API Search Results ]********************** */
         /*         * *********************************************** */
         $apiJobsArr = array();
         if (sizeof($userSearchResults) < 24) {
@@ -2787,7 +2786,22 @@ class InternjumpUserController extends Controller {
                     $title1 = $category->getSlug();
                 }
             }
-            $apiJobsArr = $this->searchForIndeedJobs($searchString = $title1, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null, $jobt);
+            if($city!="empty" && $state!="empty"){
+                $jobLocation = $city.', '.$state;
+            }
+            else{
+                if($city!="empty"){
+                    $jobLocation = $city;
+                }
+                elseif($state!="empty"){
+                    $jobLocation = $state;
+                }
+                else{
+                    $jobLocation = null;
+                }
+            }
+            echo $jobLocation;
+            $apiJobsArr = $this->searchForIndeedJobs($searchString = $title1, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation, $jobt);
 
             foreach ($apiJobsArr['results'] as $key => $job) {
                 if ($job['state'] == '' || $job['city'] == '') {

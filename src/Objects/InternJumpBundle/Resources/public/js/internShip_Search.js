@@ -43,10 +43,14 @@ $(document).ready(function(){
             },
             complete: function(msg) {
 
-                $("select.chzn-select").trigger("liszt:updated");
+
                 if(stateParam != ''){
+                    alert("complete"+stateParam);
                     $('#form_state').val(stateParam);
                 }
+                $("select.chzn-select").trigger("liszt:updated");
+                $('#search_button').click();
+
             }
         });
     }
