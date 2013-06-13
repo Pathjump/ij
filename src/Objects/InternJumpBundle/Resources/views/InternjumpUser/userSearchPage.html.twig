@@ -25,7 +25,24 @@ Job Search
                                 </ul>
                                 <div class="tab-content" id="myTabContent">
                                     <div id="basic" class="tab-pane fade active in">
-                                        <p><div class="controls">
+                                        <p>
+                                     <div class="controls  row-fluid show-grid">
+                                         <div class="span4 ">
+                                <label>Job Type</label>
+                                {{form_widget(form.jobtype, { 'attr': {'class': 'chzn-select', 'id' : 'jobtype_search'} })}}
+                            </div>
+                                            <div class="span4">
+                                                <label>Industry</label>
+                                {{form_widget(form.category, { 'attr': {'class': 'chzn-select','id' : 'category_search'} })}}
+                                            </div>
+                                             </div>
+                                    </p>
+
+                                                </div>
+
+                                    <div id="advanced" class="tab-pane fade">
+                                        <p>
+                                            <div class="controls">
 
                                             <label>Location</label>
 
@@ -44,22 +61,6 @@ Job Search
 
 
                                                     </div>
-                                     <div class="controls  row-fluid show-grid">
-                                         <div class="span4 ">
-                                <label>Job Type</label>
-                                {{form_widget(form.jobtype, { 'attr': {'class': 'chzn-select', 'id' : 'jobtype_search'} })}}
-                            </div>
-                                            <div class="span4">
-                                                <label>Industry</label>
-                                {{form_widget(form.category, { 'attr': {'class': 'chzn-select','id' : 'category_search'} })}}
-                                            </div>
-                                             </div>
-                                    </p>
-
-                                                </div>
-
-                                    <div id="advanced" class="tab-pane fade">
-                                        <p>
                                         <div class="controls  row-fluid show-grid">
                                             <div class="span4">
                                                 <label>Companies</label>
