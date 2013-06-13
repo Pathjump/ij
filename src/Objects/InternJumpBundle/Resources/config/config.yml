@@ -79,7 +79,8 @@ parameters:
   worth_no_experience: 'Add your employment histories'
   worth_no_skills: 'Add your skills'
   worth_year_boost: 3
-  worth_facebook_message: 'My expected worth on internjump is'
-  worth_select_from: automatic
-  user_worth_description: 'Your Curren Worth'
+  worth_facebook_message: 'My expected worth on InternJump is'
+  worth_select_from: manually
+  user_worth_description: 'Your Current Worth'
   user_net_worth_description: 'Your Net Worth'
+  host_name: 'newinternjump_dev.com'
