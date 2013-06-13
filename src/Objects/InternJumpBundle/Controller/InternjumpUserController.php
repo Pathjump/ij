@@ -2800,7 +2800,6 @@ class InternjumpUserController extends Controller {
                     $jobLocation = null;
                 }
             }
-            echo $jobLocation;
             $apiJobsArr = $this->searchForIndeedJobs($searchString = $title1, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation, $jobt);
 
             foreach ($apiJobsArr['results'] as $key => $job) {
@@ -2897,7 +2896,21 @@ class InternjumpUserController extends Controller {
                     $title1 = $category->getSlug();
                 }
             }
-            $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation = null, $jobt);
+            if($city!="empty" && $state!="empty"){
+                $jobLocation = $city.', '.$state;
+            }
+            else{
+                if($city!="empty"){
+                    $jobLocation = $city;
+                }
+                elseif($state!="empty"){
+                    $jobLocation = $state;
+                }
+                else{
+                    $jobLocation = null;
+                }
+            }
+            $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation, $jobt);
             // print_r($apiJobsArr);
             foreach ($apiJobsArr['results'] as $key => $job) {
                 if ($job['state'] == '' || $job['city'] == '') {

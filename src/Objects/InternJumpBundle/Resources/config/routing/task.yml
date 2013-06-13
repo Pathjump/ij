@@ -19,8 +19,8 @@ company_task_show:
     defaults: { _controller: "ObjectsInternJumpBundle:Task:companyShow" }
 
 task_new:
-    pattern:  /new
-    defaults: { _controller: "ObjectsInternJumpBundle:Task:new" }
+    pattern:  /new/{uid}
+    defaults: { _controller: "ObjectsInternJumpBundle:Task:new", uid: null }
 
 task_create:
     pattern:  /create
@@ -43,6 +43,11 @@ task_delete:
 get_job_users:
     pattern:  /getjobusers/{id}
     defaults: { _controller: "ObjectsInternJumpBundle:Task:getJobUsers" }
+
+get_user_jobs:
+    pattern:  /getusersjobs/{uid}
+    defaults: { _controller: "ObjectsInternJumpBundle:Task:getUserJobs" }
+
 
 add_note:
     pattern:  /addnote/{text}/{taskId}

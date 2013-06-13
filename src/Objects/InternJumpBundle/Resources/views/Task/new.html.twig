@@ -41,7 +41,7 @@
                         {% endif %}
                         </div>
                         <div class="controls">
-                        <label>END Date</label>
+                        <label>End Date</label>
                         {{ form_widget(form.endedAt) }}
                         {% if form_errors(form.endedAt) %}
                                         <span class="triangle-border left">{{ form_errors(form.endedAt) }}</span>
@@ -140,6 +140,7 @@
 {{parent()}}
                 <script>
                     $(document).ready(function(){
+
                         $('#logedInComapny,#newTask').addClass('crnt');
                         $('#companyNav').show();
 
@@ -149,6 +150,8 @@
                     });
 
                 var jobUsersUrl = '{{url('get_job_users',{'id' : ''})}}';
+                var userJobsUrl = '{{ path('get_user_jobs',{'uid': ''})}}';
+                var userId = '{{userId}}';
                     </script>
                     <script src="{{ asset('js/libs/chosen.jquery.min.js') }}"></script>
                     <script type="text/javascript" src="{{asset('bundles/objectsinternjump/js/task.js')}}"></script>
