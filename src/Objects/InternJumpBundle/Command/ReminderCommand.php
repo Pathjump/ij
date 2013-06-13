@@ -159,6 +159,8 @@ class ReminderCommand extends ContainerAwareCommand {
             ;
             $mailer->send($message);
         }
+
+        echo "IJ Auto reminder for students & company done \n";
     }
 
 }
