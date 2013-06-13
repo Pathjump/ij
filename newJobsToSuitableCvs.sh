@@ -5,3 +5,4 @@ CURRENTDIR=$(dirname $0)
 cd $CURRENTDIR
 
 app/console Send:NewJobsToSuitableCvs
+app/console Internjump:Reminder

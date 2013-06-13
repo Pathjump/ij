@@ -17,6 +17,78 @@ use Doctrine\ORM\EntityRepository;
 class UserRepository extends EntityRepository implements UserProviderInterface {
 
     /**
+     * get not complete resume users from 3,7,15 days
+     * @author ahmed
+     * @param datetime $threeDate
+     * @param datetime $sevenDate
+     * @param datetime $fifteenDate
+     * @param int $roleActiveId
+     */
+    public function getCharacterQuizUsers($threeDate, $sevenDate, $fifteenDate, $roleActiveId) {
+        $query = $this->getEntityManager()->createQuery("
+            select u From ObjectsUserBundle:User u
+            join u.userRoles r
+            where r.id = :roleId and u.score is null and ( u.createdAt = :threeDate or u.createdAt = :sevenDate or u.createdAt = :fifteenDate )
+            ")->setParameters(array(
+            'roleId' => $roleActiveId,
+            'threeDate' => $threeDate,
+            'sevenDate' => $sevenDate,
+            'fifteenDate' => $fifteenDate
+        ));
+
+        return $query->getResult();
+    }
+
+    /**
+     * get not complete resume users from 3,7,15 days
+     * @author ahmed
+     * @param datetime $threeDate
+     * @param datetime $sevenDate
+     * @param datetime $fifteenDate
+     * @param int $roleActiveId
+     */
+    public function getNotCompleteResumeUsers($threeDate, $sevenDate, $fifteenDate, $roleActiveId) {
+        $query = $this->getEntityManager()->createQuery("
+            select u.email,u.loginName,
+                   (select count(cv.id) from ObjectsInternJumpBundle:CV cv where cv.user = u.id ) as cvCount,
+                   (select count(e.id) from ObjectsInternJumpBundle:Education e where e.user = u.id ) as educationCount
+            From ObjectsUserBundle:User u
+            join u.userRoles r
+            where r.id = :roleId and ( u.createdAt = :threeDate or u.createdAt = :sevenDate or u.createdAt = :fifteenDate )
+            having cvCount = 0 or educationCount = 0
+            ")->setParameters(array(
+            'roleId' => $roleActiveId,
+            'threeDate' => $threeDate,
+            'sevenDate' => $sevenDate,
+            'fifteenDate' => $fifteenDate
+        ));
+
+        return $query->getResult();
+    }
+
+    /**
+     * get not active users from 3,7,15 days
+     * @author ahmed
+     * @param datetime $threeDate
+     * @param datetime $sevenDate
+     * @param datetime $fifteenDate
+     */
+    public function getNotActiveUsers($threeDate, $sevenDate, $fifteenDate, $roleActiveId) {
+        $query = $this->getEntityManager()->createQuery("
+            select u From ObjectsUserBundle:User u
+            join u.userRoles r
+            where r.id = :roleId and ( u.createdAt = :threeDate or u.createdAt = :sevenDate or u.createdAt = :fifteenDate )
+            ")->setParameters(array(
+            'roleId' => $roleActiveId,
+            'threeDate' => $threeDate,
+            'sevenDate' => $sevenDate,
+            'fifteenDate' => $fifteenDate
+        ));
+
+        return $query->getResult();
+    }
+
+    /**
      * get accepted user for new jobs email
      * @author ahmed
      * @return type

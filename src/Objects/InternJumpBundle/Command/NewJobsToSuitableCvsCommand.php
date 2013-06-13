@@ -27,13 +27,16 @@ class NewJobsToSuitableCvsCommand extends ContainerAwareCommand {
      * @param OutputInterface $output An OutputInterface instance
      */
     protected function execute(InputInterface $input, OutputInterface $output) {
+        $container = $this->getContainer();
+        $mailer = $container->get('mailer');
+        $context = $this->getContainer()->get('router')->getContext();
+        $context->setHost($container->getParameter('host_name'));
+
         $em = $this->getContainer()->get('doctrine')->getEntityManager();
         $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
         $userRepo = $em->getRepository('ObjectsUserBundle:User');
         $cVRepositoryRepo = $em->getRepository('ObjectsInternJumpBundle:CV');
 
-        $container = $this->getContainer();
-        $mailer = $container->get('mailer');
 
         //get active users
         $users = $userRepo->getUsersForNewJobs();

@@ -13,6 +13,83 @@ use Doctrine\ORM\EntityRepository;
 class CompanyRepository extends EntityRepository {
 
     /**
+     * get no tasks active companies from 3,7,15 days
+     * @author ahmed
+     * @param datetime $threeDate
+     * @param datetime $sevenDate
+     * @param datetime $fifteenDate
+     * @param int $roleActiveCompanyId
+     */
+    public function getNoTasksCompanies($threeDate, $sevenDate, $fifteenDate, $roleActiveCompanyId) {
+        $query = $this->getEntityManager()->createQuery("
+            select c.email,c.id,c.loginName,uj.id,
+                   (select count(t.id) from ObjectsInternJumpBundle:Task t where t.company = c.id ) as tasksCount
+            From ObjectsInternJumpBundle:UserInternship uj
+            join uj.internship j
+            join j.company c
+            join c.companyRoles r
+            where r.id = :roleId and ( c.createdAt = :threeDate or c.createdAt = :sevenDate or c.createdAt = :fifteenDate )
+            having tasksCount = 0
+            ")->setParameters(array(
+            'roleId' => $roleActiveCompanyId,
+            'threeDate' => $threeDate,
+            'sevenDate' => $sevenDate,
+            'fifteenDate' => $fifteenDate
+        ));
+
+        return $query->getResult();
+    }
+
+    /**
+     * get no jobs active companies from 3,7,15 days
+     * @author ahmed
+     * @param datetime $threeDate
+     * @param datetime $sevenDate
+     * @param datetime $fifteenDate
+     * @param int $roleActiveCompanyId
+     */
+    public function getNoJobsCompanies($threeDate, $sevenDate, $fifteenDate, $roleActiveCompanyId) {
+        $query = $this->getEntityManager()->createQuery("
+            select c.email,c.id,c.loginName,
+                   (select count(j.id) from ObjectsInternJumpBundle:Internship j where j.company = c.id ) as jobsCount
+            From ObjectsInternJumpBundle:Company c
+            join c.companyRoles r
+            where r.id = :roleId and ( c.createdAt = :threeDate or c.createdAt = :sevenDate or c.createdAt = :fifteenDate )
+            having jobsCount = 0
+            ")->setParameters(array(
+            'roleId' => $roleActiveCompanyId,
+            'threeDate' => $threeDate,
+            'sevenDate' => $sevenDate,
+            'fifteenDate' => $fifteenDate
+        ));
+
+        return $query->getResult();
+    }
+
+    /**
+     * get not active companies from 3,7,15 days
+     * @author ahmed
+     * @param datetime $threeDate
+     * @param datetime $sevenDate
+     * @param datetime $fifteenDate
+     * @param int $roleActiveId
+     */
+    public function getNotActiveCompanies($threeDate, $sevenDate, $fifteenDate, $roleActiveId) {
+        $query = $this->getEntityManager()->createQuery("
+            select c From ObjectsInternJumpBundle:Company c
+            join c.companyRoles r
+            where r.id = :roleId and ( c.createdAt = :threeDate or c.createdAt = :sevenDate or c.createdAt = :fifteenDate )
+            ")->setParameters(array(
+            'roleId' => $roleActiveId,
+            'threeDate' => $threeDate,
+            'sevenDate' => $sevenDate,
+            'fifteenDate' => $fifteenDate
+        ));
+
+        return $query->getResult();
+    }
+
+    /**
      * this function will get latest internships for company
      * @author Ahmed
      * @param int $id
