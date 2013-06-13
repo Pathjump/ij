@@ -851,6 +851,7 @@ class CompanyController extends Controller {
                 ->add('linkedInUrl')
                 ->add('youtubeUrl')
                 ->add('zipcode')
+                ->add('notification', null, array('required' => FALSE))
                 ->add('Latitude', 'hidden')
                 ->add('Longitude', 'hidden')
                 ->add('file', 'file', array('required' => false, 'label' => 'Logo', 'attr' => array('onchange' => 'readURL(this);')))

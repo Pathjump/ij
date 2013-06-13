@@ -17,11 +17,29 @@ use Doctrine\ORM\EntityRepository;
 class UserRepository extends EntityRepository implements UserProviderInterface {
 
     /**
+     * get accepted user for new jobs email
+     * @author ahmed
+     * @return type
+     */
+    public function getUsersForNewJobs() {
+        $query = $this->getEntityManager()
+                        ->createQuery('
+            SELECT c.id as cvId,u.id as userId,u.email,u.state,u.country
+            FROM ObjectsInternJumpBundle:CV c
+            JOIN c.user u
+            where u.matchingJobEmail = 1 and c.isActive = 1 and u.country = :country
+            group by u.email
+            ')->setParameter('country', 'US');
+
+        return $query->getResult();
+    }
+
+    /**
      * this function used to get worth users
      * @author ahmed
      * @param integer $maxResults
      */
-    public function getWorthUsers($maxResults){
+    public function getWorthUsers($maxResults) {
         $query = $this->getEntityManager()->createQuery("
             select u From ObjectsUserBundle:User u
             where u.currentWorth > 1
@@ -29,7 +47,8 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
         ")->setMaxResults($maxResults);
         return $query->getResult();
     }
-    public function getManuallyWorthUsers($maxResults){
+
+    public function getManuallyWorthUsers($maxResults) {
         $query = $this->getEntityManager()->createQuery("
             select u From ObjectsInternJumpBundle:worthPeople u
             order by u.worth desc

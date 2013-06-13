@@ -254,6 +254,12 @@ class User implements AdvancedUserInterface {
     private $gender;
 
     /**
+     * @var boolean $matchingJobEmail
+     * @ORM\Column(name="matchingJobEmail", type="boolean")
+     */
+    private $matchingJobEmail = 1;
+
+    /**
      * @var date $dateOfBirth
      * @Assert\Date(groups={"signup_second", "adminsignup", "adminedit", "edit"})
      * @ORM\Column(name="dateOfBirth", type="date", nullable=true)
@@ -1623,5 +1629,25 @@ class User implements AdvancedUserInterface {
     public function getActivatedAt()
     {
         return $this->activatedAt;
+    }
+
+    /**
+     * Set matchingJobEmail
+     *
+     * @param boolean $matchingJobEmail
+     */
+    public function setMatchingJobEmail($matchingJobEmail)
+    {
+        $this->matchingJobEmail = $matchingJobEmail;
+    }
+
+    /**
+     * Get matchingJobEmail
+     *
+     * @return boolean 
+     */
+    public function getMatchingJobEmail()
+    {
+        return $this->matchingJobEmail;
     }
 }

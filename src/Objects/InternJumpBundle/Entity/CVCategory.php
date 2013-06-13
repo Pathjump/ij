@@ -55,6 +55,11 @@ class CVCategory {
      */
     private $slug;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="\Objects\InternJumpBundle\Entity\CV", mappedBy="categories")
+     */
+    private $cvs;
+
     public function __construct() {
         $this->subCategories = new ArrayCollection();
     }
@@ -66,7 +71,7 @@ class CVCategory {
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId() {
         return $this->id;
@@ -84,7 +89,7 @@ class CVCategory {
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName() {
         return $this->name;
@@ -103,7 +108,7 @@ class CVCategory {
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
     public function getSlug() {
         return $this->slug;
@@ -121,7 +126,7 @@ class CVCategory {
     /**
      * Get parentCategory
      *
-     * @return Objects\InternJumpBundle\Entity\CVCategory 
+     * @return Objects\InternJumpBundle\Entity\CVCategory
      */
     public function getParentCategory() {
         return $this->parentCategory;
@@ -139,7 +144,7 @@ class CVCategory {
     /**
      * Get subCategories
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return Doctrine\Common\Collections\Collection
      */
     public function getSubCategories() {
         return $this->subCategories;
@@ -155,4 +160,24 @@ class CVCategory {
         return TRUE;
     }
 
+
+    /**
+     * Add cvs
+     *
+     * @param Objects\InternJumpBundle\Entity\CV $cvs
+     */
+    public function addCV(\Objects\InternJumpBundle\Entity\CV $cvs)
+    {
+        $this->cvs[] = $cvs;
+    }
+
+    /**
+     * Get cvs
+     *
+     * @return Doctrine\Common\Collections\Collection
+     */
+    public function getCvs()
+    {
+        return $this->cvs;
+    }
 }
