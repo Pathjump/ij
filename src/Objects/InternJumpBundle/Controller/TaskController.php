@@ -632,8 +632,7 @@ class TaskController extends Controller {
                 ->add('endedAt', 'date', array('attr' => array('class' => 'endedAt'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd H:mm'))
                 //->add('internship')
                 ->add('internship', 'entity', array('attr' => array('style' => 'width:120px;'), 'class' => 'ObjectsInternJumpBundle:Internship', 'choices' => $jobs))
-                ->add('user', 'entity', array('attr' => array('style' => 'width:120px;'), 'class' => 'ObjectsUserBundle:User', 'choices' => array(
-            )))
+                ->add('user', 'entity', array('attr' => array('style' => 'width:120px;'), 'class' => 'ObjectsUserBundle:User'))
                 ->getForm();
 
         if ($request->getMethod() == 'POST') {

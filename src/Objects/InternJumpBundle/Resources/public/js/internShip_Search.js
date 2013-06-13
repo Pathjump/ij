@@ -45,7 +45,6 @@ $(document).ready(function(){
 
 
                 if(stateParam != ''){
-                    alert("complete"+stateParam);
                     $('#form_state').val(stateParam);
                 }
                 $("select.chzn-select").trigger("liszt:updated");

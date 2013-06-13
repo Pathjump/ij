@@ -9,6 +9,8 @@
 {% endblock %}
 {% block pageTitle %}Add new Task{% endblock %}
 {%block body%}
+        <div class="container Main-content">
+            <div class="row-fluid show-grid">
 {% if form_errors(form) %}
 
 <div class="alert alert-error">
@@ -91,8 +93,8 @@
                 </div><!--Sign-Up-->
             </div>
 
-            <div class="span6">
-                 <div class="accTabs">
+            <div class="span4">
+                 <div class="Col-block">
                 <h2>Company Jobs</h2>
 
                 <!--Accordion Tabs-->
@@ -126,6 +128,11 @@
 
 </div><!--main content-->
 
+
+                    </div><!--row-fluid show-grid-->
+
+
+                </div><!--container-->
 
 
 {%endblock%}
