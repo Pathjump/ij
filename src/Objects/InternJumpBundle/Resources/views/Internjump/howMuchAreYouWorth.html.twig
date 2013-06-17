@@ -22,7 +22,11 @@ find your worth
             <strong>Please!</strong> Connect by <strong>Facebook</strong><br>
             to Know your worth<br><br>
 
+            {% if facebook == 'notlogged' %}
+            {% render "ObjectsAPIBundle:Facebook:facebookButton" with {'facebookUserHandleRoute' : 'facebook_logging','permissions': 'email,publish_stream,user_birthday,user_about_me','cssClass' : 'facebookButton' , 'linkText' : ''} %}
+            {% else %}
             {% render "ObjectsAPIBundle:Facebook:facebookButton" with {'facebookUserHandleRoute' : 'facebook_link','permissions': 'email,publish_stream','cssClass' : 'facebookButton' , 'linkText' : '' | trans} %}
+            {% endif %}
         </div><!--facebook-login--->
 
 

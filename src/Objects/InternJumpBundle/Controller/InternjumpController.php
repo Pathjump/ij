@@ -185,7 +185,7 @@ class InternjumpController extends Controller {
         //check if loggedin user
         if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
             return $this->render('ObjectsInternJumpBundle:Internjump:howMuchAreYouWorth.html.twig', array(
-                        'facebook' => 'notlinked'
+                        'facebook' => 'notlogged'
             ));
         } else {
             $em = $this->getDoctrine()->getEntityManager();
