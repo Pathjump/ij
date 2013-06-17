@@ -568,17 +568,19 @@ class TaskController extends Controller {
      * Displays a form to create a new Task entity.
      *
      */
-    public function newAction() {
+    public function newAction($uid) {
 
+        $em = $this->getDoctrine()->getEntityManager();
 
         if (false === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
             return $this->redirect($this->generateUrl('site_homepage'));
         }
 
+
         //Get current Company user
         $company = $this->get('security.context')->getToken()->getUser();
 
-        $em = $this->getDoctrine()->getEntityManager();
+
         $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
 
         $companyHiredUsers = array();
@@ -596,14 +598,15 @@ class TaskController extends Controller {
 
         if (sizeof($companyHiredUsers) > 0) {
             $hiredUsersJobsArray = array();
+            $hiredUsers = array();
             foreach ($companyHiredUsers as $companyHiredUser) {
                 if (!in_array($companyHiredUser->getInternship()->getTitle(), $hiredUsersJobsArray)) {
                     array_push($hiredUsersJobsArray, $companyHiredUser->getInternship()->getTitle());
                 }
+                $hiredUsers [$companyHiredUser->getUser()->getId()] = $companyHiredUser->getUser()->__toString();
             }
+
         }
-
-
 
         $cid = $company->getId();
         $request = $this->getRequest();
@@ -632,7 +635,8 @@ class TaskController extends Controller {
                 ->add('endedAt', 'date', array('attr' => array('class' => 'endedAt'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd H:mm'))
                 //->add('internship')
                 ->add('internship', 'entity', array('attr' => array('style' => 'width:120px;'), 'class' => 'ObjectsInternJumpBundle:Internship', 'choices' => $jobs))
-                ->add('user', 'entity', array('attr' => array('style' => 'width:120px;'), 'class' => 'ObjectsUserBundle:User'))
+                //->add('user', 'entity', array('attr' => array('style' => 'width:120px;'), 'class' => 'ObjectsUserBundle:User', 'preferred_choices' => array($uid)))
+                ->add('user', 'choice', array('attr' => array('style' => 'width:120px;'), 'choices' => $hiredUsers , 'preferred_choices' => array($uid)))
                 ->getForm();
 
         if ($request->getMethod() == 'POST') {
@@ -673,6 +677,7 @@ class TaskController extends Controller {
                     'formName' => $this->container->getParameter('companyAddTask_FormName'),
                     'formName1' => $this->container->getParameter('companyAddTask_FormName1'),
                     'formDesc' => $this->container->getParameter('companyAddTask_FormDesc'),
+                    'userId' => $uid,
         ));
     }
 
@@ -696,6 +701,37 @@ class TaskController extends Controller {
         }
 
         return new Response(json_encode($usersArray));
+    }
+
+        /**
+     * @author Ola
+     * to get Jobs for a company's certain user
+     * @param int $id //user Id
+     * return array of jobs
+     */
+    public function getUserJobsAction($uid) {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $userRepo = $em->getRepository('ObjectsInternJumpBundle:UserInternship');
+        //Get current Company user
+        $company = $this->get('security.context')->getToken()->getUser();
+        $cid = $company->getId();
+
+        $userJobs = $userRepo->getAllUserJobs($uid,$cid);
+        $request = $this->getRequest();
+        if (!$userJobs || !$request->isXmlHttpRequest()) {
+            return new Response("faild");
+        }
+        $jobs = array();
+        foreach($userJobs as $job){
+            $jobs[] = $job->getInternship();
+        }
+        $jobsArray = array();
+        foreach ($jobs as $job) {
+            $jobsArray [$job->getId()] = $job->getTitle();
+        }
+
+        return new Response(json_encode($jobsArray));
     }
 
     /**

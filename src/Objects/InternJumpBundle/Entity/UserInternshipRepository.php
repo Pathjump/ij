@@ -12,6 +12,28 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserInternshipRepository extends EntityRepository {
 
+
+     /**
+     * to get all Jobs for certain users in certain company
+      * used: in add new task page in Ajax filling the listes
+     * @author Ola
+     * @param type $id
+     * @return type
+     */
+    public function getAllUserJobs($uid,$cid) {
+        $dql = '
+            SELECT ui
+            FROM ObjectsInternJumpBundle:UserInternship ui
+            JOIN ui.internship j
+            JOIN ui.user u
+            WHERE u.id = :uId
+            AND ui.status = :status
+            AND j.company = :cId
+            ';
+        $query = $this->getEntityManager()->createQuery($dql)
+                ->setParameters(array('uId' => $uid, 'cId' => $cid , 'status' => 'accepted'));
+        return $query->getResult();
+    }
     /**
      * this function will get all applyed users for a job
      * @author Ahmed
@@ -52,20 +74,20 @@ class UserInternshipRepository extends EntityRepository {
         return $query->getResult();
     }
 
-        
+
     /**
-     * 
+     *
      * @param type $uid
      */
     public function getAppliedJobs($uid){
-        
+
         $query = $this->getEntityManager()->createQuery("
             SELECT ui
             FROM ObjectsInternJumpBundle:UserInternship ui
             WHERE ui.user = :userid
             AND ui.status = 'apply'
             ")->setParameters(array( 'userid' => $uid ));
-        
+
         return $query->getResult();
 
     }

@@ -53,7 +53,7 @@
             <hr/>
 
             <div class="Interns-links">
-            	<a href="{{ path('task_new') }}"  class="btn btn-success add-task-btn">Add Task</a>
+            	<a href="{{ path('task_new', {'uid': user.id}) }}"  class="btn btn-success add-task-btn">Add Task</a>
                 <a href="{{path('company_new_message', {'usename': user.loginName})}}" class="btn btn-info">Send message</a>
 
             </div>
