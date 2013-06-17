@@ -4,5 +4,5 @@ CURRENTDIR=$(dirname $0)
 #enter the current script folder
 cd $CURRENTDIR
 
-app/console Send:NewJobsToSuitableCvs
-app/console Internjump:Reminder
+app/console Send:NewJobsToSuitableCvs -e prod
+app/console Internjump:Reminder -e prod
