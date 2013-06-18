@@ -53,6 +53,36 @@ find your worth
                 <span class="Worth-value">  ${{userNetWorth}} USD</span>
                 {% endif %}
                 <a class="btn btn-primary large" href="{{path('howMuchAreYouWorth')}}">Recalculate</a>
+
+                <a class="btn btn-primary large" href="javascript:void(0)" id="shareResultOnFacebook">Share on Facebook</a>
+
+                <a class="btn btn-primary large" onclick="javascript:startTwitterShare();return false;" target="_blank" href="http://twitter.com/share?url={{url('howMuchAreYouWorth')}}&text=My expected worth on InternJump is ${{ userNetWorth }}&hashtags=internships" >Share on Twitter</a>
+
+                <div id="fb-root"></div>
+                <script src="http://connect.facebook.net/en_US/all.js"></script>
+                <br/>
+                <button onclick="sendRequestViaMultiFriendSelector(); return false;" class="btn btn-warning btn-large"><span>Invite your friends</span></button>
+                <script>
+                  FB.init({
+                    appId  : '282137608565990',
+                    oauth  : true,
+                    frictionlessRequests: true
+                  });
+
+                  function sendRequestViaMultiFriendSelector() {
+                    FB.ui({method: 'apprequests',
+                      title: 'Who would you like to invite?',
+                      message: 'Checkout Internjump Application',
+                      layout:  "iframe",
+                    }, requestCallback);
+                  }
+
+                  function requestCallback(response) {
+                    // Handle callback here
+                   console.log(response);
+                    //alert('done');
+                  }
+                </script>
             </div>
             <img width="197" height="354" class=" span2 pull-right" src="{{asset('img/drowpng.png')}}">
         </div><!--step4--->
@@ -101,7 +131,34 @@ find your worth
  {{parent()}}
         <script src="{{asset('js/Highcharts-3.0.0/highcharts.js')}}"></script>
         <script>
+            {% if facebook is not defined %}
+            function startTwitterShare(){
+                newwindow = window.open("http://twitter.com/share?url={{url('howMuchAreYouWorth')}}&text=My expected worth on InternJump is ${{ userNetWorth }}&hashtags=internships", '', 'height=500,width=800');
+                if (window.focus) {
+                    newwindow.focus();
+                }
+            }
+            {% endif %}
+
             $(window).load(function() {
+
+                {% if facebook is not defined %}
+                $('#shareResultOnFacebook').click(function() {
+                    $('#shareResultOnFacebook').hide();
+                    //show loader
+                    $('.loading').show();
+                    $.ajax({
+                        url: '{{ path('worth_faceBook_publish',{'userId' : loggedInUser.id,'userNetWorth' : userNetWorthSum}) }}',
+                        success : function(msg){
+                        },
+                        complete : function(){
+                            $('.loading').hide();
+                            $('#shareResultOnFacebook').show();
+                        }
+                    });
+                });
+                {% endif %}
+
                 $('a.notifiToTooltip').tooltip();
 
                 $('.worthLoading').fadeOut(500, function() {

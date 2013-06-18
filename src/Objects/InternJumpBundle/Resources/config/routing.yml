@@ -205,3 +205,9 @@ fb_user_delete_language:
     defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:fb_deleteLanguage" ,id : ~}
     requirements:
         id: \d+
+
+worth_faceBook_publish:
+    pattern:  /user/worth_faceBook_publish/{userId}/{userNetWorth}
+    defaults: { _controller: "ObjectsInternJumpBundle:Internjump:worthFaceBookPublish"}
+    requirements:
+        userId: \d+

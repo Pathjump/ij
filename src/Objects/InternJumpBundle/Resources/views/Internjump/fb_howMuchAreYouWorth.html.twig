@@ -48,6 +48,11 @@ find your worth
                 <span class="Worth-value">  ${{userNetWorth}} USD</span>
                 {% endif %}
                 <a class="btn btn-primary large" href="{{path('fb_howMuchAreYouWorth')}}">Recalculate</a>
+
+                <a class="btn btn-primary large" href="javascript:void(0)" id="shareResultOnFacebook">Share on Facebook</a>
+
+                <a class="btn btn-primary large" onclick="javascript:startTwitterShare();return false;" target="_blank" href="http://twitter.com/share?url={{url('howMuchAreYouWorth')}}&text=My expected worth on InternJump is ${{ userNetWorth }}&hashtags=internships" >Share on Twitter</a>
+                
             </div>
             <img width="197" height="354" class=" span2 pull-right" src="{{asset('img/drowpng.png')}}">
         </div><!--step4--->
@@ -96,7 +101,29 @@ find your worth
  {{parent()}}
 <script src="{{asset('js/Highcharts-3.0.0/highcharts.js')}}"></script>
 <script>
+    function startTwitterShare(){
+                newwindow = window.open("http://twitter.com/share?url={{url('howMuchAreYouWorth')}}&text=My expected worth on InternJump is ${{ userNetWorth }}&hashtags=internships", '', 'height=500,width=800');
+                if (window.focus) {
+                    newwindow.focus();
+                }
+            }
+
         $(window).load(function(){
+            $('#shareResultOnFacebook').click(function() {
+                    $('#shareResultOnFacebook').hide();
+                    //show loader
+                    $('.loading').show();
+                    $.ajax({
+                        url: '{{ path('worth_faceBook_publish',{'userId' : loggedInUser.id,'userNetWorth' : userNetWorthSum}) }}',
+                        success : function(msg){
+                        },
+                        complete : function(){
+                            $('.loading').hide();
+                            $('#shareResultOnFacebook').show();
+                        }
+                    });
+                });
+
             $('a.notifiToTooltip').tooltip();
 
             $('.worthLoading').fadeOut(500,function(){

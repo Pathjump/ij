@@ -178,6 +178,25 @@ class InternjumpController extends Controller {
     }
 
     /**
+     * this function used to publish on user facebook after worth
+     * @author ahmed
+     * @param int $userId
+     * @param int $userNetWorthSum
+     */
+    public function worthFaceBookPublishAction($userId, $userNetWorth) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $userRepo = $em->getRepository('ObjectsUserBundle:User');
+
+        $user = $userRepo->find($userId);
+        //post resutl on user facebook wall
+        $status = $this->container->getParameter('worth_facebook_message') . ' $' . number_format(ceil($userNetWorth));
+        $picture = $this->generateUrl('site_homepage', array(), TRUE) . 'img/faceLogo.png';
+        $link = $this->generateUrl('site_fb_homepage', array(), TRUE);
+        FacebookController::postOnUserWallAndFeedAction($user->getSocialAccounts()->getFacebookId(), $user->getSocialAccounts()->getAccessToken(), $status, null, null, $link, $picture);
+        return new Response('done');
+    }
+
+    /**
      * this function used to calculate for loggedin users worth
      * @author ahmed
      */
@@ -409,16 +428,13 @@ class InternjumpController extends Controller {
                 $loggedInUser->setNetWorth(ceil($userNetWorthSum));
                 $em->flush();
 
-                //post resutl on user facebook wall
-                $status = $this->container->getParameter('worth_facebook_message') . ' $' . number_format(ceil($userNetWorthSum));
-                $picture = $this->generateUrl('site_homepage', array(), TRUE) . 'img/faceLogo.png';
-                $link = $this->generateUrl('site_fb_homepage', array(), TRUE);
-                FacebookController::postOnUserWallAndFeedAction($loggedInUser->getSocialAccounts()->getFacebookId(), $loggedInUser->getSocialAccounts()->getAccessToken(), $status, null, null, $link, $picture);
 
                 return $this->render('ObjectsInternJumpBundle:Internjump:howMuchAreYouWorth.html.twig', array(
                             'userTotalWorth' => number_format($userTotalWorth),
                             'fiveYearsWorthArray' => $fiveYearsWorthArray,
+                            'userNetWorthSum' => $userNetWorthSum,
                             'userFriendsWorth' => $userFriendsWorth,
+                            'loggedInUser' => $loggedInUser,
                             'ImproveResultsMessageArray' => $ImproveResultsMessageArray,
                             'userNetWorth' => number_format(ceil($userNetWorthSum)),
                             'user_worth_description' => $this->container->getParameter('user_worth_description'),
@@ -667,12 +683,6 @@ class InternjumpController extends Controller {
                 $loggedInUser->setCurrentWorth($userTotalWorth);
                 $loggedInUser->setNetWorth(ceil($userNetWorthSum));
                 $em->flush();
-
-                //post resutl on user facebook wall
-                $status = $this->container->getParameter('worth_facebook_message') . ' $' . number_format(ceil($userNetWorthSum));
-                $picture = $this->generateUrl('site_homepage', array(), TRUE) . 'img/faceLogo.png';
-                $link = $this->generateUrl('site_fb_homepage', array(), TRUE);
-                FacebookController::postOnUserWallAndFeedAction($loggedInUser->getSocialAccounts()->getFacebookId(), $loggedInUser->getSocialAccounts()->getAccessToken(), $status, null, null, $link, $picture);
 
 
                 return $this->render('ObjectsInternJumpBundle:Internjump:fb_howMuchAreYouWorth.html.twig', array(
