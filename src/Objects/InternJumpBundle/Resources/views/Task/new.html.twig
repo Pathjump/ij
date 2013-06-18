@@ -20,27 +20,27 @@
 {% endif %}
 
 
-<div class="container Main-content">
+<div class="container Main-content ">
 
     <div class="Student">
 
     <h3>{%if formName%}{{formName}}{%endif%}</h3>
 <div class="row-fluid show-grid">
 
-            <div class="span6">
+            <div class="span8 addTask">
                 <div class="Sign-Up">
 
                      <form action="{{ path('task_new') }}" method="post" {{ form_enctype(form) }}>
                                      <!--form Desc-->
                                      <p class="formDesc">{%if formDesc%}{{formDesc}}{%endif%}</p>
-                        <div class="controls">
+                        <div class="controls span8 ">
                         <label>Start Date</label>
                         {{ form_widget(form.startedAt) }}
                         {% if form_errors(form.startedAt) %}
                               <span class="triangle-border left">{{ form_errors(form.startedAt) }}</span>
                         {% endif %}
                         </div>
-                        <div class="controls">
+                        <div class="controls span8">
                         <label>End Date</label>
                         {{ form_widget(form.endedAt) }}
                         {% if form_errors(form.endedAt) %}
@@ -48,7 +48,7 @@
                         {% endif %}
                          </div>
 
-                        <div class="controls">
+                        <div class="controls span8">
                          <label>Status</label>
                         {{ form_widget(form.status) }}
                         {% if form_errors(form.status) %}
@@ -56,7 +56,7 @@
                         {% endif %}
                         </div>
 
-                        <div class="controls">
+                        <div class="controls span8">
                         <label>Job</label>
                         {{ form_widget(form.internship) }}
                         {% if form_errors(form.internship) %}
@@ -64,7 +64,7 @@
                         {% endif %}
                         </div>
 
-                         <div class="controls">
+                         <div class="controls span8">
                          <label>User</label>
                         {{ form_widget(form.user) }}
                         {% if form_errors(form.user) %}
@@ -72,7 +72,7 @@
                         {% endif %}
                          </div>
 
-                         <div class="controls">
+                         <div class="controls span8">
                          <label>Title</label>
                         {{ form_widget(form.title,{'attr' : {'class' : 'subject'}}) }}
                         {% if form_errors(form.title) %}
@@ -80,7 +80,7 @@
                         {% endif %}
                         </div>
 
-                        <div class="controls">
+                        <div class="controls span8">
                         <label>Description</label>
                         {{ form_widget(form.description,{'attr' : {'class' : 'task'}}) }}
                         {% if form_errors(form.description) %}
@@ -88,7 +88,9 @@
                         {% endif %}
                         </div>
                                         {{ form_rest(form) }}
-                                        <button class="submit create btn btn-primary pull-right" name="add">Create</button>
+                                     <div class="span8">
+                                        <button class="submit create btn btn-primary pull-left" name="add">Create</button>
+                                     </div>
                                     </form>
                 </div><!--Sign-Up-->
             </div>

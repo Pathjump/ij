@@ -38,6 +38,15 @@ Job Search
                                              </div>
                                     </p>
 
+                                                  <div class="Search-Internships Search-box ">
+            <form id="search_form" action="" method="POST" class="form-search">
+                <div class="input-append">
+                    <input id="search_text" name="" type="text" {% if keyword and keyword != "empty"%} value="{{keyword}}" {%else%}placeholder="Keywords"{% endif %} class="span6 search-query">
+                    <input id="search_button" name="" type="button" value="Search" class="btn btn-info">
+                </div>
+            </form>
+
+            </div>
                                                 </div>
 
                                     <div id="advanced" class="tab-pane fade">
@@ -80,17 +89,10 @@ Job Search
 
                     </fieldset>
                 </form>
+
             </div><!--Add-Task-->
 
-            <div class="Search-Internships Search-box text-center">
-            <form id="search_form" action="" method="POST" class="form-search">
-                <div class="input-append">
-                    <input id="search_text" name="" type="text" {% if keyword and keyword != "empty"%} value="{{keyword}}" {%else%}placeholder="Keywords"{% endif %} class="span6 search-query">
-                    <input id="search_button" name="" type="button" value="Search" class="btn btn-info">
-                </div>
-            </form>
 
-            </div>
 
 
             <div class="Search-interns">

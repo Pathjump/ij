@@ -2179,4 +2179,35 @@ only screen and (min-resolution: 144dpi) {
     display: inline-block;
     width: 205px;
     height: 43px;
+
+}
+.ui-timepicker-div select{
+     height: auto;
+    padding: 0;
+    width: auto !important;
+        
+   
+}
+.ui-widget{
+    font-size: 82% !important; 
+}
+dd {
+    margin-left: 25px !important;
+}
+.ui-timepicker-div{
+    padding-right: 10px  !important;
+    
+}
+.ui-timepicker-div dl{
+    margin:0  !important;
+}
+.addTask .chzn-container,.addTask  input,.addTask  textarea{
+    width: 100% !important;
+    background: #fff !important;
+    margin-bottom: 10px !important;
+} 
+
+.addTask {background: none repeat scroll 0 0 #F7F7F7;
+    padding: 25px 20px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
