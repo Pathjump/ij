@@ -424,7 +424,7 @@ class InternshipController extends Controller {
 
 
 
-         //check for loggedin user if add company to fav
+        //check for loggedin user if add company to fav
         $userCompanyFavoriteFlag = FALSE;
         if (TRUE === $this->get('security.context')->isGranted('ROLE_USER')) {
             //get logedin user objects
@@ -557,6 +557,17 @@ class InternshipController extends Controller {
             }
         }
 
+        //get job skills
+        $jobSkills = null;
+        foreach ($entity->getSkills() as $skill) {
+            $jobSkills .= '&skills-ids[]=' . $skill->getId();
+        }
+
+        //get job categories
+        $jobCategroies = null;
+        foreach ($entity->getCategories() as $category) {
+            $jobCategroies .= '&selected-categories[]=' . $category->getId();
+        }
 
         return $this->render('ObjectsInternJumpBundle:Internship:show.html.twig', array(
                     'entity' => $entity,
@@ -569,7 +580,8 @@ class InternshipController extends Controller {
                     'jobCategories' => $jobCategories,
                     'job_added_before_message' => $this->container->getParameter('job_added_before_message_show_job_page'),
                     'job_apply_success_message' => $this->container->getParameter('job_apply_success_message_show_job_page'),
-//                    'allCompanies' => $allCompanies,
+                    'jobSkills' => $jobSkills,
+                    'jobCategroies' => $jobCategroies,
                     'allCities' => $allCities,
                     'allState' => $allState,
                     'allCategory' => $allCategory,

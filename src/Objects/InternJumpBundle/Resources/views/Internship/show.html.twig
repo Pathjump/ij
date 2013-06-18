@@ -167,7 +167,9 @@
                     {% if is_granted('ROLE_COMPANY') and company.id == app.user.id %}
                                         <div class="box-b links">
                                             <a class="btn btn-primary large pull-right apply" href="{{ path('internship_edit', { 'id': entity.id }) }}">Edit</a>
-                                            <a class="btn btn-primary large pull-right apply" href="javascript:void(0)" data-delete-url="{{ url('internship_delete', { 'id': entity.id }) }}" id="deleteJob">Delete</a> <h4 class=" text-center pull-right">({{applyedUsers|length}}) Students Applied</h4>
+                                            <a class="btn btn-primary large pull-right apply" href="javascript:void(0)" data-delete-url="{{ url('internship_delete', { 'id': entity.id }) }}" id="deleteJob">Delete</a>
+                                            <a class="btn btn-primary large pull-right apply" href="{{ path('company_search_for_cv',{'country-id' : entity.country,'city' : entity.city,'state' : entity.state}) }}{{ jobSkills }}{{ jobCategroies }}">Find Matches</a>
+                                            <h4 class=" text-center pull-right">({{applyedUsers|length}}) Students Applied</h4>
                                             <div class="clearfix"></div>
                                         </div>
                     {% endif %}
