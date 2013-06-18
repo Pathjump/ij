@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Objects\InternJumpBundle\Entity\CompanyRepository")
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity(fields={"name"}, groups={"signup", "edit", "adminsignup", "adminedit"})
- * @UniqueEntity(fields={"loginName"}, groups={"loginName","signup", "edit", "adminsignup", "adminedit"})
+ * @UniqueEntity(fields={"loginName"}, groups={"loginName", "adminsignup", "adminedit"})
  * @UniqueEntity(fields={"email"}, groups={"signup", "edit", "adminsignup", "adminedit"})
  * @GlobalUnique(groups={"signup", "edit", "adminsignup", "adminedit"})
  */
@@ -132,8 +132,8 @@ class Company implements AdvancedUserInterface {
      * @var string $loginName
      *
      * @ORM\Column(name="loginName", type="string", length=255, nullable=true, unique=true)
-     * @Assert\NotNull(groups={"loginName","signup", "edit", "adminsignup", "adminedit"})
-     * @Assert\Regex(pattern="/^\w+$/u", groups={"loginName","signup", "edit", "adminsignup", "adminedit"}, message="Only characters, numbers and _")
+     * @Assert\NotNull(groups={"loginName", "adminsignup", "adminedit"})
+     * @Assert\Regex(pattern="/^\w+$/u", groups={"loginName", "adminsignup", "adminedit"}, message="Only characters, numbers and _")
      */
     private $loginName;
 
@@ -211,15 +211,13 @@ class Company implements AdvancedUserInterface {
 
     /**
      * @var string $country
-     * @Assert\NotNull(groups={"signup","edit"})
-     * @ORM\Column(name="country", type="string", length=255)
+     * @ORM\Column(name="country", type="string", length=255, nullable=true)
      */
     private $country;
 
     /**
      * @var string $city
-     * @Assert\NotNull(groups={"signup","edit"})
-     * @ORM\Column(name="city", type="string", length=255)
+     * @ORM\Column(name="city", type="string", length=255, nullable=true)
      */
     private $city;
 
@@ -232,8 +230,7 @@ class Company implements AdvancedUserInterface {
 
     /**
      * @var text $address
-     * @Assert\NotNull(groups={"signup","edit"})
-     * @ORM\Column(name="address", type="text")
+     * @ORM\Column(name="address", type="text", nullable=true)
      */
     private $address;
 
@@ -309,23 +306,22 @@ class Company implements AdvancedUserInterface {
 
     /**
      * @var string $zipcode
-     * @Assert\NotNull(groups={"signup", "edit", "adminsignup", "adminedit"})
      * @Assert\MinLength(limit = "3", message = "zipcode must be {{ limit }} or more charcters", groups={"signup", "edit", "adminsignup", "adminedit"})
-     * @ORM\Column(name="zipcode", type="string", length=10)
+     * @ORM\Column(name="zipcode", type="string", length=10, nullable=true)
      */
     private $zipcode;
 
     /**
      * @var decimal $Latitude
      *
-     * @ORM\Column(name="Latitude", type="decimal", precision=18, scale=12)
+     * @ORM\Column(name="Latitude", type="decimal", precision=18, scale=12, nullable=true)
      */
     private $Latitude;
 
     /**
      * @var decimal $Longitude
      *
-     * @ORM\Column(name="Longitude", type="decimal", precision=18, scale=12)
+     * @ORM\Column(name="Longitude", type="decimal", precision=18, scale=12, nullable=true)
      */
     private $Longitude;
 
@@ -1138,7 +1134,7 @@ class Company implements AdvancedUserInterface {
      */
     public function setLoginName($loginName) {
         // replace all non letters or digits by - then remove any extra white spaces
-        $this->loginName = trim(preg_replace('/\W+/u', '-', $loginName));
+        $this->loginName = $loginName;
     }
 
     /**
@@ -1228,18 +1224,6 @@ class Company implements AdvancedUserInterface {
      */
     public function isRolesCorrect() {
         if (count($this->companyRoles) > 0) {
-            return TRUE;
-        } else {
-            return FALSE;
-        }
-    }
-
-    /**
-     * this function will check if the admin selected at least one profession for the company
-     * @Assert\True(message = "the company must have at least one role", groups={"signup", "edit","adminsignup", "adminedit"})
-     */
-    public function isProfessionsCorrect() {
-        if (count($this->professions) > 0) {
             return TRUE;
         } else {
             return FALSE;
@@ -1466,7 +1450,7 @@ class Company implements AdvancedUserInterface {
     /**
      * Get notification
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getNotification()
     {

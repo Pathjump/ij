@@ -7,8 +7,9 @@
 
 Welcome {{ company }} to InternJump,
 
-Thank you for taking the time to sign up for InternJump and starting the process of recruiting some of InternJump’s talented students. Before you can begin recruiting please confirm your email address by clicking the link below:
-{{ url('company_active', {'confirmationCode': company.confirmationCode}) }}
+Thank you for taking the time to sign up for InternJump and starting the process of recruiting some of InternJump’s talented students.
+{#Before you can begin recruiting please confirm your email address by clicking the link below:
+{{ url('company_active', {'confirmationCode': company.confirmationCode}) }}#}
 InternJump will allow you as an employer to screen, recruit and manage interns. One of our sales associates would be happy to walk you through the process as well, for more information or questions please email {{Email}}
 
 Your login name: "{{ company.getUsername }}"

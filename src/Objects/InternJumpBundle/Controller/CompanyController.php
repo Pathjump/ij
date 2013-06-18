@@ -1121,16 +1121,11 @@ class CompanyController extends Controller {
                     'validation_groups' => $formValidationGroups
                 ))
                 ->add('name')
-                ->add('loginName', null, array('required' => FALSE))
                 ->add('userPassword', 'repeated', array(
                     'type' => 'password',
                     'first_name' => 'Password',
                     'second_name' => 'RePassword',
                     'invalid_message' => "The passwords don't match"))
-                ->add('country', 'choice', array('preferred_choices' => array('US'), 'choices' => $allCountriesArray))
-                ->add('city')
-                ->add('state', 'choice', array('required' => FALSE))
-                ->add('address', 'text')
                 //->add('establishmentDate', 'date', array('attr' => array('class' => 'establishmentDate'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd'))
                 ->add('email', 'repeated', array(
                     'type' => 'email',
@@ -1138,10 +1133,6 @@ class CompanyController extends Controller {
                     'second_name' => 'ReEmail',
                     'invalid_message' => "The emails don't match"
                 ))
-                ->add('zipcode')
-                ->add('Latitude', 'hidden')
-                ->add('Longitude', 'hidden')
-                ->add('professions', null, array('required' => FALSE))
         ;
         //create the form
         $form = $formBuilder->getForm();
@@ -1153,6 +1144,7 @@ class CompanyController extends Controller {
             if ($form->isValid()) {
                 //get the user object from the form
                 $company = $form->getData();
+                $company->setLoginName($company->getEmail());
 
                 //finish company signup
                 //add the new user to the entity manager
@@ -1166,17 +1158,17 @@ class CompanyController extends Controller {
                 //get the role repo
                 $roleRepository = $em->getRepository('ObjectsUserBundle:Role');
                 //get a ROLE_NOTACTIVE_COMPANY
-                $roleNotActiveCompany = $roleRepository->findOneByName('ROLE_NOTACTIVE_COMPANY');
+                $roleActiveCompany = $roleRepository->findOneByName('ROLE_COMPANY');
                 //get a update userName role object
                 $roleUpdateUserName = $roleRepository->findOneByName('ROLE_UPDATABLE_USERNAME');
                 //set company not active role
-                $company->addRole($roleNotActiveCompany);
+                $company->addRole($roleActiveCompany);
                 $company->addRole($roleUpdateUserName);
                 //store the object in the database
                 $em->flush();
                 //prepare the message object
                 $message = \Swift_Message::newInstance()
-                        ->setSubject($this->get('translator')->trans('Welcome to InternJump, verification required.'))
+                        ->setSubject($this->get('translator')->trans('Welcome to InternJump'))
                         ->setFrom($this->container->getParameter('mailer_user'))
                         ->setTo($company->getEmail())
                         ->setBody($body)
