@@ -1134,7 +1134,7 @@ class Company implements AdvancedUserInterface {
      */
     public function setLoginName($loginName) {
         // replace all non letters or digits by - then remove any extra white spaces
-        $this->loginName = trim(preg_replace('/\W+/u', '-', $loginName));
+        $this->loginName = $loginName;
     }
 
     /**
