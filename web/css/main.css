@@ -214,13 +214,16 @@ a:hover{
     color:#2e2b85;
 }
 .nav-students{
-    background:url("../img/icons.png") repeat scroll 52px -91px transparent !important;
+    background:url("../img/icons.png") repeat scroll 22px -91px transparent !important;
 }
 .nav-companies{
     background:url("../img/icons.png") repeat scroll -205px -85px transparent !important;
 }
 .company-profile h2 {
     height:77px
+}
+.Top-Links strong {
+    font-weight: normal;
 }
 .company-profile h2 .img-box{
     width:60px;
@@ -237,7 +240,7 @@ a:hover{
 .show-map .modal-header{
     padding:9px 15px !important
 }.map {
-    color: #FFFFFF;
+    color: #FFFFFF !important;
     display: block;
     font-size: 14px;
     margin-top: -6px;
@@ -1329,7 +1332,7 @@ form select{
     text-shadow: none;
 }.Result-box {
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
-    margin: 2px;
+    margin: 0px;
 }
 .Result-box ul.inner-list{
     display:table;
@@ -2014,6 +2017,64 @@ table .ez-checkbox, td.defaultP .ez-checked {
 
 
 
+.Top-Links {
+    text-align: right;
+}
+
+
+.Social-icons-f li a.ico-youtube {
+    background-position: -381px -9px;
+}
+
+
+#schoolsLink a {
+    background: url("../img/icons.png") repeat scroll -477px -385px transparent !important;
+}
+
+#resourceLink a {
+    background:url("../img/icons.png") repeat scroll -679px -384px transparent !important;
+}
+
+.searchResult,.searchResult .searchResult{
+	padding:0;
+	margin:0
+}
+
+.input-append .btn {
+    height: 30px;
+}
+
+.ui-timepicker-div select{
+     height: auto;
+    padding: 0;
+    width: auto !important;
+        
+   
+}
+.ui-widget{
+    font-size: 82% !important; 
+}
+dd {
+    margin-left: 25px !important;
+}
+.ui-timepicker-div{
+    padding-right: 10px  !important;
+    
+}
+.ui-timepicker-div dl{
+    margin:0  !important;
+}
+.addTask .chzn-container,.addTask  input,.addTask  textarea{
+    width: 100% !important;
+    background: #fff !important;
+    margin-bottom: 10px !important;
+} 
+
+.addTask {background: none repeat scroll 0 0 #F7F7F7;
+    padding: 25px 20px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
 
 
 
@@ -2179,35 +2240,4 @@ only screen and (min-resolution: 144dpi) {
     display: inline-block;
     width: 205px;
     height: 43px;
-
-}
-.ui-timepicker-div select{
-     height: auto;
-    padding: 0;
-    width: auto !important;
-        
-   
-}
-.ui-widget{
-    font-size: 82% !important; 
-}
-dd {
-    margin-left: 25px !important;
-}
-.ui-timepicker-div{
-    padding-right: 10px  !important;
-    
-}
-.ui-timepicker-div dl{
-    margin:0  !important;
-}
-.addTask .chzn-container,.addTask  input,.addTask  textarea{
-    width: 100% !important;
-    background: #fff !important;
-    margin-bottom: 10px !important;
-} 
-
-.addTask {background: none repeat scroll 0 0 #F7F7F7;
-    padding: 25px 20px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
