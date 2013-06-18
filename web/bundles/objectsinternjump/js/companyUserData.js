@@ -1,4 +1,16 @@
 $(document).ready(function() {
+    //report user
+    $('#reportThisUser').colorbox({
+        href: reportUserUrl,
+        iframe: true,
+        innerWidth: 750,
+        innerHeight: 250,
+        scrolling: false,
+        onClosed: function() {
+            location.reload();
+        }
+    });
+
     $('.addToFavorite').click(function() {
         var status = $(this).attr('data-status');
         //show loading img

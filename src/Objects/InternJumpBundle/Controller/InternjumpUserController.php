@@ -13,8 +13,86 @@ use Objects\InternJumpBundle\Entity\Skill;
 use Objects\InternJumpBundle\Entity\Education;
 use Objects\InternJumpBundle\Entity\EmploymentHistory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Objects\InternJumpBundle\Entity\ReportedUser;
 
 class InternjumpUserController extends Controller {
+
+    /**
+     * company report user cv
+     * @author ahmed
+     * @param int $userId
+     * @param int $cvId
+     */
+    public function reportUserAction($userId, $cvId) {
+        //check for loggedin company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('login'));
+        }
+        $request = $this->getRequest();
+
+        $company = $this->get('security.context')->getToken()->getUser();
+        //get the entity manager
+        $em = $this->getDoctrine()->getEntityManager();
+        $cvRepo = $em->getRepository('ObjectsInternJumpBundle:CV');
+        $userRepo = $em->getRepository('ObjectsUserBundle:User');
+
+        $user = $userRepo->find($userId);
+        $cv = $cvRepo->find($cvId);
+
+        //create new report user
+        $newReport = new ReportedUser();
+        $newReport->setCv($cv);
+        $newReport->setUser($user);
+        $newReport->setCompany($company);
+
+        //create report form
+        $form = $this->createFormBuilder($newReport)
+                ->add('reason', 'choice', array(
+                    'choices' => array(
+                        'I believe this is a spam resume' => 'I believe this is a spam resume',
+                        'Contains foul languages / contents' => 'Contains foul languages / contents',
+                        'Others' => 'Others'
+                    )
+                ))
+                ->add('reasonText')
+                ->getForm();
+        if ($request->getMethod() == 'POST') {
+            //fill the form data from the request
+            $form->bindRequest($request);
+            //check if the form values are correct
+            if ($form->isValid()) {
+                $em->persist($newReport);
+                $em->flush();
+
+                //send email to admin
+                //prepare the body of the email
+                $body = $this->renderView('ObjectsInternJumpBundle:InternjumpUser:user_report.txt.twig', array(
+                    'company' => $company,
+                    'user' => $user,
+                    'newReport' => $newReport,
+                ));
+                //prepare the message object
+                $message = \Swift_Message::newInstance()
+                        ->setSubject('Internjump - User Report')
+                        ->setFrom($this->container->getParameter('contact_us_email'))
+                        ->setTo($this->container->getParameter('contact_us_email'))
+                        ->setBody($body)
+                ;
+                //send the activation mail to the user
+                $this->get('mailer')->send($message);
+
+                return $this->render('ObjectsInternJumpBundle:InternjumpUser:reportUserSuccess.html.twig', array(
+                ));
+            }
+        }
+
+        return $this->render('ObjectsInternJumpBundle:InternjumpUser:reportUser.html.twig', array(
+                    'form' => $form->createView(),
+                    'userId' => $userId,
+                    'cvId' => $cvId
+        ));
+    }
 
     /**
      * this function used to add company to favorite list for user
@@ -68,8 +146,10 @@ class InternjumpUserController extends Controller {
         if (isset($_SERVER['REMOTE_ADDR'])) {
             $userIp = $_SERVER['REMOTE_ADDR'];
         }
-        if($jobType == "empty" || $jobType == null){$jobType = "internship";}
-        $apiSearchString = 'http://api.indeed.com/ads/apisearch?publisher=5399161479070076&jt='.urlencode($jobType).'&v=2&format=json&latlong=1&useragent=' . urlencode($userAgent) . '&userip=' . urlencode($userIp) . '&start=' . $start . '&limit=' . $limit . '&q=' . urlencode($searchString). '&sort=date';
+        if ($jobType == "empty" || $jobType == null) {
+            $jobType = "internship";
+        }
+        $apiSearchString = 'http://api.indeed.com/ads/apisearch?publisher=5399161479070076&jt=' . urlencode($jobType) . '&v=2&format=json&latlong=1&useragent=' . urlencode($userAgent) . '&userip=' . urlencode($userIp) . '&start=' . $start . '&limit=' . $limit . '&q=' . urlencode($searchString) . '&sort=date';
         if ($jobLocation) {
             $apiSearchString .= '&l=' . urlencode($jobLocation);
         }
@@ -2156,6 +2236,7 @@ class InternjumpUserController extends Controller {
         $interestRepo = $em->getRepository('ObjectsInternJumpBundle:Interest');
         $userInternshipRepo = $em->getRepository('ObjectsInternJumpBundle:UserInternship');
         $interviewRepo = $em->getRepository('ObjectsInternJumpBundle:Interview');
+        $reportedUserRepo = $em->getRepository('ObjectsInternJumpBundle:ReportedUser');
 
         $request = $this->getRequest();
 
@@ -2226,8 +2307,12 @@ class InternjumpUserController extends Controller {
             $age = $age->y;
         }
 
+        //check ig company report this user before
+        $reportUser = $reportedUserRepo->findOneBy(array('user' => $userObject->getId(), 'cv' => $cvId, 'company' => $company->getId()));
+
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:companySeeUserData.html.twig', array(
                     'user' => $userObject,
+                    'reportUser' => $reportUser,
                     'userCv' => $userCv,
                     'cvId' => $cvId,
                     'age' => $age,
@@ -2777,26 +2862,22 @@ class InternjumpUserController extends Controller {
         $apiJobsArr = array();
         if (sizeof($userSearchResults) < 24) {
             $title1 = $title;
-            if($title == "empty"){
-                if($category != "empty")
-                {
+            if ($title == "empty") {
+                if ($category != "empty") {
                     $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
                     //get countries array
                     $category = $categoryRepo->findOneBy(array('id' => $category));
                     $title1 = $category->getSlug();
                 }
             }
-            if($city!="empty" && $state!="empty"){
-                $jobLocation = $city.', '.$state;
-            }
-            else{
-                if($city!="empty"){
+            if ($city != "empty" && $state != "empty") {
+                $jobLocation = $city . ', ' . $state;
+            } else {
+                if ($city != "empty") {
                     $jobLocation = $city;
-                }
-                elseif($state!="empty"){
+                } elseif ($state != "empty") {
                     $jobLocation = $state;
-                }
-                else{
+                } else {
                     $jobLocation = null;
                 }
             }
@@ -2886,27 +2967,23 @@ class InternjumpUserController extends Controller {
         /*         * *********************************************** */
         $apiJobsArr = array();
         if (sizeof($userSearchResults) < 24) {
-             $title1 = $title;
-            if($title == "empty"){
-                if($category != "empty")
-                {
+            $title1 = $title;
+            if ($title == "empty") {
+                if ($category != "empty") {
                     $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
                     //get countries array
                     $category = $categoryRepo->findOneBy(array('id' => $category));
                     $title1 = $category->getSlug();
                 }
             }
-            if($city!="empty" && $state!="empty"){
-                $jobLocation = $city.', '.$state;
-            }
-            else{
-                if($city!="empty"){
+            if ($city != "empty" && $state != "empty") {
+                $jobLocation = $city . ', ' . $state;
+            } else {
+                if ($city != "empty") {
                     $jobLocation = $city;
-                }
-                elseif($state!="empty"){
+                } elseif ($state != "empty") {
                     $jobLocation = $state;
-                }
-                else{
+                } else {
                     $jobLocation = null;
                 }
             }

@@ -47,11 +47,11 @@ services:
             - { name: sonata.admin, manager_type: orm, label: Skill }
         arguments: [null, Objects\InternJumpBundle\Entity\Skill, ObjectsAdminBundle:SkillAdmin]
 
-#  cv_admin:
-#        class: Objects\AdminBundle\Admin\CVAdmin
-#        tags:
-#          - { name: sonata.admin, manager_type: orm, label: CV }
-#        arguments: [null, Objects\InternJumpBundle\Entity\CV, ObjectsAdminBundle:CVAdmin]
+  cv_admin:
+        class: Objects\AdminBundle\Admin\CVAdmin
+        tags:
+          - { name: sonata.admin, manager_type: orm, label: CV }
+        arguments: [null, Objects\InternJumpBundle\Entity\CV, ObjectsAdminBundle:CVAdmin]
 
   education_admin:
         class: Objects\AdminBundle\Admin\EducationAdmin
@@ -131,3 +131,9 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, label: WorthPeople }
         arguments: [null, Objects\InternJumpBundle\Entity\worthPeople, ObjectsAdminBundle:WorthPeopleAdmin]
+
+  report_admin:
+        class: Objects\AdminBundle\Admin\ReportAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: ReportUsers }
+        arguments: [null, Objects\InternJumpBundle\Entity\ReportedUser, ObjectsAdminBundle:ReportAdmin]

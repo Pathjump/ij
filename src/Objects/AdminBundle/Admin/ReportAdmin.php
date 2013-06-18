@@ -14,21 +14,20 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Doctrine\ORM\EntityRepository;
-use Sonata\AdminBundle\Route\RouteCollection;
 
-class CVAdmin extends Admin {
+class ReportAdmin extends Admin {
 
     /**
      * this variable holds the route name prefix for this actions
      * @var string
      */
-    protected $baseRouteName = 'cv_admin';
+    protected $baseRouteName = 'report_user_admin';
 
     /**
      * this variable holds the url route prefix for this actions
      * @var string
      */
-    protected $baseRoutePattern = 'cv';
+    protected $baseRoutePattern = 'report_user';
 
     /**
      * this function configure the list action fields
@@ -38,13 +37,12 @@ class CVAdmin extends Admin {
     public function configureListFields(ListMapper $listMapper) {
         $listMapper
                 ->addIdentifier('id')
+                ->add('company')
                 ->add('user')
+                ->add('cv')
+                ->add('reason')
+                ->add('reasonText')
                 ->add('createdAt')
-                ->add('viewsCount')
-                ->add('objective')
-                ->add('describeYourself')
-                ->add('name')
-                ->add('isActive')
                 ->add('_action', 'actions', array(
                     'actions' => array(
                         'view' => array(),
@@ -62,18 +60,12 @@ class CVAdmin extends Admin {
      */
     public function configureShowField(ShowMapper $showMapper) {
         $showMapper
-                ->add('id')
+                ->add('company')
                 ->add('user')
-                ->add('skills')
-                ->add('internships')
-                ->add('employmentHistory')
-                ->add('categories')
+                ->add('cv')
+                ->add('reason')
+                ->add('reasonText')
                 ->add('createdAt')
-                ->add('viewsCount')
-                ->add('objective')
-                ->add('describeYourself')
-                ->add('name')
-                ->add('isActive')
         ;
     }
 
@@ -86,32 +78,27 @@ class CVAdmin extends Admin {
     public function configureDatagridFilters(DatagridMapper $datagridMapper) {
         $datagridMapper
                 ->add('id')
+                ->add('company')
                 ->add('user')
-                ->add('skills')
-                ->add('internships')
-                ->add('employmentHistory')
-                ->add('categories')
+                ->add('reason')
+                ->add('reasonText')
                 ->add('createdAt')
-                ->add('viewsCount')
-                ->add('objective')
-                ->add('describeYourself')
-                ->add('name')
-                ->add('isActive')
         ;
     }
 
     /**
      * this function configure the new, edit form fields
-     * @author Mahmoud
+     * @author Ahmed
      * @param FormMapper $formMapper
      */
     public function configureFormFields(FormMapper $formMapper) {
         $formMapper
                 ->with('Required Fields')
-                ->add('objective')
-                ->add('describeYourself')
-                ->add('name')
-                ->add('isActive')
+                ->add('company')
+                ->add('user')
+                ->add('cv')
+                ->add('reason')
+                ->add('reasonText')
                 ->end()
         ;
     }

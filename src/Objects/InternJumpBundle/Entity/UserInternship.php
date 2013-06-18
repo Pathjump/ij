@@ -58,15 +58,19 @@ class UserInternship {
      * @ORM\Column(name="createdAt", type="date")
      */
     private $createdAt;
-    
+
+    public function __toString() {
+        return "$this->id";
+    }
+
     public function __construct() {
         $this->createdAt = new \DateTime();
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId() {
         return $this->id;
@@ -84,7 +88,7 @@ class UserInternship {
     /**
      * Get status
      *
-     * @return string 
+     * @return string
      */
     public function getStatus() {
         return $this->status;
@@ -115,7 +119,7 @@ class UserInternship {
     /**
      * Get cv
      *
-     * @return Objects\InternJumpBundle\Entity\CV 
+     * @return Objects\InternJumpBundle\Entity\CV
      */
     public function getCv() {
         return $this->cv;
@@ -133,7 +137,7 @@ class UserInternship {
     /**
      * Get internship
      *
-     * @return Objects\InternJumpBundle\Entity\Internship 
+     * @return Objects\InternJumpBundle\Entity\Internship
      */
     public function getInternship() {
         return $this->internship;
@@ -151,7 +155,7 @@ class UserInternship {
     /**
      * Get user
      *
-     * @return Objects\UserBundle\Entity\User 
+     * @return Objects\UserBundle\Entity\User
      */
     public function getUser() {
         return $this->user;
@@ -171,7 +175,7 @@ class UserInternship {
     /**
      * Get createdAt
      *
-     * @return date 
+     * @return date
      */
     public function getCreatedAt()
     {
