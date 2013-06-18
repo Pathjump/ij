@@ -101,6 +101,7 @@ sonata_admin:
                     - quiz_admin
                     - quiz_result_admin
                     - personal_question_admin
+                    - cv_admin
             company:
                 items:
                     - company_admin
@@ -114,6 +115,7 @@ sonata_admin:
                     - post_category_admin
                     - languages_admin
                     - worth_admin
+                    - report_admin
 
 sonata_block:
     default_contexts: [cms]

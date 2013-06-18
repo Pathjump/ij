@@ -33,6 +33,13 @@
                         <div class="span10">
                             <h2>{{user}}
                                 <div><small>{{user.getCountryName}}{% if user.state %}, {{user.state}}{% endif %}, {{user.city}}</small></div></h2>
+
+                                {% if reportUser %}
+                                <a href="javascript:void(0)" class="btn btn-danger">Reported</a>
+                                {% else %}
+                                <a href="javascript:void(0)" class="btn btn-danger" id="reportThisUser">Report this</a>
+                                {% endif %}
+
                         </div>
                         <div class="span2 logo-box"><img src="{{user.getTimThumbUrl(90,85)}}"></div>
 
@@ -85,6 +92,12 @@
                                 {% endif %}
                                 </h2>
                                 <a href="javascript:void(0)" class="btn btn-inverse" id="addInerest">Express interest</a>
+
+                                {% if reportUser %}
+                                <a href="javascript:void(0)" class="btn btn-danger">Reported</a>
+                                {% else %}
+                                <a href="javascript:void(0)" class="btn btn-danger" id="reportThisUser">Report this</a>
+                                {% endif %}
                             </div>
                             <div class="span2 logo-box"><img src="{{asset('img/cv-img.png')}}" width="90" height="85" style="border: none;"></div>
                         </div><!--Resume-title--->
@@ -140,7 +153,7 @@
                                 <h5 class="titl-blue">{{empHistory.title}}</h5>
                                 <strong>
                             {% if empHistory.companyUrl %}
-                                        <a href="{{empHistory.companyUrl}}">
+                                        <a href="{{empHistory.companyUrl}}" rel="nofollow" target="_blank">
                                 {{empHistory.companyName}}
                                             </a>
                            {% else %}
@@ -211,6 +224,7 @@
                                 var companyHireUserUrl = '{{path('company_hire_user',{'userId' : user.id,'cvId' : cvId})}}';
                                 var addInterestUrl = '{{path('add_interest',{'loginName' : user.loginName,'cvId' : cvId})}}';
                                 var addUserQuestionUrl = '{{path('add_user_question',{'userLoginName' : user.loginName,'question': ''})}}';
+                                var reportUserUrl = '{{path('report_user',{'userId' : user.id,'cvId' : cvId})}}';
                                 </script>
                                 <script src="{{ asset('js/libs/jquery-ui-1.8.24.custom.min.js') }}" type="text/javascript"></script>
                                 <script src="{{asset('bundles/objectsinternjump/js/companyUserData.js')}}"></script>

@@ -188,3 +188,10 @@ fb_User_notification:
 add_company_to_favorite:
     pattern:  /add_company/favorite/{companyId}/{status}
     defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:addCompanyToFavorite" , companyId : ~ ,status : ~}
+
+report_user:
+    pattern:  /report_user/{userId}/{cvId}
+    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:reportUser"}
+    requirements:
+        userId:  \d+
+        cvId:  \d+
