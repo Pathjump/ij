@@ -70,7 +70,7 @@ class UserController extends Controller {
                         'last_username' => $session->get(SecurityContext::LAST_USERNAME),
                         'error' => $error,
                         'message' => $message
-                    ));
+            ));
         }
         //return the main page
         return $this->render('ObjectsUserBundle:User:login.html.twig', array(
@@ -80,7 +80,7 @@ class UserController extends Controller {
                     'message' => $message,
                     'formName' => $this->container->getParameter('loginFormName'),
                     'formDesc' => $this->container->getParameter('loginFormDesc'),
-                ));
+        ));
     }
 
     /**
@@ -168,6 +168,7 @@ class UserController extends Controller {
         $formBuilder = $this->createFormBuilder($user, array(
                     'validation_groups' => $formValidationGroups
                 ))
+                ->add('name')
                 ->add('email', 'repeated', array(
                     'type' => 'email',
                     'first_name' => 'Email',
@@ -179,7 +180,7 @@ class UserController extends Controller {
             'first_name' => 'Password',
             'second_name' => 'RePassword',
             'invalid_message' => "The passwords don't match",
-                ));
+        ));
         //use the signup page
         $view = 'ObjectsUserBundle:User:signup.html.twig';
         //check if the login name is required
@@ -196,50 +197,8 @@ class UserController extends Controller {
             //check if the form values are correct
             if ($form->isValid()) {
                 //get the user object from the form
-                $user = $form->getData();
-                //get the activation configurations
-                $active = $this->container->getParameter('auto_active');
-                //get the entity manager
-                $em = $this->getDoctrine()->getEntityManager();
-                //add the new user to the entity manager
-                $em->persist($user);
-                //set the user password in the session
-                $request->getSession()->set('user_password', $user->getUserPassword());
-                //check if the user should be active by email or auto activated
-                if ($active) {
-                    //auto active user
-                    $roleName = 'ROLE_ACTIVE_SOCIAL';
-                } else {
-                    //user need to activate from email
-                    $roleName = 'ROLE_NOTACTIVE_SOCIAL';
-                }
-                //get the role repo
-                $roleRepository = $em->getRepository('ObjectsUserBundle:Role');
-                //get a user role object
-                $role = $roleRepository->findOneByName($roleName);
-                //get a update userName role object
-                $roleUpdateUserName = $roleRepository->findOneByName('ROLE_UPDATABLE_USERNAME');
-                //set user roles
-                $user->addRole($role);
-                $user->addRole($roleUpdateUserName);
-                //store the object in the database
-                $em->flush();
-                //try to login the user
-                try {
-                    // create the authentication token
-                    $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-                    // give it to the security context
-                    $this->get('security.context')->setToken($token);
-                } catch (\Exception $e) {
-                    //can not reload the user object log out the user
-                    $this->get('security.context')->setToken(null);
-                    //invalidate the current user session
-                    $this->getRequest()->getSession()->invalidate();
-                    //redirect to the login page
-                    return $this->redirect($this->generateUrl('login'));
-                }
-                //go to the home page
-                return $this->redirect($this->generateUrl('user_signup_second_step'));
+                $user->setLoginName($user->getEmail());
+                return $this->finishSignUp($user);
             }
         }
         return $this->render($view, array(
@@ -248,7 +207,7 @@ class UserController extends Controller {
                     'message' => $message,
                     'formName' => $this->container->getParameter('studentSignUp_FormName'),
                     'formDesc' => $this->container->getParameter('studentSignUp_FormDesc'),
-                ));
+        ));
     }
 
     /**
@@ -291,7 +250,7 @@ class UserController extends Controller {
             $oldPassword = TRUE;
         }
         //check if the user can change the login name
-        if ($container->getParameter('login_name_required') && TRUE === $this->get('security.context')->isGranted('ROLE_UPDATABLE_USERNAME')) {
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_UPDATABLE_USERNAME')) {
             //make the user able to change his user name
             $changeUserName = TRUE;
         }
@@ -342,7 +301,7 @@ class UserController extends Controller {
                 ->add('city')
                 ->add('state', 'choice', array('required' => false))
                 ->add('email')
-                ->add('matchingJobEmail',null,array('required' => FALSE))
+                ->add('matchingJobEmail', null, array('required' => FALSE))
                 ->add('file', 'file', array('required' => false, 'label' => 'image', 'attr' => array('onchange' => 'readURL(this);')))
         ;
         //check if the old password is required
@@ -455,7 +414,7 @@ class UserController extends Controller {
                     'user' => $loggedInUser,
                     'formName' => $this->container->getParameter('studentEditAccount_FormName'),
                     'formDesc' => $this->container->getParameter('studentEditAccount_FormDesc'),
-                ));
+        ));
     }
 
     /**
@@ -681,57 +640,14 @@ class UserController extends Controller {
                     $socialAccounts->setUser($user);
                     //set the user twitter info
                     $user->setSocialAccounts($socialAccounts);
-                    //check if we need to set a login name
-                    if ($container->getParameter('login_name_required')) {
-                        //set a valid login name
-                        $user->setLoginName($this->suggestLoginName($screen_name));
-                    }
-                    //get the activation configurations
-                    $active = $this->container->getParameter('auto_active');
-                    //add the new user to the entity manager
-                    $em->persist($user);
-                    //set the user password in the session
-                    $session->set('user_password', $user->getUserPassword());
-                    //check if the user should be active by email or auto activated
-                    if ($active) {
-                        //auto active user
-                        $roleName = 'ROLE_ACTIVE_SOCIAL';
-                    } else {
-                        //user need to activate from email
-                        $roleName = 'ROLE_NOTACTIVE_SOCIAL';
-                    }
-                    //get the role repo
-                    $roleRepository = $em->getRepository('ObjectsUserBundle:Role');
-                    //get a user role object
-                    $role = $roleRepository->findOneByName($roleName);
-                    //get a update userName role object
-                    $roleUpdateUserName = $roleRepository->findOneByName('ROLE_UPDATABLE_USERNAME');
-                    //set user roles
-                    $user->addRole($role);
-                    $user->addRole($roleUpdateUserName);
-                    //store the object in the database
-                    $em->flush();
-                    //try to login the user
-                    try {
-                        // create the authentication token
-                        $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-                        // give it to the security context
-                        $this->get('security.context')->setToken($token);
-                    } catch (\Exception $e) {
-                        //can not reload the user object log out the user
-                        $this->get('security.context')->setToken(null);
-                        //invalidate the current user session
-                        $this->getRequest()->getSession()->invalidate();
-                        //redirect to the login page
-                        return $this->redirect($this->generateUrl('login'));
-                    }
-                    //go to the home page
-                    return $this->redirect($this->generateUrl('user_signup_second_step'));
+                    //set a valid login name
+                    $user->setLoginName($user->getEmail());
+                    return $this->finishSignUp($user);
                 }
             }
             return $this->render('ObjectsUserBundle:User:twitter_signup.html.twig', array(
                         'form' => $form->createView()
-                    ));
+            ));
         } else {
             //something went wrong clear the session and set a flash to try again
             $session->clear();
@@ -753,7 +669,7 @@ class UserController extends Controller {
         if (TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE')) {
             //go to the home page
             if (!$this->getRequest()->get('access_method')) {
-                return $this->redirect($this->generateUrl('site_homepage',array(),TRUE));
+                return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
             }
         }
         $request = $this->getRequest();
@@ -771,11 +687,11 @@ class UserController extends Controller {
         $facebookError = $session->get('facebook_error', FALSE);
 
         if ($facebookError || !$faceUser || !$shortLive_access_token || !$faceUser->email) {
-             if ($this->getRequest()->get('access_method')== "face") {
-                return $this->redirect($this->generateUrl('site_fb_homepage',array(),TRUE));
+            if ($this->getRequest()->get('access_method') == "face") {
+                return $this->redirect($this->generateUrl('site_fb_homepage', array(), TRUE));
             }
             else
-            return $this->redirect('/');
+                return $this->redirect('/');
         }
 
         //generate long-live facebook access token access token and expiration date
@@ -805,7 +721,7 @@ class UserController extends Controller {
                     return $this->redirect($this->generateUrl('fb_student_task', array('loginName' => $user->getLoginName()), TRUE));
                 }
                 else
-                return $this->redirectUserAction();
+                    return $this->redirectUserAction();
             } catch (\Exception $e) {
                 //can not reload the user object log out the user
                 $this->get('security.context')->setToken(null);
@@ -964,51 +880,7 @@ class UserController extends Controller {
                 $socialAccounts->setFbTokenExpireDate(new \DateTime(date('Y-m-d', time() + $longLive_accessToken['expires'])));
                 $socialAccounts->setUser($user);
                 $user->setSocialAccounts($socialAccounts);
-                $translator = $this->get('translator');
-                //get the activation configurations
-                $active = $this->container->getParameter('auto_active');
-                //add the new user to the entity manager
-                $em->persist($user);
-                //set the user password in the session
-                $session->set('user_password', $user->getUserPassword());
-                //check if the user should be active by email or auto activated
-                if ($active || $this->getRequest()->get('access_method')) {
-                    //auto active user
-                    $roleName = 'ROLE_ACTIVE_SOCIAL';
-                } else {
-                    //user need to activate from email
-                    $roleName = 'ROLE_NOTACTIVE_SOCIAL';
-                }
-                //get the role repo
-                $roleRepository = $em->getRepository('ObjectsUserBundle:Role');
-                //get a user role object
-                $role = $roleRepository->findOneByName($roleName);
-                //get a update userName role object
-                $roleUpdateUserName = $roleRepository->findOneByName('ROLE_UPDATABLE_USERNAME');
-                //set user roles
-                $user->addRole($role);
-                $user->addRole($roleUpdateUserName);
-                //store the object in the database
-                $em->flush();
-                //try to login the user
-                try {
-                    // create the authentication token
-                    $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-                    // give it to the security context
-                    $this->get('security.context')->setToken($token);
-                } catch (\Exception $e) {
-                    //can not reload the user object log out the user
-                    $this->get('security.context')->setToken(null);
-                    //invalidate the current user session
-                    $this->getRequest()->getSession()->invalidate();
-                    //redirect to the login page
-                    return $this->redirect($this->generateUrl('login'));
-                }
-                //go to the home page
-                 if (!$this->getRequest()->get('access_method')) {
-                    return $this->redirect($this->generateUrl('fb_user_signup_second_step'));
-                }
-                return $this->redirect($this->generateUrl('user_signup_second_step'));
+                return $this->finishSignUp($user, true);
 
                 //TODO use
                 //send feed to user profile with sign up
@@ -1153,6 +1025,7 @@ class UserController extends Controller {
         }
         //get the entity manager
         $em = $this->getDoctrine()->getEntityManager();
+        $container = $this->container;
         //add the new user to the entity manager
         $em->persist($user);
         //prepare the body of the email
@@ -1160,7 +1033,7 @@ class UserController extends Controller {
             'user' => $user,
             'password' => $user->getUserPassword(),
             'active' => $active
-                ));
+        ));
         //check if the user should be active by email or auto activated
         if ($active) {
             //auto active user
@@ -1183,22 +1056,33 @@ class UserController extends Controller {
         //prepare the message object
         $message = \Swift_Message::newInstance()
                 ->setSubject($this->get('translator')->trans('Welcome to InternJump.'))
-                ->setFrom($this->container->getParameter('mailer_user'))
+                ->setFrom($container->getParameter('mailer_user'))
                 ->setTo($user->getEmail())
                 ->setBody($body)
         ;
         //send the email
         $this->get('mailer')->send($message);
-        //get the translator object
-        $translator = $this->get('translator');
-        //initialize a welcome flash message
-        $welcomeMessage = $translator->trans('welcome') . ' ' . $user->__toString() . ' ' . $translator->trans('to our site');
-        //check if the user need to activate his account
-        if (!$active) {
-            $welcomeMessage .= ' ' . $this->get('translator')->trans('check your email for your activation link');
+        //check if user have social acounts
+        $userSocialAccounts = $user->getSocialAccounts();
+        if ($userSocialAccounts) {
+            $status = 'I just installed the InternJump App, a platform to find internships/entry-level jobs!';
+            $link = $this->generateUrl('site_fb_homepage', array(), true);
+
+            // check if have facebook
+            if ($userSocialAccounts->isFacebookLinked()) {
+                FacebookController::postOnUserWallAndFeedAction($userSocialAccounts->getFacebookId(), $userSocialAccounts->getAccessToken(), $status, null, null, $link, NULL);
+            }
+
+            // check if have twitter
+            if ($userSocialAccounts->isTwitterLinked()) {
+                TwitterController::twitt($status . ' ' . $link, $container->getParameter('consumer_key'), $container->getParameter('consumer_secret'), $userSocialAccounts->getOauthToken(), $userSocialAccounts->getOauthTokenSecret());
+            }
+
+            // check if have linkedin
+            if ($userSocialAccounts->isLinkedInLinked()) {
+                LinkedinController::linkedInShare($container->getParameter('linkedin_api_key'), $container->getParameter('linkedin_secret_key'), $userSocialAccounts->getLinkedinOauthToken(), $userSocialAccounts->getLinkedinOauthTokenSecret(), $status, $status, $status, $link, NULL);
+            }
         }
-        //set the success flag in the session
-        $this->getRequest()->getSession()->setFlash('success', $welcomeMessage);
         //try to login the user
         try {
             // create the authentication token
@@ -1214,7 +1098,7 @@ class UserController extends Controller {
             return $this->redirect($this->generateUrl('login'));
         }
         //go to the home page
-        return $this->redirect($this->generateUrl('user_signup_second_step'));
+        return $this->redirect($this->generateUrl('student_task', array('loginName' => $user->getLoginName())));
     }
 
     /**
@@ -1319,8 +1203,8 @@ class UserController extends Controller {
         $request = $this->getRequest();
         //prepare the form validation constrains
         $collectionConstraint = new Collection(array(
-                    'email' => new Email()
-                ));
+            'email' => new Email()
+        ));
         //create the form
         $form = $this->createFormBuilder(null, array(
                     'validation_constraint' => $collectionConstraint,
@@ -1373,7 +1257,7 @@ class UserController extends Controller {
                     'form' => $form->createView(),
                     'error' => $error,
                     'success' => $success
-                ));
+        ));
     }
 
     /**
@@ -1454,7 +1338,7 @@ class UserController extends Controller {
         return $this->render('ObjectsUserBundle:User:change_password.html.twig', array(
                     'form' => $form->createView(),
                     'user' => $user
-                ));
+        ));
     }
 
     /**
@@ -1912,35 +1796,7 @@ class UserController extends Controller {
                 //set the user linkedIn info
                 $user->setSocialAccounts($socialAccounts);
 
-                $em->persist($user);
-                //set the user password in the session
-                $session->set('user_password', $user->getUserPassword());
-                //add user role
-                //get a user role object
-                $role = $roleRepository->findOneByName('ROLE_ACTIVE_SOCIAL');
-                //get a update userName role object
-                $roleUpdateUserName = $roleRepository->findOneByName('ROLE_UPDATABLE_USERNAME');
-                //set user roles
-                $user->addRole($role);
-                $user->addRole($roleUpdateUserName);
-                //store the object in the database
-                $em->flush();
-                //try to login the user
-                try {
-                    // create the authentication token
-                    $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-                    // give it to the security context
-                    $this->get('security.context')->setToken($token);
-                } catch (\Exception $e) {
-                    //can not reload the user object log out the user
-                    $this->get('security.context')->setToken(null);
-                    //invalidate the current user session
-                    $this->getRequest()->getSession()->invalidate();
-                    //redirect to the login page
-                    return $this->redirect($this->generateUrl('login'));
-                }
-
-                return $this->redirect($this->generateUrl('user_signup_second_step', array(), TRUE));
+                return $this->finishSignUp($user, true);
             } else {
                 //linkedIn data not found go to the login page
                 return $this->redirect($this->generateUrl('login', array(), TRUE));
@@ -2098,57 +1954,6 @@ class UserController extends Controller {
                 $session->remove('user_password');
                 //save the data
                 $em->flush();
-                //prepare the body of the email
-                $body = $this->renderView('ObjectsUserBundle:User:Emails\welcome_to_site.txt.twig', array(
-                    'user' => $user,
-                    'password' => $userPassword,
-                    'active' => $active
-                        ));
-                //prepare the message object
-                $message = \Swift_Message::newInstance()
-                        ->setSubject($this->get('translator')->trans('welcome'))
-                        ->setFrom($this->container->getParameter('mailer_user'))
-                        ->setTo($user->getEmail())
-                        ->setBody($body)
-                ;
-                //send the email
-                $this->get('mailer')->send($message);
-                //check if user have social acounts
-                $userSocialAccounts = $user->getSocialAccounts();
-                $container = $this->container;
-                if ($userSocialAccounts) {
-                    $status = 'I just installed the InternJump App, a platform to find internships/entry-level jobs!';
-                    $link = $this->generateUrl('site_fb_homepage', array(), true);
-
-                    // check if have facebook
-                    if ($userSocialAccounts->isFacebookLinked()) {
-                        FacebookController::postOnUserWallAndFeedAction($userSocialAccounts->getFacebookId(), $userSocialAccounts->getAccessToken(), $status, null, null, $link, NULL);
-                    }
-
-                    // check if have twitter
-                    if ($userSocialAccounts->isTwitterLinked()) {
-                        TwitterController::twitt($status . ' ' . $link, $container->getParameter('consumer_key'), $container->getParameter('consumer_secret'), $userSocialAccounts->getOauthToken(), $userSocialAccounts->getOauthTokenSecret());
-                    }
-
-                    // check if have linkedin
-                    if ($userSocialAccounts->isLinkedInLinked()) {
-                        LinkedinController::linkedInShare($container->getParameter('linkedin_api_key'), $container->getParameter('linkedin_secret_key'), $userSocialAccounts->getLinkedinOauthToken(), $userSocialAccounts->getLinkedinOauthTokenSecret(), $status, $status, $status, $link, NULL);
-                    }
-                }
-                //try to login the user
-                try {
-                    // create the authentication token
-                    $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-                    // give it to the security context
-                    $this->get('security.context')->setToken($token);
-                } catch (\Exception $e) {
-                    //can not reload the user object log out the user
-                    $this->get('security.context')->setToken(null);
-                    //invalidate the current user session
-                    $this->getRequest()->getSession()->invalidate();
-                    //redirect to the login page
-                    return $this->redirect($this->generateUrl('login'));
-                }
                 return $this->redirect($this->generateUrl('signup_education'));
             }
         }
@@ -2157,7 +1962,7 @@ class UserController extends Controller {
                     'user' => $user,
                     'formName' => $this->container->getParameter('studentSignUp_FormName'),
                     'formDesc' => $this->container->getParameter('studentSignUp_FormDesc'),
-                ));
+        ));
     }
 
 }

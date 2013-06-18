@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Objects\UserBundle\Entity\User
  *
  * @Assert\Callback(methods={"isDateOfBirthCorrect"}, groups={"dateOfBirth", "signup_second", "edit", "adminsignup", "adminedit"})
- * @UniqueEntity(fields={"loginName"}, groups={"loginName", "signup", "edit", "adminsignup", "adminedit"})
+ * @UniqueEntity(fields={"loginName"}, groups={"loginName", "adminsignup", "adminedit"})
  * @UniqueEntity(fields={"email"}, groups={"signup", "email", "edit", "adminsignup", "adminedit"})
  * @GlobalUnique(groups={"signup", "edit", "adminsignup", "adminedit"})
  * @ORM\Table(indexes={@ORM\Index(name="search_user_name", columns={"loginName"})})
@@ -161,10 +161,15 @@ class User implements AdvancedUserInterface {
      * @var string $loginName
      *
      * @ORM\Column(name="loginName", type="string", length=255, nullable=true, unique=true)
-     * @Assert\NotNull(groups={"loginName","signup", "edit", "adminsignup", "adminedit"})
-     * @Assert\Regex(pattern="/^\w+$/u", groups={"loginName","signup", "edit", "adminsignup", "adminedit"}, message="Only characters, numbers and _")
+     * @Assert\NotNull(groups={"loginName", "adminsignup", "adminedit"})
+     * @Assert\Regex(pattern="/^\w+$/u", groups={"loginName", "adminsignup", "adminedit"}, message="Only characters, numbers and _")
      */
     private $loginName;
+
+    /**
+     * @var string
+     */
+    private $name;
 
     /**
      * @var string $email
@@ -752,7 +757,7 @@ class User implements AdvancedUserInterface {
      * @param string $loginName
      */
     public function setLoginName($loginName) {
-        $this->loginName = trim(preg_replace('/\W+/u', '_', $loginName));
+        $this->loginName = $loginName;
     }
 
     /**
@@ -1546,8 +1551,7 @@ class User implements AdvancedUserInterface {
      *
      * @param integer $currentWorth
      */
-    public function setCurrentWorth($currentWorth)
-    {
+    public function setCurrentWorth($currentWorth) {
         $this->currentWorth = $currentWorth;
     }
 
@@ -1556,8 +1560,7 @@ class User implements AdvancedUserInterface {
      *
      * @return integer
      */
-    public function getCurrentWorth()
-    {
+    public function getCurrentWorth() {
         return $this->currentWorth;
     }
 
@@ -1566,8 +1569,7 @@ class User implements AdvancedUserInterface {
      *
      * @param integer $netWorth
      */
-    public function setNetWorth($netWorth)
-    {
+    public function setNetWorth($netWorth) {
         $this->netWorth = $netWorth;
     }
 
@@ -1576,8 +1578,7 @@ class User implements AdvancedUserInterface {
      *
      * @return integer
      */
-    public function getNetWorth()
-    {
+    public function getNetWorth() {
         return $this->netWorth;
     }
 
@@ -1586,8 +1587,7 @@ class User implements AdvancedUserInterface {
      *
      * @param date $createdAt
      */
-    public function setCreatedAt($createdAt)
-    {
+    public function setCreatedAt($createdAt) {
         $this->createdAt = $createdAt;
     }
 
@@ -1596,8 +1596,7 @@ class User implements AdvancedUserInterface {
      *
      * @param Objects\InternJumpBundle\Entity\Company $favoriteComapnies
      */
-    public function addCompany(\Objects\InternJumpBundle\Entity\Company $favoriteComapnies)
-    {
+    public function addCompany(\Objects\InternJumpBundle\Entity\Company $favoriteComapnies) {
         $this->favoriteComapnies[] = $favoriteComapnies;
     }
 
@@ -1606,8 +1605,7 @@ class User implements AdvancedUserInterface {
      *
      * @return Doctrine\Common\Collections\Collection
      */
-    public function getFavoriteComapnies()
-    {
+    public function getFavoriteComapnies() {
         return $this->favoriteComapnies;
     }
 
@@ -1616,8 +1614,7 @@ class User implements AdvancedUserInterface {
      *
      * @param date $activatedAt
      */
-    public function setActivatedAt($activatedAt)
-    {
+    public function setActivatedAt($activatedAt) {
         $this->activatedAt = $activatedAt;
     }
 
@@ -1626,8 +1623,7 @@ class User implements AdvancedUserInterface {
      *
      * @return date
      */
-    public function getActivatedAt()
-    {
+    public function getActivatedAt() {
         return $this->activatedAt;
     }
 
@@ -1636,18 +1632,32 @@ class User implements AdvancedUserInterface {
      *
      * @param boolean $matchingJobEmail
      */
-    public function setMatchingJobEmail($matchingJobEmail)
-    {
+    public function setMatchingJobEmail($matchingJobEmail) {
         $this->matchingJobEmail = $matchingJobEmail;
     }
 
     /**
      * Get matchingJobEmail
      *
-     * @return boolean 
+     * @return boolean
      */
-    public function getMatchingJobEmail()
-    {
+    public function getMatchingJobEmail() {
         return $this->matchingJobEmail;
     }
+
+    public function getName() {
+        return $this->name;
+    }
+
+    public function setName($name) {
+        $stringParts = explode(' ', $name, 2);
+        if (isset($stringParts[0])) {
+            $this->firstName = $stringParts[0];
+        }
+        if (isset($stringParts[1])) {
+            $this->lastName = $stringParts[1];
+        }
+        $this->name = $name;
+    }
+
 }
