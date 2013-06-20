@@ -73,10 +73,16 @@
                                         </button>
                                         <div class="nav-collapse collapse pull-right">
                                             <ul class="nav">
-                                                <li id="employerLink"><a href="{{path('students_data')}}" class="nav-students">Students</a></li>
-                                                <li id="studentLink"><a href="{{path('employers_data')}}" class="nav-companies">Employers</a></li>
-                                                <li id="schoolsLink"><a href="{{path('schools')}}">Schools</a></li>
-                                                <li id="resourceLink"><a href="{{path('resources')}}">Resources</a></li>
+                                                {% if is_granted('ROLE_NOTACTIVE_COMPANY') %}
+                                                    <li id="resourceLink"><a href="{{path('resources')}}">Resources</a></li>
+                                                {% elseif is_granted('ROLE_NOTACTIVE') %}
+                                                    <li id="resourceLink"><a href="{{path('resources')}}">Resources</a></li>
+                                                {% else %}
+                                                    <li id="employerLink"><a href="{{path('students_data')}}" class="nav-students">Students</a></li>
+                                                    <li id="studentLink"><a href="{{path('employers_data')}}" class="nav-companies">Employers</a></li>
+                                                    <li id="schoolsLink"><a href="{{path('schools')}}">Schools</a></li>
+                                                    <li id="resourceLink"><a href="{{path('resources')}}">Resources</a></li>
+                                                {% endif %}
                                             </ul>
                                         </div><!--/.nav-collapse -->
 
@@ -106,6 +112,8 @@
                                             <li><a href="{{ path('personal_questions') }}" title="Personal Questions">Personal Questions</a></li>
                                             {% if not app.user.score %}
                                                 <li><a href="{{path('internjumb_quiz')}}">Personality Quiz</a></li>
+                                            {% else %}
+                                                <li><a href="{{path('internjumb_quiz_page_result')}}">Personality Quiz</a></li>
                                             {% endif %}
 
                                             <li><a href="{{ path('howMuchAreYouWorth') }}">Find Your Worth</a></li>

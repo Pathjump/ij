@@ -1206,10 +1206,9 @@ class InternjumpUserController extends Controller {
         $user = $this->get('security.context')->getToken()->getUser();
 
         //check if the user have score
-        if (!$user->getScore()) {
-            $user->setScore($score);
-            $em->flush();
-        }
+        $user->setScore($score);
+        $em->flush();
+
 
         //find all quiz results
         $quizResults = $quizResultRepo->findAll();
@@ -1252,10 +1251,10 @@ class InternjumpUserController extends Controller {
     }
 
     /**
-     * this action for the logedin users to answer know you quiz link
-     * @author Ahmed
+     * this function used to show quiz result
+     * @author ahmed
      */
-    public function internjumbQuizPageAction() {
+    public function internjumbQuizPageResultAction() {
         //check for logrdin company
         if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
             //return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
@@ -1263,13 +1262,9 @@ class InternjumpUserController extends Controller {
             return $this->redirect($this->generateUrl('login'));
         }
         $em = $this->getDoctrine()->getEntityManager();
-        $quizRepo = $em->getRepository('ObjectsInternJumpBundle:Quiz');
         $quizResultRepo = $em->getRepository('ObjectsInternJumpBundle:QuizResult');
-
         //get logedin user objects
         $user = $this->get('security.context')->getToken()->getUser();
-
-        $quiz = $quizRepo->findAll();
 
         //check if user pass the quiz before
         $resultObject = null;
@@ -1285,8 +1280,67 @@ class InternjumpUserController extends Controller {
             }
         }
 
+        return $this->render('ObjectsInternJumpBundle:InternjumpUser:internjumbQuizPageResult.html.twig', array(
+                    'user' => $user, 'resultObject' => $resultObject
+        ));
+    }
+
+    /**
+     * this action for the logedin users to answer know you quiz link
+     * @author Ahmed
+     */
+    public function internjumbQuizPageAction() {
+        //check for logrdin company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
+            //return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('login'));
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        $quizRepo = $em->getRepository('ObjectsInternJumpBundle:Quiz');
+
+        //get logedin user objects
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        $quiz = $quizRepo->findAll();
+
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:internjumbQuizPage.html.twig', array(
-                    'quiz' => $quiz, 'user' => $user, 'resultObject' => $resultObject
+                    'quiz' => $quiz, 'user' => $user
+        ));
+    }
+
+    /**
+     * this function used to show quiz result
+     * @author ahmed
+     */
+    public function fb_internjumbQuizPageResultAction() {
+        //check for logrdin company
+        if (FALSE === $this->get('security.context')->isGranted('ROLE_USER')) {
+            //return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+            $this->getRequest()->getSession()->set('redirectUrl', $this->getRequest()->getRequestUri());
+            return $this->redirect($this->generateUrl('login'));
+        }
+        $em = $this->getDoctrine()->getEntityManager();
+        $quizResultRepo = $em->getRepository('ObjectsInternJumpBundle:QuizResult');
+        //get logedin user objects
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        //check if user pass the quiz before
+        $resultObject = null;
+        if ($user->getScore()) {
+            //find all quiz results
+            $quizResults = $quizResultRepo->findAll();
+            foreach ($quizResults as $result) {
+                if ($result->getScore() >= $user->getScore()) {
+                    $resultObject = $result;
+                    break;
+                }
+                $resultObject = $result;
+            }
+        }
+
+        return $this->render('ObjectsInternJumpBundle:InternjumpUser:fb_internjumbQuizPageResult.html.twig', array(
+                    'user' => $user, 'resultObject' => $resultObject
         ));
     }
 
@@ -1303,29 +1357,14 @@ class InternjumpUserController extends Controller {
         }
         $em = $this->getDoctrine()->getEntityManager();
         $quizRepo = $em->getRepository('ObjectsInternJumpBundle:Quiz');
-        $quizResultRepo = $em->getRepository('ObjectsInternJumpBundle:QuizResult');
 
         //get logedin user objects
         $user = $this->get('security.context')->getToken()->getUser();
 
         $quiz = $quizRepo->findAll();
 
-        //check if user pass the quiz before
-        $resultObject = null;
-        if ($user->getScore()) {
-            //find all quiz results
-            $quizResults = $quizResultRepo->findAll();
-            foreach ($quizResults as $result) {
-                if ($result->getScore() >= $user->getScore()) {
-                    $resultObject = $result;
-                    break;
-                }
-                $resultObject = $result;
-            }
-        }
-
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:fb_internjumbQuizPage.html.twig', array(
-                    'quiz' => $quiz, 'user' => $user, 'resultObject' => $resultObject
+                    'quiz' => $quiz, 'user' => $user
         ));
     }
 

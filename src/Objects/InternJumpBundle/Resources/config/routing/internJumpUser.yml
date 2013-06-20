@@ -195,3 +195,11 @@ report_user:
     requirements:
         userId:  \d+
         cvId:  \d+
+
+internjumb_quiz_page_result:
+    pattern:  /internjumb_quiz_result
+    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:internjumbQuizPageResult" }
+
+fb_internjumb_quiz_page_result:
+    pattern:  /fb_internjumb_quiz_result
+    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:fb_internjumbQuizPageResult" }

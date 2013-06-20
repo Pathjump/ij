@@ -3,13 +3,11 @@
 
 {% block body %}
 {% if quiz|length > 0 %}
-    {% if not user.score %}
-
         <div class="container Main-content">
             <div class="company-form Quizes">
                 {% for question in quiz %}
                 <div class="questionsContainer"{% if not loop.first %}style="display: none;"{% endif %} questionNumber='{{loop.index}}'>
-                    <h4 class="title3">Question {{loop.index}}<span class="pull-right btn-small">Guestion {{loop.index}} - {{ quiz|length }}</span></h4>
+                    <h4 class="title3">Question {{loop.index}}<span class="pull-right btn-small">Question {{loop.index}} - {{ quiz|length }}</span></h4>
                     <h5 class="titl-blue">{{question.question}}</h5>
                     <div class="box-b">
                         <ul class="unstyled">
@@ -25,7 +23,7 @@
                 </div>
                 {% endfor %}
                  <div class="box-b links" id="quizButtons">
-                    {% if not user.score and quiz|length > 0 %}
+                    {% if quiz|length > 0 %}
                         <a href="javascript:void(0)" class="btn btn-primary large pull-right" id="quizNextButton" style="display: none;">Next Question</a>
                         <a href="javascript:void(0)" class="btn btn-primary large pull-right" id="submitQuiz" style="display: none;">Submit</a>
                         <a href="javascript:void(0)" class="pull-right" id="quizBackButton" style="display: none;">Back</a>
@@ -35,26 +33,6 @@
                 </div>
             </div><!--company-form-->
         </div>
-
-    {% else %}
-    <div class="container Main-content">
-        <div class="row-fluid show-grid">
-            <div class="span12">
-                <div class="company-form Resume">
-                    <div class="row-fluid Resume-title show-grid">
-                          <div class="span10">
-                               <h2>{{resultObject.message}}</h2>
-                          </div>
-                          <div class="span2 logo-box"><img src="{{resultObject.getTimThumbUrl(90,80)}}"></div>
-                    </div>
-                    <div class="Box-a">
-                        <p>{{ resultObject.description | raw }}</p>
-                   </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
 {% else %}
 <div class="alert alert-info">
 The quiz is not created yet
@@ -133,7 +111,7 @@ The quiz is not created yet
 
                 },
                 complete: function(msg) {
-                        location.reload();
+                        window.location = "{{path('internjumb_quiz_page_result')}}";
                 }
             });
 
