@@ -137,6 +137,16 @@
                                                                 <div class="Area">{{ entity.city }}, {%if entity.state %}{{ entity.state }},{% endif %} {{ entity.getCountryName }}</div>
                                                         {% if is_granted('ROLE_COMPANY') and company.id == app.user.id %}
                                                                 <a href="{{ path('internship_edit', { 'id': entity.id }) }}"><i class="icon-file"></i> Edit</a>
+                                                                <br/>
+                                                                {% set findJobMachesUrl =  path('company_search_for_cv',{'country-id' : entity.country,'city' : entity.city,'state' : entity.state})  %}
+                                                                {% for skill in entity.skills %}
+                                                                    {% set findJobMachesUrl = findJobMachesUrl ~  '&skills-ids[]=' ~ skill.id %}
+                                                                {% endfor %}
+                                                                {% for category in entity.categories %}
+                                                                    {% set findJobMachesUrl = findJobMachesUrl ~  '&selected-categories[]=' ~ category.id %}
+                                                                {% endfor %}
+
+                                                                <a href="{{ findJobMachesUrl }}">Find Matches</a>
                                                         {% endif %}
                                                             </div>
                                                         </li>
