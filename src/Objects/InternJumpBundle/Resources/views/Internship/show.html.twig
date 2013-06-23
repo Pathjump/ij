@@ -66,10 +66,12 @@
 
 
                             <div class="box-b links">
-                                <a href=""><i class="icon-share"></i> Share</a>
-                            {% if not is_granted('ROLE_NOTACTIVE_COMPANY') %}
+                                <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-51c6b26429cfea68"></script>
+                                <!-- AddThis Button END -->
+                                <a class="addthis_button_compact"><i class="icon-share"></i> Share</a>
+                            {#
                                 <a href=""><i class="icon-star"></i> Add to Favorites</a>
-                            {% endif %}
+                            #}
                             {% if entity.active and jobAvailabilityFlag == 1 and is_granted('ROLE_USER') and addedBeforeFlag == 1%}
                                 <a class="btn btn-primary large pull-right apply" href="javascript:void(0)" id="jobApply">apply</a>
                             {% elseif not is_granted('ROLE_NOTACTIVE_COMPANY') and not is_granted('ROLE_NOTACTIVE') %}

@@ -1,5 +1,5 @@
 {% if allUserCvs|length > 0%}
-<div class="container Main-content span4">
+<div class="container Main-content span4" style="margin-left: 0;">
     <div class="row-fluid show-grid">
             <div class="company-form Resume">
                 <div class="Result-box">
@@ -16,7 +16,7 @@
                                 </div>
                             </div>
                             <div class="control-group">
-                                <div class="controls">
+                                <div class="controls" style="margin-bottom: 20px;">
                                     <button type="button" class="btn" id="userCvSubmit">Confirm</button>
                                     <button type="button" class="btn" id="userCvCancle">Cancel</button>
                                     <img src="{{asset('img/loadingfacebox.gif')}}" id="userAddJobImg" style="display: none;float: right;"/>
