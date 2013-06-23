@@ -168,13 +168,8 @@ class UserController extends Controller {
         $formBuilder = $this->createFormBuilder($user, array(
                     'validation_groups' => $formValidationGroups
                 ))
-                ->add('name')
-                ->add('email', 'repeated', array(
-                    'type' => 'email',
-                    'first_name' => 'Email',
-                    'second_name' => 'ReEmail',
-                    'invalid_message' => "The emails don't match",
-                ))
+                ->add('name', null, array('required' => FALSE))
+                ->add('email')
                 ->add('userPassword', 'repeated', array(
             'type' => 'password',
             'first_name' => 'Password',

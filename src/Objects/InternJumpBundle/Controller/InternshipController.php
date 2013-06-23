@@ -124,6 +124,7 @@ class InternshipController extends Controller {
 
             $cvs = $em->getRepository('ObjectsInternJumpBundle:CV')->getAllCvs($user->getId());
             //print_r($cvs);
+            $categ = array();
             if ($cvs) {//if student Has CVs
                 //echo "found cvs <br>";
                 foreach ($cvs as $cv) {
