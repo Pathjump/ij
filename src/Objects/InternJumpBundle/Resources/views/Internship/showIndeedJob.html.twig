@@ -39,7 +39,7 @@
 
 
                             <div class="box-b links">
-                                <a class="btn btn-primary large pull-right apply" target="_blank" href="{{jobDetails.url}}">Offsite Application</a>
+                                <a class="btn btn-primary large pull-right apply" href="{{ path('indeed_job_apply',{'jobkey' : jobDetails.jobkey}) }}">Offsite Application</a>
                                 <div class="clearfix"></div>
                             </div><!--box-b-->
 
@@ -60,7 +60,7 @@
                                         </div><!--box-b--->
 
                                         <div class="box-b links">
-                                            <a class="btn btn-primary large pull-right apply" target="_blank" href="{{jobDetails.url}}" >Offsite Application</a> <h4 class=" text-center pull-right">Apply to this position!</h4>
+                                            <a class="btn btn-primary large pull-right apply" href="{{ path('indeed_job_apply',{'jobkey' : jobDetails.jobkey}) }}" >Offsite Application</a> <h4 class=" text-center pull-right">Apply to this position!</h4>
                                             <div class="clearfix"></div>
                                         </div>
 

@@ -68,3 +68,7 @@ show_indeed_job:
 fb_show_indeed_job:
     pattern:  /fb_indeed/{jobkey}/show
     defaults: { _controller: "ObjectsInternJumpBundle:Internship:fb_showIndeedJob" }
+
+indeed_job_apply:
+    pattern:  /indeed/{jobkey}/apply
+    defaults: { _controller: "ObjectsInternJumpBundle:Internship:indeedJobApply" }

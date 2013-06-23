@@ -91,6 +91,26 @@ class InternshipController extends Controller {
     }
 
     /**
+     * this function used to apply on indeed job
+     * @author ahmed
+     * @param type $jobkey
+     */
+    public function indeedJobApplyAction($jobkey){
+        //get the job details
+        $jobDetails = $this->getIndeedJob($jobkey);
+        if (!$jobDetails['jobtitle']) {
+            $message = $this->container->getParameter('internship_not_found_error_msg');
+            return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                        'message' => $message,));
+        }
+
+        return $this->render('ObjectsInternJumpBundle:Internship:indeedJobApply.html.twig', array(
+                    'jobDetails' => $jobDetails
+        ));
+    }
+
+    
+    /**
      * show indeed job
      * @author ahmed
      * @param type $jobkey
