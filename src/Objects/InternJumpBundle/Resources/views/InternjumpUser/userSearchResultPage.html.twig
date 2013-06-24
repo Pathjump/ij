@@ -47,7 +47,7 @@
                                             </div>
                                             <div class="span4">
                                             	<div class="Area">{{ job.city }}  ,  {%if job.state %}{{ job.state }}  ,{% endif %}  {{job.getCountryName()}}</div>
-                                                <div class="date muted"><b style="color: black"><i class="icon-time"></i>Posted at:</b> {{job.createdAt|date('d-m-Y h:i:s')}}</div>
+                                                <div class="date muted">{#<b style="color: black"><i class="icon-time"></i>Posted at:</b>#} {{job.createdAt|date('d-m-Y h:i:s')}}</div>
                                                 <a href="javascript:void(0)"><i class="icon-calendar"></i> Active from:{{job.activeFrom|date('j F, Y')}}</a><br/>
                                                 <a href="javascript:void(0)"><i class="icon-calendar"></i> Active to:{{job.activeTo|date('j F, Y')}}</a><br/>
                                                 <!-- <a href="javascript:void(0)"><i class="icon-pencil"></i> Position type</a> -->
@@ -65,7 +65,7 @@
                                             </div>
                                             <div class="span4">
                                             	<div class="Area">{{j['city']}}  ,  {{j['state']}},  {{j['country']}}</div>
-                                                <div class="date muted"><b style="color: black"><i class="icon-time"></i>Posted at:</b> {{j['date']|date('d-m-Y h:i:s')}}</div>
+                                                <div class="date muted">{#<b style="color: black"><i class="icon-time"></i>Posted at:</b>#} {{j['date']|date('d-m-Y h:i:s')}}</div>
                                                 <a href="javascript:void(0)"><i class="icon-calendar"></i> Active form: {{j['formattedRelativeTime']}}</a><br/>
                                                 <!-- <a href="javascript:void(0)"><i class="icon-pencil"></i> Position type</a> -->
                                             </div>
