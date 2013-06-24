@@ -17,7 +17,7 @@
             <div class="span5 pull-right">
 
                 <div class="Worth-box">
-                    <h4>How much are they Worth? </h4>
+                    <h4>How Much Are They Worth? </h4>
                     <div class="Worth-content">
                         <ul class="thumb-a">
                             {% if worthFrom == 'automatic' %}
@@ -50,7 +50,7 @@
                 </div><!--Worth-conten--->
                 {% if not is_granted('ROLE_NOTACTIVE_COMPANY') %}
                 <div class="Find-Statment">
-                    Find out how much you are WORTH?
+                    Find out how much you are WORTH!
                     <a href="{{path('howMuchAreYouWorth')}}">Start now</a>
                 </div><!--Find-Statment--->
                 {% endif %}

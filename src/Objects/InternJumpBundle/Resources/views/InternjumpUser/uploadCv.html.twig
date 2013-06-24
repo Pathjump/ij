@@ -2,7 +2,7 @@
 {% block title %}Cv Upload{% endblock %}
 
 
-{% block pageTitle %}Cv Upload{% endblock %}
+{% block pageTitle %}Upload Resume{% endblock %}
 
 {% block body %}
 {% if form_errors(form) %}
@@ -13,7 +13,7 @@
 {% endif %}
 <div class="container Main-content">
     <div class="Student">
-        <h3>Cv Upload</h3>
+        <h3>Upload Resume</h3>
         <p></p>
         <div class="row-fluid show-grid">
             <div class="span12">
@@ -22,12 +22,10 @@
                         <legend></legend>
                         <div class="Sign-Up">
                             <ul>
-                                <li>Download Cv Template From <a href="{{asset('cvTemplate.doc')}}">Here</a></li>
-                                <li>Fill The Template With Your Data</li>
-                                <li>Upload The Template</li>
+                                <li>Upload your exisiting resume to auto-fill your InternJump profile.</li>
+                                <li>If you choose to use one of our templates, download the template (<a href="{{asset('cvTemplate.doc')}}">Here</a>), fill in the template with your information and then upload the template</li>
                             </ul>
                             <div class="controls">
-                                <label>User Name</label>
                                 {{ form_widget(form.file) }}
                                 {% if form_errors(form.file) %}
                                 <div class="alert alert-error">

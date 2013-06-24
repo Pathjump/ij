@@ -75,7 +75,7 @@
                             {% if entity.active and jobAvailabilityFlag == 1 and is_granted('ROLE_USER') and addedBeforeFlag == 1%}
                                 <a class="btn btn-primary large pull-right apply" href="javascript:void(0)" id="jobApply">apply</a>
                             {% elseif not is_granted('ROLE_NOTACTIVE_COMPANY') and not is_granted('ROLE_NOTACTIVE') %}
-                                <a class="btn btn-primary large pull-right apply" href="javascript:void(0)" id="notActiveUserApply">apply</a>
+                                <a class="btn btn-primary large pull-right apply" href="{{ path('user_signup') }}">apply</a>
                             {% endif %}
 
                             {% if addedBeforeFlag == 0 and is_granted('ROLE_USER') %}
@@ -156,7 +156,7 @@
                                         </div>
                     {% elseif not is_granted('ROLE_NOTACTIVE_COMPANY') and not is_granted('ROLE_NOTACTIVE')  %}
                                         <div class="box-b links">
-                                            <a class="btn btn-primary large pull-right apply" href="javascript:void(0)" id="notActiveUserApply">apply</a> <h4 class=" text-center pull-right">Apply to this position!</h4>
+                                            <a class="btn btn-primary large pull-right apply" href="{{ path('user_signup') }}">apply</a> <h4 class=" text-center pull-right">Apply to this position!</h4>
                                             <div class="clearfix"></div>
                                         </div>
                     {% endif %}
