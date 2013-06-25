@@ -328,6 +328,7 @@ a:hover{
     color:#090020;
     text-align:center;
     padding:10px;
+	background:none repeat scroll 0 0 #E9E9E9;
 }
 .Find-Statment a{
     font-size:29px;
@@ -442,6 +443,11 @@ a:hover{
     max-height:200px;
     overflow: scroll;
 }
+.Home-Search-form .sbOptions {
+	 box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    max-height: 230px !important;
+    overflow-x: hidden;
+}
 .ui-menu {
     display: block;
     float: left;
@@ -500,9 +506,7 @@ a:hover{
     box-shadow:none;
     opacity:0.6
 }/*=============================== Feaetured-Companies =========================*/
-.intrens{
-    border-top:40px solid #212c8e;
-}
+
 .intrens .row-fluid .span7{
     margin-top:-40px;
 }
@@ -518,13 +522,13 @@ a:hover{
     margin-right:50px;
     margin-bottom:40px;
 }
-.Feaetured-Companies h3,.Latest-In h3{
+.Feaetured-Companies h3,.Latest-In h3,.Recently-Hired h3{
     font-family: 'Roboto Condensed', sans-serif;
     font-size:23px;
     font-weight:normal;
     margin:20px 0
 }
-.Feaetured-Companies h3 span,.Latest-In h3 span{
+.Feaetured-Companies h3 span,.Latest-In h3 span,.Recently-Hired h3 span{
     color:#0eb4ea;
     font-family: 'Roboto', sans-serif;
     font-weight:700;
@@ -578,7 +582,7 @@ a:hover{
 .footer{
     border-top:2px solid #4d90fe;
     padding:20px 0 10px;
-    margin-top:40px;color:#2e2b85;
+    margin-top:20px;color:#2e2b85;
     background:#f6f6f6;
 }
 .nav-footer  li {
@@ -1883,7 +1887,7 @@ form select{
 }#myModal .modal-header{
     padding:0;
 }.Search-box {
-    box-shadow: 0 0 1px rgba(0, 0, 0, 0.5) inset;
+   /* box-shadow: 0 0 1px rgba(0, 0, 0, 0.5) inset;*/
     padding: 22px 0 5px;
 }#yourImage {
     clear: left;
@@ -1936,7 +1940,21 @@ form select{
 }
 .span6 .row-fluid .span12{
 	width:98% !important;
-}.Facbook-App{ max-width:1000px;}/*----------------------------
+}.Facbook-App{ max-width:1000px;}
+
+
+.Search-Internships .btn {
+    border-radius: 0 15px 15px 0 !important;
+    margin-left: -11px !important;
+}
+.Search-student .tab-content {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #DBDBDB;
+    margin: -21px 0;
+    overflow: inherit !important;
+    padding: 10px;
+}
+/*----------------------------
          loading image
 ----------------------------*/
 .loading {
@@ -2048,18 +2066,18 @@ table .ez-checkbox, td.defaultP .ez-checked {
      height: auto;
     padding: 0;
     width: auto !important;
-        
-   
+
+
 }
 .ui-widget{
-    font-size: 82% !important; 
+    font-size: 82% !important;
 }
 dd {
     margin-left: 25px !important;
 }
 .ui-timepicker-div{
     padding-right: 10px  !important;
-    
+
 }
 .ui-timepicker-div dl{
     margin:0  !important;
@@ -2068,11 +2086,116 @@ dd {
     width: 100% !important;
     background: #fff !important;
     margin-bottom: 10px !important;
-} 
+}
 
 .addTask {background: none repeat scroll 0 0 #F7F7F7;
     padding: 25px 20px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.InternJumb-bar{
+	padding:5px 0;
+	border-bottom:3px solid #4D90FE;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.InternJumb-bar .btn{
+	margin-top:10px;
+}
+
+.carousel-control {
+	left:inherit;
+	top:-35px;
+    border: 0 none;
+    border-radius: 0 0 0 0;
+    color: #FFFFFF;
+    height: 32px;
+    line-height: 22px;
+    width: 24px;
+	background-image:url(../img/arrows.png);
+	background-color: transparent;
+	font-size:0;
+
+}
+
+.carousel-control.left{
+    background-position: 0 0;
+    right: 23px;
+}
+.carousel-control.right{
+	right:0;
+	    background-position: -20px 0;
+
+}
+
+
+.Recently-Hired{
+	background:#e7e7e7;
+}
+
+.Recently-Hired .carousel-control.left{
+    background-position: 0 -29px;
+}
+.Recently-Hired .carousel-control.right{
+	    background-position: -20px -29px;
+
+}
+
+.l-Search {
+	position:relative;
+	background:url(../img/bg2.png) no-repeat;
+	background-size:100% auto;
+}
+.Home-Search-form img{
+	position:absolute;
+	top:0
+}
+
+
+.landing .Start-form{
+	background:none;
+	margin:0;
+	padding:0;
+}
+
+
+.landing  .Form-Text{
+	margin:0;
+	padding:0;
+}
+
+.landing  .thumb-a li h5,.landing  .thumb-a li p {
+	margin:0;
+}
+
+.landing  .thumb-a li p{
+	font-size:14px;
+}
+
+.landing  .Home-Search-form .sbSelector{
+font-size: 12px;
+    margin-bottom: 15px;
+
+}
+
+.landing .Start-btn{
+	font-size:14px
+}
+
+.connect-interns{
+	background:#bcd4d8;
+	padding:10px;
+	color:#4347cd;
+}
+
+.connect-interns h4{
+	margin:0 0 10px;
+	color:#000;
+}
+.connect-interns a{
+	text-decoration:underline;
+	color:#4347cd;
+	padding:3px 0 0 0;
 }
 
 

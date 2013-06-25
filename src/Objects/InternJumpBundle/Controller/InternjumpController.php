@@ -1146,7 +1146,7 @@ class InternjumpController extends Controller {
         //get featured companies
         $featuredCompanies = $companyRepo->findBy(array('isHome' => 1));
         //get latest internships
-        $latestInternShips = $internshipRepo->getLatestinternShips(3);
+//        $latestInternShips = $internshipRepo->getLatestinternShips(3);
         //get Recently Hired interns
         $latestHiredUsers = $internshipRepo->getLatestHiredUsers(4);
         //all companies
@@ -1161,7 +1161,6 @@ class InternjumpController extends Controller {
         return $this->render('ObjectsInternJumpBundle:Internjump:homePage.html.twig', array(
                     'worthUsers' => $worthUsers,
                     'featuredCompanies' => $featuredCompanies,
-                    'latestInternShips' => $latestInternShips,
                     'latestHiredUsers' => $latestHiredUsers,
 //                    'allCompanies' => $allCompanies,
                     'allCities' => $allCities,
