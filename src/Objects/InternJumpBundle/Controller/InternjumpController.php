@@ -1158,16 +1158,33 @@ class InternjumpController extends Controller {
         //all category
         $allCategory = $categoryRepo->findAll();
 
-        return $this->render('ObjectsInternJumpBundle:Internjump:homePage.html.twig', array(
-                    'worthUsers' => $worthUsers,
-                    'featuredCompanies' => $featuredCompanies,
-                    'latestHiredUsers' => $latestHiredUsers,
+
+        //check for 2nd home page
+        $landingPage = $this->getRequest()->get('code');
+
+        if ($landingPage == 1) {
+            return $this->render('ObjectsInternJumpBundle:Internjump:landingHomePage_1.html.twig', array(
+                        'worthUsers' => $worthUsers,
+                        'featuredCompanies' => $featuredCompanies,
+                        'latestHiredUsers' => $latestHiredUsers,
 //                    'allCompanies' => $allCompanies,
-                    'allCities' => $allCities,
-                    'allState' => $allState,
-                    'allCategory' => $allCategory,
-                    'worthFrom' => $worthFrom
-        ));
+                        'allCities' => $allCities,
+                        'allState' => $allState,
+                        'allCategory' => $allCategory,
+                        'worthFrom' => $worthFrom
+            ));
+        } else {
+            return $this->render('ObjectsInternJumpBundle:Internjump:homePage.html.twig', array(
+                        'worthUsers' => $worthUsers,
+                        'featuredCompanies' => $featuredCompanies,
+                        'latestHiredUsers' => $latestHiredUsers,
+//                    'allCompanies' => $allCompanies,
+                        'allCities' => $allCities,
+                        'allState' => $allState,
+                        'allCategory' => $allCategory,
+                        'worthFrom' => $worthFrom
+            ));
+        }
     }
 
     /**
