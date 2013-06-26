@@ -2412,12 +2412,12 @@ class InternjumpUserController extends Controller {
         $state = $request->get("state");
         $category = $request->get("industry");
         $keyword = $request->get("keyword");
-
+        $company = $request->get("company");
 
         //Get city Repo
         $cityRepo = $em->getRepository('ObjectsInternJumpBundle:City');
 
-        if ($jobType || $category || $city || $state || $keyword) {
+        if ($jobType || $category || $city || $state || $keyword || $company) {
             //set the check to be true
             $check = true;
 
@@ -2437,13 +2437,16 @@ class InternjumpUserController extends Controller {
             if (!$keyword) {
                 $keyword = "empty";
             }
+            if (!$company) {
+                $company = "empty";
+            }
 
             //get number of jobs per page
             $jobsPerPage = $this->container->getParameter('jobs_per_search_results_page');
 
             $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
             //get jobs search results array
-            $userSearchResults = $internshipRepo->getJobsSearchResult($keyword, "empty", $city, $state, $category, "empty", "empty", "empty", $jobType, 1, $jobsPerPage);
+            $userSearchResults = $internshipRepo->getJobsSearchResult($keyword, "empty", $city, $state, $category, $company, "empty", "empty", $jobType, 1, $jobsPerPage);
 
             //Limit the details to only 200 character
             foreach ($userSearchResults as &$job) {
@@ -2456,7 +2459,7 @@ class InternjumpUserController extends Controller {
             }
             /* pagenation part */
             //get count of all search result jobs
-            $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($keyword, "empty", $city, $state, $category, "empty", "empty", "empty", $jobType, 1, null));
+            $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($keyword, "empty", $city, $state, $category, $company, "empty", "empty", $jobType, 1, null));
 
             $lastPageNumber = (int) ($userSearchResultsCount / $jobsPerPage);
             if (($userSearchResultsCount % $jobsPerPage) > 0) {
@@ -2554,6 +2557,10 @@ class InternjumpUserController extends Controller {
             if ($sessionData['jobt'] != "empty") {
                 $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($sessionData['jobt']));
             }
+            if($sessionData['company'] != "empty"){
+                $company =$companyRepo->findOneBy(array('loginName' => $sessionData['company']));
+                $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($company->getId()));
+            }
         }
 
         /*         * *************************************************************************** */
@@ -2579,7 +2586,12 @@ class InternjumpUserController extends Controller {
             if ($jobType != "empty") {
                 $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($jobType));
             }
+            if($company != "empty"){
+                $company =$companyRepo->findOneBy(array('loginName' => $company));
+                $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($company->getId()));
+            }
         }
+
 
         //create a search form
         $formBuilder = $this->createFormBuilder()
@@ -2603,7 +2615,7 @@ class InternjumpUserController extends Controller {
                     'lastPageNumber' => $lastPageNumber,
                     'title' => "empty",
                     'country' => "empty",
-                    'company' => "empty",
+                    'company' => $company,
                     'city' => $city,
                     'state' => $state, 'category' => $category, 'lang' => "empty", 'jobtype' => $jobType, 'keyword' => $keyword,
         ));
@@ -2651,12 +2663,12 @@ class InternjumpUserController extends Controller {
         $state = $request->get("state");
         $category = $request->get("industry");
         $keyword = $request->get("keyword");
-
+        $company = $request->get("company");
 
         //Get city Repo
         $cityRepo = $em->getRepository('ObjectsInternJumpBundle:City');
 
-        if ($jobType || $category || $city || $state || $keyword) {
+        if ($jobType || $category || $city || $state || $keyword || $company) {
             //set the check to be true
             $check = true;
 
@@ -2676,13 +2688,16 @@ class InternjumpUserController extends Controller {
             if (!$keyword) {
                 $keyword = "empty";
             }
+            if (!$company) {
+                $company = "empty";
+            }
 
             //get number of jobs per page
             $jobsPerPage = $this->container->getParameter('jobs_per_search_results_page');
 
             $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
             //get jobs search results array
-            $userSearchResults = $internshipRepo->getJobsSearchResult($keyword, "empty", $city, $state, $category, "empty", "empty", "empty", $jobType, 1, $jobsPerPage);
+            $userSearchResults = $internshipRepo->getJobsSearchResult($keyword, "empty", $city, $state, $category, $company, "empty", "empty", $jobType, 1, $jobsPerPage);
 
             //Limit the details to only 200 character
             foreach ($userSearchResults as &$job) {
@@ -2695,7 +2710,7 @@ class InternjumpUserController extends Controller {
             }
             /* pagenation part */
             //get count of all search result jobs
-            $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($keyword, "empty", $city, $state, $category, "empty", "empty", "empty", $jobType, 1, null));
+            $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($keyword, "empty", $city, $state, $category, $company, "empty", "empty", $jobType, 1, null));
 
             $lastPageNumber = (int) ($userSearchResultsCount / $jobsPerPage);
             if (($userSearchResultsCount % $jobsPerPage) > 0) {
@@ -2793,6 +2808,10 @@ class InternjumpUserController extends Controller {
             if ($sessionData['jobt'] != "empty") {
                 $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($sessionData['jobt']));
             }
+            if($sessionData['company'] != "empty"){
+                $company =$companyRepo->findOneBy(array('loginName' => $sessionData['company']));
+                $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($company->getId()));
+            }
         }
 
         /*         * *************************************************************************** */
@@ -2818,6 +2837,10 @@ class InternjumpUserController extends Controller {
             if ($jobType != "empty") {
                 $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($jobType));
             }
+            if($company != "empty"){
+                $company =$companyRepo->findOneBy(array('loginName' => $company));
+                $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($company->getId()));
+            }
         }
 
         //create a search form
@@ -2841,7 +2864,7 @@ class InternjumpUserController extends Controller {
                     'lastPageNumber' => $lastPageNumber,
                     'title' => "empty",
                     'country' => "empty",
-                    'company' => "empty",
+                    'company' => $company,
                     'city' => $city,
                     'state' => $state, 'category' => $category, 'jobtype' => $jobType, 'lang' => "empty", 'jobtype' => $jobType, 'keyword' => $keyword,
         ));
