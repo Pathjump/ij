@@ -2558,8 +2558,7 @@ class InternjumpUserController extends Controller {
                 $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($sessionData['jobt']));
             }
             if($sessionData['company'] != "empty"){
-                $company =$companyRepo->findOneBy(array('loginName' => $sessionData['company']));
-                $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($company->getId()));
+                $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($sessionData['company']));
             }
         }
 
