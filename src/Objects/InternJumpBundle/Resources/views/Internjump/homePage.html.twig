@@ -151,7 +151,7 @@
                             <div class="row-fluid">
                                 {% endif %}
                                     <div class="span2">
-                                        <a href="{{path('internship',{'loginName' : company.loginName})}}" class="thumbnail">
+                                        <a href="{{path('user_search_page',{'company' : company.loginName})}}" class="thumbnail">
                                             <img src="{{company.getTimThumbUrl(130,97)}}"  width="130" height="97">
                                         </a>
                                     </div>
