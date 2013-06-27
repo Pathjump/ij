@@ -15,7 +15,7 @@ Job Search
 <div class="container Main-content">
 
       <div class="Search-student">
-            	<form>
+                  <form>
                 	<fieldset>
 
 
@@ -27,15 +27,19 @@ Job Search
                                     <div id="basic" class="tab-pane fade active in">
                                         <p>
                                      <div class="controls  row-fluid show-grid">
-                                         <div class="span4 ">
-                                <label>Job Type</label>
-                                {{form_widget(form.jobtype, { 'attr': {'class': 'chzn-select', 'id' : 'jobtype_search'} })}}
-                            </div>
-                                            <div class="span4">
-                                                <label>Industry</label>
-                                {{form_widget(form.category, { 'attr': {'class': 'chzn-select','id' : 'category_search'} })}}
-                                            </div>
-                                             </div>
+                                        <div class="span4 ">
+                                			<label>Job Type</label>
+                               					{{form_widget(form.jobtype, { 'attr': {'class': 'chzn-select', 'id' : 'jobtype_search'} })}}
+                            			</div>
+                                        <div class="span4 ">
+                                            <label>State</label>        
+                                            {{form_widget(form.state, { 'attr': {'class': 'chzn-select', 'id' : 'state_search'} })}}
+                                        </div>                                        
+                                        <div class="span4">
+                                        	<label>Industry</label>
+                                				{{form_widget(form.category, { 'attr': {'class': 'chzn-select','id' : 'category_search'} })}}
+                                        </div>
+                                     </div>
                                     </p>
 
                                                   <div class="Search-Internships Search-box ">
@@ -53,16 +57,14 @@ Job Search
                                         <p>
                                             <div class="controls">
 
-                                            <label>Location</label>
 
                                             <div class="row-fluid show-grid">
                                                 <div class="span4">
+                                            <label>Location</label>    
                                             {{form_widget(form.country, { 'attr': {'class': 'chzn-select', 'id' : 'country_search'} })}}
                                                     </div>{#{{form_widget(form.city, { 'attr': {'class': 'chzn-select','style':'width:160px;', 'id' : 'city_search'} })}}#}
                                                     <div class="span4 ">
-                                            {{form_widget(form.state, { 'attr': {'class': 'chzn-select', 'id' : 'state_search'} })}}
-                                                        </div>
-                                                        <div class="span4 ">
+                                            <label>City</label>
                                             {{form_widget(form.city, { 'attr': { 'id' : 'city_search', 'placeholder': 'Type city'} })}}
                                                             </div>
 
