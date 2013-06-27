@@ -144,13 +144,13 @@
                     <div class="active item">
                         <div class="row-fluid">
                     {% for company in featuredCompanies %}
-                                {% if loop.index%7 == 0 %}
+                                {% if loop.index%5 == 0 %}
                             </div>
                         </div>
                         <div class="item">
                             <div class="row-fluid">
                                 {% endif %}
-                                    <div class="span2">
+                                    <div class="span3 text-center">
                                         <a href="{{path('user_search_page',{'company' : company.loginName})}}" class="thumbnail">
                                             <img src="{{company.getTimThumbUrl(130,97)}}"  width="130" height="97">
                                         </a>
@@ -317,7 +317,7 @@
                 $(document).ready(function() {
                     $('#homeSearchJob').click(function() {
                         //slider
-                        $('.carousel').carousel({
+                        $('#myCarousel').carousel({
                             interval: 20000
                         });
     					$('.carousel').carousel('cycle'); // to auto cycle through all slides
