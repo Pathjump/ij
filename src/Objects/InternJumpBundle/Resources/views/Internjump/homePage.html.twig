@@ -4,6 +4,77 @@
 
 {%block body%}
 
+<div class="Start-form">
+    <div class="container">
+
+        <div class="row-fluid show-grid">
+            <div class="span5">
+                <div class="Form-Text">
+                    <h2><span>Jump</span> Start<br/> Your Career</h2>
+                    <p>We know you're ambitious and want that great internship that will help launch your career.
+                        Look no further,
+                        InternJump works with companies in the leading industries and makes applying and managing internships an easy process.</p>
+                </div>
+
+
+            </div>
+            <div class="span7">
+
+                <div class="Home-Search-form">
+                    <form>
+                        <select  Class="Choosen" id="companyFilter">
+                            <option value="">job type</option>
+                            <option value="Internship">Internship</option>
+                            <option value="Entry Level">Entry Level</option>
+                        </select>
+
+                       {# {% if allCities |length > 0 %}
+                        <select  Class="Choosen" id="cityFilter">
+                            <option value="">city</option>
+                            {% for city in allCities %}
+                            <option value="{{city.id}}">{{city}}</option>
+                            {% endfor %}
+                        </select>
+                        {% endif %}#}
+
+
+
+                        {% if allState |length > 0 %}
+                        <select  Class="Choosen" id="stateFilter">
+                            <option value="">state</option>
+                            {% for state in allState %}
+                            <option value="{{state}}">{{state}}</option>
+                            {% endfor %}
+                        </select>
+                        {% endif %}
+
+                        {% if allCategory |length > 0 %}
+                        <select  Class="Choosen" id="industryFilter">
+                            <option value="">INDUSTRY</option>
+                            {% for category in allCategory %}
+                            <option value="{{category.id}}">{{category}}</option>
+                            {% endfor %}
+                        </select>
+                        {% endif %}
+
+                        <input id="keywordFilter" placeholder="Keyword" type="text" style="width: 94%;background: #3882BD;color: #FFFFFF;font-family: Arial,Helvetica,sans-serif;font-size: 17px;"/>
+
+                        <div class="Btn-box">
+
+                            <input class="Start-btn" type="button" id="homeSearchJob" value="start  now"/>
+                        </div>
+
+                    </form>
+
+                </div>
+                <img src="{{asset('img/bg2.png')}}" />
+
+            </div>
+        </div><!--row-fluid-->
+
+    </div><!--container--->
+</div><!--Start-form-->
+
 <div class="Your-worth">
     <div class="container">
 
@@ -60,77 +131,6 @@
 
         </div><!--container-->
     </div><!--Your-worth-->
-
-    <div class="Start-form">
-        <div class="container">
-
-            <div class="row-fluid show-grid">
-                <div class="span5">
-                    <div class="Form-Text">
-                        <h2><span>Jump</span> Start<br/> Your Career</h2>
-                        <p>We know you're ambitious and want that great internship that will help launch your career.
-                            Look no further,
-                            InternJump works with companies in the leading industries and makes applying and managing internships an easy process.</p>
-                    </div>
-
-
-                </div>
-                <div class="span7">
-
-                    <div class="Home-Search-form">
-                        <form>
-                            <select  Class="Choosen" id="companyFilter">
-                                <option value="">job type</option>
-                                <option value="Internship">Internship</option>
-                                <option value="Entry Level">Entry Level</option>
-                            </select>
-
-                       {# {% if allCities |length > 0 %}
-                        <select  Class="Choosen" id="cityFilter">
-                            <option value="">city</option>
-                            {% for city in allCities %}
-                            <option value="{{city.id}}">{{city}}</option>
-                            {% endfor %}
-                        </select>
-                        {% endif %}#}
-
-
-
-                        {% if allState |length > 0 %}
-                            <select  Class="Choosen" id="stateFilter">
-                                <option value="">state</option>
-                            {% for state in allState %}
-                                <option value="{{state}}">{{state}}</option>
-                            {% endfor %}
-                            </select>
-                        {% endif %}
-
-                        {% if allCategory |length > 0 %}
-                            <select  Class="Choosen" id="industryFilter">
-                                <option value="">INDUSTRY</option>
-                            {% for category in allCategory %}
-                                <option value="{{category.id}}">{{category}}</option>
-                            {% endfor %}
-                            </select>
-                        {% endif %}
-
-                            <input id="keywordFilter" placeholder="Keyword" type="text" style="width: 94%;background: #3882BD;color: #FFFFFF;font-family: Arial,Helvetica,sans-serif;font-size: 17px;"/>
-
-                            <div class="Btn-box">
-
-                                <input class="Start-btn" type="button" id="homeSearchJob" value="start  now"/>
-                            </div>
-
-                        </form>
-
-                    </div>
-                    <img src="{{asset('img/bg2.png')}}" />
-
-                </div>
-            </div><!--row-fluid-->
-
-        </div><!--container--->
-    </div><!--Start-form-->
 
     {% if featuredCompanies | length > 0 %}
     <div class="Feaetured-Companies">
@@ -318,7 +318,7 @@
                         //slider
                         $('.carousel').carousel({
                             interval: 20000
-                            });
+                        });
 
                         var company = $('#companyFilter').val();
                         var city = $('#cityFilter').val();
