@@ -136,7 +136,7 @@ class InternjumpUserController extends Controller {
      * @param type $jobLocation
      * @return false | array
      */
-    private function searchForIndeedJobs($searchString = null, $start = 1, $limit = 10, $jobLocation = null, $jobType = "internship") {
+    private function searchForIndeedJobs($searchString = null, $start = 1, $limit = 10, $jobLocation = null, $jobType = "internship", $company = "empty") {
         $userAgent = 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:16.0) Gecko/20100101 Firefox/16.0';
         $start--;
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
@@ -149,7 +149,16 @@ class InternjumpUserController extends Controller {
         if ($jobType == "empty" || $jobType == null) {
             $jobType = "internship";
         }
-        $apiSearchString = 'http://api.indeed.com/ads/apisearch?publisher=5399161479070076&jt=' . urlencode($jobType) . '&v=2&format=json&latlong=1&useragent=' . urlencode($userAgent) . '&userip=' . urlencode($userIp) . '&start=' . $start . '&limit=' . $limit . '&q=' . urlencode($searchString) . '&sort=date';
+
+        if($searchString){ $searchString = urlencode ($searchString);}
+        if( $company != "empty"){
+            if( $searchString != null && $searchString != "empty" )
+                $searchString = urlencode ($company)."+".$searchString;
+            else
+                $searchString = urlencode ($company);
+        }
+        $apiSearchString = 'http://api.indeed.com/ads/apisearch?publisher=5399161479070076&jt=' . urlencode($jobType) . '&v=2&format=json&latlong=1&useragent=' . urlencode($userAgent) . '&userip=' . urlencode($userIp) . '&start=' . $start . '&limit=' . $limit . '&q=' . $searchString . '&sort=date'; //urlencode($searchString)
+        
         if ($jobLocation) {
             $apiSearchString .= '&l=' . urlencode($jobLocation);
         }
@@ -2382,7 +2391,6 @@ class InternjumpUserController extends Controller {
 //            return $this->redirect($this->generateUrl('login'));
 //        }
 
-
         $em = $this->getDoctrine()->getEntityManager();
 
         //Check data in session In case User pressed back button
@@ -2525,14 +2533,13 @@ class InternjumpUserController extends Controller {
         /*         * *************************************************************************** */
         //inspect if check been set to be true then set the defaults values of the form
         if ($sessionCheck) {
-
             if ($sessionData['title'] != "empty") {
 
             }
-            if ($sessionData['country'] != "empty") {
+            if ($sessionData['country'] != "empty" && $sessionData['country'] != '') {
                 $countryOptionsArr = array('choices' => $allCountriesArray, 'preferred_choices' => array($sessionData['country']));
             }
-            if ($sessionData['city'] != "empty") {
+            if ($sessionData['city'] != "empty" && $sessionData['city'] != '' ) {
                 //get the city name
                 $theCity = "";
                 if ($cityRepo->findOneBy(array('id' => $sessionData['city']))) {
@@ -2542,24 +2549,22 @@ class InternjumpUserController extends Controller {
                 else
                     $cityOptionsArr = array();
             }
-            if ($sessionData['state'] != "empty") {
+            if ($sessionData['state'] != "empty" && $sessionData['state'] != '') {
                 $stateOptionsArr = array('empty_value' => '--- choose State ---');
             }
-            if ($sessionData['category'] != "empty") {
+            if ($sessionData['category'] != "empty" && $sessionData['category'] != ''  ) {
                 $categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($sessionData['category']));
             }
-            if ($sessionData['company'] != "empty") {
+            if ($sessionData['company'] != "empty" && $sessionData['company'] != '' && !$request->get("company")) {
                 $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($sessionData['company']));
             }
-            if ($sessionData['lang'] != "empty") {
+            if ($sessionData['lang'] != "empty" && $sessionData['lang'] != '') {
                 $allLanguagesArray = array('class' => 'ObjectsInternJumpBundle:Language', 'property' => 'name', 'preferred_choices' => array($sessionData['lang']));
             }
-            if ($sessionData['jobt'] != "empty") {
+            if ($sessionData['jobt'] != "empty" && $sessionData['jobt'] != '') {
                 $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($sessionData['jobt']));
             }
-            if($sessionData['company'] != "empty"){
-                $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($sessionData['company']));
-            }
+        
         }
 
         /*         * *************************************************************************** */
@@ -2586,8 +2591,12 @@ class InternjumpUserController extends Controller {
                 $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($jobType));
             }
             if($company != "empty"){
-                $company =$companyRepo->findOneBy(array('loginName' => $company));
-                $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($company->getId()));
+                $companyObj =$companyRepo->findOneBy(array('loginName' => $company));
+                if($companyObj){
+                    $companyId = $companyObj->getId();
+                    $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($companyId));
+                }
+                
             }
         }
 
@@ -2601,10 +2610,10 @@ class InternjumpUserController extends Controller {
                 ->add('category', 'choice', $categoryOptionsArr)
                 ->add('company', 'choice', $companyOptionsArr)
                 ->add('language', 'entity', $allLanguagesArray)
-                ->add('jobtype', 'choice', $jobTypeOptionsArr);
+                ->add('jobtype', 'choice', $jobTypeOptionsArr)
+                ;
         //create the form
         $form = $formBuilder->getForm();
-
 
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:userSearchPage.html.twig', array(
                     'form' => $form->createView(),
@@ -2775,14 +2784,13 @@ class InternjumpUserController extends Controller {
         /*         * *************************************************************************** */
         //inspect if check been set to be true then set the defaults values of the form
         if ($sessionCheck) {
-
             if ($sessionData['title'] != "empty") {
 
             }
-            if ($sessionData['country'] != "empty") {
+            if ($sessionData['country'] != "empty" && $sessionData['country'] != '') {
                 $countryOptionsArr = array('choices' => $allCountriesArray, 'preferred_choices' => array($sessionData['country']));
             }
-            if ($sessionData['city'] != "empty") {
+            if ($sessionData['city'] != "empty" && $sessionData['city'] != '' ) {
                 //get the city name
                 $theCity = "";
                 if ($cityRepo->findOneBy(array('id' => $sessionData['city']))) {
@@ -2792,25 +2800,22 @@ class InternjumpUserController extends Controller {
                 else
                     $cityOptionsArr = array();
             }
-            if ($sessionData['state'] != "empty") {
+            if ($sessionData['state'] != "empty" && $sessionData['state'] != '') {
                 $stateOptionsArr = array('empty_value' => '--- choose State ---');
             }
-            if ($sessionData['category'] != "empty") {
+            if ($sessionData['category'] != "empty" && $sessionData['category'] != ''  ) {
                 $categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($sessionData['category']));
             }
-            if ($sessionData['company'] != "empty") {
+            if ($sessionData['company'] != "empty" && $sessionData['company'] != '' && !$request->get("company")) {
                 $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($sessionData['company']));
             }
-            if ($sessionData['lang'] != "empty") {
+            if ($sessionData['lang'] != "empty" && $sessionData['lang'] != '') {
                 $allLanguagesArray = array('class' => 'ObjectsInternJumpBundle:Language', 'property' => 'name', 'preferred_choices' => array($sessionData['lang']));
             }
-            if ($sessionData['jobt'] != "empty") {
+            if ($sessionData['jobt'] != "empty" && $sessionData['jobt'] != '') {
                 $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($sessionData['jobt']));
             }
-            if($sessionData['company'] != "empty"){
-                $company =$companyRepo->findOneBy(array('loginName' => $sessionData['company']));
-                $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($company->getId()));
-            }
+        
         }
 
         /*         * *************************************************************************** */
@@ -2837,8 +2842,12 @@ class InternjumpUserController extends Controller {
                 $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($jobType));
             }
             if($company != "empty"){
-                $company =$companyRepo->findOneBy(array('loginName' => $company));
-                $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($company->getId()));
+                $companyObj =$companyRepo->findOneBy(array('loginName' => $company));
+                if($companyObj){
+                    $companyId = $companyObj->getId();
+                    $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($companyId));
+                }
+                
             }
         }
 
@@ -2942,7 +2951,18 @@ class InternjumpUserController extends Controller {
                     $jobLocation = null;
                 }
             }
-            $apiJobsArr = $this->searchForIndeedJobs($searchString = $title1, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation, $jobt);
+            
+            //get company name if Exist
+            $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
+            $companyObj = $companyRepo->findOneBy(array('id' => $company));
+            if($companyObj){
+                $companyName = $companyObj->getloginName();
+            }
+            else
+            {
+                $companyName = $company;
+            }
+            $apiJobsArr = $this->searchForIndeedJobs($searchString = $title1, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation, $jobt, $companyName);
 
             foreach ($apiJobsArr['results'] as $key => $job) {
                 if ($job['state'] == '' || $job['city'] == '') {
@@ -2987,7 +3007,6 @@ class InternjumpUserController extends Controller {
         $session->set('searchQuery', $searchQuery);
 
         $session->set('page', $page);
-
         //to check if Ajax Request
 //        if (!$request->isXmlHttpRequest()) {
 //            return new Response("Faild");
@@ -3048,8 +3067,19 @@ class InternjumpUserController extends Controller {
                     $jobLocation = null;
                 }
             }
-            $apiJobsArr = $this->searchForIndeedJobs($searchString = $title, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation, $jobt);
-            // print_r($apiJobsArr);
+            
+            //get company name if Exist
+            $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
+            $companyObj = $companyRepo->findOneBy(array('id' => $company));
+            if($companyObj){
+                $companyName = $companyObj->getloginName();
+            }
+            else
+            {
+                $companyName = $company;
+            }
+            $apiJobsArr = $this->searchForIndeedJobs($searchString = $title1, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation, $jobt, $companyName);
+
             foreach ($apiJobsArr['results'] as $key => $job) {
                 if ($job['state'] == '' || $job['city'] == '') {
                     unset($apiJobsArr['results'][$key]);
