@@ -2956,7 +2956,7 @@ class InternjumpUserController extends Controller {
             $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
             $companyObj = $companyRepo->findOneBy(array('id' => $company));
             if($companyObj){
-                $companyName = $companyObj->getloginName();
+                $companyName = $companyObj->getName();
             }
             else
             {
@@ -3072,7 +3072,7 @@ class InternjumpUserController extends Controller {
             $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
             $companyObj = $companyRepo->findOneBy(array('id' => $company));
             if($companyObj){
-                $companyName = $companyObj->getloginName();
+                $companyName = $companyObj->getName();
             }
             else
             {
