@@ -311,6 +311,7 @@
 
 {% block javascripts %}
 {{parent()}}
+
             <script>
                 var searchJobsUrl = "{{path('user_search_page')}}";
                 $(document).ready(function() {
@@ -319,6 +320,7 @@
                         $('.carousel').carousel({
                             interval: 20000
                         });
+    					$('.carousel').carousel('cycle'); // to auto cycle through all slides
 
                         var company = $('#companyFilter').val();
                         var city = $('#cityFilter').val();
