@@ -122,7 +122,19 @@
         <div class="row-fluid show-grid">
             <div class="span7">
                 <div class="worth-img">
-                    <img src="{{asset('img/bg1.png')}}" />
+                    <img src="{{asset('img/find-your-worth.png')}}" />
+                    <div class="well">
+                        <h3>How Can I Maximize My Salary?</h3>
+                        <span style="color:#F00;"><strong>InternJump Can Help!</strong></span>
+                        <p>Find Your Worth is an innovative algorithm that allows you to see how
+                        much you are likely to earn after you graduate and more importantly how
+                        you can improve your salary!</p>
+                        <p>For instance, by changing your major, learning programming, or
+                        learning a foreign language you may be able to earn significantly more!</p>
+                        {% if not is_granted('ROLE_NOTACTIVE_COMPANY') %}
+                        	<p class="text-center"><a class="btn btn-success btn-large" href="{{path('howMuchAreYouWorth')}}">Find My Worth</a></p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
             {% if worthUsers | length > 0 %}
@@ -225,7 +237,7 @@
                                             </a>
                                             <div class="media-body">
                                                 <blockquote>
-                                                    <p>InternJump is a really easy way to search for internships and Jobs. I would recommend it as part of anyone’s job search.</p>
+                                                    <p>InternJump is a really easy way to search for internships and Jobs. I would recommend it as part of anyone's job search.</p>
                                                     <small><a href="#">Cheyenne B.</a><cite title="Source Title">(University of Maryland 2013)</cite></small>
                                                 </blockquote>
                                             </div>
