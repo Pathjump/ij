@@ -76,6 +76,46 @@
     </div><!--container--->
 </div><!--Start-form-->
 
+
+    {% if featuredCompanies | length > 0 %}
+    <div class="Feaetured-Companies">
+        <div class="container">
+
+            <h3>Featured <span>Companies</span></h3>
+
+            <div id="myCarousel" class="carousel slide">
+                <!-- Carousel items -->
+                <div class="carousel-inner">
+                    <div class="active item">
+                        <div class="row-fluid">
+                    {% for company in featuredCompanies %}
+                                {% if loop.index % 4 == 0 %}
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="row-fluid">
+                                {% endif %}
+                                    <div class="span3 text-center">
+                                        <a href="{{path('user_search_page',{'company' : company.loginName})}}" class="thumbnail">
+                                            <img src="{{company.getTimThumbUrl(130,97)}}"  width="130" height="97">
+                                        </a>
+                                    </div>
+                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Carousel nav -->
+                        <a class="carousel-control left" href="#myCarousel" data-slide="prev"> &lsaquo;</a>
+                        <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+                    </div>
+
+                </div><!--container-->
+            </div><!-- Feaetured-Companies -->
+    {% endif %}
+
+            <div class="clearfix"></div>
+
+
 <div class="Your-worth">
     <div class="container">
 
@@ -133,41 +173,6 @@
         </div><!--container-->
     </div><!--Your-worth-->
 
-    {% if featuredCompanies | length > 0 %}
-    <div class="Feaetured-Companies">
-        <div class="container">
-
-            <h3>Featured <span>Companies</span></h3>
-
-            <div id="myCarousel" class="carousel slide">
-                <!-- Carousel items -->
-                <div class="carousel-inner">
-                    <div class="active item">
-                        <div class="row-fluid">
-                    {% for company in featuredCompanies %}
-                                {% if loop.index % 4 == 0 %}
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="row-fluid">
-                                {% endif %}
-                                    <div class="span3 text-center">
-                                        <a href="{{path('user_search_page',{'company' : company.loginName})}}" class="thumbnail">
-                                            <img src="{{company.getTimThumbUrl(130,97)}}"  width="130" height="97">
-                                        </a>
-                                    </div>
-                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Carousel nav -->
-                        <a class="carousel-control left" href="#myCarousel" data-slide="prev"> &lsaquo;</a>
-                        <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
-                    </div>
-
-                </div><!--container-->
-            </div><!-- Feaetured-Companies -->
-    {% endif %}
 
             <div class="clearfix"></div>
 
