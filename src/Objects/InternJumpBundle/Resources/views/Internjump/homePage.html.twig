@@ -145,7 +145,7 @@
                     <div class="active item">
                         <div class="row-fluid">
                     {% for company in featuredCompanies %}
-                                {% if loop.index % 5 == 0 %}
+                                {% if loop.index0 % 4 == 0 %}
                             </div>
                         </div>
                         <div class="item">
@@ -312,16 +312,19 @@
 
 {% block javascripts %}
 {{parent()}}
-
-            <script>
-                var searchJobsUrl = "{{path('user_search_page')}}";
-                $(document).ready(function() {
-                    $('#homeSearchJob').click(function() {
+<script>
+$( document ).ready(function() {
                         //slider
                         $('#myCarousel').carousel({
                             interval: 20000
                         });
-    					$('.carousel').carousel('cycle'); // to auto cycle through all slides
+        				$('.carousel').carousel('cycle'); // to auto cycle through all slides
+});                    
+</script>                        
+            <script>
+                var searchJobsUrl = "{{path('user_search_page')}}";
+                $(document).ready(function() {
+                    $('#homeSearchJob').click(function() {
 
                         var company = $('#companyFilter').val();
                         var city = $('#cityFilter').val();
