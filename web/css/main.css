@@ -340,8 +340,8 @@ a:hover{
 /*===================================== Start form =========================*/
 .Start-form{
     background:#f2f2f2;
-    min-height:450px;
-    padding:30px 0 0;
+    min-height:410px;
+    padding:10px 0 0;
 }
 .Start-form .span6{
     position:relative
