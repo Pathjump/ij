@@ -45,7 +45,7 @@
                         <a href="{{ path('site_homepage') }}" class="pull-left"><img src="{{ asset('img/Logo.png') }}" /></a>
                         <div class="Top-Links pull-right span6">
                             {% if not is_granted('ROLE_NOTACTIVE_COMPANY') and not is_granted('ROLE_NOTACTIVE') %}
-                                <p style="text-align:center;background:#46cfe7;padding:4px;font-weight:bold;"><strong class="notLoggedInUserMessage">Are you an employer? Connect with top interns from all around the nation. <a href="{{path('employers_data')}}" class="startHiring" style="text-decoration:underline;color:#fff;">Start Hiring !</a></strong></p>
+                                <p class="well well-small"><strong class="notLoggedInUserMessage">Are you an employer? Connect with top interns from all around the nation. <a href="{{path('employers_data')}}" class="startHiring" class="btn btn-mini btn-info" style="color:#fff;">Start Hiring !</a></strong></p>
                             {% endif %}
 
                             {% if is_granted('ROLE_NOTACTIVE_COMPANY') %}
