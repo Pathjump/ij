@@ -2404,7 +2404,7 @@ class InternjumpUserController extends Controller {
 
         //Inspect if the sessionData been set
         if (isset($sessionData)) {
-            $sessionCheck = true;
+            $sessionCheck = false;
         }
 
         //Check to fill the form with parameters if been sent with the request
@@ -2415,12 +2415,12 @@ class InternjumpUserController extends Controller {
 
 
         //Get request's parameters
-        $jobType = $request->get("jobType");
-        $city = $request->get("city");
-        $state = $request->get("state");
-        $category = $request->get("industry");
-        $keyword = $request->get("keyword");
-        $company = $request->get("company");
+        //$jobType = $request->get("jobType");
+        //$city = $request->get("city");
+       // $state = $request->get("state");
+        //$category = $request->get("industry");
+        //$keyword = $request->get("keyword");
+        //$company = $request->get("company");
 
         //Get city Repo
         $cityRepo = $em->getRepository('ObjectsInternJumpBundle:City');
