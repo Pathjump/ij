@@ -121,11 +121,11 @@
 
         <div class="row-fluid show-grid">
             <div class="span7">
-                <div class="worth-img">
+                <div class="well">
                     <img src="{{asset('img/find-your-worth.png')}}" />
-                    <div class="well">
-                        <h3>How Can I Maximize My Salary?</h3>
-                        <span style="color:#F00;"><strong>InternJump Can Help!</strong></span>
+                    <div>
+                        <h2>How Can I Maximize My Salary?</h2>
+                        <p><span style="color:#F00;"><strong>InternJump Can Help!</strong></span></p>
                         <p>Find Your Worth is an innovative algorithm that allows you to see how
                         much you are likely to earn after you graduate and more importantly how
                         you can improve your salary!</p>
@@ -141,7 +141,8 @@
             <div class="span5 pull-right">
 
                 <div class="Worth-box">
-                    <h4>How Much Are They Worth? </h4>
+                    <!--<h3>How Much Are They Worth?</h3>-->
+                    <p>You can even be worth as much as these celebrtities someday! Also see how much you are likely to earn versus your friends!</p>
                     <div class="Worth-content">
                         <ul class="thumb-a">
                             {% if worthFrom == 'automatic' %}
@@ -172,12 +173,14 @@
                             </ul>
                         </div>
                     </div><!--Worth-conten--->
+                {#
                 {% if not is_granted('ROLE_NOTACTIVE_COMPANY') %}
                     <div class="Find-Statment">
                         Find out how much you are WORTH!
                         <a href="{{path('howMuchAreYouWorth')}}">Start now</a>
                     </div><!--Find-Statment--->
                 {% endif %}
+                #}
                 </div><!--span5-->
             {% endif %}
             </div><!--row-fluid--->
