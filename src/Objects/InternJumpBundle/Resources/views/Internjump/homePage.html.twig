@@ -95,6 +95,16 @@
                         <div class="item">
                             <div class="row-fluid">
                                 {% endif %}
+                                
+                                    {% if loop.first %}
+                                        {# the loop is displaying 3 results first then group of 4, to fix that i added this line #}
+                                        <div class="span3 text-center">
+                                            <a href="/internJumpUser/search?company=goldmansachs" class="thumbnail">
+                                            <img src="/company-logo/130/97/51cda3c0a06db.jpg"  width="130" height="97">
+                                        </a>
+                                    </div>                                        
+                                    {% endif %}                                
+                                
                                     <div class="span3 text-center">
                                         <a href="{{path('user_search_page',{'company' : company.loginName})}}" class="thumbnail">
                                             <img src="{{company.getTimThumbUrl(130,97)}}"  width="130" height="97">
