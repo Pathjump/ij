@@ -2954,7 +2954,7 @@ class InternjumpUserController extends Controller {
             
             //get company name if Exist
             $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
-            $companyObj = $companyRepo->findOneBy(array('loginName' => $company));
+            $companyObj = $companyRepo->findOneBy(array('id' => $company));
             if($companyObj){
                 $companyName = $companyObj->getName();
             }
