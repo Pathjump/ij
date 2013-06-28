@@ -153,9 +153,9 @@ class InternjumpUserController extends Controller {
         if($searchString){ $searchString = urlencode ($searchString);}
         if( $company != "empty"){
             if( $searchString != null && $searchString != "empty" )
-                $searchString = urlencode ($company)."+".$searchString;
+                $searchString = urlencode ("company:".$company)."+".$searchString;
             else
-                $searchString = urlencode ($company);
+                $searchString = urlencode ("company:".$company);
         }
         $apiSearchString = 'http://api.indeed.com/ads/apisearch?publisher=5399161479070076&jt=' . urlencode($jobType) . '&v=2&format=json&latlong=1&useragent=' . urlencode($userAgent) . '&userip=' . urlencode($userIp) . '&start=' . $start . '&limit=' . $limit . '&q=' . $searchString . '&sort=date'; //urlencode($searchString)
         
