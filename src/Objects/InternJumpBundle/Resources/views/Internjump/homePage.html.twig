@@ -131,6 +131,7 @@
                         you can improve your salary!</p>
                         <p>For instance, by changing your major, learning programming, or
                         learning a foreign language you may be able to earn significantly more!</p>
+                        <br />
                         {% if not is_granted('ROLE_NOTACTIVE_COMPANY') %}
                         	<p class="text-center"><a class="btn btn-success btn-large" href="{{path('howMuchAreYouWorth')}}">Find My Worth</a></p>
                         {% endif %}
@@ -142,8 +143,8 @@
 
                 <div class="Worth-box">
                     <!--<h3>How Much Are They Worth?</h3>-->
-                    <p>You can even be worth as much as these celebrtities someday! Also see how much you are likely to earn versus your friends!</p>
                     <div class="Worth-content">
+                    <p>You can even be worth as much as these celebrtities someday! Also see how much you are likely to earn versus your friends!</p>
                         <ul class="thumb-a">
                             {% if worthFrom == 'automatic' %}
                                 {% for user in worthUsers %}
