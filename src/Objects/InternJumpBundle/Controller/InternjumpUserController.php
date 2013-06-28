@@ -136,7 +136,7 @@ class InternjumpUserController extends Controller {
      * @param type $jobLocation
      * @return false | array
      */
-    private function searchForIndeedJobs($searchString = null, $start = 1, $limit = 10, $jobLocation = null, $jobType = "internship", $company = "empty") {
+    private function searchForIndeedJobs($searchString = null, $start = 1, $limit = 10, $jobLocation = null, $jobType = null, $company = "empty") {
         $userAgent = 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:16.0) Gecko/20100101 Firefox/16.0';
         $start--;
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
