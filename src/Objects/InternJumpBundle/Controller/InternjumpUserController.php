@@ -2415,12 +2415,12 @@ class InternjumpUserController extends Controller {
 
 
         //Get request's parameters
-        //$jobType = $request->get("jobType");
-        //$city = $request->get("city");
-       // $state = $request->get("state");
-        //$category = $request->get("industry");
-        //$keyword = $request->get("keyword");
-        //$company = $request->get("company");
+        $jobType = $request->get("jobType");
+        $city = $request->get("city");
+        $state = $request->get("state");
+        $category = $request->get("industry");
+        $keyword = $request->get("keyword");
+        $company = $request->get("company");
 
         //Get city Repo
         $cityRepo = $em->getRepository('ObjectsInternJumpBundle:City');
