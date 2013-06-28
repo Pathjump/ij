@@ -147,7 +147,7 @@ class InternjumpUserController extends Controller {
             $userIp = $_SERVER['REMOTE_ADDR'];
         }
         if ($jobType == "empty" || $jobType == null) {
-            $jobType = "internship";
+            //$jobType = "internship";
         }
 
         if($searchString){ $searchString = urlencode ($searchString);}
