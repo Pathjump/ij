@@ -275,7 +275,7 @@ No Results found
     if($('#form_company').val()!= ""){ var company=$('#form_company').val();}
     else{ 
         var comp = '{{ app.request.get('company') }}';
-        if(comp != "empty" || comp != '') {  var company=comp;}
+        if(comp != "empty" && comp != '') {  var company=comp;}
         else  var company="empty";
     }
 
