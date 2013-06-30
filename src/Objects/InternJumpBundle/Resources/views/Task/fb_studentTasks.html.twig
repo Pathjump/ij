@@ -697,7 +697,7 @@ $('.isActiveCv').live('click',function() {
                     var cvId = $(this).find('input').attr('id');
                     if(cvId != currentElement )
                     {
-                        if($(this).attr('class') == "switch-animate isActiveCv switch-on"){
+                        if($(this).attr('class') == "switch-animate isActiveCv switch-on" || $(this).attr('class',"isActiveCv switch-on switch-animate"){
                                $(this).attr('class',"switch-animate isActiveCv switch-off");
                                $.ajax({
                                     url: changeCvStatusUrl+'/'+cvId+'/'+0,
