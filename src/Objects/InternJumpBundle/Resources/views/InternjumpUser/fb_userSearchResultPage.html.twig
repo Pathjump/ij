@@ -41,15 +41,15 @@
                                    		<li class="row-fluid show-grid">
                                             <div class="span8">
                                             	<h4><a class="titl-blue" href="{{path('fb_internship_show', {'id': job.id})}}">{{job.title}}</a></h4>
-                                                <i><strong><a href="javascript:void(0)">{{job.company.name}}</a></strong></i>
+                                                <i><strong><a href="{{path('fb_internship_show', {'id': job.id})}}">{{job.company.name}}</a></strong></i>
                                                 <p>{{job.description|raw}}</p>
                                                 <p></p>
                                             </div>
                                             <div class="span4">
                                             	<div class="Area">{{ job.city }}  ,  {%if job.state %}{{ job.state }}  ,{% endif %}  {{job.getCountryName()}}</div>
                                                 <div class="date muted">{#<b style="color: black"><i class="icon-time"></i>Posted at:</b>#} {{job.createdAt|date('d-m-Y h:i:s')}}</div>
-                                                <a href="javascript:void(0)"><i class="icon-calendar"></i> Active from:{{job.activeFrom|date('j F, Y')}}</a><br/>
-                                                <a href="javascript:void(0)"><i class="icon-calendar"></i> Active to:{{job.activeTo|date('j F, Y')}}</a><br/>
+                                                <a href="{{path('fb_internship_show', {'id': job.id})}}"><i class="icon-calendar"></i> Active from:{{job.activeFrom|date('j F, Y')}}</a><br/>
+                                                <a href="{{path('fb_internship_show', {'id': job.id})}}"><i class="icon-calendar"></i> Active to:{{job.activeTo|date('j F, Y')}}</a><br/>
                                                 <!-- <a href="javascript:void(0)"><i class="icon-pencil"></i> Position type</a> -->
                                             </div>
                                         </li>
@@ -59,14 +59,14 @@
                                            <li class="row-fluid show-grid">
                                             <div class="span8">
                                             	<h4><a class="titl-blue" href="{{ path('fb_show_indeed_job',{'jobkey' : j['jobkey']}) }}">{{j['jobtitle']}}</a></h4>
-                                                <i><strong><a href="javascript:void(0)">{{j['company']}}</a></strong></i>
+                                                <i><strong><a href="{{ path('fb_show_indeed_job',{'jobkey' : j['jobkey']}) }}">{{j['company']}}</a></strong></i>
                                                 <p>{{j['snippet']|raw}}</p>
                                                 <p></p>
                                             </div>
                                             <div class="span4">
                                             	<div class="Area">{{j['city']}}  ,  {{j['state']}},  {{j['country']}}</div>
                                                 <div class="date muted">{#<b style="color: black"><i class="icon-time"></i>Posted at:</b>#} {{j['date']|date('d-m-Y h:i:s')}}</div>
-                                                <a href="javascript:void(0)"><i class="icon-calendar"></i> Active form: {{j['formattedRelativeTime']}}</a><br/>
+                                                <a href="{{ path('fb_show_indeed_job',{'jobkey' : j['jobkey']}) }}"><i class="icon-calendar"></i> Active form: {{j['formattedRelativeTime']}}</a><br/>
                                                 <!-- <a href="javascript:void(0)"><i class="icon-pencil"></i> Position type</a> -->
                                             </div>
                                         </li>

@@ -159,6 +159,8 @@ class InternjumpUserController extends Controller {
             else
                 $searchString = urlencode("company:" . $company);
         }
+        if($searchString == "empty")$searchString="";
+        
         $apiSearchString = 'http://api.indeed.com/ads/apisearch?publisher=5399161479070076&jt=' . urlencode($jobType) . '&v=2&format=json&latlong=1&useragent=' . urlencode($userAgent) . '&userip=' . urlencode($userIp) . '&start=' . $start . '&limit=' . $limit . '&q=' . $searchString . '&sort=date'; //urlencode($searchString)
 
         if ($jobLocation) {
@@ -2534,8 +2536,10 @@ class InternjumpUserController extends Controller {
         $cityOptionsArr = array();
         $stateOptionsArr = array('empty_value' => '--- choose State ---');
         $categoryOptionsArr = array('empty_value' => '--- choose Industry ---', 'choices' => $allCategoriesArray);
-        $companyOptionsArr = array('empty_value' => '--- choose Company ---', 'choices' => $allCompanysArray);
-        $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'empty_value' => '--- choose job type ---');
+        //$companyOptionsArr = array('empty_value' => '--- choose Company ---', 'choices' => $allCompanysArray);
+        $companyOptionsArr = array('attr' => array( 'placeholder' => 'Type Company') );
+        $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'expanded'=> true ,'label' => 'Job type :', 'data' => 'Entry Level' ); //, 'empty_value' => '--- choose job type ---'
+        //->add('spokenFluency', 'choice', array('choices' => array('None' => 'None', 'Novice' => 'Novice', 'Intermediate' => 'Intermediate', 'Advanced' => 'Advanced'), 'expanded' => true, 'label' => 'Spoken :', 'attr' => array('class' => 'lngopt')))
 
         /*         * *************************************************************************** */
         //inspect if check been set to be true then set the defaults values of the form
@@ -2560,7 +2564,8 @@ class InternjumpUserController extends Controller {
                 $stateOptionsArr = array('empty_value' => '--- choose State ---');
             }
             if ($sessionData['category'] != "empty" && $sessionData['category'] != '') {
-                $categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($sessionData['category']));
+                //$categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($sessionData['category']));
+                $companyOptionsArr = array('attr' => array( 'value' => $sessionData['category']) );
             }
             if ($sessionData['company'] != "empty" && $sessionData['company'] != '' && !$request->get("company")) {
                 $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($sessionData['company']));
@@ -2569,7 +2574,7 @@ class InternjumpUserController extends Controller {
                 $allLanguagesArray = array('class' => 'ObjectsInternJumpBundle:Language', 'property' => 'name', 'preferred_choices' => array($sessionData['lang']));
             }
             if ($sessionData['jobt'] != "empty" && $sessionData['jobt'] != '') {
-                $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($sessionData['jobt']));
+                $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'data' => $sessionData['jobt'] , 'expanded'=> true ,'label' => 'Job type :', 'attr' => array('class' => 'lngopt') );
             }
         }
 
@@ -2594,14 +2599,17 @@ class InternjumpUserController extends Controller {
                 $categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($category));
             }
             if ($jobType != "empty") {
-                $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($jobType));
+                $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'data' => $jobType,  'expanded'=> true ,'label' => 'Job type :', 'attr' => array('class' => 'lngopt') );
             }
             if ($company != "empty") {
-                $companyObj = $companyRepo->findOneBy(array('loginName' => $company));
-                if ($companyObj) {
-                    $companyId = $companyObj->getId();
-                    $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($companyId));
-                }
+                $companyOptionsArr = array('attr' => array( 'value' => $company) );
+//                $companyObj = $companyRepo->findOneBy(array('loginName' => $company));
+//                if ($companyObj) {
+//                    $companyId = $companyObj->getId();
+//                    $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($companyId));
+//                    
+//                    
+//                }
             }
         }
 
@@ -2613,7 +2621,8 @@ class InternjumpUserController extends Controller {
                 ->add('city', 'text', $cityOptionsArr)
                 ->add('state', 'choice', $stateOptionsArr)
                 ->add('category', 'choice', $categoryOptionsArr)
-                ->add('company', 'choice', $companyOptionsArr)
+                ->add('company','text', $companyOptionsArr)
+                //->add('company', 'choice', $companyOptionsArr)
                 ->add('language', 'entity', $allLanguagesArray)
                 ->add('jobtype', 'choice', $jobTypeOptionsArr)
         ;
@@ -2670,7 +2679,7 @@ class InternjumpUserController extends Controller {
         /*         * ********Start Partial Search part*********** */
 
 
-        //Get request's parameters
+         //Get request's parameters
         $jobType = $request->get("jobType");
         $city = $request->get("city");
         $state = $request->get("state");
@@ -2784,7 +2793,8 @@ class InternjumpUserController extends Controller {
         $stateOptionsArr = array('empty_value' => '--- choose State ---');
         $categoryOptionsArr = array('empty_value' => '--- choose Industry ---', 'choices' => $allCategoriesArray);
         $companyOptionsArr = array('empty_value' => '--- choose Company ---', 'choices' => $allCompanysArray);
-        $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'empty_value' => '--- choose job type ---');
+        $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'expanded'=> true ,'label' => 'Job type :', 'data' => 'Entry Level' ); //, 'empty_value' => '--- choose job type ---'
+        //->add('spokenFluency', 'choice', array('choices' => array('None' => 'None', 'Novice' => 'Novice', 'Intermediate' => 'Intermediate', 'Advanced' => 'Advanced'), 'expanded' => true, 'label' => 'Spoken :', 'attr' => array('class' => 'lngopt')))
 
         /*         * *************************************************************************** */
         //inspect if check been set to be true then set the defaults values of the form
@@ -2818,7 +2828,7 @@ class InternjumpUserController extends Controller {
                 $allLanguagesArray = array('class' => 'ObjectsInternJumpBundle:Language', 'property' => 'name', 'preferred_choices' => array($sessionData['lang']));
             }
             if ($sessionData['jobt'] != "empty" && $sessionData['jobt'] != '') {
-                $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($sessionData['jobt']));
+                $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'data' => $sessionData['jobt'] , 'expanded'=> true ,'label' => 'Job type :', 'attr' => array('class' => 'lngopt') );
             }
         }
 
@@ -2843,7 +2853,7 @@ class InternjumpUserController extends Controller {
                 $categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($category));
             }
             if ($jobType != "empty") {
-                $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($jobType));
+                $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'data' => $jobType,  'expanded'=> true ,'label' => 'Job type :', 'attr' => array('class' => 'lngopt') );
             }
             if ($company != "empty") {
                 $companyObj = $companyRepo->findOneBy(array('loginName' => $company));
