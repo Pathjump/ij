@@ -109,7 +109,7 @@ class InternshipController extends Controller {
         ));
     }
 
-    
+
     /**
      * show indeed job
      * @author ahmed
@@ -1405,7 +1405,7 @@ class InternshipController extends Controller {
         $user = $this->get('security.context')->getToken()->getUser();
 
         //get all user cvs
-        $allUserCvs = $cvRepo->findBy(array('user' => $user->getId(), 'isActive' => TRUE), array('createdAt' => 'desc'));
+        $allUserCvs = $cvRepo->findBy(array('user' => $user->getId()), array('createdAt' => 'desc'));
         return $this->render('ObjectsInternJumpBundle:Internship:userCvs.html.twig', array(
                     'allUserCvs' => $allUserCvs,
                     'user_does_not_have_cv_message' => $this->container->getParameter('user_does_not_have_cv_message')

@@ -150,15 +150,17 @@ class InternjumpUserController extends Controller {
             //$jobType = "internship";
         }
 
-        if($searchString){ $searchString = urlencode ($searchString);}
-        if( $company != "empty"){
-            if( $searchString != null && $searchString != "empty" )
-                $searchString = urlencode ("company:".$company)."+".$searchString;
+        if ($searchString) {
+            $searchString = urlencode($searchString);
+        }
+        if ($company != "empty") {
+            if ($searchString != null && $searchString != "empty")
+                $searchString = urlencode("company:" . $company) . "+" . $searchString;
             else
-                $searchString = urlencode ("company:".$company);
+                $searchString = urlencode("company:" . $company);
         }
         $apiSearchString = 'http://api.indeed.com/ads/apisearch?publisher=5399161479070076&jt=' . urlencode($jobType) . '&v=2&format=json&latlong=1&useragent=' . urlencode($userAgent) . '&userip=' . urlencode($userIp) . '&start=' . $start . '&limit=' . $limit . '&q=' . $searchString . '&sort=date'; //urlencode($searchString)
-        
+
         if ($jobLocation) {
             $apiSearchString .= '&l=' . urlencode($jobLocation);
         }
@@ -2301,7 +2303,12 @@ class InternjumpUserController extends Controller {
         //get user cv
         $userCv = $cvRepo->find($cvId);
 
-        if (!$userCv || $userCv->getUser()->getId() != $userObject->getId() || $userCv->getIsActive() == FALSE) {
+        //get loggedin company
+        $company = $this->get('security.context')->getToken()->getUser();
+        //check if the user apply to job with this cv
+        $userInternship = $userInternshipRepo->checkUserCompanyJobApply($userObject->getId(), $cvId, $company->getId());
+
+        if (!$userCv || $userCv->getUser()->getId() != $userObject->getId() || ($userCv->getIsActive() == FALSE && !$userInternship)) {
             $message = $this->container->getParameter('cv_not_found_error_msg');
             return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
                         'message' => $message,));
@@ -2539,7 +2546,7 @@ class InternjumpUserController extends Controller {
             if ($sessionData['country'] != "empty" && $sessionData['country'] != '') {
                 $countryOptionsArr = array('choices' => $allCountriesArray, 'preferred_choices' => array($sessionData['country']));
             }
-            if ($sessionData['city'] != "empty" && $sessionData['city'] != '' ) {
+            if ($sessionData['city'] != "empty" && $sessionData['city'] != '') {
                 //get the city name
                 $theCity = "";
                 if ($cityRepo->findOneBy(array('id' => $sessionData['city']))) {
@@ -2552,7 +2559,7 @@ class InternjumpUserController extends Controller {
             if ($sessionData['state'] != "empty" && $sessionData['state'] != '') {
                 $stateOptionsArr = array('empty_value' => '--- choose State ---');
             }
-            if ($sessionData['category'] != "empty" && $sessionData['category'] != ''  ) {
+            if ($sessionData['category'] != "empty" && $sessionData['category'] != '') {
                 $categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($sessionData['category']));
             }
             if ($sessionData['company'] != "empty" && $sessionData['company'] != '' && !$request->get("company")) {
@@ -2564,7 +2571,6 @@ class InternjumpUserController extends Controller {
             if ($sessionData['jobt'] != "empty" && $sessionData['jobt'] != '') {
                 $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($sessionData['jobt']));
             }
-        
         }
 
         /*         * *************************************************************************** */
@@ -2590,13 +2596,12 @@ class InternjumpUserController extends Controller {
             if ($jobType != "empty") {
                 $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($jobType));
             }
-            if($company != "empty"){
-                $companyObj =$companyRepo->findOneBy(array('loginName' => $company));
-                if($companyObj){
+            if ($company != "empty") {
+                $companyObj = $companyRepo->findOneBy(array('loginName' => $company));
+                if ($companyObj) {
                     $companyId = $companyObj->getId();
                     $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($companyId));
                 }
-                
             }
         }
 
@@ -2611,7 +2616,7 @@ class InternjumpUserController extends Controller {
                 ->add('company', 'choice', $companyOptionsArr)
                 ->add('language', 'entity', $allLanguagesArray)
                 ->add('jobtype', 'choice', $jobTypeOptionsArr)
-                ;
+        ;
         //create the form
         $form = $formBuilder->getForm();
 
@@ -2790,7 +2795,7 @@ class InternjumpUserController extends Controller {
             if ($sessionData['country'] != "empty" && $sessionData['country'] != '') {
                 $countryOptionsArr = array('choices' => $allCountriesArray, 'preferred_choices' => array($sessionData['country']));
             }
-            if ($sessionData['city'] != "empty" && $sessionData['city'] != '' ) {
+            if ($sessionData['city'] != "empty" && $sessionData['city'] != '') {
                 //get the city name
                 $theCity = "";
                 if ($cityRepo->findOneBy(array('id' => $sessionData['city']))) {
@@ -2803,7 +2808,7 @@ class InternjumpUserController extends Controller {
             if ($sessionData['state'] != "empty" && $sessionData['state'] != '') {
                 $stateOptionsArr = array('empty_value' => '--- choose State ---');
             }
-            if ($sessionData['category'] != "empty" && $sessionData['category'] != ''  ) {
+            if ($sessionData['category'] != "empty" && $sessionData['category'] != '') {
                 $categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($sessionData['category']));
             }
             if ($sessionData['company'] != "empty" && $sessionData['company'] != '' && !$request->get("company")) {
@@ -2815,7 +2820,6 @@ class InternjumpUserController extends Controller {
             if ($sessionData['jobt'] != "empty" && $sessionData['jobt'] != '') {
                 $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($sessionData['jobt']));
             }
-        
         }
 
         /*         * *************************************************************************** */
@@ -2841,13 +2845,12 @@ class InternjumpUserController extends Controller {
             if ($jobType != "empty") {
                 $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'preferred_choices' => array($jobType));
             }
-            if($company != "empty"){
-                $companyObj =$companyRepo->findOneBy(array('loginName' => $company));
-                if($companyObj){
+            if ($company != "empty") {
+                $companyObj = $companyRepo->findOneBy(array('loginName' => $company));
+                if ($companyObj) {
                     $companyId = $companyObj->getId();
                     $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($companyId));
                 }
-                
             }
         }
 
@@ -2951,15 +2954,13 @@ class InternjumpUserController extends Controller {
                     $jobLocation = null;
                 }
             }
-            
+
             //get company name if Exist
             $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
             $companyObj = $companyRepo->findOneBy(array('id' => $company));
-            if($companyObj){
+            if ($companyObj) {
                 $companyName = $companyObj->getName();
-            }
-            else
-            {
+            } else {
                 $companyName = $company;
             }
             $apiJobsArr = $this->searchForIndeedJobs($searchString = $title1, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation, $jobt, $companyName);
@@ -3067,15 +3068,13 @@ class InternjumpUserController extends Controller {
                     $jobLocation = null;
                 }
             }
-            
+
             //get company name if Exist
             $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
             $companyObj = $companyRepo->findOneBy(array('id' => $company));
-            if($companyObj){
+            if ($companyObj) {
                 $companyName = $companyObj->getName();
-            }
-            else
-            {
+            } else {
                 $companyName = $company;
             }
             $apiJobsArr = $this->searchForIndeedJobs($searchString = $title1, $start = $page * $jobsPerPage, $limit = $jobsPerPage, $jobLocation, $jobt, $companyName);

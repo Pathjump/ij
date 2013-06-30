@@ -126,7 +126,7 @@ class CV {
      * @var boolean $isActive
      * @ORM\Column(name="isActive", type="boolean")
      */
-    private $isActive = TRUE;
+    private $isActive = False;
 
     /**
      * @var string $name

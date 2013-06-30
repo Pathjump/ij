@@ -12,15 +12,40 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserInternshipRepository extends EntityRepository {
 
+    /**
+     * this function used to check if user apply to company by cv
+     * @author ahmed
+     * @param int $userId
+     * @param int $cvId
+     * @param int $companyId
+     */
+    public function checkUserCompanyJobApply($userId, $cvId, $companyId) {
+        $dql = '
+            SELECT ui
+            FROM ObjectsInternJumpBundle:UserInternship ui
+            JOIN ui.internship j
+            JOIN j.company c
+            WHERE ui.user = :userId
+            AND ui.cv = :cvId
+            AND c.id = :companyId
+            ';
+        $query = $this->getEntityManager()->createQuery($dql)
+                ->setParameters(array('userId' => $userId, 'cvId' => $cvId, 'companyId' => $companyId));
+        try {
+            return $query->getSingleResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return null;
+        }
+    }
 
-     /**
+    /**
      * to get all Jobs for certain users in certain company
-      * used: in add new task page in Ajax filling the listes
+     * used: in add new task page in Ajax filling the listes
      * @author Ola
      * @param type $id
      * @return type
      */
-    public function getAllUserJobs($uid,$cid) {
+    public function getAllUserJobs($uid, $cid) {
         $dql = '
             SELECT ui
             FROM ObjectsInternJumpBundle:UserInternship ui
@@ -31,9 +56,10 @@ class UserInternshipRepository extends EntityRepository {
             AND j.company = :cId
             ';
         $query = $this->getEntityManager()->createQuery($dql)
-                ->setParameters(array('uId' => $uid, 'cId' => $cid , 'status' => 'accepted'));
+                ->setParameters(array('uId' => $uid, 'cId' => $cid, 'status' => 'accepted'));
         return $query->getResult();
     }
+
     /**
      * this function will get all applyed users for a job
      * @author Ahmed
@@ -51,7 +77,7 @@ class UserInternshipRepository extends EntityRepository {
             LEFT JOIN u.socialAccounts s
             WHERE j.id = :jobId and ui.status = :status
             order by ui.createdAt desc
-            ')->setParameters(array('jobId'=> $jobId,'status' => 'apply'));
+            ')->setParameters(array('jobId' => $jobId, 'status' => 'apply'));
         return $query->getResult();
     }
 
@@ -74,22 +100,20 @@ class UserInternshipRepository extends EntityRepository {
         return $query->getResult();
     }
 
-
     /**
      *
      * @param type $uid
      */
-    public function getAppliedJobs($uid){
+    public function getAppliedJobs($uid) {
 
         $query = $this->getEntityManager()->createQuery("
             SELECT ui
             FROM ObjectsInternJumpBundle:UserInternship ui
             WHERE ui.user = :userid
             AND ui.status = 'apply'
-            ")->setParameters(array( 'userid' => $uid ));
+            ")->setParameters(array('userid' => $uid));
 
         return $query->getResult();
-
     }
 
 }
