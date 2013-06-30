@@ -285,6 +285,9 @@ class CVController extends Controller {
         $form->bindRequest($request);
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
+            if(count($user->getCvs()) === 0){
+                $entity->setIsActive(true);
+            }
             $em->persist($entity);
             $em->flush();
             $request->getSession()->set('cvCreate', TRUE);

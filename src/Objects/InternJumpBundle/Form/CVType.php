@@ -11,7 +11,6 @@ class CVType extends AbstractType {
         $builder
                 ->add('objective')
                 ->add('name')
-                ->add('isActive', NULL, array('required' => false))
                 ->add('categories', NULL, array('required' => false))
         ;
     }

@@ -79,18 +79,6 @@
                                     </div>
                                     {% endif %}
                                 </div>
-                                <div class="controls">
-                                    <label class="checkbox">Is Active
-                                        {{ form_widget(form.isActive) }}
-                                    </label>
-
-                                    {% if form_errors(form.isActive) %}
-                                    <div class="alert alert-error">
-                                        <button type="button" class="close" data-dismiss="alert"> × </button>
-                                        {{ form_errors(form.isActive) }}
-                                    </div>
-                                    {% endif %}
-                                </div>
                                 <hr class="divider"/>
                                 <div class="controls ">
                                     {{ form_rest(form) }}
