@@ -2679,7 +2679,7 @@ class InternjumpUserController extends Controller {
         /*         * ********Start Partial Search part*********** */
 
 
-         //Get request's parameters
+        //Get request's parameters
         $jobType = $request->get("jobType");
         $city = $request->get("city");
         $state = $request->get("state");
@@ -2792,7 +2792,8 @@ class InternjumpUserController extends Controller {
         $cityOptionsArr = array();
         $stateOptionsArr = array('empty_value' => '--- choose State ---');
         $categoryOptionsArr = array('empty_value' => '--- choose Industry ---', 'choices' => $allCategoriesArray);
-        $companyOptionsArr = array('empty_value' => '--- choose Company ---', 'choices' => $allCompanysArray);
+        //$companyOptionsArr = array('empty_value' => '--- choose Company ---', 'choices' => $allCompanysArray);
+        $companyOptionsArr = array('attr' => array( 'placeholder' => 'Type Company') );
         $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'expanded'=> true ,'label' => 'Job type :', 'data' => 'Entry Level' ); //, 'empty_value' => '--- choose job type ---'
         //->add('spokenFluency', 'choice', array('choices' => array('None' => 'None', 'Novice' => 'Novice', 'Intermediate' => 'Intermediate', 'Advanced' => 'Advanced'), 'expanded' => true, 'label' => 'Spoken :', 'attr' => array('class' => 'lngopt')))
 
@@ -2819,7 +2820,8 @@ class InternjumpUserController extends Controller {
                 $stateOptionsArr = array('empty_value' => '--- choose State ---');
             }
             if ($sessionData['category'] != "empty" && $sessionData['category'] != '') {
-                $categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($sessionData['category']));
+                //$categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($sessionData['category']));
+                $companyOptionsArr = array('attr' => array( 'value' => $sessionData['category']) );
             }
             if ($sessionData['company'] != "empty" && $sessionData['company'] != '' && !$request->get("company")) {
                 $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($sessionData['company']));
@@ -2856,13 +2858,17 @@ class InternjumpUserController extends Controller {
                 $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'data' => $jobType,  'expanded'=> true ,'label' => 'Job type :', 'attr' => array('class' => 'lngopt') );
             }
             if ($company != "empty") {
-                $companyObj = $companyRepo->findOneBy(array('loginName' => $company));
-                if ($companyObj) {
-                    $companyId = $companyObj->getId();
-                    $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($companyId));
-                }
+                $companyOptionsArr = array('attr' => array( 'value' => $company) );
+//                $companyObj = $companyRepo->findOneBy(array('loginName' => $company));
+//                if ($companyObj) {
+//                    $companyId = $companyObj->getId();
+//                    $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($companyId));
+//                    
+//                    
+//                }
             }
         }
+
 
         //create a search form
         $formBuilder = $this->createFormBuilder()
@@ -2871,9 +2877,11 @@ class InternjumpUserController extends Controller {
                 ->add('city', 'text', $cityOptionsArr)
                 ->add('state', 'choice', $stateOptionsArr)
                 ->add('category', 'choice', $categoryOptionsArr)
-                ->add('company', 'choice', $companyOptionsArr)
+                ->add('company','text', $companyOptionsArr)
+                //->add('company', 'choice', $companyOptionsArr)
                 ->add('language', 'entity', $allLanguagesArray)
-                ->add('jobtype', 'choice', $jobTypeOptionsArr);
+                ->add('jobtype', 'choice', $jobTypeOptionsArr)
+        ;
         //create the form
         $form = $formBuilder->getForm();
 
