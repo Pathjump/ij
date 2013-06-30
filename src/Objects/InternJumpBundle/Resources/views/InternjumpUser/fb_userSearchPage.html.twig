@@ -277,12 +277,17 @@ No Results found
     if($('#form_category').val()!= ""){ var category=$('#form_category').val();}
     else{ var category="empty"; }
 
-    if($('#form_company').val()!= ""){ var company=$('#form_company').val();}
-    else{  
+    
+    /*if($('#form_company').val()!= ""){ var company=$('#form_company').val();}
+    else{ 
         var comp = '{{ app.request.get('company') }}';
-        if(comp != "empty" || comp != '') {  var company=comp;}
+        if(comp != "empty" && comp != '') {  var company=comp;}
         else  var company="empty";
+    }*/
+    if($('#form_company').attr('value') != ""){
+        var company = $('#form_company').attr('value');
     }
+     else  var company="empty";
 
     if($('#form_language').val()!= ""){ var language=$('#form_language').val();}
     else{ var language="empty";}
