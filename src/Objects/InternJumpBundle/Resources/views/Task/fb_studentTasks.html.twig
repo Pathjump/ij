@@ -279,7 +279,7 @@
                             <span class="span2">
                             <div class="onoffswitch pull-right">
                                <div class="switch">
-                                   <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox isActiveCv" id="{{ cv.id }}" {% if cv.isActive %}{% else %}checked="checked"{% endif %}>
+                                   <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox isActiveCv" id="{{ cv.id }}" {% if cv.isActive %}checked="checked"{% else %}{% endif %}>
                                </div>
                             </div>
                             </span>
@@ -289,8 +289,8 @@
 
                 <br>
                 <button class="button del_btn btn btn-danger" value="Delete">Delete</button>
-                <button class="button pub_btn btn btn-success" value="Publish">Publish</button>
-                <button class="button unpub_btn btn btn-warning" value="UnPublish">Unpublish</button>
+                <!--<button class="button pub_btn btn btn-success" value="Publish">Publish</button>-->
+                <!--<button class="button unpub_btn btn btn-warning" value="UnPublish">Unpublish</button>-->
                 <a class="button addcvbutton btn btn-link pull-right" href="{{path('fb_cv_new')}}" value="AddCV"> <i class="icon-plus"></i>Add Resume</a>
                 <div class="clear"></div>
 
@@ -676,8 +676,9 @@ $('.isActiveCv').live('click',function() {
     var cvId = $(this).find('input').attr('id');
     var status = '';
     var thisCheckbox = $(this);
+    var currentElement = cvId;
     //alert($(this).attr('class'));
-    if($(this).attr('class') == "isActiveCv switch-off switch-animate"){
+    if($(this).attr('class') == "isActiveCv switch-on switch-animate"){
      status = 1;
     }
     else{
@@ -688,8 +689,28 @@ $('.isActiveCv').live('click',function() {
     $.ajax({
         url: changeCvStatusUrl+'/'+cvId+'/'+status,
         success: function(msg) {
+
         },
         complete: function(msg) {
+                if(status == 1){
+                $('.isActiveCv').each(function(){
+                    var cvId = $(this).find('input').attr('id');
+                    if(cvId != currentElement )
+                    {
+                        if($(this).attr('class') == "switch-animate isActiveCv switch-on" || $(this).attr('class',"isActiveCv switch-on switch-animate"){
+                               $(this).attr('class',"switch-animate isActiveCv switch-off");
+                               $.ajax({
+                                    url: changeCvStatusUrl+'/'+cvId+'/'+0,
+                                    success: function(msg) {
+                                    },
+                                    complete: function(msg) {
+                                        thisCheckbox.removeAttr('disabled')
+                                    }
+                                });
+                        }
+                    }
+                })
+                }
             thisCheckbox.removeAttr('disabled')
             //hide loading div
             $('.loading').hide();

@@ -15,48 +15,40 @@ Job Search
 <div class="container Main-content">
 
       <div class="Search-student">
-            	<form>
+                  <form>
                 	<fieldset>
 
 
                                 <ul class="nav nav-tabs">
                                     <li class="active"><a href="#basic" data-toggle="tab">Basic </a></li>
-                                    <li><a href="#advanced" data-toggle="tab">Advanced Search</a></li>
+                                    <li><a href="#advanced" data-toggle="tab">Advanced Options</a></li>
                                 </ul>
                                 <div class="tab-content" id="myTabContent">
                                     <div id="basic" class="tab-pane fade active in">
-                                        <p><div class="controls">
-
-                                            <label>Location</label>
-
-                                            <div class="row-fluid show-grid">
-                                                <div class="span4">
-                                            {{form_widget(form.country, { 'attr': {'class': 'chzn-select', 'id' : 'country_search'} })}}
-                                                    </div>{#{{form_widget(form.city, { 'attr': {'class': 'chzn-select','style':'width:160px;', 'id' : 'city_search'} })}}#}
-                                                    <div class="span4 ">
+                                        <p>
+                                     <div class="controls  row-fluid show-grid">
+                                        <div class="span4 ">
+                                			<label>Job Type</label>
+                               					{{form_widget(form.jobtype, { 'attr': {'class': '', 'id' : 'jobtype_search'} })}}
+                            			</div>
+                                        <div class="span4 ">
+                                            <label>State</label>        
                                             {{form_widget(form.state, { 'attr': {'class': 'chzn-select', 'id' : 'state_search'} })}}
-                                                        </div>
-                                                        <div class="span4 ">
+                                        </div>    
+                                             </div>
+                                        <div class="controls  row-fluid show-grid">
+                                        <div class="span4">
+                                        	<label>Industry</label>
+                                				{{form_widget(form.category, { 'attr': {'class': 'chzn-select','id' : 'category_search'} })}}
+                                        </div>
+                                             <div class="span4 ">
+                                            <label>City</label>
                                             {{form_widget(form.city, { 'attr': { 'id' : 'city_search', 'placeholder': 'Type city'} })}}
                                                             </div>
-
-                                                        </div>
-
-
-                                                    </div>
-                                     <div class="controls  row-fluid show-grid">
-                                         <div class="span4 ">
-                                <label>Job Type</label>
-                                {{form_widget(form.jobtype, { 'attr': {'class': 'chzn-select', 'id' : 'jobtype_search'} })}}
-                            </div>
-                                            <div class="span4">
-                                                <label>Industry</label>
-                                {{form_widget(form.category, { 'attr': {'class': 'chzn-select','id' : 'category_search'} })}}
-                                            </div>
-                                             </div>
+                                     </div>
                                     </p>
 
-                                                <div class="Search-Internships Search-box text-center">
+                                                  <div class="Search-Internships Search-box ">
             <form id="search_form" action="" method="POST" class="form-search">
                 <div class="input-append">
                     <input id="search_text" name="" type="text" {% if keyword and keyword != "empty"%} value="{{keyword}}" {%else%}placeholder="Keywords"{% endif %} class="span6 search-query">
@@ -69,25 +61,42 @@ Job Search
 
                                     <div id="advanced" class="tab-pane fade">
                                         <p>
+                                            <div class="controls">
+
+
+                                            <div class="row-fluid show-grid">
+                                                <div class="span4">
+                                            <label>Location</label>    
+                                            {{form_widget(form.country, { 'attr': {'class': 'chzn-select', 'id' : 'country_search'} })}}
+                                                    </div>{#{{form_widget(form.city, { 'attr': {'class': 'chzn-select','style':'width:160px;', 'id' : 'city_search'} })}}#}
+                                                    
+                                            <div class="span4 ">
+                                                <label>Language</label>
+                                                    {{form_widget(form.language, { 'attr': {'class': 'chzn-select', 'style' : 'width: auto', 'id' : 'language_search'} })}}
+                                            </div>
+                                                        </div>
+
+
+                                                    </div>
                                         <div class="controls  row-fluid show-grid">
                                             <div class="span4">
                                                 <label>Companies</label>
-                                {{form_widget(form.company, { 'attr': {'class': 'chzn-select', 'style' : 'width: auto', 'id' : 'company_search'} })}}
+                                {{form_widget(form.company, { 'attr': {'class': '', 'style' : 'width: auto', 'id' : 'company_search'} })}}
                                             </div>
-                                            <div class="span4 ">
-                                                <label>Language</label>
-                                {{form_widget(form.language, { 'attr': {'class': 'chzn-select', 'style' : 'width: auto', 'id' : 'language_search'} })}}
-                                            </div>
-
+                                           
 
                                         </div>
+                                       
                                     </p>
+                                     <input id="search_button" name="" type="button" value="Search" class="btn btn-info pull-right search_button"/>
+                                     <div class="clearfix"></div>
                                     </div>
 
                                 </div>
 
                     </fieldset>
                 </form>
+
             </div><!--Add-Task-->
 
 
@@ -249,7 +258,7 @@ No Results found
     return false;
     });
 
-    $('#search_button').click(function(){
+    $('#search_button , .search_button').click(function(){
     var searchJobsUrl= '{{url('user_search_ajax', {'title' : '','country' : '','city' : '','state' : '','category' : '','company' :  '','lang' :  '', 'jobt' : '' ,'page' :  1})}}';
     $('.loading').show();
 
@@ -268,18 +277,25 @@ No Results found
     if($('#form_category').val()!= ""){ var category=$('#form_category').val();}
     else{ var category="empty"; }
 
-    if($('#form_company').val()!= ""){ var company=$('#form_company').val();}
-    else{  
+    
+    /*if($('#form_company').val()!= ""){ var company=$('#form_company').val();}
+    else{ 
         var comp = '{{ app.request.get('company') }}';
-        if(comp != "empty" || comp != '') {  var company=comp;}
+        if(comp != "empty" && comp != '') {  var company=comp;}
         else  var company="empty";
+    }*/
+    if($('#form_company').attr('value') != ""){
+        var company = $('#form_company').attr('value');
     }
+     else  var company="empty";
 
     if($('#form_language').val()!= ""){ var language=$('#form_language').val();}
     else{ var language="empty";}
 
-    if($('#form_jobtype').val()!= ""){ var jobType=$('#form_jobtype').val();}
-    else{ var jobType="empty";}
+    /*if($('#form_jobtype').val()!= ""){ var jobType=$('#form_jobtype').val();}
+    else{ var jobType="empty";}*/
+    if($('#form_jobtype input:radio:checked').val() != "" ) {var jobType = $('#form_jobtype input:radio:checked').val()}
+    else {var jobType="empty" }
 
     if(text || country || city || state || category || company || language || jobType){
     $('#search_error').hide();
