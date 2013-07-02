@@ -31,6 +31,7 @@ class ReminderCommand extends ContainerAwareCommand {
         $mailer = $container->get('mailer');
         $context = $this->getContainer()->get('router')->getContext();
         $context->setHost($container->getParameter('host_name'));
+        $context->setScheme('https');
 
         $em = $this->getContainer()->get('doctrine')->getEntityManager();
         $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
