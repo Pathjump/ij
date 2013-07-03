@@ -2949,6 +2949,7 @@ class InternjumpUserController extends Controller {
             $lastPageNumber++;
         }
 
+
         /*         * ***************[ Start API Search Results ]********************** */
         /*         * *********************************************** */
         $apiJobsArr = array();
@@ -2958,9 +2959,8 @@ class InternjumpUserController extends Controller {
                 if ($category != "empty") {
                     $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
                     //get countries array
-                    $categoryObj = $categoryRepo->findOneBy(array('id' => $category));
-                    if( $categoryObj )
-                    $title1 = $categoryObj->getSlug();
+                    $category = $categoryRepo->findOneBy(array('id' => $category));
+                    $title1 = $category->getSlug();
                         
                 }
             }
@@ -3074,10 +3074,8 @@ class InternjumpUserController extends Controller {
                 if ($category != "empty") {
                     $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
                     //get countries array
-                    $categoryObj = $categoryRepo->findOneBy(array('id' => $category));
-                    if( $categoryObj )
-                    $title1 = $categoryObj->getSlug();
-                        
+                    $category = $categoryRepo->findOneBy(array('id' => $category));
+                    $title1 = $category->getSlug();
                 }
             }
             if ($city != "empty" && $state != "empty") {
