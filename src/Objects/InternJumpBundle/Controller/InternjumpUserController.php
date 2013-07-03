@@ -2961,7 +2961,7 @@ class InternjumpUserController extends Controller {
                     //get countries array
                     $categoryObj = $categoryRepo->findOneBy(array('id' => $category));
                     if( $categoryObj )
-                    $title1 = $category->getSlug();
+                    $title1 = $categoryObj->getSlug();
                         
                 }
             }
@@ -3075,8 +3075,10 @@ class InternjumpUserController extends Controller {
                 if ($category != "empty") {
                     $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
                     //get countries array
-                    $category = $categoryRepo->findOneBy(array('id' => $category));
-                    $title1 = $category->getSlug();
+                    $categoryObj = $categoryRepo->findOneBy(array('id' => $category));
+                    if( $categoryObj )
+                    $title1 = $categoryObj->getSlug();
+                        
                 }
             }
             if ($city != "empty" && $state != "empty") {
