@@ -2564,11 +2564,12 @@ class InternjumpUserController extends Controller {
                 $stateOptionsArr = array('empty_value' => '--- choose State ---');
             }
             if ($sessionData['category'] != "empty" && $sessionData['category'] != '') {
-                //$categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($sessionData['category']));
-                $companyOptionsArr = array('attr' => array( 'value' => $sessionData['category']) );
+                $categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($sessionData['category']));
+                
             }
             if ($sessionData['company'] != "empty" && $sessionData['company'] != '' && !$request->get("company")) {
-                $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($sessionData['company']));
+                //$companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($sessionData['company']));
+                $companyOptionsArr = array('attr' => array( 'value' => $sessionData['company']) );
             }
             if ($sessionData['lang'] != "empty" && $sessionData['lang'] != '') {
                 $allLanguagesArray = array('class' => 'ObjectsInternJumpBundle:Language', 'property' => 'name', 'preferred_choices' => array($sessionData['lang']));
@@ -2820,11 +2821,12 @@ class InternjumpUserController extends Controller {
                 $stateOptionsArr = array('empty_value' => '--- choose State ---');
             }
             if ($sessionData['category'] != "empty" && $sessionData['category'] != '') {
-                //$categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($sessionData['category']));
-                $companyOptionsArr = array('attr' => array( 'value' => $sessionData['category']) );
+                $categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($sessionData['category']));
+                
             }
             if ($sessionData['company'] != "empty" && $sessionData['company'] != '' && !$request->get("company")) {
-                $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($sessionData['company']));
+                //$companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($sessionData['company']));
+                $companyOptionsArr = array('attr' => array( 'value' => $sessionData['company']) );
             }
             if ($sessionData['lang'] != "empty" && $sessionData['lang'] != '') {
                 $allLanguagesArray = array('class' => 'ObjectsInternJumpBundle:Language', 'property' => 'name', 'preferred_choices' => array($sessionData['lang']));
@@ -2960,6 +2962,7 @@ class InternjumpUserController extends Controller {
                     $category = $categoryRepo->findOneBy(array('id' => $category));
                     if( $category )
                     $title1 = $category->getSlug();
+                        
                 }
             }
             if ($city != "empty" && $state != "empty") {
