@@ -134,7 +134,7 @@ class InternshipController extends Controller {
         //all state
         $allState = $stateRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
         //all category
-        $allCategory = $categoryRepo->findAll();
+        $allCategory = $categoryRepo->findBy(array(), array('name' => 'asc'));
 
         //get latest jobs
         $LatestJobs = array();
@@ -191,7 +191,7 @@ class InternshipController extends Controller {
         //all state
         $allState = $stateRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
         //all category
-        $allCategory = $categoryRepo->findAll();
+        $allCategory = $categoryRepo->findBy(array(), array('name' => 'asc'));
 
         //get latest jobs
         $LatestJobs = array();
@@ -555,7 +555,7 @@ class InternshipController extends Controller {
         //all state
         $allState = $stateRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
         //all category
-        $allCategory = $categoryRepo->findAll();
+        $allCategory = $categoryRepo->findBy(array(), array('name' => 'asc'));
 
         //get latest jobs
         $LatestJobs = array();
@@ -693,7 +693,7 @@ class InternshipController extends Controller {
         //all state
         $allState = $stateRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
         //all category
-        $allCategory = $categoryRepo->findAll();
+        $allCategory = $categoryRepo->findBy(array(), array('name' => 'asc'));
 
         //get latest jobs
         $LatestJobs = array();
