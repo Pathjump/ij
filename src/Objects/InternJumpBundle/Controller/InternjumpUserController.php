@@ -2932,7 +2932,7 @@ class InternjumpUserController extends Controller {
         $userSearchResults = $internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray, $jobt, $page, $jobsPerPage);
 
         //Limit the details to only 200 character
-        foreach ($userSearchResults as &$job) {
+        foreach ($userSearchResults as $job) {
             $jobDesc = strip_tags($job->getDescription());
             if (strlen($jobDesc) > 200) {
                 $job->setDescription(substr($jobDesc, 0, 200) . '...');
@@ -2959,8 +2959,8 @@ class InternjumpUserController extends Controller {
                 if ($category != "empty") {
                     $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
                     //get countries array
-                    $category = $categoryRepo->findOneBy(array('id' => $category));
-                    $title1 = $category->getSlug();
+                    $categoryObj = $categoryRepo->findOneBy(array('id' => $category));
+                    $title1 = $categoryObj->getSlug();
                         
                 }
             }
@@ -3074,8 +3074,8 @@ class InternjumpUserController extends Controller {
                 if ($category != "empty") {
                     $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
                     //get countries array
-                    $category = $categoryRepo->findOneBy(array('id' => $category));
-                    $title1 = $category->getSlug();
+                    $categoryObj = $categoryRepo->findOneBy(array('id' => $category));
+                    $title1 = $categoryObj->getSlug();
                 }
             }
             if ($city != "empty" && $state != "empty") {
