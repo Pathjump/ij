@@ -125,7 +125,7 @@ class TaskController extends Controller {
         //all cities
         $allCities = $cityRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
         //all category
-        $allCategory = $categoryRepo->findAll();
+        $allCategory = $categoryRepo->findBy(array(), array('name' => 'asc'));
         //Get users State for the hidden Feild
         $uState = $user->getState();
 
@@ -275,7 +275,7 @@ class TaskController extends Controller {
         //all cities
         $allCities = $cityRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
         //all category
-        $allCategory = $categoryRepo->findAll();
+        $allCategory = $categoryRepo->findBy(array(), array('name' => 'asc'));
 
         //Get the user's worth result
         $worth = $user->getNetWorth();
