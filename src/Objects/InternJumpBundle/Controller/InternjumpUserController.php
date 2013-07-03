@@ -2958,6 +2958,7 @@ class InternjumpUserController extends Controller {
                     $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
                     //get countries array
                     $category = $categoryRepo->findOneBy(array('id' => $category));
+                    if( $category )
                     $title1 = $category->getSlug();
                 }
             }
