@@ -1,4 +1,3 @@
-{{category}}
 <div class="pagination pagination-centered">
 <ul class="">
                                 {% if lastPageNumber > 1 %}
@@ -39,7 +38,6 @@
 
                                    <ul class="unstyled inner-list">
                                        {%for job in jobs%}
-                                           {% if loop.index <= job|length %}
                                    		<li class="row-fluid show-grid">
                                             <div class="span8">
                                             	<h4><a class="titl-blue" href="{{path('internship_show', {'id': job.id})}}">{{job.title}}</a></h4>
@@ -55,7 +53,6 @@
                                                 <!-- <a href="javascript:void(0)"><i class="icon-pencil"></i> Position type</a> -->
                                             </div>
                                         </li>
-                                        {% endif %}
                                         {% endfor %}
                                         <!--++++++++++++++++++++++++ API jobs +++++++++++++++++++++++++++ -->
                                          {% for j in apiJobs['results']%}

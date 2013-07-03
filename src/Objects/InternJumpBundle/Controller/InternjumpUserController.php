@@ -2949,7 +2949,6 @@ class InternjumpUserController extends Controller {
             $lastPageNumber++;
         }
 
-
         /*         * ***************[ Start API Search Results ]********************** */
         /*         * *********************************************** */
         $apiJobsArr = array();
