@@ -38,7 +38,7 @@
 
                                    <ul class="unstyled inner-list">
                                        {%for job in jobs%}
-                                           {% if job|length > 0 %}
+                                           {% if loop.index <= job|length %}
                                    		<li class="row-fluid show-grid">
                                             <div class="span8">
                                             	<h4><a class="titl-blue" href="{{path('internship_show', {'id': job.id})}}">{{job.title}}</a></h4>

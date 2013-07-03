@@ -37,7 +37,7 @@
                                   </div><!---title3--->
 
                                    <ul class="unstyled inner-list">
-                                       {% if job|length > 0 %}
+                                       {% if loop.index <= job|length %}
                                            {% if job.id %}
                                    		<li class="row-fluid show-grid">
                                             <div class="span8">
