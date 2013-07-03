@@ -2959,8 +2959,8 @@ class InternjumpUserController extends Controller {
                 if ($category != "empty") {
                     $categoryRepo = $em->getRepository('ObjectsInternJumpBundle:CVCategory');
                     //get countries array
-                    $category = $categoryRepo->findOneBy(array('id' => $category));
-                    if( $category )
+                    $categoryObj = $categoryRepo->findOneBy(array('id' => $category));
+                    if( $categoryObj )
                     $title1 = $category->getSlug();
                         
                 }
