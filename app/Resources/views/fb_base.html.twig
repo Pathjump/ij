@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
    <script>
 
-   //var isInIFrame = (window.location != window.parent.location) ? true : window.location= 'http://apps.facebook.com/internjump/';
+   var isInIFrame = (window.location != window.parent.location) ? true : window.location= 'http://apps.facebook.com/internjump/';
    </script>
     <!--<![endif]-->
     <head>
@@ -64,7 +64,7 @@
                             {% else %}
                                 <li><a href="{{path('fb_internjumb_quiz_page_result')}}">Personality Quiz</a></li>
                             {% endif %}
-                            <li><a href="{{ path('fb_howMuchAreYouWorth') }}">Find Your Worth</a></li>   
+                            <li><a href="{{ path('fb_howMuchAreYouWorth') }}">Find Your Worth</a></li>
                         </ul>
                     </div>
                     {% endif %}

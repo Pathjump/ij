@@ -101,6 +101,7 @@
                                         </div><!--company-form-->
 
 
+                                        {% if companyJobs | length > 0 %}
                                         <h3>Internship list</h3>
 
                                         <div class="Result-box">
@@ -139,6 +140,7 @@
 
 
                                         </div><!--Result-box-->
+                                        {% endif %}
 
                                              {% if lastPageNumber > 1 %}
                                             <div class="pagination pagination-centered">
