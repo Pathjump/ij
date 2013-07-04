@@ -13,13 +13,76 @@ use Doctrine\ORM\EntityRepository;
 class InternshipRepository extends EntityRepository {
 
     /**
+     * this function used to get relted jobs to job categories
+     * @author ahmed
+     * @param int $id
+     * @param int $jobCatIds
+     */
+    public function getRelatedJobs($jobId, $jobCatIds) {
+        $query = $this->getEntityManager()->createQuery('
+            SELECT i
+            FROM ObjectsInternJumpBundle:Internship i
+            JOIN i.categories c
+            WHERE i.id != :jobId
+            and c.id in (:jobCatIds)
+            and i.active = true
+            AND  i.activeFrom <= :today
+            AND  i.activeTo >= :today
+            order by i.createdAt desc
+            ')->setParameters(array('today' => new \DateTime(), 'jobId' => $jobId, 'jobCatIds' => $jobCatIds))->setMaxResults(5);
+        return $query->getResult();
+    }
+
+    /**
+     * get recent jobs
+     * @author ahmed
+     * @param int $max
+     * @return type
+     */
+    public function getRecentJobs($max) {
+        $query = $this->getEntityManager()->createQuery('
+            SELECT i
+            FROM ObjectsInternJumpBundle:Internship i
+            WHERE i.active = true
+            AND  i.activeFrom <= :today
+            AND  i.activeTo >= :today
+            order by i.createdAt desc
+            ')->setParameters(array('today' => new \DateTime()))->setMaxResults($max);
+        return $query->getResult();
+    }
+
+    /**
+     * get all job categories ids
+     * @author ahmed
+     * @param int $jobId
+     * @return type
+     */
+    public function getJobCatIds($jobId) {
+        $query = $this->getEntityManager()->createQuery('
+            SELECT c.id
+            FROM ObjectsInternJumpBundle:Internship i
+            JOIN i.categories c
+            WHERE i.id = :jobId
+            ')->setParameter('jobId', $jobId);
+        $result = $query->getResult();
+        $ids = array();
+        if (count($result) > 0) {
+            foreach ($result as $idArray) {
+                $ids [] = $idArray['id'];
+            }
+        }
+        return $ids;
+    }
+
+    /**
      * this function get jobs mathching to user
      * @author ahmed
      * @param string $userCvCategoriesIds
      * @param string $country
      * @param string $state
      */
-    public function getmatchingUserJobs($userCvCategoriesIds, $country, $state) {;
+    public function getmatchingUserJobs($userCvCategoriesIds, $country, $state) {
+        ;
         $parameters = array('today' => new \DateTime(date('Y-m-d')));
         $query = '
             SELECT j

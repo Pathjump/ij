@@ -95,7 +95,7 @@ class InternshipController extends Controller {
      * @author ahmed
      * @param type $jobkey
      */
-    public function indeedJobApplyAction($jobkey){
+    public function indeedJobApplyAction($jobkey) {
         //get the job details
         $jobDetails = $this->getIndeedJob($jobkey);
         if (!$jobDetails['jobtitle']) {
@@ -108,7 +108,6 @@ class InternshipController extends Controller {
                     'jobDetails' => $jobDetails
         ));
     }
-
 
     /**
      * show indeed job
@@ -128,13 +127,6 @@ class InternshipController extends Controller {
             return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
                         'message' => $message,));
         }
-
-        //all cities
-        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
-        //all state
-        $allState = $stateRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
-        //all category
-        $allCategory = $categoryRepo->findBy(array(), array('name' => 'asc'));
 
         //get latest jobs
         $LatestJobs = array();
@@ -156,12 +148,11 @@ class InternshipController extends Controller {
             if (sizeof($categ) > 0) { //found array of categories
                 $LatestJobs = $em->getRepository('ObjectsInternJumpBundle:Internship')->getLatestJobs($categ, 5);
             }
+        } else {
+            $LatestJobs = $em->getRepository('ObjectsInternJumpBundle:Internship')->getRecentJobs(5);
         }
 
         return $this->render('ObjectsInternJumpBundle:Internship:showIndeedJob.html.twig', array(
-                    'allCities' => $allCities,
-                    'allState' => $allState,
-                    'allCategory' => $allCategory,
                     'LatestJobs' => $LatestJobs,
                     'jobDetails' => $jobDetails
         ));
@@ -186,13 +177,6 @@ class InternshipController extends Controller {
                         'message' => $message,));
         }
 
-        //all cities
-        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
-        //all state
-        $allState = $stateRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
-        //all category
-        $allCategory = $categoryRepo->findBy(array(), array('name' => 'asc'));
-
         //get latest jobs
         $LatestJobs = array();
         if (true === $this->get('security.context')->isGranted('ROLE_USER')) {
@@ -212,12 +196,11 @@ class InternshipController extends Controller {
             if (sizeof($categ) > 0) { //found array of categories
                 $LatestJobs = $em->getRepository('ObjectsInternJumpBundle:Internship')->getLatestJobs($categ, 5);
             }
+        } else {
+            $LatestJobs = $em->getRepository('ObjectsInternJumpBundle:Internship')->getRecentJobs(5);
         }
 
         return $this->render('ObjectsInternJumpBundle:Internship:fb_showIndeedJob.html.twig', array(
-                    'allCities' => $allCities,
-                    'allState' => $allState,
-                    'allCategory' => $allCategory,
                     'LatestJobs' => $LatestJobs,
                     'jobDetails' => $jobDetails
         ));
@@ -547,16 +530,6 @@ class InternshipController extends Controller {
             $jobCategories [] = $category->getId();
         }
 
-
-        //all companies
-//        $allCompanies = $companyRepo->findAll();
-        //all cities
-        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
-        //all state
-        $allState = $stateRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
-        //all category
-        $allCategory = $categoryRepo->findBy(array(), array('name' => 'asc'));
-
         //get latest jobs
         $LatestJobs = array();
         if (true === $this->get('security.context')->isGranted('ROLE_USER')) {
@@ -576,6 +549,13 @@ class InternshipController extends Controller {
             if (sizeof($categ) > 0) { //found array of categories
                 $LatestJobs = $em->getRepository('ObjectsInternJumpBundle:Internship')->getLatestJobs($categ, 5);
             }
+        }
+
+        //get related jobs
+        $jobCatIds = $internshipRepo->getJobCatIds($id);
+        $relatedJobs = array();
+        if (sizeof($jobCatIds) > 0) {
+            $relatedJobs = $internshipRepo->getRelatedJobs($id, $jobCatIds);
         }
 
         //get job skills
@@ -603,9 +583,7 @@ class InternshipController extends Controller {
                     'job_apply_success_message' => $this->container->getParameter('job_apply_success_message_show_job_page'),
                     'jobSkills' => $jobSkills,
                     'jobCategroies' => $jobCategroies,
-                    'allCities' => $allCities,
-                    'allState' => $allState,
-                    'allCategory' => $allCategory,
+                    'relatedJobs' => $relatedJobs,
                     'LatestJobs' => $LatestJobs
         ));
     }
@@ -685,16 +663,6 @@ class InternshipController extends Controller {
             $jobCategories [] = $category->getId();
         }
 
-
-        //all companies
-//        $allCompanies = $companyRepo->findAll();
-        //all cities
-        $allCities = $cityRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
-        //all state
-        $allState = $stateRepo->findBy(array('country' => 'US'), array('name' => 'asc'));
-        //all category
-        $allCategory = $categoryRepo->findBy(array(), array('name' => 'asc'));
-
         //get latest jobs
         $LatestJobs = array();
         if (true === $this->get('security.context')->isGranted('ROLE_USER')) {
@@ -716,6 +684,12 @@ class InternshipController extends Controller {
             }
         }
 
+        //get related jobs
+        $jobCatIds = $internshipRepo->getJobCatIds($id);
+        $relatedJobs = array();
+        if (sizeof($jobCatIds) > 0) {
+            $relatedJobs = $internshipRepo->getRelatedJobs($id, $jobCatIds);
+        }
 
         return $this->render('ObjectsInternJumpBundle:Internship:fb_show.html.twig', array(
                     'entity' => $entity,
@@ -729,10 +703,8 @@ class InternshipController extends Controller {
                     'job_added_before_message' => $this->container->getParameter('job_added_before_message_show_job_page'),
                     'job_apply_success_message' => $this->container->getParameter('job_apply_success_message_show_job_page'),
 //                    'allCompanies' => $allCompanies,
-                    'allCities' => $allCities,
-                    'allState' => $allState,
-                    'allCategory' => $allCategory,
-                    'LatestJobs' => $LatestJobs
+                    'LatestJobs' => $LatestJobs,
+                    'relatedJobs' => $relatedJobs
         ));
     }
 

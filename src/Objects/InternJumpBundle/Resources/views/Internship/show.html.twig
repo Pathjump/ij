@@ -180,9 +180,9 @@
 
                                     {% if is_granted('ROLE_COMPANY') and company.id == app.user.id and applyedUsers|length > 0 %}
                                     <div class="Result-box">
-                                            <h4 class="title3">Applications Received</h4><!---title3--->
+                                        <h4 class="title3">Applications Received</h4><!---title3--->
 
-                                            <ul class="unstyled inner-list">
+                                        <ul class="unstyled inner-list">
                                                 {% for userInternship in applyedUsers %}
                                                 <li class="row-fluid show-grid">
                                                     <div class="span8">
@@ -200,57 +200,29 @@
                                         </div><!--Result-box-->
                                         {% endif %}
 
-                                </div><!--span 8-->
+                                    </div><!--span 8-->
 
-                                <div class="span4 search-right-col">
+                                    <div class="span4 search-right-col">
 
-                                    <div class="Col-block">
-                                        <h2>Search</h2>
-                                        <div class="Search-form">
-                                            <form>
-                                            <select id="companyFilter">
-                                                <option value="">job type</option>
-                                                <option value="Internship">Internship</option>
-                                                <option value="Entry Level">Entry Level</option>
-                                            </select>
-
-
-                                                    {#
-                            {% if allCities |length > 0 %}
-                                                    <select id="cityFilter">
-                                                        <option value="">City</option>
-                                    {% for city in allCities %}
-                                                        <option value="{{city.id}}">{{city}}</option>
-                                    {% endfor %}
-                                                    </select>
-                            {% endif %}
-                                                    #}
-
-                            {% if allState |length > 0 %}
-                                                    <select id="stateFilter">
-                                                        <option value="">State</option>
-                                    {% for state in allState %}
-                                                        <option value="{{state}}">{{state}}</option>
-                                    {% endfor %}
-                                                    </select>
-                            {% endif %}
-                            {% if allCategory |length > 0 %}
-                                                    <select id="industryFilter">
-                                                        <option value="">Industry</option>
-                                    {% for category in allCategory %}
-                                                        <option value="{{category.id}}">{{category}}</option>
-                                    {% endfor %}
-                                                    </select>
-                            {% endif %}
-
-                                                    <input id="keywordFilter" placeholder="Keyword" type="text" style="width: 94%;"/>
-                                                    <br>
-                                                    <button class="btn btn-primary" type="button" id="homeSearchJob">Search</button>
-                                                    <br/>
-                                                    <a href="{{ path('user_search_page') }}">Advanced search</a>
-                                                </form>
-                                            </div>
+                                    {% if relatedJobs | length > 0 %}
+                                        <div class="Col-block">
+                                            <h2>Related Positions</h2>
+                                            <div class="media">
+                        {% for job in relatedJobs %}
+                                                    <a href="{{path('internship',{'loginName' : job.company.loginName})}}" class="pull-left"><img src="{{job.company.getTimThumbUrl(60,60)}}"></a>
+                                                    <div class="media-body">
+                                                        <div class="titl-blue">
+                                                            <a href="{{path('internship_show',{'id' : job.id})}}">
+                                    {{job.title}}
+                                                                </a>
+                                                            </div>
+                            {{job.company}}
+                                                        </div><br>
+                                                        <div class="clearfix"></div>
+                        {% endfor %}
+                                                    </div>
                                         </div><!--Col-block--->
+                                        {% endif %}
 
                 {% if LatestJobs | length > 0%}
                                         <div class="Col-block Latest-Interrnships">
