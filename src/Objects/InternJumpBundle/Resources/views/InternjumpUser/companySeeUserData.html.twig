@@ -135,7 +135,7 @@
                         {% if education.schoolName %}
                                 <h5 class="titl-blue">{{education.schoolName}}</h5>
                         {% endif %}
-                                <strong>AS, A ({{education.major}})</strong>
+                                <strong>{% if education.graduateDegree %}{{ education.graduateDegree }}{% else %}{{ education.undergraduateDegree }}{% endif %} - {{education.major}} {% if education.minor %}({{education.minor}}){% endif %}</strong>
                                 <!--<div class="muted">Alexandria,Egypt</div>-->
                                 <div class="muted">{% if education.startDate %}{{education.startDate}}{% endif %} - {% if education.endDate %}{{education.endDate}}{% endif %}</div>
                         {% if education.startDate %}
