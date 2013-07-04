@@ -24,11 +24,11 @@
         <div class="container Main-content">
             <div class="row-fluid show-grid">
 
-                <div class="Sign-Up">
+                <a class="addNewEducation btn btn-mini btn-info" style="color:#fff;margin-bottom: 20px;" href="javascript:void(0)">Add New Education</a>
+                <div class="Sign-Up" id="newEducationDiv" style="display: none;">
 
                     <form action="{{ path('education_create') }}" method="post">
                         <fieldset>
-                            <legend><h3>{% if formName %}{{ formName }}{% endif %}</h3></legend>
                             <p>{% if formDesc %}{{ formDesc }}{% endif %}</p>
 
                             <div class="controls  row-fluid show-grid">
@@ -220,33 +220,23 @@
                         <tbody>
                             <tr>
                                 <th scope="row">School</th>
-                                <th scope="row">Degree Type</th>
                                 <th scope="row">Major</th>
                                 <th scope="row">Minor</th>
-                                <th scope="row">Cumulative GPA</th>
-                                <th scope="row">Major GPA</th>
                                 <th scope="row">Graduate Degree</th>
                                 <th scope="row">UnderGraduate Degree</th>
                                 <th scope="row">Start Date</th>
                                 <th scope="row">End Date</th>
-                                <th scope="row">Relevant Coursework Taken</th>
-                                <th scope="row">Extracurricular Activity</th>
                                 <th scope="row">Action</th>
                             </tr>
                             {% for education in app.user.educations %}
                             <tr>
                                 <td>{{ education.schoolName }}</td>
-                                <td>{{ education.underGraduate }}</td>
                                 <td>{{ education.major }}</td>
                                 <td>{{ education.minor }}</td>
-                                <td>{{ education.cumulativeGPA }}</td>
-                                <td>{{ education.majorGPA }}</td>
                                 <td>{{ education.graduateDegree }}</td>
                                 <td>{{ education.underGraduateDegree }}</td>
-                                <td>{{ education.startDate | date('Y-m-d') }}</td>
-                                <td>{{ education.endDate | date('Y-m-d') }}</td>
-                                <td>{{ education.relevantCourseworkTaken }}</td>
-                                <td>{{ education.extracurricularActivity }}</td>
+                                <td>{{ education.startDate }}</td>
+                                <td>{{ education.endDate }}</td>
                                 <td><a href="{{ path('education_edit',{'id' : education.id }) }}"><i class="icon-pencil"></i></a></td>
                             </tr>
                             {% endfor %}
@@ -264,6 +254,15 @@
 <script src="{{ asset('js/tooltip/tooltip.js') }}"></script>
 <script>
     $(document).ready(function() {
+        // show/hide education form
+        $('.addNewEducation').click(function(){
+           if($('#newEducationDiv').is(':visible')){
+               $('#newEducationDiv').slideUp(1000);
+           } else{
+               $('#newEducationDiv').slideDown(1000);
+           }
+        });
+
         $('.graduateDegree').autocomplete({
             autoFocus: true,
             minLength: 2,
