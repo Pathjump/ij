@@ -42,7 +42,7 @@ class Post
     /**
      * @var string $postImage
      *
-     * @ORM\Column(name="postImage", type="string", length=255)
+     * @ORM\Column(name="postImage", type="string", length=255,nullable=true)
      */
     private $postImage;
 
@@ -214,7 +214,7 @@ class Post
 
    /**ToString**/
     public function __toString() {
-        return $this->postImage;
+        return (string) $this->postTitle;
     }
 
     public function __construct() {

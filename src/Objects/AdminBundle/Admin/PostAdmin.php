@@ -19,25 +19,24 @@ class PostAdmin extends Admin {
 
     /**
      * this variable holds the route name prefix for this actions
-     * @var string 
+     * @var string
      */
     protected $baseRouteName = 'post_admin';
 
     /**
      * this variable holds the url route prefix for this actions
-     * @var string 
+     * @var string
      */
     protected $baseRoutePattern = 'post';
 
     /**
      * this function configure the list action fields
      * @author Ola
-     * @param ListMapper $listMapper 
+     * @param ListMapper $listMapper
      */
     public function configureListFields(ListMapper $listMapper) {
         $listMapper
                 ->add('postTitle')
-                ->add('postBody')
                 ->add('createdAt')
                 ->add('categories')
                 ->add('postImage',NULL, array('template' => 'ObjectsAdminBundle:General:list_post_image.html.twig'))
@@ -55,15 +54,15 @@ class PostAdmin extends Admin {
     /**
      * this function configure the show action fields
      * @author Ahmed
-     * @param ShowMapper $showMapper 
+     * @param ShowMapper $showMapper
      */
     public function configureShowField(ShowMapper $showMapper) {
         $showMapper
                 ->add('postTitle')
-                ->add('postBody')
+                ->add('postBody',NULL, array('template' => 'ObjectsAdminBundle:General:show_html_content.html.twig'))
                 ->add('createdAt')
                 ->add('categories')
-                ->add('postImage')
+                ->add('postImage',NULL, array('template' => 'ObjectsAdminBundle:General:show_image.html.twig'))
                 ->add('isPublished')
         ;
     }
@@ -72,15 +71,13 @@ class PostAdmin extends Admin {
      * this function configure the list action filters fields
      * @todo add the date filters if sonata project implemented it
      * @author Ola
-     * @param DatagridMapper $datagridMapper 
+     * @param DatagridMapper $datagridMapper
      */
     public function configureDatagridFilters(DatagridMapper $datagridMapper) {
         $datagridMapper
                 ->add('postTitle')
-                ->add('postBody')
                 ->add('createdAt')
                 ->add('categories')
-                ->add('postImage')
                 ->add('isPublished')
         ;
     }
@@ -88,23 +85,24 @@ class PostAdmin extends Admin {
     /**
      * this function configure the new, edit form fields
      * @author Ola
-     * @param FormMapper $formMapper 
+     * @param FormMapper $formMapper
      */
     public function configureFormFields(FormMapper $formMapper) {
 
         $formMapper
                 ->add('postTitle')
-                ->add('postBody',null, array('attr'=> array('class' => 'ckeditor')))
+                ->add('slug')
+                ->add('postBody',null, array('required' => false,'attr'=> array('class' => 'ckeditor')))
                 ->add('file','file', array('label'=> 'Resource Image', 'required' => false))
-                ->add('categories', 'sonata_type_model', array('attr' => array()))
+                ->add('categories', 'sonata_type_model', array('attr' => array('class' => 'chosen')))
                 ->add('isPublished',null,array('required' => false))
         ;
     }
 
-     //for update image 
+     //for update image
      public function PreUpdate($postImage){
         $postImage->preUpload();
-    }  
+    }
 }
 
 ?>
