@@ -2538,7 +2538,7 @@ class InternjumpUserController extends Controller {
         $categoryOptionsArr = array('empty_value' => '--- choose Industry ---', 'choices' => $allCategoriesArray);
         //$companyOptionsArr = array('empty_value' => '--- choose Company ---', 'choices' => $allCompanysArray);
         $companyOptionsArr = array('attr' => array( 'placeholder' => 'Type Company') );
-        $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'expanded'=> true ,'label' => 'Job type :', 'data' => 'Internship' ); //, 'empty_value' => '--- choose job type ---'
+        $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'expanded'=> true ,'label' => 'Job type :' ); //, 'data' => 'Internship', 'empty_value' => '--- choose job type ---'
         //->add('spokenFluency', 'choice', array('choices' => array('None' => 'None', 'Novice' => 'Novice', 'Intermediate' => 'Intermediate', 'Advanced' => 'Advanced'), 'expanded' => true, 'label' => 'Spoken :', 'attr' => array('class' => 'lngopt')))
 
         /*         * *************************************************************************** */
@@ -2795,7 +2795,7 @@ class InternjumpUserController extends Controller {
         $categoryOptionsArr = array('empty_value' => '--- choose Industry ---', 'choices' => $allCategoriesArray);
         //$companyOptionsArr = array('empty_value' => '--- choose Company ---', 'choices' => $allCompanysArray);
         $companyOptionsArr = array('attr' => array( 'placeholder' => 'Type Company') );
-        $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'expanded'=> true ,'label' => 'Job type :', 'data' => 'Internship' ); //, 'empty_value' => '--- choose job type ---'
+        $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'expanded'=> true ,'label' => 'Job type :' ); //, 'data' => 'Internship', 'empty_value' => '--- choose job type ---'
         //->add('spokenFluency', 'choice', array('choices' => array('None' => 'None', 'Novice' => 'Novice', 'Intermediate' => 'Intermediate', 'Advanced' => 'Advanced'), 'expanded' => true, 'label' => 'Spoken :', 'attr' => array('class' => 'lngopt')))
 
         /*         * *************************************************************************** */

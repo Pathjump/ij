@@ -294,8 +294,9 @@ No Results found
 
     /*if($('#form_jobtype').val()!= ""){ var jobType=$('#form_jobtype').val();}
     else{ var jobType="empty";}*/
-    if($('#form_jobtype input:radio:checked').val() != "" ) {var jobType = $('#form_jobtype input:radio:checked').val()}
-    else {var jobType="empty" }
+    if($('#form_jobtype input:radio').is(':checked')){
+        if($('#form_jobtype input:radio:checked').val() != "" ) {var jobType = $('#form_jobtype input:radio:checked').val()}
+    }  else {var jobType="empty" }
 
     if(text || country || city || state || category || company || language || jobType){
     $('#search_error').hide();
