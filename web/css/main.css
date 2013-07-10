@@ -4731,3 +4731,7 @@ only screen and (min-resolution: 144dpi) {
 
 }
 
+/* to make large radius box on homepage */
+.wellcircle{-webkit-border-radius: 1000px;
+-moz-border-radius: 1000px;
+border-radius: 1000px;}
