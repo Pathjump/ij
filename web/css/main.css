@@ -681,7 +681,7 @@ a:hover{
 
 .Start-form{
 
-    background:#f2f2f2 url("../img/startForm-bg.png") top center no-repeat;
+    background:#f2f2f2 url("../img/startForm-bg.png") top center repeat;
 
     min-height:410px;
 
@@ -4734,4 +4734,6 @@ only screen and (min-resolution: 144dpi) {
 /* to make large radius box on homepage */
 .wellcircle{-webkit-border-radius: 1000px;
 -moz-border-radius: 1000px;
-border-radius: 1000px;}
+border-radius: 1000px;
+padding:15px;
+}
