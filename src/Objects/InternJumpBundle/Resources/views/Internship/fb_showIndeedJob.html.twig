@@ -39,7 +39,11 @@
 
 
                             <div class="box-b links">
-                                <a class="btn btn-primary large pull-right apply" target="_blank" href="{{jobDetails.url}}">Custom Apply</a>
+                                {% if is_granted('ROLE_USER')  %}
+                                                <a class="btn btn-primary large pull-right apply" href="{{ path('indeed_job_apply',{'jobkey' : jobDetails.jobkey}) }}">Custom Apply</a>
+                                            {% elseif not is_granted('ROLE_NOTACTIVE')%}
+                                                <a class="btn btn-primary large pull-right apply" href="{{ path('user_signup') }}">Custom Apply</a>
+                                            {% endif %}
                                 <div class="clearfix"></div>
                             </div><!--box-b-->
 
@@ -60,7 +64,12 @@
                                         </div><!--box-b--->
 
                                         <div class="box-b links">
-                                            <a class="btn btn-primary large pull-right apply" target="_blank" href="{{jobDetails.url}}" >Custom Apply</a> <h4 class=" text-center pull-right">Apply to this position!</h4>
+                                            {% if is_granted('ROLE_USER')  %}
+                                                <a class="btn btn-primary large pull-right apply" href="{{ path('indeed_job_apply',{'jobkey' : jobDetails.jobkey}) }}">Custom Apply</a>
+                                            {% elseif not is_granted('ROLE_NOTACTIVE')%}
+                                                <a class="btn btn-primary large pull-right apply" href="{{ path('user_signup') }}">Custom Apply</a>
+                                            {% endif %}
+                                            <h4 class=" text-center pull-right">Apply to this position!</h4>
                                             <div class="clearfix"></div>
                                         </div>
 
