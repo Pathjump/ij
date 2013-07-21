@@ -189,7 +189,7 @@ class EmploymentHistoryController extends Controller {
             }
             $em->flush();
             $request->getSession()->setFlash('success', 'Edited Successfuly');
-            return $this->redirect($this->generateUrl('employmenthistory_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('employmenthistory_new'));
         }
         return $this->render('ObjectsInternJumpBundle:EmploymentHistory:edit.html.twig', array(
                     'entity' => $entity,

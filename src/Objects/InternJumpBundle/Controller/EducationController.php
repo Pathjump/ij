@@ -360,7 +360,7 @@ class EducationController extends Controller {
             }
             $em->flush();
             $request->getSession()->setFlash('success', 'Edited Successfuly');
-            return $this->redirect($this->generateUrl('education_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('education_new'));
         }
         return $this->render('ObjectsInternJumpBundle:Education:edit.html.twig', array(
                     'entity' => $entity,

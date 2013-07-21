@@ -216,7 +216,7 @@ class FacebookEducationController extends Controller {
             }
             $em->flush();
             $request->getSession()->setFlash('success', 'Edited Successfuly');
-            return $this->redirect($this->generateUrl('fb_education_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('fb_education_new'));
         }
         return $this->render('ObjectsInternJumpBundle:FacebookEducation:edit.html.twig', array(
                     'entity' => $entity,

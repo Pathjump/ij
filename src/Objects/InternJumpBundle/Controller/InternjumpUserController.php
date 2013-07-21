@@ -466,7 +466,7 @@ class InternjumpUserController extends Controller {
                     $em->flush();
 
                     $request->getSession()->setFlash('success', 'Language Updated successfully');
-                    return $this->redirect($this->generateUrl('user_edit_language', array('id' => $id)));
+                    return $this->redirect($this->generateUrl('user_languages'));
                 }
             }
 
@@ -588,7 +588,7 @@ class InternjumpUserController extends Controller {
                     $em->flush();
 
                     $request->getSession()->setFlash('success', 'Language Updated successfully');
-                    return $this->redirect($this->generateUrl('fb_user_edit_language', array('id' => $id)));
+                    return $this->redirect($this->generateUrl('fb_user_languages'));
                 }
             }
 
