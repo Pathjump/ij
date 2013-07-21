@@ -116,7 +116,7 @@ class FacebookEmploymentHistoryController extends Controller {
             $em->persist($entity);
             $em->flush();
             $request->getSession()->setFlash('success', 'Created Successfuly');
-            return $this->redirect($this->generateUrl('fb_employmenthistory_edit', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('fb_employmenthistory_new'));
         }
         return $this->render('ObjectsInternJumpBundle:FacebookEmploymentHistory:new.html.twig', array(
                     'entity' => $entity,

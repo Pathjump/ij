@@ -160,7 +160,7 @@ class InternjumpUserController extends Controller {
                 $searchString = urlencode("company:" . $company);
         }
         if($searchString == "empty")$searchString="";
-        
+
         $apiSearchString = 'http://api.indeed.com/ads/apisearch?publisher=5399161479070076&jt=' . urlencode($jobType) . '&v=2&format=json&latlong=1&useragent=' . urlencode($userAgent) . '&userip=' . urlencode($userIp) . '&start=' . $start . '&limit=' . $limit . '&q=' . $searchString . '&sort=date'; //urlencode($searchString)
 
         if ($jobLocation) {
@@ -512,7 +512,7 @@ class InternjumpUserController extends Controller {
                 $em->flush();
 
                 $request->getSession()->setFlash('success', 'New Language Added successfully');
-                return $this->redirect($this->generateUrl('user_edit_language', array('id' => $newUserLanguage->getId())));
+                return $this->redirect($this->generateUrl('user_languages'));
             }
         }
 
@@ -634,7 +634,7 @@ class InternjumpUserController extends Controller {
                 $em->flush();
 
                 $request->getSession()->setFlash('success', 'New Language Added successfully');
-                return $this->redirect($this->generateUrl('fb_user_edit_language', array('id' => $newUserLanguage->getId())));
+                return $this->redirect($this->generateUrl('fb_user_languages'));
             }
         }
 
@@ -2565,7 +2565,7 @@ class InternjumpUserController extends Controller {
             }
             if ($sessionData['category'] != "empty" && $sessionData['category'] != '') {
                 $categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($sessionData['category']));
-                
+
             }
             if ($sessionData['company'] != "empty" && $sessionData['company'] != '' && !$request->get("company")) {
                 //$companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($sessionData['company']));
@@ -2608,8 +2608,8 @@ class InternjumpUserController extends Controller {
 //                if ($companyObj) {
 //                    $companyId = $companyObj->getId();
 //                    $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($companyId));
-//                    
-//                    
+//
+//
 //                }
             }
         }
@@ -2822,7 +2822,7 @@ class InternjumpUserController extends Controller {
             }
             if ($sessionData['category'] != "empty" && $sessionData['category'] != '') {
                 $categoryOptionsArr = array('choices' => $allCategoriesArray, 'preferred_choices' => array($sessionData['category']));
-                
+
             }
             if ($sessionData['company'] != "empty" && $sessionData['company'] != '' && !$request->get("company")) {
                 //$companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($sessionData['company']));
@@ -2865,8 +2865,8 @@ class InternjumpUserController extends Controller {
 //                if ($companyObj) {
 //                    $companyId = $companyObj->getId();
 //                    $companyOptionsArr = array('choices' => $allCompanysArray, 'preferred_choices' => array($companyId));
-//                    
-//                    
+//
+//
 //                }
             }
         }
@@ -2928,7 +2928,7 @@ class InternjumpUserController extends Controller {
 
         $em = $this->getDoctrine()->getEntityManager();
         $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
-        
+
         $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
         $companyId = $company;
         $companyObj = $companyRepo->findOneBy(array('loginName' => $company));
@@ -2968,7 +2968,7 @@ class InternjumpUserController extends Controller {
                     //get countries array
                     $categoryObj = $categoryRepo->findOneBy(array('id' => $category));
                     $title1 = $categoryObj->getSlug();
-                        
+
                 }
             }
             if ($city != "empty" && $state != "empty") {
@@ -3050,7 +3050,7 @@ class InternjumpUserController extends Controller {
 
         $em = $this->getDoctrine()->getEntityManager();
         $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
-        
+
         $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
         $companyId = $company;
         $companyObj = $companyRepo->findOneBy(array('loginName' => $company));
@@ -3090,7 +3090,7 @@ class InternjumpUserController extends Controller {
                     //get countries array
                     $categoryObj = $categoryRepo->findOneBy(array('id' => $category));
                     $title1 = $categoryObj->getSlug();
-                        
+
                 }
             }
             if ($city != "empty" && $state != "empty") {

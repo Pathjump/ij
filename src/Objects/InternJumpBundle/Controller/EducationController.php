@@ -281,7 +281,7 @@ class EducationController extends Controller {
             $em->persist($entity);
             $em->flush();
             $request->getSession()->setFlash('success', 'Created Successfuly');
-            return $this->redirect($this->generateUrl('education_edit', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('education_new'));
         }
         return $this->render('ObjectsInternJumpBundle:Education:new.html.twig', array(
                     'entity' => $entity,
