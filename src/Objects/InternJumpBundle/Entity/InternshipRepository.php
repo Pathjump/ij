@@ -374,7 +374,7 @@ class InternshipRepository extends EntityRepository {
             FROM ObjectsInternJumpBundle:Internship j
             JOIN j.company c
             JOIN j.categories cat
-            JOIN j.keywords kw
+            LEFT JOIN j.keywords kw
             JOIN j.languages il
             JOIN il.language l
             WHERE j.active = true AND  j.activeFrom <= :today AND  j.activeTo >= :today

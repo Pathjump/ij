@@ -140,7 +140,7 @@ city_auto_complete_url:
     requirements: { _format: (xml|json), _method: GET }
 
 internjumb_quiz:
-    pattern:  /internjumb_quiz
+    pattern:  /internjump_quiz
     defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:internjumbQuizPage" }
 
 
@@ -169,7 +169,7 @@ fb_personal_questions:
     defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:fb_personalQuestions" }
 
 fb_internjumb_quiz:
-    pattern:  /fb_internjumb_quiz
+    pattern:  /fb_internjump_quiz
     defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:fb_internjumbQuizPage" }
 
 fb_user_portal_home:
@@ -197,9 +197,9 @@ report_user:
         cvId:  \d+
 
 internjumb_quiz_page_result:
-    pattern:  /internjumb_quiz_result
+    pattern:  /internjump_quiz_result
     defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:internjumbQuizPageResult" }
 
 fb_internjumb_quiz_page_result:
-    pattern:  /fb_internjumb_quiz_result
+    pattern:  /fb_internjump_quiz_result
     defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:fb_internjumbQuizPageResult" }

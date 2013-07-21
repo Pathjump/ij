@@ -2538,7 +2538,7 @@ class InternjumpUserController extends Controller {
         $categoryOptionsArr = array('empty_value' => '--- choose Industry ---', 'choices' => $allCategoriesArray);
         //$companyOptionsArr = array('empty_value' => '--- choose Company ---', 'choices' => $allCompanysArray);
         $companyOptionsArr = array('attr' => array( 'placeholder' => 'Type Company') );
-        $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'expanded'=> true ,'label' => 'Job type :', 'data' => 'Entry Level' ); //, 'empty_value' => '--- choose job type ---'
+        $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'expanded'=> true ,'label' => 'Job type :' ); //, 'data' => 'Internship', 'empty_value' => '--- choose job type ---'
         //->add('spokenFluency', 'choice', array('choices' => array('None' => 'None', 'Novice' => 'Novice', 'Intermediate' => 'Intermediate', 'Advanced' => 'Advanced'), 'expanded' => true, 'label' => 'Spoken :', 'attr' => array('class' => 'lngopt')))
 
         /*         * *************************************************************************** */
@@ -2795,7 +2795,7 @@ class InternjumpUserController extends Controller {
         $categoryOptionsArr = array('empty_value' => '--- choose Industry ---', 'choices' => $allCategoriesArray);
         //$companyOptionsArr = array('empty_value' => '--- choose Company ---', 'choices' => $allCompanysArray);
         $companyOptionsArr = array('attr' => array( 'placeholder' => 'Type Company') );
-        $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'expanded'=> true ,'label' => 'Job type :', 'data' => 'Entry Level' ); //, 'empty_value' => '--- choose job type ---'
+        $jobTypeOptionsArr = array('choices' => array('Internship' => 'Internship', 'Entry Level' => 'Entry Level'), 'expanded'=> true ,'label' => 'Job type :' ); //, 'data' => 'Internship', 'empty_value' => '--- choose job type ---'
         //->add('spokenFluency', 'choice', array('choices' => array('None' => 'None', 'Novice' => 'Novice', 'Intermediate' => 'Intermediate', 'Advanced' => 'Advanced'), 'expanded' => true, 'label' => 'Spoken :', 'attr' => array('class' => 'lngopt')))
 
         /*         * *************************************************************************** */
@@ -2928,8 +2928,15 @@ class InternjumpUserController extends Controller {
 
         $em = $this->getDoctrine()->getEntityManager();
         $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
+        
+        $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
+        $companyId = $company;
+        $companyObj = $companyRepo->findOneBy(array('loginName' => $company));
+                if ($companyObj) {
+                    $companyId = $companyObj->getId();
+                }
         //get jobs search results array
-        $userSearchResults = $internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray, $jobt, $page, $jobsPerPage);
+        $userSearchResults = $internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $companyId, $lang, $keywordsArray, $jobt, $page, $jobsPerPage);
 
         //Limit the details to only 200 character
         foreach ($userSearchResults as $job) {
@@ -2942,7 +2949,7 @@ class InternjumpUserController extends Controller {
         }
         /* pagenation part */
         //get count of all search result jobs
-        $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray, $jobt, 1, null));
+        $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $companyId, $lang, $keywordsArray, $jobt, 1, null));
 
         $lastPageNumber = (int) ($userSearchResultsCount / $jobsPerPage);
         if (($userSearchResultsCount % $jobsPerPage) > 0) {
@@ -2978,7 +2985,7 @@ class InternjumpUserController extends Controller {
 
             //get company name if Exist
             $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
-            $companyObj = $companyRepo->findOneBy(array('id' => $company));
+            $companyObj = $companyRepo->findOneBy(array('loginName' => $company));
             if ($companyObj) {
                 $companyName = $companyObj->getName();
             } else {
@@ -3043,11 +3050,18 @@ class InternjumpUserController extends Controller {
 
         $em = $this->getDoctrine()->getEntityManager();
         $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
+        
+        $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
+        $companyId = $company;
+        $companyObj = $companyRepo->findOneBy(array('loginName' => $company));
+                if ($companyObj) {
+                    $companyId = $companyObj->getId();
+                }
         //get jobs search results array
-        $userSearchResults = $internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray, $jobt, $page, $jobsPerPage);
+        $userSearchResults = $internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $companyId, $lang, $keywordsArray, $jobt, $page, $jobsPerPage);
 
         //Limit the details to only 200 character
-        foreach ($userSearchResults as &$job) {
+        foreach ($userSearchResults as $job) {
             $jobDesc = strip_tags($job->getDescription());
             if (strlen($jobDesc) > 200) {
                 $job->setDescription(substr($jobDesc, 0, 200) . '...');
@@ -3057,7 +3071,7 @@ class InternjumpUserController extends Controller {
         }
         /* pagenation part */
         //get count of all search result jobs
-        $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $company, $lang, $keywordsArray, $jobt, 1, null));
+        $userSearchResultsCount = sizeof($internshipRepo->getJobsSearchResult($title, $country, $city, $state, $category, $companyId, $lang, $keywordsArray, $jobt, 1, null));
 
         $lastPageNumber = (int) ($userSearchResultsCount / $jobsPerPage);
         if (($userSearchResultsCount % $jobsPerPage) > 0) {
@@ -3076,6 +3090,7 @@ class InternjumpUserController extends Controller {
                     //get countries array
                     $categoryObj = $categoryRepo->findOneBy(array('id' => $category));
                     $title1 = $categoryObj->getSlug();
+                        
                 }
             }
             if ($city != "empty" && $state != "empty") {
@@ -3092,7 +3107,7 @@ class InternjumpUserController extends Controller {
 
             //get company name if Exist
             $companyRepo = $em->getRepository('ObjectsInternJumpBundle:Company');
-            $companyObj = $companyRepo->findOneBy(array('id' => $company));
+            $companyObj = $companyRepo->findOneBy(array('loginName' => $company));
             if ($companyObj) {
                 $companyName = $companyObj->getName();
             } else {
