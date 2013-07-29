@@ -13,7 +13,11 @@
                 {% for post in allPosts %}
                 <div class="media">
                     <a href="{{ path('show_resources',{'slug' : post.slug}) }}" class="pull-left">
+                        {% if post.postImage %}
                         <img src="{{ post.getTimThumbUrl(175,130) }}" class="media-object" alt="{{ post.postTitle }}" />
+                        {% else %}
+                        <img src="{{ asset('img/no-image.jpg') }}" style="width: 175px;height: 130px;" class="media-object" alt="{{ post.postTitle }}" />
+                        {% endif %}
                     </a>
 
                     <div class="media-body">
