@@ -64,7 +64,7 @@ class Post
      * @var string $slug
      * @var string $slug
      * @Assert\NotNull
-     * @Assert\Regex(pattern="/^\w+$/u", message="Only characters, numbers and _")
+     * @Assert\Regex(pattern="/^[\w-]+$/u", message="Only characters, numbers and _")
      * @ORM\Column(name="slug", type="string", length=255, unique=true)
      */
     private $slug;
