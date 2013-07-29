@@ -1451,9 +1451,10 @@ class InternjumpController extends Controller {
         //Get all published posts
         $allPosts = $postRepo->getAllPosts($page, $itemsPerPage);
 
-        foreach ($allPosts as &$post) {
-            if (strlen($post->getPostBody()) > 200) {
-                $post->setPostBody(substr($post->getPostBody(), 0, 200) . '....');
+        foreach ($allPosts as $post) {
+            $postBody = strip_tags($post->getPostBody());
+            if (strlen($postBody) > 200) {
+                $post->setPostBody(substr($postBody, 0, 200) . '....');
             }
         }
         //Get number of published posts
