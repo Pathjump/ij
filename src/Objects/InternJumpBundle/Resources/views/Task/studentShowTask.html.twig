@@ -1,26 +1,5 @@
 {% extends '::base.html.twig' %}
 
-    {% block stylesheets %}
-{{parent()}}
-
-{% endblock %}
-{% block pageTitle %}Show Task{% endblock %}
-{% block subcatego %}
-    <div class="container">
-        <ul class="unstyled">
-            <li id="userHome"><a href="{{path('student_task',{'loginName' : app.user.loginName})}}">Profile Page</a></li>
-            <li id="jobSearch"><a href="{{ path('user_search_page') }}">Internship Search</a></li>
-            <li id="newEducation"><a href="{{ path('education_new') }}">Education</a></li>
-            <li id="newLanguage"><a href="{{ path('user_languages') }}">Language</a></li>
-            <li id="newEmploymentHistory"><a href="{{ path('employmenthistory_new') }}">Employment History</a></li>
-            <li id="userSkills"><a href="{{ path('addEditUserSkills') }}" title="Your Skills">Skills</a></li>
-            <li id="personalQuestion"><a href="{{ path('personal_questions') }}" title="Personal Questions">Personal Questions</a></li>
-            {% if not app.user.score %}
-                <li><a href="{{path('internjumb_quiz')}}">InternJump Personality Quiz</a></li>
-            {% endif %}
-       </ul>
-   </div><!--container-->
-{% endblock %}
 
 {%block body%}
 
@@ -106,7 +85,7 @@
                       </div><!--Tasks-->
                       </div><!--containter-->
 
-
+</div>
 
 
 

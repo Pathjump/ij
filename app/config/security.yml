@@ -59,7 +59,7 @@ security:
 #         - { path: ^/, requires_channel: https }
          - { path: ^/admin, roles: ROLE_ADMIN }
          - { path: ^/user/auth/redirect/user$, roles: [ROLE_NOTACTIVE, ROLE_NOTACTIVE_COMPANY, ROLE_ACTIVE_SOCIAL, ROLE_NOTACTIVE_SOCIAL, ROLE_COMPANY_MANAGER] }
-         - { path: ^/company/messages, roles: ROLE_COMPANY }
+         - { path: ^/company/messages, roles: [ROLE_COMPANY, ROLE_COMPANY_MANAGER] }
 #         - { path: ^/user/messages, roles: ROLE_USER }
          - { path: ^/user/signup/second/step, roles: [ROLE_ACTIVE_SOCIAL, ROLE_NOTACTIVE_SOCIAL] }
 #         - { path: ^/user/signup/third/step, roles: ROLE_NOTACTIVE }

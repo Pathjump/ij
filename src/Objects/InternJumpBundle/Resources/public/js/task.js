@@ -1,9 +1,4 @@
-$(document).ready(function(){
-    setInterval(function(){
-        //Loader Script
-        $('#loading').width($('#loading').parent().width());
-        $('#loading').height($('#loading').parent().height());
-    }, 500);
+$(document).ready(function() {
 
     $('.taskNote').hide();
     //intialize job users
@@ -37,7 +32,7 @@ $(document).ready(function(){
 //
 //    //change job users when jobs change
 //    $('#form_internship').change(function(){
-//        $('#loading').show();
+//        $('.loading').show();
 //        $.ajax({
 //            url: jobUsersUrl+"/"+$(this).val(),
 //            dataType: 'json',
@@ -53,7 +48,7 @@ $(document).ready(function(){
 //                });
 //            },
 //            complete: function(msg) {
-//                $('#loading').hide();
+//                $('.loading').hide();
 //                $('#form_user').val(userId);
 //                $("select.chzn-done").trigger("liszt:updated");
 //            }
@@ -62,9 +57,10 @@ $(document).ready(function(){
 //    });
 
 
-    if($('#form_user').val() != ''){
+    if ($('#form_user').val() != '') {
+        $('.loading').show();
         $.ajax({
-            url: userJobsUrl+"/"+userId,
+            url: userJobsUrl + "/" + $('#form_user').val(),
             dataType: 'json',
             success: function(msg) {
                 //                var msg = $.parseJSON(msg);
@@ -73,14 +69,14 @@ $(document).ready(function(){
                 $.each(msg, function(k, v) {
                     //display the key and value pair
                     $('#form_internship').append(
-                        $('<option></option>').val(k).html(v)
-                        );
+                            $('<option></option>').val(k).html(v)
+                            );
                 });
-;
 
             },
             complete: function(msg) {
-                $('#form_user').val(userId);
+                $('.loading').hide();
+//                $('#form_user').val(userId);
                 $("select.chzn-done").trigger("liszt:updated");
             }
         });
@@ -88,10 +84,10 @@ $(document).ready(function(){
 
 
     //change job users when jobs change
-    $('#form_user').change(function(){
-        $('#loading').show();
+    $('#form_user').change(function() {
+        $('.loading').show();
         $.ajax({
-            url: userJobsUrl+"/"+$(this).val(),
+            url: userJobsUrl + "/" + $(this).val(),
             dataType: 'json',
             success: function(msg) {
                 //                var msg = $.parseJSON(msg);
@@ -100,13 +96,13 @@ $(document).ready(function(){
                 $.each(msg, function(k, v) {
                     //display the key and value pair
                     $('#form_internship').append(
-                        $('<option></option>').val(k).html(v)
-                        );
+                            $('<option></option>').val(k).html(v)
+                            );
                 });
             },
             complete: function(msg) {
-                $('#loading').hide();
-                $('#form_user').val(userId);
+                $('.loading').hide();
+//                $('#form_user').val(userId);
                 $("select.chzn-done").trigger("liszt:updated");
             }
         });

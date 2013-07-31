@@ -52,7 +52,11 @@
                     <i class="icon-eye-open"></i>
                     {% endif %}
                     <input class="companyMessage" name="companyMessages[]" value="{{ entity.id }}" type="checkbox" />
+                    {% if is_granted('ROLE_COMPANY') %}
                     <a onclick="requestData('{{ path('company_message', {'id': entity.id}) }}', '#tab{% if box == 'inbox' %}1{% else %}2{% endif %}', updateCompanyNotifications);return false;" href="{{ path('show_company_message', {'id': entity.id}) }}" title="{{ entity }}">{{ entity.title }}</a>
+                    {% elseif  is_granted('ROLE_COMPANY_MANAGER') %}
+                    <a onclick="requestData('{{ path('company_message', {'id': entity.id}) }}', '#tab{% if box == 'inbox' %}1{% else %}2{% endif %}');return false;" href="{{ path('show_company_message', {'id': entity.id}) }}" title="{{ entity }}">{{ entity.title }}</a>
+                    {% endif %}
                     <small class="muted pull-right">{{ entity.createdAt|date('M d,Y') }}</small>
                 </label>
             </li>

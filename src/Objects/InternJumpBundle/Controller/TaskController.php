@@ -315,7 +315,9 @@ class TaskController extends Controller {
     public function companyAllTasksAction($tasksPerPage, $status, $page) {
 
         if (false === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
-            return $this->redirect($this->generateUrl('site_homepage'));
+            if (false === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+                return $this->redirect($this->generateUrl('site_homepage'));
+            }
         }
 
 
@@ -323,7 +325,12 @@ class TaskController extends Controller {
 
 
         //Get current Company user
-        $company = $this->get('security.context')->getToken()->getUser();
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            $company = $this->get('security.context')->getToken()->getUser();
+        } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+            $manager = $this->get('security.context')->getToken()->getUser();
+            $company = $manager->getCompany();
+        }
         $cid = $company->getId();
 
         //check if we do not have the items per page number
@@ -366,14 +373,21 @@ class TaskController extends Controller {
     public function companyUserAllTasksAction($userName, $itemsPerPage, $status, $page) {
 
         if (false === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
-            return $this->redirect($this->generateUrl('site_homepage'));
+            if (false === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+                return $this->redirect($this->generateUrl('site_homepage'));
+            }
         }
 
         $em = $this->getDoctrine()->getEntityManager();
         //$tasksPerPage = $this->container->getParameter('tasks_per_show_page'); //for pagenation
         //$entities = $em->getRepository('ObjectsInternJumpBundle:Task')->findAll();
         //Get current Company user
-        $company = $this->get('security.context')->getToken()->getUser();
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            $company = $this->get('security.context')->getToken()->getUser();
+        } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+            $manager = $this->get('security.context')->getToken()->getUser();
+            $company = $manager->getCompany();
+        }
         $cid = $company->getId();
 
         //check if we do not have the items per page number
@@ -511,10 +525,10 @@ class TaskController extends Controller {
      *
      */
     public function companyShowAction($id) {
-
-
         if (false === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
-            return $this->redirect($this->generateUrl('site_homepage'));
+            if (false === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+                return $this->redirect($this->generateUrl('site_homepage'));
+            }
         }
 
         $em = $this->getDoctrine()->getEntityManager();
@@ -527,7 +541,13 @@ class TaskController extends Controller {
 
         //If Task Found then check if the Current User is the Task Owner
         //Get current user
-        $loggedinCompany = $this->get('security.context')->getToken()->getUser();
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            $loggedinCompany = $this->get('security.context')->getToken()->getUser();
+        } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+            $manager = $this->get('security.context')->getToken()->getUser();
+            $loggedinCompany = $manager->getCompany();
+        }
+
         //Get Task Owner company
         $taskCompany = $task->getCompany();
         //check if the same user
@@ -570,15 +590,24 @@ class TaskController extends Controller {
      */
     public function newAction($uid) {
 
+        if (!$uid)
+            $uid = -1;
         $em = $this->getDoctrine()->getEntityManager();
 
         if (false === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
-            return $this->redirect($this->generateUrl('site_homepage'));
+            if (false === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+                return $this->redirect($this->generateUrl('site_homepage'));
+            }
         }
 
 
         //Get current Company user
-        $company = $this->get('security.context')->getToken()->getUser();
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            $company = $this->get('security.context')->getToken()->getUser();
+        } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+            $manager = $this->get('security.context')->getToken()->getUser();
+            $company = $manager->getCompany();
+        }
 
 
         $internshipRepo = $em->getRepository('ObjectsInternJumpBundle:Internship');
@@ -596,16 +625,21 @@ class TaskController extends Controller {
             $companyHiredUsers = $internshipRepo->getCompanyHiredUsers($companyJobsIdsArray);
         }
 
+        $companyUsers = array();
+        $hiredUsersJobsArray = array();
+
         if (sizeof($companyHiredUsers) > 0) {
-            $hiredUsersJobsArray = array();
+            $hiredUsersIdsArray = array();
             $hiredUsers = array();
             foreach ($companyHiredUsers as $companyHiredUser) {
                 if (!in_array($companyHiredUser->getInternship()->getTitle(), $hiredUsersJobsArray)) {
                     array_push($hiredUsersJobsArray, $companyHiredUser->getInternship()->getTitle());
                 }
-                $hiredUsers [$companyHiredUser->getUser()->getId()] = $companyHiredUser->getUser()->__toString();
+                if (!in_array($companyHiredUser->getUser()->getId(), $hiredUsersIdsArray)) {
+                    array_push($hiredUsersIdsArray, $companyHiredUser->getUser()->getId());
+                    $companyUsers[] = $companyHiredUser->getUser();
+                }
             }
-
         }
 
         $cid = $company->getId();
@@ -635,8 +669,8 @@ class TaskController extends Controller {
                 ->add('endedAt', 'date', array('attr' => array('class' => 'endedAt'), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd H:mm'))
                 //->add('internship')
                 ->add('internship', 'entity', array('attr' => array('style' => 'width:120px;'), 'class' => 'ObjectsInternJumpBundle:Internship', 'choices' => $jobs))
-                //->add('user', 'entity', array('attr' => array('style' => 'width:120px;'), 'class' => 'ObjectsUserBundle:User', 'preferred_choices' => array($uid)))
-                ->add('user', 'choice', array('attr' => array('style' => 'width:120px;'), 'choices' => $hiredUsers , 'preferred_choices' => array($uid)))
+                ->add('user', 'entity', array('attr' => array('style' => 'width:120px;'), 'class' => 'ObjectsUserBundle:User', 'choices' => $companyUsers, 'preferred_choices' => array($uid)))
+//                ->add('user', 'choice', array('attr' => array('style' => 'width:120px;'), 'choices' => $hiredUsers, 'preferred_choices' => array($uid)))
                 ->getForm();
 
         if ($request->getMethod() == 'POST') {
@@ -703,7 +737,7 @@ class TaskController extends Controller {
         return new Response(json_encode($usersArray));
     }
 
-        /**
+    /**
      * @author Ola
      * to get Jobs for a company's certain user
      * @param int $id //user Id
@@ -717,13 +751,13 @@ class TaskController extends Controller {
         $company = $this->get('security.context')->getToken()->getUser();
         $cid = $company->getId();
 
-        $userJobs = $userRepo->getAllUserJobs($uid,$cid);
+        $userJobs = $userRepo->getAllUserJobs($uid, $cid);
         $request = $this->getRequest();
         if (!$userJobs || !$request->isXmlHttpRequest()) {
             return new Response("faild");
         }
         $jobs = array();
-        foreach($userJobs as $job){
+        foreach ($userJobs as $job) {
             $jobs[] = $job->getInternship();
         }
         $jobsArray = array();
@@ -940,7 +974,9 @@ class TaskController extends Controller {
         $flag = $this->checkWhere($url);
 
         if (false === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
-            return $this->redirect($this->generateUrl('site_homepage'));
+            if (false === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+                return $this->redirect($this->generateUrl('site_homepage'));
+            }
         }
 
         $form = $this->createDeleteForm($id);
@@ -961,7 +997,12 @@ class TaskController extends Controller {
 
             //If Task Found then check if the Current Company is the Task Owner
             //Get current Company
-            $loggedinCompany = $this->get('security.context')->getToken()->getUser();
+            if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+                $loggedinCompany = $this->get('security.context')->getToken()->getUser();
+            } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+                $manager = $this->get('security.context')->getToken()->getUser();
+                $loggedinCompany = $manager->getCompany();
+            }
             //Get Task Owner
             $taskCompany = $task->getCompany();
             //check if the same company
@@ -1026,11 +1067,17 @@ class TaskController extends Controller {
         if (!$task || !$request->isXmlHttpRequest()) {
             return new Response("faild");
         }
-        if (true === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+        if (true === $this->get('security.context')->isGranted('ROLE_COMPANY') || true === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
             //it is a company
             $type = 1;
             //Check if the current company is the task owner
-            $loggedinCompany = $this->get('security.context')->getToken()->getUser();
+            if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+                $loggedinCompany = $this->get('security.context')->getToken()->getUser();
+            } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+                $manager = $this->get('security.context')->getToken()->getUser();
+                $loggedinCompany = $manager->getCompany();
+            }
+
             $taskCompany = $task->getCompany();
             if ($taskCompany->getId() != $loggedinCompany->getId()) {
                 //if not response faild
@@ -1433,7 +1480,7 @@ class TaskController extends Controller {
 //        }
     }
 
-     /**
+    /**
      * This action is to check and calculate values to measure how much user completed his CV
      * @author Ola
      */

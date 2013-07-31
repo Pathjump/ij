@@ -38,8 +38,8 @@ company_message_delete:
         id: \d+
 
 company_new_message:
-    pattern:  /to/{userName}
-    defaults: { _controller: "ObjectsInternJumpBundle:CompanyMessage:new", userName: ~ }
+    pattern:  /to
+    defaults: { _controller: "ObjectsInternJumpBundle:CompanyMessage:new" }
 
 company_new_message_form:
     pattern:  /form/{userName}

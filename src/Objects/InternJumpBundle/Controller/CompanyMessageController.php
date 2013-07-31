@@ -20,7 +20,12 @@ class CompanyMessageController extends Controller {
      */
     public function messagesBoxAction($box, $page = 1) {
         //get the company object
-        $company = $this->get('security.context')->getToken()->getUser();
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            $company = $this->get('security.context')->getToken()->getUser();
+        } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+            $manager = $this->get('security.context')->getToken()->getUser();
+            $company = $manager->getCompany();
+        }
         //get the messages per page count
         $itemsPerPage = $this->getRequest()->cookies->get('company_messages_per_page_' . $company->getId(), 10);
         return $this->render('ObjectsInternJumpBundle:Message:box.html.twig', array(
@@ -28,7 +33,7 @@ class CompanyMessageController extends Controller {
                     'itemsPerPage' => $itemsPerPage,
                     'box' => $box,
                     'type' => 'box'
-                ));
+        ));
     }
 
     /**
@@ -39,7 +44,12 @@ class CompanyMessageController extends Controller {
      */
     public function getMessagesAction($box, $page, $itemsPerPage) {
         //get the company object
-        $company = $this->get('security.context')->getToken()->getUser();
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            $company = $this->get('security.context')->getToken()->getUser();
+        } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+            $manager = $this->get('security.context')->getToken()->getUser();
+            $company = $manager->getCompany();
+        }
         //check if we do not have the items per page number
         if (!$itemsPerPage) {
             //get the items per page from cookie or the default value
@@ -68,7 +78,7 @@ class CompanyMessageController extends Controller {
                     'box' => $box,
                     'entities' => $entities,
                     'companyId' => $company->getId()
-                ));
+        ));
     }
 
     /**
@@ -77,7 +87,12 @@ class CompanyMessageController extends Controller {
      */
     public function messagesBatchAction() {
         //get the company object
-        $company = $this->get('security.context')->getToken()->getUser();
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            $company = $this->get('security.context')->getToken()->getUser();
+        } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+            $manager = $this->get('security.context')->getToken()->getUser();
+            $company = $manager->getCompany();
+        }
         //get the request object
         $request = $this->getRequest();
         //get all the messages
@@ -159,7 +174,12 @@ class CompanyMessageController extends Controller {
         //get the entity manager
         $em = $this->getDoctrine()->getEntityManager();
         //get the company object
-        $company = $this->get('security.context')->getToken()->getUser();
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            $company = $this->get('security.context')->getToken()->getUser();
+        } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+            $manager = $this->get('security.context')->getToken()->getUser();
+            $company = $manager->getCompany();
+        }
         //try to select the message from the database
         try {
             $entity = $em->getRepository('ObjectsInternJumpBundle:Message')->getMessage($id);
@@ -202,7 +222,7 @@ class CompanyMessageController extends Controller {
                     'box' => $box,
                     'messageId' => $entity->getId(),
                     'type' => 'show'
-                ));
+        ));
     }
 
     /**
@@ -224,7 +244,7 @@ class CompanyMessageController extends Controller {
                     'entity' => $entity,
                     'delete_form' => $deleteForm->createView(),
                     'box' => $box
-                ));
+        ));
     }
 
     /**
@@ -235,7 +255,12 @@ class CompanyMessageController extends Controller {
         //get the entity manager
         $em = $this->getDoctrine()->getEntityManager();
         //get the company object
-        $company = $this->get('security.context')->getToken()->getUser();
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            $company = $this->get('security.context')->getToken()->getUser();
+        } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+            $manager = $this->get('security.context')->getToken()->getUser();
+            $company = $manager->getCompany();
+        }
         //try to select the message from the database
         try {
             $entity = $em->getRepository('ObjectsInternJumpBundle:Message')->getMessage($id);
@@ -301,7 +326,12 @@ class CompanyMessageController extends Controller {
         //get the entity manager
         $em = $this->getDoctrine()->getEntityManager();
         //get the company object
-        $company = $this->get('security.context')->getToken()->getUser();
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            $company = $this->get('security.context')->getToken()->getUser();
+        } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+            $manager = $this->get('security.context')->getToken()->getUser();
+            $company = $manager->getCompany();
+        }
         //get the valid users to send to
         $users = $this->getValidUsersToSendTo($company->getId());
         //check if the company can send messages to any one
@@ -316,7 +346,7 @@ class CompanyMessageController extends Controller {
             if (!$user) {
                 $message = $this->container->getParameter('user_not_found_error_msg');
                 return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
-                        'message' => $message,));
+                            'message' => $message,));
             }
             //check if the company can send this user messages
             if (!isset($users[$user->getId()])) {
@@ -337,14 +367,17 @@ class CompanyMessageController extends Controller {
      * @param string $userName
      * @return type
      */
-    public function newAction($userName = NULL) {
+    public function newAction() {
+        $userName = null;
+        if ($this->getRequest()->get('usename'))
+            $userName = $this->getRequest()->get('usename');
         //check if we need to throw an exception
         $this->createNewMessageForm(new Message(), $userName);
         return $this->render('ObjectsInternJumpBundle:Message:box.html.twig', array(
                     'box' => 'compose message',
                     'type' => 'compose',
                     'userName' => $userName
-                ));
+        ));
     }
 
     /**
@@ -363,7 +396,7 @@ class CompanyMessageController extends Controller {
         return $this->render('ObjectsInternJumpBundle:Message:new.html.twig', array(
                     'entity' => $entity,
                     'form' => $form->createView()
-                ));
+        ));
     }
 
     /**
@@ -392,7 +425,7 @@ class CompanyMessageController extends Controller {
         return $this->render('ObjectsInternJumpBundle:Message:new.html.twig', array(
                     'entity' => $entity,
                     'form' => $form->createView()
-                ));
+        ));
     }
 
 }

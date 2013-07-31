@@ -2,8 +2,7 @@
 
 {% block stylesheets %}
 {{ parent() }}
-<link href="{{asset('css/tabs-accordion.css')}}" type="text/css" rel="stylesheet" />
-<link href="{{asset('css/scrollinList.css')}}" type="text/css" rel="stylesheet" />
+<link href="{{ asset('css/jquery.alerts.css') }}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {%block body%}
@@ -32,7 +31,7 @@
             <hr/>
 
             <div class="Interns-links">
-            	<a href="{{ path('task_new') }}"  class="btn btn-success add-task-btn">Add Task</a>
+            	<a href="{{ path('task_new',{'uid' : user.id}) }}"  class="btn btn-success add-task-btn">Add Task</a>
                 <a href="{{path('company_new_message', {'usename': user.loginName})}}" class="btn btn-info">Send message</a>
 
             </div>
@@ -49,7 +48,7 @@
                             <option value="done">done</option>
                         </select>
                     </div>
-<a href="{{path('student_task', {'loginName': user.loginName})}}"><button class="button btn btn-info" >Back</button></a><br><br>
+<a href="{{path('company_task')}}"><button class="button btn btn-info" >Back</button></a><br><br>
 <form action="{{ path('task_delete', { 'id': entity.id }) }}" method="post" class="deleteform">{{ form_widget(delete_form) }}<input class="deletebutton btn btn-danger" type="button" value="Delete"/></form>
 <div class="clearfix"></div>
 
@@ -107,11 +106,10 @@
                             </table>
 
 <div class="addNote">
-{#<textarea name="" cols="" rows=""></textarea>#}
 <button class="button addNoteAjax btn btn-warning">Add Note</button>
-<div class="taskNote">
-    <textarea type="text" class="noteText1"></textarea>
-    <input type="button" value="Add" class="addNoteButton">
+<div class="taskNote" style="margin-top: 20px;">
+    <textarea type="text" class="noteText1" rows="3" style="width: 100%"></textarea>
+    <input type="button" value="Add" class="addNoteButton btn btn-primary">
 </div>
 </div>
                 </div><!--Tasks-Content--->
@@ -125,7 +123,7 @@
 
 {%block javascripts%}
 {{parent()}}
-
+<script src="{{ asset('js/jquery.alerts.js') }}" type="text/javascript"></script>
 <script type="text/javascript" src="{{asset('js/website.js')}}"></script>
 
 <script>
