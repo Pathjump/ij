@@ -480,11 +480,14 @@ class InternshipController extends Controller {
             //check if not the owner company
             //so will check for job active or not
             if (FALSE === $this->get('security.context')->isGranted('ROLE_COMPANY') || $this->get('security.context')->getToken()->getUser()->getId() != $entity->getCompany()->getId()) {
-                $todayDate = new \DateTime('today');
-                if (!$entity->getActive() || $entity->getActiveTo() < $todayDate || $entity->getActiveFrom() > $todayDate) {
-                    $message = $this->container->getParameter('internship_not_found_error_msg');
-                    return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
-                                'message' => $message,));
+                //check for manager
+                if (FALSE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER') || $this->get('security.context')->getToken()->getUser()->getCompany()->getId() != $entity->getCompany()->getId()) {
+                    $todayDate = new \DateTime('today');
+                    if (!$entity->getActive() || $entity->getActiveTo() < $todayDate || $entity->getActiveFrom() > $todayDate) {
+                        $message = $this->container->getParameter('internship_not_found_error_msg');
+                        return $this->render('ObjectsInternJumpBundle:Internjump:general.html.twig', array(
+                                    'message' => $message,));
+                    }
                 }
             }
         }
@@ -790,11 +793,20 @@ class InternshipController extends Controller {
     public function newAction() {
         //check for logrdin company
         if (FALSE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
-            return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+            //check for managers
+            if (FALSE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+                return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+            }
         }
 
         //get logedin company objects
-        $company = $this->get('security.context')->getToken()->getUser();
+        //check for manager
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            $company = $this->get('security.context')->getToken()->getUser();
+        } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+            $manager = $this->get('security.context')->getToken()->getUser();
+            $company = $manager->getCompany();
+        }
 
         $em = $this->getDoctrine()->getEntityManager();
         $countryRepo = $em->getRepository('ObjectsInternJumpBundle:Country');
@@ -1033,11 +1045,20 @@ class InternshipController extends Controller {
     public function editAction($id) {
         //check for logrdin company
         if (FALSE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
-            return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+            //check for managers
+            if (FALSE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+                return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+            }
         }
 
         //get logedin company objects
-        $company = $this->get('security.context')->getToken()->getUser();
+        //check for manager
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            $company = $this->get('security.context')->getToken()->getUser();
+        } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+            $manager = $this->get('security.context')->getToken()->getUser();
+            $company = $manager->getCompany();
+        }
 
         $em = $this->getDoctrine()->getEntityManager();
         $countryRepo = $em->getRepository('ObjectsInternJumpBundle:Country');
@@ -1240,9 +1261,14 @@ class InternshipController extends Controller {
      */
     public function deleteAction($id) {
         //check for logrdin company
+        //check for logrdin company
         if (FALSE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
-            return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+            //check for managers
+            if (FALSE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+                return $this->redirect($this->generateUrl('site_homepage', array(), TRUE));
+            }
         }
+
         $em = $this->getDoctrine()->getEntityManager();
         $job = $em->getRepository('ObjectsInternJumpBundle:Internship')->find($id);
 
@@ -1254,15 +1280,27 @@ class InternshipController extends Controller {
         //get job company
         $jobCompany = $job->getCompany();
         //get logedin company objects
-        $company = $this->get('security.context')->getToken()->getUser();
+        //check for manager
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            $company = $this->get('security.context')->getToken()->getUser();
+        } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+            $manager = $this->get('security.context')->getToken()->getUser();
+            $company = $manager->getCompany();
+        }
 
         //check if the logedin company is the owner
         if ($company->getId() == $jobCompany->getId()) {
             $em->remove($job);
             $em->flush();
+            //set the success flag in the session
+            $this->getRequest()->getSession()->setFlash('success', 'Internship deleted successfully');
         }
 
-        return $this->redirect($this->generateUrl('internship', array('loginName' => $company->getLoginName())));
+        if (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY')) {
+            return $this->redirect($this->generateUrl('internship', array('loginName' => $company->getLoginName())));
+        } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+            return $this->redirect($this->generateUrl('manager_home', array()));
+        }
     }
 
     /**

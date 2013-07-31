@@ -116,6 +116,10 @@ class UserController extends Controller {
                     //add login success flash
                     $this->getRequest()->getSession()->setFlash('loginSuccess', TRUE);
                     return $this->redirect($this->generateUrl('student_task', array('loginName' => $user->getLoginName()), TRUE));
+                } elseif (TRUE === $this->get('security.context')->isGranted('ROLE_COMPANY_MANAGER')) {
+                    //get logedin manager objects
+                    $manager = $this->get('security.context')->getToken()->getUser();
+                    return $this->redirect($this->generateUrl('manager_home', array(), TRUE));
                 }
                 if (TRUE === $this->get('security.context')->isGranted('ROLE_ACTIVE_SOCIAL') || TRUE === $this->get('security.context')->isGranted('ROLE_NOTACTIVE_SOCIAL')) {
                     return $this->redirect($this->generateUrl('user_signup_second_step'));

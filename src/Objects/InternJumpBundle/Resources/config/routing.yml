@@ -211,3 +211,7 @@ worth_faceBook_publish:
     defaults: { _controller: "ObjectsInternJumpBundle:Internjump:worthFaceBookPublish"}
     requirements:
         userId: \d+
+
+ObjectsInternJumpBundle_manager:
+        resource: "@ObjectsInternJumpBundle/Resources/config/routing/manager.yml"
+        prefix:   /manager

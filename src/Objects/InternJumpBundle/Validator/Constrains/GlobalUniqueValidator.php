@@ -49,6 +49,21 @@ class GlobalUniqueValidator extends ConstraintValidator {
                     }
                 }
             }
+            //check if we have a manager with that login name
+            $manager = $this->entityManager->getRepository('ObjectsInternJumpBundle:Manager')->findOneByLoginName($object->getLoginName());
+            if ($manager) {
+                //check if the current validated object is different than the one we found
+                if (get_class($manager) != get_class($object)) {
+                    $valid = FALSE;
+                } else {
+                    //reset valid to true incase the user if set it to false
+                    $valid = TRUE;
+                    //check if the object we found is not the same as the one we validate
+                    if ($manager->getId() != $object->getId()) {
+                        $valid = FALSE;
+                    }
+                }
+            }
             //check if the login name is not valid
             if (!$valid) {
                 $propertyPath = $this->context->getPropertyPath() . 'loginName';

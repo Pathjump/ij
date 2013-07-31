@@ -44,7 +44,7 @@
                     <div class="container">
                         <a href="{{ path('site_homepage') }}" class="pull-left"><img src="{{ asset('img/Logo.png') }}" /></a>
                         <div class="Top-Links pull-right span6">
-                            {% if not is_granted('ROLE_NOTACTIVE_COMPANY') and not is_granted('ROLE_NOTACTIVE') %}
+                            {% if not is_granted('ROLE_NOTACTIVE_COMPANY') and not is_granted('ROLE_NOTACTIVE') and not is_granted('ROLE_COMPANY_MANAGER')%}
                                 <p class="well well-small"><strong class="notLoggedInUserMessage">Are you an employer? Connect with top interns from all around the nation. <a href="{{path('employers_data')}}" class="startHiring btn btn-mini btn-info" style="color:#fff;">Start Hiring !</a></strong></p>
                             {% endif %}
 
@@ -54,6 +54,11 @@
                                      <li><i class="icon-off"></i><a href="{{ path('logout') }}">Sign out</a></li>
                                 </ul>
                             {% elseif is_granted('ROLE_NOTACTIVE') %}
+                                <ul class="log-links pull-right  unstyled">
+                                     <!--<li><a href="{{ path('student_task',{'loginName' : app.user.loginName}) }}">Hi, {{app.user.loginName}}</a></li>-->
+                                     <li><i class="icon-off"></i><a href="{{ path('logout') }}">Sign out</a></li>
+                                </ul>
+                            {% elseif is_granted('ROLE_COMPANY_MANAGER') %}
                                 <ul class="log-links pull-right  unstyled">
                                      <!--<li><a href="{{ path('student_task',{'loginName' : app.user.loginName}) }}">Hi, {{app.user.loginName}}</a></li>-->
                                      <li><i class="icon-off"></i><a href="{{ path('logout') }}">Sign out</a></li>
@@ -75,6 +80,7 @@
                                             <ul class="nav">
                                                 {% if is_granted('ROLE_NOTACTIVE_COMPANY') %}
                                                 {% elseif is_granted('ROLE_NOTACTIVE') %}
+                                                {% elseif is_granted('ROLE_COMPANY_MANAGER') %}
                                                 {% else %}
                                                     <li id="employerLink"><a href="{{path('students_data')}}" class="nav-students">Students</a></li>
                                                     <li id="studentLink"><a href="{{path('employers_data')}}" class="nav-companies">Employers</a></li>
@@ -95,6 +101,16 @@
                                             <li><a href="{{ path('internship_new') }}">Add new Position</a></li>
                                             <li><a href="{{ path('company_task') }}">Manage Interns/Employees</a></li>
                                             <li><a href="{{ path('company_search_for_cv') }}">Search Candidates</a></li>
+                                            <li><a href="{{ path('company_managers',{'loginName' : app.user.loginName}) }}">Managers</a></li>
+                                            <li><a href="{{path('FAQ_page')}}">FAQ</a></li>
+                                        </ul>
+                                    </div>
+                                {% elseif is_granted('ROLE_COMPANY_MANAGER') %}
+                                    <div class="container">
+                                        <ul class="unstyled">
+                                            <li><a href="{{ path('manager_home') }}">Home</a></li>
+                                            <li><a href="{{ path('internship_new') }}">Add new Position</a></li>
+                                            <li><a href="{{ path('company_task') }}">Manage Interns/Employees</a></li>
                                             <li><a href="{{path('FAQ_page')}}">FAQ</a></li>
                                         </ul>
                                     </div>

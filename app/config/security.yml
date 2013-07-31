@@ -8,6 +8,10 @@ security:
             algorithm: sha512
             encode-as-base64: true
             iterations: 10
+        Objects\InternJumpBundle\Entity\Manager:
+            algorithm: sha512
+            encode-as-base64: true
+            iterations: 10
 
     role_hierarchy:
         ROLE_COMPANY:     ROLE_NOTACTIVE_COMPANY
@@ -17,11 +21,13 @@ security:
 
     providers:
         main:
-            providers: [company, user]
+            providers: [company, manager, user]
         company:
             entity: { class: Objects\InternJumpBundle\Entity\Company, property: loginName }
         user:
             entity: { class: Objects\UserBundle\Entity\User }
+        manager:
+            entity: { class: Objects\InternJumpBundle\Entity\Manager, property: loginName }
 
     firewalls:
         dev:
@@ -29,6 +35,7 @@ security:
             security: false
 
         secured_area:
+            provider: main
             pattern:    ^/
             anonymous: ~
             form_login:
@@ -51,7 +58,7 @@ security:
     access_control:
 #         - { path: ^/, requires_channel: https }
          - { path: ^/admin, roles: ROLE_ADMIN }
-         - { path: ^/user/auth/redirect/user$, roles: [ROLE_NOTACTIVE, ROLE_NOTACTIVE_COMPANY, ROLE_ACTIVE_SOCIAL, ROLE_NOTACTIVE_SOCIAL] }
+         - { path: ^/user/auth/redirect/user$, roles: [ROLE_NOTACTIVE, ROLE_NOTACTIVE_COMPANY, ROLE_ACTIVE_SOCIAL, ROLE_NOTACTIVE_SOCIAL, ROLE_COMPANY_MANAGER] }
          - { path: ^/company/messages, roles: ROLE_COMPANY }
 #         - { path: ^/user/messages, roles: ROLE_USER }
          - { path: ^/user/signup/second/step, roles: [ROLE_ACTIVE_SOCIAL, ROLE_NOTACTIVE_SOCIAL] }

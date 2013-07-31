@@ -31,11 +31,7 @@ class UserInternshipRepository extends EntityRepository {
             ';
         $query = $this->getEntityManager()->createQuery($dql)
                 ->setParameters(array('userId' => $userId, 'cvId' => $cvId, 'companyId' => $companyId));
-        try {
-            return $query->getSingleResult();
-        } catch (\Doctrine\ORM\NoResultException $e) {
-            return null;
-        }
+        return $query->getResult();
     }
 
     /**

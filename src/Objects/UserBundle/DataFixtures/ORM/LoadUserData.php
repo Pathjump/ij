@@ -20,12 +20,12 @@ class LoadUserData implements FixtureInterface {
         $roleActiveSocial = new Role();
         $roleActiveSocial->setName('ROLE_ACTIVE_SOCIAL');
         $manager->persist($roleActiveSocial);
-        
+
         // create the ROLE_NOTACTIVE_SOCIAL role
         $roleNotActiveSocial = new Role();
         $roleNotActiveSocial->setName('ROLE_NOTACTIVE_SOCIAL');
         $manager->persist($roleNotActiveSocial);
-        
+
         // create the ROLE_NOTACTIVE_COMPANY role
         $roleNotActiveCompany = new Role();
         $roleNotActiveCompany->setName('ROLE_NOTACTIVE_COMPANY');
@@ -54,6 +54,11 @@ class LoadUserData implements FixtureInterface {
         // create the ROLE_UPDATABLE_USERNAME role
         $roleUserName = new Role();
         $roleUserName->setName('ROLE_UPDATABLE_USERNAME');
+        $manager->persist($roleUserName);
+
+        // create the ROLE_COMPANY_MANAGER role
+        $roleUserName = new Role();
+        $roleUserName->setName('ROLE_COMPANY_MANAGER');
         $manager->persist($roleUserName);
 
         // create admin user
