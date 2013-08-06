@@ -137,3 +137,9 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, label: ReportUsers }
         arguments: [null, Objects\InternJumpBundle\Entity\ReportedUser, ObjectsAdminBundle:ReportAdmin]
+
+  banner_admin:
+        class: Objects\AdminBundle\Admin\BannerAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Banner }
+        arguments: [null, Objects\InternJumpBundle\Entity\Banner, ObjectsAdminBundle:BannerAdmin]

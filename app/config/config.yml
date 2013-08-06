@@ -116,6 +116,7 @@ sonata_admin:
                     - languages_admin
                     - worth_admin
                     - report_admin
+                    - banner_admin
 
 sonata_block:
     default_contexts: [cms]

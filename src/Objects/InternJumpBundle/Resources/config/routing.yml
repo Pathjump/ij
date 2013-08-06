@@ -215,3 +215,9 @@ worth_faceBook_publish:
 ObjectsInternJumpBundle_manager:
         resource: "@ObjectsInternJumpBundle/Resources/config/routing/manager.yml"
         prefix:   /manager
+
+increment_banner_no_of_clicks:
+    pattern:  /banner/{id}
+    defaults: { _controller: "ObjectsInternJumpBundle:InternjumpUser:incrementBannerNoOfClicks" }
+    requirements:
+        id:  \d+

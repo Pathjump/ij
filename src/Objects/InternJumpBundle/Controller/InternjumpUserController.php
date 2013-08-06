@@ -18,6 +18,22 @@ use Objects\InternJumpBundle\Entity\ReportedUser;
 class InternjumpUserController extends Controller {
 
     /**
+     * this function used to increment banner no of clicks
+     * @author Mahmoud, ahmed
+     * @param integer $id
+     */
+    public function incrementBannerNoOfClicksAction($id) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $banner = $em->getRepository('ObjectsInternJumpBundle:Banner')->find($id);
+        if (!$banner) {
+            throw $this->createNotFoundException('banner not found');
+        }
+        $banner->setNumberOfClicks($banner->getNumberOfClicks() + 1);
+        $em->flush();
+        return $this->redirect($banner->getUrl());
+    }
+
+    /**
      * company report user cv
      * @author ahmed
      * @param int $userId
@@ -2198,13 +2214,27 @@ class InternjumpUserController extends Controller {
         //get user personal question answers
         $userPersonalQuestionAnswers = $personalQuestionAnswerRepo->findBy(array('user' => $user->getId()));
 
+        $bannerRepo = $em->getRepository('ObjectsInternJumpBundle:Banner');
+        //get page banner
+        $pageBanners = $bannerRepo->findBy(array('position' => 'Student Pages'));
+        if (sizeof($pageBanners) > 0) {
+            $rand_key = array_rand($pageBanners, 1);
+            $rand_banner = $pageBanners[$rand_key];
+            //increment banner of views
+            $rand_banner->setNumberOfViews($rand_banner->getNumberOfViews() + 1);
+            $em->flush();
+        } else {
+            $rand_banner = NULL;
+        }
+
         return $this->render('ObjectsInternJumpBundle:InternjumpUser:userPortalHome.html.twig', array(
                     'user' => $user,
                     'userCv' => $userCv,
                     'cvId' => $cvId,
                     'age' => $age,
                     'companiesQuestions' => $companiesQuestions,
-                    'userPersonalQuestionAnswers' => $userPersonalQuestionAnswers
+                    'userPersonalQuestionAnswers' => $userPersonalQuestionAnswers,
+                    'rand_banner' => $rand_banner
         ));
     }
 

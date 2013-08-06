@@ -152,9 +152,23 @@ class InternshipController extends Controller {
             $LatestJobs = $em->getRepository('ObjectsInternJumpBundle:Internship')->getRecentJobs(5);
         }
 
+        $bannerRepo = $em->getRepository('ObjectsInternJumpBundle:Banner');
+        //get page banner
+        $pageBanners = $bannerRepo->findBy(array('position' => 'Student Pages'));
+        if (sizeof($pageBanners) > 0) {
+            $rand_key = array_rand($pageBanners, 1);
+            $rand_banner = $pageBanners[$rand_key];
+            //increment banner of views
+            $rand_banner->setNumberOfViews($rand_banner->getNumberOfViews() + 1);
+            $em->flush();
+        } else {
+            $rand_banner = NULL;
+        }
+
         return $this->render('ObjectsInternJumpBundle:Internship:showIndeedJob.html.twig', array(
                     'LatestJobs' => $LatestJobs,
-                    'jobDetails' => $jobDetails
+                    'jobDetails' => $jobDetails,
+                    'rand_banner' => $rand_banner
         ));
     }
 
@@ -573,6 +587,19 @@ class InternshipController extends Controller {
             $jobCategroies .= '&selected-categories[]=' . $category->getId();
         }
 
+        $bannerRepo = $em->getRepository('ObjectsInternJumpBundle:Banner');
+        //get page banner
+        $pageBanners = $bannerRepo->findBy(array('position' => 'Student Pages'));
+        if (sizeof($pageBanners) > 0) {
+            $rand_key = array_rand($pageBanners, 1);
+            $rand_banner = $pageBanners[$rand_key];
+            //increment banner of views
+            $rand_banner->setNumberOfViews($rand_banner->getNumberOfViews() + 1);
+            $em->flush();
+        } else {
+            $rand_banner = NULL;
+        }
+
         return $this->render('ObjectsInternJumpBundle:Internship:show.html.twig', array(
                     'entity' => $entity,
                     'company' => $company,
@@ -587,7 +614,8 @@ class InternshipController extends Controller {
                     'jobSkills' => $jobSkills,
                     'jobCategroies' => $jobCategroies,
                     'relatedJobs' => $relatedJobs,
-                    'LatestJobs' => $LatestJobs
+                    'LatestJobs' => $LatestJobs,
+                    'rand_banner' => $rand_banner
         ));
     }
 

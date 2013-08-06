@@ -69,7 +69,7 @@
                                             {% elseif not is_granted('ROLE_NOTACTIVE')%}
                                                 <a class="btn btn-primary large pull-right apply" href="{{ path('user_signup') }}">Custom Apply</a>
                                             {% endif %}
-                                            
+
                                             <h4 class=" text-center pull-right">Apply to this position!</h4>
                                             <div class="clearfix"></div>
                                         </div>
@@ -102,6 +102,12 @@
                 {% endif %}
 
 
+                                    {% if rand_banner %}
+            <div class="Col-block">
+                {% include 'ObjectsInternJumpBundle:InternjumpUser:banner.html.twig'
+                     with{'banner': rand_banner, 'bannerWidth': 300, 'bannerHeight': 250} %}
+            </div>
+            {% endif %}
 
 
                                             </div><!--search-right-col--->

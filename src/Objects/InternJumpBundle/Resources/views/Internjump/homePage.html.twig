@@ -14,7 +14,9 @@
                     <p>We know you're ambitious and want that great internship that will help launch your career.
                         Look no further,
                         InternJump works with companies in the leading industries and makes applying and managing internships an easy process.</p>
-                        <p class="text-center"><a class="btn btn-danger btn-large" href="https://internjump.com/user/signup">Sign Up Now</a></p>
+                        {% if not is_granted('ROLE_NOTACTIVE') and not is_granted('ROLE_NOTACTIVE_COMPANY') and not is_granted('ROLE_COMPANY_MANAGER') %}
+                        <p class="text-center"><a class="btn btn-danger btn-large" href="{{ path('user_signup') }}">Sign Up Now</a></p>
+                        {% endif %}
                 </div>
 
 
@@ -95,16 +97,16 @@
                         <div class="item">
                             <div class="row-fluid">
                                 {% endif %}
-                                
+
                                     {% if loop.first %}
                                         {# the loop is displaying 3 results first then group of 4, to fix that i added this line #}
                                         <div class="span3 text-center">
                                             <a href="/internJumpUser/search?company=goldmansachs" class="thumbnail">
                                             <img src="/company-logo/130/97/51cda3c0a06db.jpg"  width="130" height="97">
                                         </a>
-                                    </div>                                        
-                                    {% endif %}                                
-                                
+                                    </div>
+                                    {% endif %}
+
                                     <div class="span3 text-center">
                                         <a href="{{path('user_search_page',{'company' : company.loginName})}}" class="thumbnail">
                                             <img src="{{company.getTimThumbUrl(130,97)}}"  width="130" height="97">
@@ -384,9 +386,9 @@ $( document ).ready(function() {
                         $('#myCarousel2').carousel({
                             interval: 5000
                         });
-            			$('#myCarousel2').carousel('cycle'); // to auto cycle through all slides                        
-});                    
-</script>                        
+            			$('#myCarousel2').carousel('cycle'); // to auto cycle through all slides
+});
+</script>
             <script>
                 var searchJobsUrl = "{{path('user_search_page')}}";
                 $(document).ready(function() {

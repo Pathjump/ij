@@ -136,6 +136,19 @@ class TaskController extends Controller {
         //get favorite companies
         $favCompanies = $user->getFavoriteComapnies();
 
+        $bannerRepo = $em->getRepository('ObjectsInternJumpBundle:Banner');
+        //get page banner
+        $pageBanners = $bannerRepo->findBy(array('position' => 'Student Pages'));
+        if (sizeof($pageBanners) > 0) {
+            $rand_key = array_rand($pageBanners, 1);
+            $rand_banner = $pageBanners[$rand_key];
+            //increment banner of views
+            $rand_banner->setNumberOfViews($rand_banner->getNumberOfViews() + 1);
+            $em->flush();
+        } else {
+            $rand_banner = NULL;
+        }
+
         return $this->render('ObjectsInternJumpBundle:Task:studentTasks.html.twig', array(
                     'entities' => $tasks,
                     'user' => $user,
@@ -158,6 +171,7 @@ class TaskController extends Controller {
                     'allCategory' => $allCategory,
                     'state' => $uState,
                     'worth' => $worth,
+                    'rand_banner' => $rand_banner,
                     'favCompanies' => $favCompanies
         ));
     }

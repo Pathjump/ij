@@ -250,6 +250,12 @@
                                                 </div>
                 {% endif %}
 
+                                        {% if rand_banner %}
+            <div class="Col-block">
+                {% include 'ObjectsInternJumpBundle:InternjumpUser:banner.html.twig'
+                     with{'banner': rand_banner, 'bannerWidth': 300, 'bannerHeight': 250} %}
+            </div>
+            {% endif %}
 
 
 

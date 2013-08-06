@@ -200,6 +200,12 @@
             </div> <!--Col-block-->
             <br><br>
 
+            {% if rand_banner %}
+            <div class="Col-block">
+                {% include 'ObjectsInternJumpBundle:InternjumpUser:banner.html.twig'
+                     with{'banner': rand_banner, 'bannerWidth': 300, 'bannerHeight': 250} %}
+            </div>
+            {% endif %}
             <!--
             <div class="Col-block ">
                 <h2>Your Resumes</h2>
@@ -248,12 +254,12 @@ var google_conversion_color = "ffffff";
 var google_conversion_label = "-LesCOjp0QQQ2LCx2QM"; var google_conversion_value = 2;
 /* ]]> */
 </script>
-<script type="text/javascript"  
+<script type="text/javascript"
 src="//www.googleadservices.com/pagead/conversion.js">
 </script>
 <noscript>
 <div style="display:inline;">
-<img height="1" width="1" style="border-style:none;" alt=""  
+<img height="1" width="1" style="border-style:none;" alt=""
 src="//www.googleadservices.com/pagead/conversion/992761944/?value=2&amp;label=-LesCOjp0QQQ2LCx2QM&amp;guid=ON&amp;script=0"/>
 </div>
 </noscript>
