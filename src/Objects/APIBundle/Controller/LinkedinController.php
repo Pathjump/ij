@@ -28,7 +28,7 @@ class LinkedinController extends Controller {
         $oauth = new \LinkedIn($config);
         $oauth->setTokenAccess($linkedIn_oauth);
         $userData = $oauth->profile('~:(id,first-name,last-name,picture-url,headline,site-standard-profile-request,location:(country:(code)),summary,positions,skills,educations,courses,email-address,phone-numbers,main-address,date-of-birth)');
-        
+
         //check if connection success with twitter
         if (200 == $userData['info']['http_code']) {
             return $userData;
@@ -55,6 +55,18 @@ class LinkedinController extends Controller {
         //create new linkedIn oauth object
         $oauth = new \LinkedIn($config);
         //get user access token
+        //check for oauth_token_secret
+        if (!is_string($request->get('oauth_token')) || !is_string($session->get('oauth_token_secret')) || !is_string($request->get('oauth_verifier'))) {
+            $session->setFlash('error', 'An error occurred please try again');
+            //redirect the parent window and then close the popup
+            return new Response('
+                    <script>
+                        window.opener.top.location.href = "' . $this->generateUrl('user_signup', array(), TRUE) . '";
+                        self.close();
+                    </script>
+                    ');
+        }
+
         $access_token = $oauth->retrieveTokenAccess($request->get('oauth_token'), $session->get('oauth_token_secret'), $request->get('oauth_verifier'));
 
         /* If HTTP response is 200 continue otherwise send to connect page to retry */
