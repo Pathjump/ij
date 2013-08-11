@@ -73,6 +73,7 @@ class SkillController extends Controller {
         $user = $this->get('security.context')->getToken()->getUser();
 
         foreach ($skills as $skill) {
+            $skill = trim($skill);
             //check if this skill not exist in database
             $skillObject = $skillRepo->findOneBy(array('title' => $skill));
             if (!$skillObject) {
